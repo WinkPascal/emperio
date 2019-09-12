@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body>
+	<div class="modal" id="loginModal">
+		<form id="loginForm" class="modal-content">
+			<h2>login</h2>
+			<em>email adres</em><br> 
+			<input type="text" value="pawiwink@gmail.com" name="username" id="emailLogin" class="loginInput" placeholder="email adres"><br>
+			<em>wachtwoord</em><br> 
+			<input type="text" value="PascalWink1" name="password" id="passwordLogin" class="loginInput" placeholder="wachtwoord"><br>
+			<input type="button" id="loginButton" value="Log in"> 
+			<input type="button" id="anulleer" value="anulleer" /> 
+			<a>wachtwoord vergeten</a>
+		</form>
+	</div>
+	
+	<div id="errorLijst" class="errorLijst">
+	</div>
+	
+	<script>
+		document.getElementById("loginButton").addEventListener("click", function(){
+			var formData = new FormData(document.querySelector("#loginForm"));
+			var encData = new URLSearchParams(formData.entries());
+			console.log(encData);
+			fetch("restservices/authentication", {method : 'POST', body : encData})
+			.then(function(response){
+				if(response.ok){
+					//het inloggen is geslaagdt
+					return response.json()
+				} else {
+					
+					//het inloggen is niet gelukt
+				};
+			})
+			.then(function(myJson){
+				//de JWTKey wordt in de sessionStorage gezet en de actor wordt doorverbonden naar de afspraken.html pagina
+				window.sessionStorage.setItem("sessionToken", myJson.JWT);
+				console.log(sessionStorage.getItem("sessionToken"));
+				window.location.href = "home.html";
+			})
+		})
+	</script>
+	<script src="javascript/errorManager.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+@charset "UTF-8";
+
+.inplannenLinks {
+	display: none; /* Hidden by default */
+	width: 40%;
+	height: 100%;
+	float: left;
+}
+
+.inplannenForm{
+	width: 30%;
+	height: 80%;
+	border-radius: 30px; 
+	margin: 30px;
+	background-color: white;
+	float: left;
+}
+
+.inplannenRechts {
+	display: none; /* Hidden by default */
+	float: right;
+	width: 50%;
+}
+
+.geslachtButton {
+	width: 70px;
+	height: 10%;
+	background-color: white;
+	margin: 10px;
+	border-radius: 5%;
+}
+
+.geslachtButton:hover {
+	background-color: blue;
+}
+
+.naamBehandelingKeuze {
+	float: left;
+	width: 80%;
+}
+
+.beschrijvingBehandelingKeuze {
+	float: left;
+	width: 80%;
+}
+
+.prijsBehandelingKeuze {
+	float: right;
+	height: 50%;
+	border: 1px solid black;
+}
+
+.lengteBehandelingKeuze {
+	top: 0px;
+	float: right;
+	border: 1px solid black;
+	height: 50%;
+	float: right;
+}
+
+.behandelingKeuze {
+	height: 80px;
+	border: 1px solid black;
+	border-radius: 5px;
+	margin: 20px;
+	background-color: white;
+}
+
+.behandelingKeuze:hover {
+	background-color: blue;
+	color: white;
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Emperio</title>
+	<link rel="stylesheet" type="text/css" href="css/home.css">
+	<link rel="stylesheet" type="text/css" href="css/inplannenCard.css">
+	<link rel="stylesheet" type="text/css" href="css/klantenCard.css">
+	<link rel="stylesheet" type="text/css" href="css/instellingenCard.css">
+</head>
+<body onload="onload()">
+	<!-- rooster vandaag -->
+	<div class="dagRooster">
+		<h2 class="logo">Emperio</h2>
+		<h2>Afspraken vandaag</h2>
+	</div>
+	
+	<!-- opties van de gebruiker -->
+	<div class="cardHolder" id="cardHolder">
+		<span>
+			<h2 class="title">Dashboard</h2>
+		</span>
+		
+		<div class="card" id="klantenCard">
+			<img class="cardImg"
+				src="https://cdn.pixabay.com/photo/2014/04/03/00/41/people-309098_960_720.png">
+			<div class="container">
+				<h4>
+					<b>Klanten</b>
+				</h4>
+			</div>
+		</div>
+
+		<div class="card" id="inventarisCard">
+			<img class="cardImg"
+				src="http://www.maranatha-rijssen.nl/fileadmin/user_upload/barbershop-blue-blur-1319458.jpg">
+			<div class="container">
+				<h4>
+					<b>Inventaris</b>
+				</h4>
+			</div>
+		</div>
+
+		<div class="card" onclick="location.href = 'appointments.html';">
+			<img class="cardImg"
+				src="https://globalaffairs.fiu.edu/wp-content/uploads/sites/40/2017/05/appointment_policy_pic-1024x683.jpg">
+			<div class="container">
+				<h4>
+					<b>Afspraken</b>
+				</h4>
+			</div>
+		</div>
+
+		<div class="card" id="inplannenCard">
+			<img class="cardImg"
+				src="https://images.pexels.com/photos/7103/writing-notes-idea-conference.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+			<div class="container">
+				<h4>
+					<b>Inplannen</b>
+				</h4>
+			</div>
+		</div>
+		
+		<div class="card" id="marketingCard">
+			<img class="cardImg"
+				src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjmeOP5hv84080xuXYDDT3tzeQqTC9FJXkct5XikE3GP00kguqsQ">
+			<div class="container">
+				<h4>
+					<b>Marketing</b>
+				</h4>
+			</div>
+		</div>
+
+		<div class="card" id="logoutButton">
+			<img class="cardImg"
+				src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjmeOP5hv84080xuXYDDT3tzeQqTC9FJXkct5XikE3GP00kguqsQ">
+			<div class="container">
+				<h4>
+					<b>Uitloggen</b>
+				</h4>
+			</div>
+		</div>
+
+		<div class="card" id="settingsButton">
+			<img class="cardImg"
+				src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrWVcFi7u8J9CaWw21qMDdwRDAuSmQjK8LoP7QvNlJmHWCu7fEKQ">
+			<div class="container">
+				<h4>
+					<b>Instellingen</b>
+				</h4>
+			</div>
+		</div>
+	</div>
+
+	<!-- klanten -->
+	<div id="KlantenModel" class="modal">
+		<div class="modal-content">
+			<div id="searchBar">
+				<span class="navigatieButton">Terug</span>
+		
+				<input type="text" id="zoekKlantInput"/>
+				<span class="navigatieButton" id="zoekKlantButton">Zoek</span>
+				
+				<span class="navigatieButton">Volgende</span>
+			</div>
+			
+			<div id="klantenLijst" class="klantenLijst">
+				
+			</div>
+		</div>
+	</div>
+	
+	<!-- inventaris -->
+	<div id="inventarisModal" class="modal">
+		<div class="modal-content">
+			<div id="topBar" class="topBar">
+				<span class="navigatieButton">Terug</span>
+		
+				<input type="text" id="zoekProductenInput"/>
+				<span class="navigatieButton" id="zoekProductButton">Zoek</span>
+				
+				<span class="navigatieButton">Volgende</span>
+			</div>
+			<div id="productenLijst">
+				
+			</div>
+		</div>
+	</div>
+		
+	<!-- inplannen -->
+	<div id="inplannenModal" class="modal">
+		<div class="modal-content">
+			<div class="topBar">
+				<input type="button" class="navigatieButton"  id="terugInplannen" value="Annuleer"/>
+				Inplannen
+				<input type="button" class="navigatieButton"  id="volgendeInplannen" value="Volgende"/>
+			</div>
+			
+			<form id="inplannenForm" class="inplannenForm">
+				<span>Behandelingen:</span><br>
+				<span id="inplanFormBehandeling"></span><br>
+				<span>inplan datum</span>
+				<span id="inplanFormDatum"></span><br>				
+				<span>inplan tijd</span>
+				<span id="inplanFormTijd"></span><br>
+				<br>
+				<span>klant</span><br>
+				<span>Geslacht</span> 
+				<span id="inplanFormGeslacht"></span><br>
+				<span>Naam</span> 
+				<span id="inplanFormnaam"></span><br>
+				<span>Email</span> 
+				<span id="inplanFormEmail"></span><br>
+				<span>Telefoon nummer</span> 
+				<span id="inplanFormTelefoon"></span>
+				<input type="button" id="submitInplanFormButton">
+			</form>
+			
+
+			<div id="inplannenGeslacht" class="inplannenRechts">
+				<span id="geslachtMan" class="geslachtButton">man</span>
+				<span id="geslachtVrouw" class="geslachtButton">Vrouw</span>
+				<span id="geslachtJongen" class="geslachtButton">Meisje</span>
+				<span id="geslachtMeisje" class="geslachtButton">Jongen</span>
+			</div>
+			<div id="behandelingenKeuzeLijst" class="inplannenRechts">
+				<!-- De behandelingen waar uit gekozen kan worden -->
+			</div>
+			
+			<div id="inplannenDatum" class="inplannenRechts">
+				<input type="date" id="datumInplannen">
+			</div>
+			
+			<div id="inplannenTijd" class="inplannenRechts">
+				<div class="behandelingKeuze" id="inplannenTijdKeuze" value="9:00">
+				</div>
+			</div>
+			
+			<div id="inplannenKlantInfo" class="inplannenRechts">
+				naam<br>
+				<input type="text" value="John" id="inplannenKlantNaam"><br>
+				email<br>
+				<input type="email" value="John@gmail.com" id="inplannenKlantEmail"><br>
+				telefoon nummer<br>
+				<input type="number" value="0615584840" id="inplannenKlantTel">
+			</div>
+		</div>			
+	</div>
+	
+
+	<!-- Settings -->
+	<div id="settings" class="modal">
+		<div class="modal-content">
+			<p class="settingsTitle">Instellingen</p>
+			<span class="close">&times;</span>
+			
+			<!-- Behandelingen toevoegen -->
+			<div class="settingItem">
+				<b>Toevoegen behandelingen</b><br>
+				<div class="toevoegLijst" id="toevoegLijst">
+				
+				</div>
+				<b id="plus" class="plus">+ Voeg nog een behandeling toe</b>
+				<strong	id="voegBehandelingToe" class="addAll">Voeg toe!</strong>
+			</div>
+			
+			<div class="settingItem">
+				<b>Wijzigen behandelingen</b>
+				<div class="wijzigLijst" id="wijzigLijst">
+					
+				</div>
+				<b>Bevestig</b>
+			</div>
+			
+			<div>
+				<b>Openings tijden aanpassen</b>
+				
+			</div>
+		</div>
+	</div>
+	
+	<!-- Scripts -->
+	<script src="home.js"></script>
+	<script src="javascript/klantenCard.js"></script>
+	<script src="javascript/inplannenCard.js"></script>
+	<script src="javascript/errorManager.js"></script>
+	
+</body>
+</html>

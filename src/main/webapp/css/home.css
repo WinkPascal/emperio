@@ -1,0 +1,85 @@
+@charset "UTF-8";
+
+.logo {
+	color: orange;
+	left: 0px;
+}
+
+.title {
+	border-bottom: 2px solid black;
+}
+
+.dagRooster {
+	width: 30%;
+	text-align: center;
+}
+
+.cardHolder {
+	width: 70%;
+	top: 0px;
+	position: absolute;
+	margin-left: 30%;
+}
+
+.card {
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	transition: 0.3s;
+	width: 350px;
+	height: 250px;
+	border: 2px solid black;
+	border-radius: 5px;
+	overflow: hidden;
+	text-align: center;
+	margin: 5px;
+	float: left;
+}
+
+.card:hover {
+	box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
+}
+
+.cardImg {
+	width: 120%;
+	height: 80%;;
+}
+
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	border-radius: 20px;
+	width: 60%;
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/opacity/see-through */
+	height: 70%;
+}
+
+/* The Close Button */
+.close {
+	color: #aaaaaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
+

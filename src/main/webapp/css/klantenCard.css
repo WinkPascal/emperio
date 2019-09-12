@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+.klantenLijst {
+	width: 100%;
+	height: 90%;
+}
+
+.klantDiv {
+	width: 250px;
+	height: 40px;
+	border-radius: 40px;
+	margin-top: 20px;
+	background-color: white;
+}
+
+.navigatieButton{
+	display: inline-block;
+	text-align: center;
+	width: 150px;
+	background-color: blue;
+	height: 40px;
+	border-radius: 20px;
+}
