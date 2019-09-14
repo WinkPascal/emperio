@@ -31,8 +31,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 				String behandelingsNaam = dbResultSet.getString("naam");
 
 				Klant klant = new Klant(klantNaam);
-				Behandeling behandeling = new Behandeling(behandelingsNaam);
-				Afspraak afspraak = new Afspraak(id, tijd, lengte, klant, behandeling);
+				Afspraak afspraak = new Afspraak(id, tijd, lengte, klant);
 				afsprakenVandaag.add(afspraak);
 			}
 		} catch (SQLException e) {
@@ -41,26 +40,21 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		return afsprakenVandaag;
 	}
 
-	public boolean setAfspraak(String afspraakKlantNaam, String afspraakKlantGeslacht, String afspraakKlantEmail,
-			String afspraakKlantTel, int afspraakBehandeling, String afspraakTijd, String afspraakDatum,
-			String bedrijf) {
-
-		if (afspraakKlantEmail.length() <= 1) {
-			boolean email = false;
-		}
-		if (afspraakKlantTel.length() <= 1) {
-			boolean tel = false;
-		}
+	public boolean setAfspraak(Afspraak afspraak) {
 		try (Connection con = super.getConnection()) {
-			PreparedStatement pstmt = con.prepareStatement("insert into klant(bedrijf, naam, email, telefoon, geslacht)"
-					+ "values('" + bedrijf + "', '" + afspraakKlantNaam + "','" + afspraakKlantEmail + "','"
-					+ afspraakKlantTel + "', '" + afspraakKlantGeslacht + "')");
-			System.out.println(pstmt);
-			pstmt.executeUpdate();
+			//PreparedStatement pstmt = con.prepareStatement("insert into klant(bedrijf, naam, email, telefoon, geslacht)"
+			//		+ "values('" + bedrijf + "', '" + afspraakKlantNaam + "','" + afspraakKlantEmail + "','"
+			//		+ afspraakKlantTel + "', '" + afspraakKlantGeslacht + "')");
+			//System.out.println(pstmt);
+			//pstmt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public int getAfspraakId(Afspraak afspraak) {
+		return 0;
 	}
 }

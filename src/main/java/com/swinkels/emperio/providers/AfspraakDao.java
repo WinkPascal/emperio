@@ -8,5 +8,7 @@ public interface AfspraakDao {
 	
 	public ArrayList<Afspraak> getAfsprakenVandaag(String date, String bedrijf);
 
-	public boolean setAfspraak(String afspraakKlantNaam, String afspraakKlantGeslacht, String afspraakKlantEmail, String afspraakKlantTel, int afspraakBehandeling, String afspraakTijd, String afspraakDatum, String bedrijf);
+	public boolean setAfspraak(Afspraak afspraak);
+
+	public int getAfspraakId(Afspraak afspraak);
 }

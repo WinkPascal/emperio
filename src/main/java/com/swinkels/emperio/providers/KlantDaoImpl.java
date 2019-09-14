@@ -60,5 +60,32 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao{
 		}
 		return klanten;
 	}
+	public boolean setKlant(Klant klant) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"select * from klant where bedrijf = '"+bedrijf+"' ORDER BY naam LIMIT 0, 10");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeUpdate();
+			while (dbResultSet.next()) {
+				int id = dbResultSet.getInt("id");
+				String naam =dbResultSet.getString("naam");
+				String email =dbResultSet.getString("email");
+				String telefoon=dbResultSet.getString("telefoon");
+				String geslacht=dbResultSet.getString("geslacht");
+				
+				Klant klant = new Klant(id, naam, email, telefoon, geslacht);
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public int getKlantId(Klant klant) {
+		int klantId = 0;
+		
+		return klantId;
+	}
 
 }

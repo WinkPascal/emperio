@@ -12,7 +12,6 @@ function onload(){
 		succesMessage("Succesvol ingelogd.");
 	}).catch(function() {
 		// De gebruiker is niet ingelogt
-		alert("niet meer ingelogd");
 	});
 }
 
@@ -57,13 +56,7 @@ document.getElementById("inplannenCard").addEventListener("click", function() {
 	document.getElementById("inplannenGeslacht").style.display = "block";
 
 	inplannenGeslachtKiezen();
-	document.getElementById("volgendeInplannen").addEventListener("click", function() {
-		volgendeKnopInplannen();
-	})
-	
-	document.getElementById("terugInplannen").addEventListener("click", function() {
-		terugKnopInplannen();
-	})
+
 })
 
 document.getElementById("logoutButton").addEventListener("click", function() {

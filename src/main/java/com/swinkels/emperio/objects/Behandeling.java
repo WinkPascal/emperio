@@ -20,6 +20,10 @@ public class Behandeling {
 		this.prijs = prijs;
 	}
 
+	public Behandeling(int afspraakBehandeling) {
+		this.id = afspraakBehandeling;
+	}
+
 	public int getId() {
 		return id;
 	}

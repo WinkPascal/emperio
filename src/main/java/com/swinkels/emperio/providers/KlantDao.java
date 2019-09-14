@@ -9,4 +9,8 @@ public interface KlantDao {
 	public ArrayList<Klant> zoekKlant(String bedrijf, String klantRequest);
 
 	public ArrayList<Klant> getKlanten(String bedrijf, int pageNummer);
+	
+	public boolean setKlant(Klant klant);
+	
+	public int getKlantId(Klant klant);
 }

@@ -5,16 +5,22 @@ public class Afspraak {
 	int id;
 	Klant klant;
 	Bedrijf bedrijf;
-	Behandeling behandeling;
 	String tijd;
 	String lengte;
 
-	public Afspraak(int id, String tijd, String lengte, Klant klant, Behandeling behandeling) {
+	public Afspraak(int id, String tijd, String lengte, Klant klant) {
 		this.id = id;
 		this.tijd = tijd;
 		this.lengte = lengte;
 		this.klant = klant;
-		this.behandeling = behandeling;
+	}
+
+	public Afspraak(String afspraakTijd, String afspraakDatum, Bedrijf bedrijf,
+			Klant klant) {
+		this.lengte= afspraakTijd;
+		this.tijd= afspraakDatum;
+		this.bedrijf= bedrijf;
+		this.klant= klant;
 	}
 
 	public int getId() {
@@ -39,14 +45,6 @@ public class Afspraak {
 
 	public void setBedrijf(Bedrijf bedrijf) {
 		this.bedrijf = bedrijf;
-	}
-
-	public Behandeling getBehandeling() {
-		return behandeling;
-	}
-
-	public void setBehandeling(Behandeling behandeling) {
-		this.behandeling = behandeling;
 	}
 
 	public String getTijd() {

@@ -6,15 +6,26 @@ public class Klant {
 	String email;
 	String tel;
 	String geslacht;
-	
-	public Klant(int id, String naam, String email,	String tel,	String geslacht) {
+	Bedrijf bedrijf;
+
+	public Klant(int id, String naam, String email, String tel, String geslacht) {
 		this.id = id;
 		this.naam = naam;
 		this.email = email;
 		this.tel = tel;
 		this.geslacht = geslacht;
 	}
-	
+
+	public Klant(String afspraakKlantGeslacht, String afspraakKlantNaam, Bedrijf bedrijf) {
+		this.geslacht = afspraakKlantGeslacht;
+		this.bedrijf = bedrijf;
+		this.naam = afspraakKlantNaam;
+	}
+
+	public Klant(String klantNaam) {
+		this.naam = klantNaam;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -28,6 +39,9 @@ public class Klant {
 	}
 
 	public void setEmail(String email) {
+		System.out.println(email);
+		System.out.println(email.equals(""));
+	
 		this.email = email;
 	}
 
@@ -49,10 +63,6 @@ public class Klant {
 
 	public void setNaam(String naam) {
 		this.naam = naam;
-	}
-
-	public Klant(String klantNaam) {
-		this.naam = klantNaam;
 	}
 
 	public String getNaam() {
