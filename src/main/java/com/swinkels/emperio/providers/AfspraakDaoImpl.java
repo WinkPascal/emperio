@@ -4,35 +4,65 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.swinkels.emperio.objects.Afspraak;
+import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Klant;
+import com.swinkels.emperio.service.ServiceFilter;
 
 public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 
-	public ArrayList<Afspraak> getAfsprakenVandaag(String date, String bedrijf) {
+	public ArrayList<Afspraak> getAfsprakenVandaag(Date date, Bedrijf bedrijf) {
 		ArrayList<Afspraak> afsprakenVandaag = new ArrayList<Afspraak>();
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"select * from afspraak where bedrijf ='" + bedrijf + "' and tijd = '" + date + "'");
+					"select a.id, a.timestamp, k.naam as klantnaam, \n" + 
+					"       b.naam as behandelingnaam, b.lengte, b.prijs\n" + 
+					"from klant k join afspraak a on a.klant = k.id \n" + 
+					"             join afspraakbehandeling ab on ab.afspraak = a.id \n" + 
+					"             join bedrijf m on k.bedrijf = m.email \n" + 
+					"             join behandeling b on b.id = ab.behandeling \n" + 
+					"where DATE(timestamp) = '"+ServiceFilter.DateToStringFormatter(date, "yyyy-MM-dd")+"' \n" + 
+					"  and m.email = '"+bedrijf.getEmail()+"'");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				System.out.println(dbResultSet.getString("id"));
-				// klant
-				String klantNaam = dbResultSet.getString("naam");
-				// afspraak
-				int id = dbResultSet.getInt("id");
-				String tijd = dbResultSet.getString("tijd");
-				String lengte = dbResultSet.getString("lengte");
-				// behandeling
-				String behandelingsNaam = dbResultSet.getString("naam");
+				//Behandeling
+				String behandelingnaam = dbResultSet.getString("behandelingnaam");
+				Date lengte = ServiceFilter.StringToDateFormatter(dbResultSet.getString("lengte"), "HH:mm");
+				double prijs = dbResultSet.getDouble("prijs");
+				
+				Behandeling behandeling = new Behandeling(behandelingnaam, lengte, prijs);
 
-				Klant klant = new Klant(klantNaam);
-				Afspraak afspraak = new Afspraak(id, tijd, lengte, klant);
-				afsprakenVandaag.add(afspraak);
+				
+				//Afspraak
+				int id = dbResultSet.getInt("id");
+				for(Afspraak afspraak : afsprakenVandaag) {
+					if(afspraak.getId() == id) {
+						//afspraak bestaat al
+						//alleen de behandeling wordt toegevoegd
+						afspraak.addBehandeling(behandeling);
+					} else {
+						//afspraak wordt aangemaakt
+						String timestampString = dbResultSet.getString("timestamp");
+						
+						//klant
+						String klantNaam = dbResultSet.getString("klantNaam");
+						Klant klant = new Klant(klantNaam);
+						
+
+						
+						Afspraak newAfspraak = new Afspraak(id, ServiceFilter.StringToDateFormatter(timestampString,"yyyy-MM-dd HH-mm"), klant);
+
+						afsprakenVandaag.add(newAfspraak);
+					}
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -42,19 +72,41 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 
 	public boolean setAfspraak(Afspraak afspraak) {
 		try (Connection con = super.getConnection()) {
-			//PreparedStatement pstmt = con.prepareStatement("insert into klant(bedrijf, naam, email, telefoon, geslacht)"
-			//		+ "values('" + bedrijf + "', '" + afspraakKlantNaam + "','" + afspraakKlantEmail + "','"
-			//		+ afspraakKlantTel + "', '" + afspraakKlantGeslacht + "')");
-			//System.out.println(pstmt);
-			//pstmt.executeUpdate();
-
+			PreparedStatement pstmt = con.prepareStatement(
+			"insert into afspraak(klant, timestamp) values("
+			+ "'"+afspraak.getKlant().getId()+"', "
+			+ "'"+ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"')");
+			System.out.println(pstmt);
+			pstmt.executeUpdate();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
 
-	public int getAfspraakId(Afspraak afspraak) {
-		return 0;
+	public Afspraak getAfspraakId(Afspraak afspraak) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"select * from afspraak "
+					+ "where klant = '"+afspraak.getKlant().getId()+"' "
+					+ "and timestamp = '"+ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"'");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				//afspraak
+				int id = dbResultSet.getInt("id");
+				
+				afspraak.setId(id);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return afspraak;
+	}
+
+	public ArrayList<Afspraak> getOpenPlekken(Date date, String behandelingen) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

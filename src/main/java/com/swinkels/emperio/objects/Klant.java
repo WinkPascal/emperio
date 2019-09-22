@@ -26,6 +26,8 @@ public class Klant {
 		this.naam = klantNaam;
 	}
 
+	//getters and setters
+	
 	public int getId() {
 		return id;
 	}
@@ -67,5 +69,9 @@ public class Klant {
 
 	public String getNaam() {
 		return naam;
+	}
+	
+	public Bedrijf getBedrijf() {
+		return bedrijf;
 	}
 }

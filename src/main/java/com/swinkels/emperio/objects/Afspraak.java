@@ -1,30 +1,42 @@
 package com.swinkels.emperio.objects;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 public class Afspraak {
 
 	int id;
 	Klant klant;
 	Bedrijf bedrijf;
-	String tijd;
-	String lengte;
+	Date timestamp;
+	ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 
-	public Afspraak(int id, String tijd, String lengte, Klant klant) {
+	public Afspraak(int id, Date timestamp, Klant klant) {
 		this.id = id;
-		this.tijd = tijd;
-		this.lengte = lengte;
+		this.timestamp = timestamp;
 		this.klant = klant;
 	}
 
-	public Afspraak(String afspraakTijd, String afspraakDatum, Bedrijf bedrijf,
-			Klant klant) {
-		this.lengte= afspraakTijd;
-		this.tijd= afspraakDatum;
+	public Afspraak(Date afspraakTimestamp, Bedrijf bedrijf, Klant klant) {
+		this.timestamp= afspraakTimestamp;
 		this.bedrijf= bedrijf;
 		this.klant= klant;
+	}
+	
+	public Afspraak(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public int getId() {
 		return id;
+	}
+	
+	public void addBehandeling(Behandeling behandeling) {
+		behandelingen.add(behandeling);
+	}
+	
+	public ArrayList<Behandeling> getBehandelingen(){
+		return behandelingen;
 	}
 
 	public void setId(int id) {
@@ -47,20 +59,11 @@ public class Afspraak {
 		this.bedrijf = bedrijf;
 	}
 
-	public String getTijd() {
-		return tijd;
+	public Date getTimeStamp() {
+		return timestamp;
 	}
 
-	public void setTijd(String tijd) {
-		this.tijd = tijd;
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
-
-	public String getLengte() {
-		return lengte;
-	}
-
-	public void setLengte(String lengte) {
-		this.lengte = lengte;
-	}
-
 }

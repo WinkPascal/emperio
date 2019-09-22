@@ -11,15 +11,91 @@
 	width: 30%;
 	height: 80%;
 	border-radius: 30px; 
+	border: 1px solid black;
 	margin: 30px;
 	background-color: white;
 	float: left;
 }
 
+.inplanBlokOverzicht{
+  	display: inline-block;
+	width: 100px;
+	height: 100px;
+	margin: 20px;
+	border: 1px solid black;
+	bottom: 50px;
+}
+
+.dagKiezen{
+  	display: inline-block;
+	width: 60%;
+	margin-left: 20%;
+	margin-top: 10px;
+	height: 50px;
+	border: 2px solid blue;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.dagKiezen:hover{
+	background-color: blue;
+	color: white;
+}
+
+.afspraakTijdslot{
+	display: inline-block;
+	width: 60%;
+	margin-left: 20%;
+	margin-top: 10px;
+	height: 50px;
+	border: 2px solid blue;
+	border-radius: 5px;
+	text-align: center;
+}
+
 .inplannenRechts {
 	display: none; /* Hidden by default */
 	float: right;
+	height: 100%;
 	width: 50%;
+}
+
+.inplanFullRowOverzicht{
+  	display: inline-block;
+	width: 100%;
+}
+
+.inplanBehandelingenOverzicht{
+	width: 100%;
+	border: 1px solid black;
+}
+
+.inplannenBehandelingOverzicht{
+  	display: inline-block;
+	border: 1px solid blue;
+	margin: 5px;
+	width: 120px;
+	items-align: center;
+	height: 30px;
+	border-radius: 5px;
+	overflow: auto;
+}
+
+.inplannenBehandelingOverzicht:hover{
+	background-color: red;
+}
+
+.textGekozenBehandeling{
+   margin: auto;
+}	
+
+.voegbehandelingToeForm{
+	margin: auto;
+	width: 90%;
+	height: 80%;
+	display: none;
+	border-radius: 5px;
+	background-color: white;
 }
 
 .geslachtButton {
@@ -58,12 +134,16 @@
 	float: right;
 }
 
+
+
 .behandelingKeuze {
 	height: 80px;
-	border: 1px solid black;
+	border: 1px solid blue;
 	border-radius: 5px;
 	margin: 20px;
 	background-color: white;
+	animation-name: animatetop;
+  	animation-duration: 0.6s;
 }
 
 .behandelingKeuze:hover {

@@ -12,5 +12,5 @@ public interface KlantDao {
 	
 	public boolean setKlant(Klant klant);
 	
-	public int getKlantId(Klant klant);
+	public Klant getKlantId(Klant klant);
 }

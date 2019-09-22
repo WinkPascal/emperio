@@ -18,7 +18,6 @@
 	<!-- opties van de gebruiker -->
 	<div class="cardHolder" id="cardHolder">
 		<span>
-			<h2 class="title">Dashboard</h2>
 		</span>
 		
 		<div class="card" id="klantenCard">
@@ -41,7 +40,7 @@
 			</div>
 		</div>
 
-		<div class="card" onclick="location.href = 'appointments.html';">
+		<div class="card" id="afsprakenCard">
 			<img class="cardImg"
 				src="https://globalaffairs.fiu.edu/wp-content/uploads/sites/40/2017/05/appointment_policy_pic-1024x683.jpg">
 			<div class="container">
@@ -136,42 +135,48 @@
 				<input type="button" class="navigatieButton"  id="volgendeInplannen" value="Volgende"/>
 			</div>
 			
-			<form id="inplannenForm" class="inplannenForm">
-				<span>Behandelingen:</span><br>
-				<span id="inplanFormBehandeling"></span><br>
-				<span>inplan datum</span>
-				<span id="inplanFormDatum"></span><br>				
-				<span>inplan tijd</span>
-				<span id="inplanFormTijd"></span><br>
-				<br>
-				<span>klant</span><br>
-				<span>Geslacht</span> 
-				<span id="inplanFormGeslacht"></span><br>
-				<span>Naam</span> 
-				<span id="inplanFormnaam"></span><br>
-				<span>Email</span> 
-				<span id="inplanFormEmail"></span><br>
-				<span>Telefoon nummer</span> 
-				<span id="inplanFormTelefoon"></span>
-				<input type="button" id="submitInplanFormButton">
-			</form>
+			<!-- linker kant inplannen met overzicht -->
+			<div class="inplannenForm">
+				<h3>Klant</h3>
+				<span class="inplanFullRowOverzicht"><a>Geslacht: </a><a id="inplanGeslachtOverzicht"></a></span>				
+				
+				<h3>Afspraak</h3>
+				<span id="inplanBehandelingenOverzicht"></span>
+				<span class="inplanFullRowOverzicht"><a>Datum van afspraak: </a><a id="inplannenDatumOverzicht"></a></span>
+				<span class="inplanFullRowOverzicht"><a>Tijd van afspraak: </a><a id="inplannenTijdOverzicht"></a></span>
+					
+				<span class="inplanBlokOverzicht" id="lengteAfspraak">Uur</span><span class="inplanBlokOverzicht" id="prijsAfspraak"> %</span>
+				
+			</div>
 			
-
+			<!-- eerste scherm -->
 			<div id="inplannenGeslacht" class="inplannenRechts">
 				<span id="geslachtMan" class="geslachtButton">man</span>
 				<span id="geslachtVrouw" class="geslachtButton">Vrouw</span>
 				<span id="geslachtJongen" class="geslachtButton">Meisje</span>
 				<span id="geslachtMeisje" class="geslachtButton">Jongen</span>
+				<span id="inplannenBehnadelingToevoegen" class="geslachtButton">Behandeling toevoegen</span>
+
+				<div id="behandelingenKeuzeLijst">
+					<!-- De behandelingen waar uit gekozen kan worden -->
+				</div>
 			</div>
-			<div id="behandelingenKeuzeLijst" class="inplannenRechts">
-				<!-- De behandelingen waar uit gekozen kan worden -->
-			</div>
-			
+
+			<!-- Datum en tijd -->
 			<div id="inplannenDatum" class="inplannenRechts">
-				<input type="date" id="datumInplannen">
+				<span class="defaultButton" id="weekTerugInplannen">Week terug</span><span id="weekVerderInplannen" class="defaultButton">Week verder</span>
+				<span class="dagKiezen" id="dateSpanMaandag"><a>Maandag</a><br><a id="dateMaandag"></a></span>
+				<span class="dagKiezen" id="dateSpanDinsdag"><a>Dinsdag</a><br><a id="dateDinsdag"></a></span>
+				<span class="dagKiezen" id="dateSpanWoensdag"><a>Woensdag</a><br><a id="dateWoensdag"></a></span>
+				<span class="dagKiezen" id="dateSpanDonderdag"><a>Donderdag</a><br><a id="dateDonderdag"></a></span>
+				<span class="dagKiezen" id="dateSpanVrijdag"><a>Vrijdag</a><br><a id="dateVrijdag"></a></span>
+				<span class="dagKiezen" id="dateSpanZaterdag"><a>Zaterdag</a><br><a id="dateZaterdag"></a></span>
+				<span class="dagKiezen" id="dateSpanZondag"><a>Zondag</a><br><a id="dateZondag"></a></span>
 			</div>
 			
 			<div id="inplannenTijd" class="inplannenRechts">
+							<input type="date" id="datumInplannen">
+			
 				<div class="behandelingKeuze" id="inplannenTijdKeuze" value="9:00">
 				</div>
 			</div>
@@ -184,10 +189,57 @@
 				telefoon nummer<br>
 				<input type="number" value="0615584840" id="inplannenKlantTel">
 			</div>
-		</div>			
+		</div>	
+	</div>
+
+	<!-- Final step inplannen -->
+	<div class="modal">
+		<form id="inplannenForm" class="inplannenForm">
+			<span>klant</span><br>
+			<span>Geslacht</span> 
+			<span id="inplanFormGeslacht"></span><br>
+			<span>Naam</span> 
+			<span id="inplanFormnaam"></span><br>
+			<span>Email</span> 
+			<span id="inplanFormEmail"></span><br>
+			<span>Telefoon nummer</span> 
+			<span id="inplanFormTelefoon"></span><br>
+			
+			<span>Behandelingen:</span><br>
+			<span id="inplanFormBehandeling"></span><br>
+			<span>inplan datum</span>
+			<span id="inplanFormDatum"></span><br>				
+			<span>inplan tijd</span>
+			<span id="inplanFormTijd"></span><br>
+			<br>
+			<input type="button" id="submitInplanFormButton" class="defaultButton" 
+			value="Inplannen" style="bottom: 10px;">
+		</form>
+	</div>
+				
+	<!-- Behandeling toevoegen -->
+	<div id="BehandelingToevoegenModal" class="modal">
+		<form id="BehandelingToevoegenForm" class="modal-content-small">
+			<h2 style="align:center;">Behandeling Toevoegen</h2>
+			naam 				<input class="inputBehandelingToevoegen" type="text" name="naam"><br>
+			beschrijving 		<input class="inputBehandelingToevoegen" type="text" name="beschrijving"><br>
+			prijs 				<input class="inputBehandelingToevoegen" type="number" name="prijs"><br>
+			lengte 				<input type="number" name="uur"> : <input type="number" name="minuten"><br>
+			geslacht<br>
+			<span id="geslachtManToevoegen" class="geslachtButton">man</span>
+			<span id="geslachtVrouwToevoegen" class="geslachtButton">Vrouw</span>
+			<span id="geslachtJongenToevoegen" class="geslachtButton">Jongen</span>
+			<span id="geslachtMeisjeToevoegen" class="geslachtButton">Meisje</span>
+			<br>
+			<span id="inplannenBehandelingToevoegen" class="defaultButton">
+				<a class="defaultText">Toevoegen!</a>
+			</span>
+			<span id="annuleerBehandelingAnnuleren" class="defaultButton">
+				<a class="defaultText">Annuleer</a>
+			</span>
+		</form>
 	</div>
 	
-
 	<!-- Settings -->
 	<div id="settings" class="modal">
 		<div class="modal-content">

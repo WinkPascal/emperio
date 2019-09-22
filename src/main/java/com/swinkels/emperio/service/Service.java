@@ -11,7 +11,5 @@ import com.swinkels.emperio.providers.MariadbBaseDao;
 public class Service {
 	public static void main(String [] args)
 	{
-		UserMariadbDaoImpl impl = new UserMariadbDaoImpl();
-		impl.findRoleForUser("pasca", "das");
 	}
 }

@@ -1,22 +1,26 @@
 package com.swinkels.emperio.objects;
 
+import java.util.Date;
+
 public class Behandeling {
 	int id;
 	Bedrijf bedrijf;
 	String naam;
 	String beschrijving;
-	String tijd;
+	Date lengte;
 	double prijs;
+	String geslacht;
+	
 	
 	public Behandeling(String behandelingsNaam) {
 		this.naam = behandelingsNaam;
 	}
 	
-	public Behandeling(int id, String behandelingsNaam, String beschrijving, String lengte, double prijs) {
+	public Behandeling(int id, String behandelingsNaam, String beschrijving, Date lengte, double prijs) {
 		this.id=id;
 		this.naam = behandelingsNaam;
 		this.beschrijving = beschrijving;
-		this.tijd = lengte;
+		this.lengte = lengte;
 		this.prijs = prijs;
 	}
 
@@ -24,6 +28,23 @@ public class Behandeling {
 		this.id = afspraakBehandeling;
 	}
 
+	public Behandeling(String naam, Date lengte, double prijs) {
+		this.naam = naam;
+		this.lengte = lengte;
+		this.prijs = prijs;
+	}
+	
+	public Behandeling(Bedrijf bedrijf, String naam, String beschrijving, double prijs, Date lengte,
+			String geslacht) {
+		this.bedrijf = bedrijf;
+		this.naam = naam;
+		this.beschrijving=beschrijving;
+		this.prijs = prijs;
+		this.lengte = lengte;
+		this.geslacht = geslacht;
+	}
+
+	
 	public int getId() {
 		return id;
 	}
@@ -48,12 +69,12 @@ public class Behandeling {
 		this.beschrijving = beschrijving;
 	}
 
-	public String getTijd() {
-		return tijd;
+	public Date getLengte() {
+		return lengte;
 	}
 
-	public void setTijd(String tijd) {
-		this.tijd = tijd;
+	public void setLengte(Date lengte) {
+		this.lengte = lengte;
 	}
 
 	public double getPrijs() {
@@ -70,5 +91,9 @@ public class Behandeling {
 
 	public String getNaam() {
 		return naam;
+	}
+	
+	public String getGeslacht() {
+		return geslacht;
 	}
 }

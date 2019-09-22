@@ -1,6 +1,7 @@
 
 //eerste wat er gedaan wordt bij het laden van de pagina
 function onload(){
+	var onload = 1;
 	var fetchoptions = {
 			headers: {
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
@@ -9,6 +10,7 @@ function onload(){
 	fetch("restservices/service/afsprakenVandaag", fetchoptions)
 	.then(response => response.json())
 	.then(function(afspraken){
+		
 		succesMessage("Succesvol ingelogd.");
 	}).catch(function() {
 		// De gebruiker is niet ingelogt
@@ -49,6 +51,11 @@ document.getElementById("klantenCard").addEventListener("click", function() {
 		terugKnopInplannen();
 	})
 })
+
+document.getElementById("afsprakenCard").addEventListener("click", function(){
+	location.href = 'afspraken.html';
+})
+	
 
 
 document.getElementById("inplannenCard").addEventListener("click", function() {
