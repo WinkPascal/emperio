@@ -12,6 +12,14 @@
   to {top: 0; opacity: 1}
 }
 
+.topBar{
+ 	display: inline-block;
+	top: 0px;
+	width: 100%;
+	height: 70%;
+	background-color: gray;
+}
+
 .modal {
 	display: none; /* Hidden by default */
 	position: fixed; /* Stay in place */

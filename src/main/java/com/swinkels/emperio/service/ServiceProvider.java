@@ -99,8 +99,6 @@ public class ServiceProvider {
 		return jab.build().toString();
 	}
 	
-
-	
 	@GET
 	@Path("/tijdslotenOphalen/{datum}")
 	@RolesAllowed("user")
@@ -117,11 +115,32 @@ public class ServiceProvider {
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		if(dagTijden.get(0) != null) {
 			JsonObjectBuilder job1 = Json.createObjectBuilder();
-			job1.add("openingsTijd", ServiceFilter.DateToStringFormatter(dagTijden.get(0), "HH-mm"));
-			job1.add("sluitingstijd", ServiceFilter.DateToStringFormatter(dagTijden.get(1), "HH-mm"));
+			String openingsTijd = ServiceFilter.DateToStringFormatter(dagTijden.get(0), "HH-mm");
+			String sluitingstijd = ServiceFilter.DateToStringFormatter(dagTijden.get(1), "HH-mm");
+			
+			System.out.println(openingsTijd);
+			System.out.println(sluitingstijd);
+			
+			String openingsTijdUurString = openingsTijd.substring(0, 2);
+			String openingsTijdMinuutString = openingsTijd.substring(3, 5);
+			
+			String sluitingsTijdUurString = sluitingstijd.substring(0, 2);
+			String sluitingsTijdMinuutString = sluitingstijd.substring(3, 5);
+
+			int openingsTijdUur = Integer.parseInt(openingsTijdUurString);
+			int openingsTijdMinuut= Integer.parseInt(openingsTijdMinuutString);
+			int sluitingsTijdUur = Integer.parseInt(sluitingsTijdUurString);
+			int sluitingsTijdMinuut = Integer.parseInt(sluitingsTijdMinuutString);
+			
+			job1.add("openingsTijdUur", openingsTijdUur);
+			job1.add("openingsTijdMinuut", openingsTijdMinuut);
+
+			job1.add("sluitingsTijdUur", sluitingsTijdUur);
+			job1.add("sluitingsTijdMinuut", sluitingsTijdMinuut);
+			
 			jab.add(job1);
 		}
-	
+
 		for (Afspraak afspraak : afsprakenVandaagList) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
 			int minuten = 0;
@@ -129,16 +148,44 @@ public class ServiceProvider {
 			
 			for(Behandeling behandeling : afspraak.getBehandelingen()) {
 				Date lengte = behandeling.getLengte();
-				minuten = minuten + lengte.getMinutes();
-				if(minuten > 59) {
-					uur = uur + 1;
+				System.out.println(lengte);
+				
+				String lengteString =  ServiceFilter.DateToStringFormatter(lengte, "HH:mm");
+				
+				String behandelingUren = lengteString.substring(0, 2);
+				int behandelingUrenInt = Integer.parseInt(behandelingUren);
+				
+				String behandelingMinuten = lengteString.substring(3, 5);
+				int behandelingMinutenInt = Integer.parseInt(behandelingMinuten);
+				
+				uur = uur + behandelingUrenInt;
+				minuten = minuten + behandelingMinutenInt;
+				if(minuten > 60) {
+					uur ++;
 					minuten = minuten - 60;
 				}
-				uur = uur + lengte.getHours();				
 			}
-			System.out.println("=========="+uur);
-			job.add("timestamp", ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm"));			
-			job.add("lengte", uur+":"+minuten);
+			String timestampString = ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm");
+			
+			String beginUurString = timestampString.substring(11, 13);
+			String beginMinuutString = timestampString.substring(14, 16);
+			
+			int beginUur = Integer.parseInt(beginUurString);
+			int beginMinuut = Integer.parseInt(beginMinuutString);
+
+			int eindUur = beginUur + uur;
+			int eindMinuut = beginMinuut + minuten;
+			if(eindMinuut > 60) {
+				eindMinuut=eindMinuut - 60;
+				eindUur ++;
+			}
+
+			job.add("beginUur", beginUur);			
+			job.add("beginMinuut", beginMinuut);			
+
+			job.add("eindUur", eindUur);
+			job.add("eindMinuut", eindMinuut);
+			
 			jab.add(job);
 		}
 		return jab.build().toString();	
@@ -172,10 +219,11 @@ public class ServiceProvider {
 	@Path("/afspraak")
 	@Produces("application/json")
 	public Response setAfspraak(@Context SecurityContext sc, 
-			@FormParam("afspraakKlantNaam") String afspraakKlantNaam,
-			@FormParam("afspraakKlantGeslacht") String afspraakKlantGeslacht,
-			@FormParam("afspraakKlantEmail") String afspraakKlantEmail,
-			@FormParam("afspraakKlantTel") String afspraakKlantTel,
+			@FormParam("klantNaam") String afspraakKlantNaam,
+			@FormParam("klantGeslacht") String afspraakKlantGeslacht,
+			@FormParam("klantEmail") String afspraakKlantEmail,
+			@FormParam("klantTelefoon") String afspraakKlantTel,
+			
 			@FormParam("afspraakBehandeling") String afspraakBehandelingen,
 			@FormParam("afspraakTijd") String afspraakTijd, 
 			@FormParam("afspraakDatum") String afspraakDatum) throws ParseException {
@@ -241,19 +289,48 @@ public class ServiceProvider {
 	@Path("/klantenZoekReq/{request}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getKlantenZoekRequest(@Context SecurityContext sc, @PathParam("request") String request) {
+	public String getKlantenZoekRequest(@Context SecurityContext sc, 
+			@PathParam("request") String request) {
+		System.out.println("sdasda");
 		String bedrijf = sc.getUserPrincipal().getName();
 		ArrayList<Klant> klanten = klantDao.zoekKlant(bedrijf, request);
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 
 		for (Klant klant : klanten) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
-
-			job.add("id", klant.getId());
-			job.add("naam", klant.getNaam());
-			job.add("email", klant.getEmail());
-			job.add("telefoon", klant.getTel());
-			job.add("geslacht", klant.getGeslacht());
+			System.out.println(klant.getId());
+			System.out.println(klant.getNaam());
+			System.out.println(klant.getEmail());
+			System.out.println(klant.getTel());
+			System.out.println(klant.getGeslacht());
+			String email =klant.getEmail();
+			String telefoon = klant.getTel();
+			if(email==null) {
+				if(telefoon == null) {
+					//heeft geen telefoon en email
+					job.add("id", klant.getId());
+					job.add("naam", klant.getNaam());
+					job.add("geslacht", klant.getGeslacht());
+				} else {
+					//geen email wel telefoon
+					job.add("id", klant.getId());
+					job.add("naam", klant.getNaam());
+					job.add("geslacht", klant.getGeslacht());				}
+					job.add("telefoon", klant.getTel());
+			} else if(telefoon == null) {
+				//alleen mail geen telefoon
+				job.add("id", klant.getId());
+				job.add("naam", klant.getNaam());
+				job.add("geslacht", klant.getGeslacht());				
+				job.add("email", klant.getEmail());
+			} else {
+				//heeft alles
+				job.add("id", klant.getId());
+				job.add("naam", klant.getNaam());
+				job.add("email", klant.getEmail());
+				job.add("telefoon", klant.getTel());
+				job.add("geslacht", klant.getGeslacht());
+			}
 
 			jab.add(job);
 
@@ -270,15 +347,42 @@ public class ServiceProvider {
 		String bedrijf = sc.getUserPrincipal().getName();
 		ArrayList<Klant> klanten = klantDao.getKlanten(bedrijf, pageNummer);
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-
+		
 		for (Klant klant : klanten) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
-
-			job.add("id", klant.getId());
-			job.add("naam", klant.getNaam());
-			job.add("email", klant.getEmail());
-			job.add("telefoon", klant.getTel());
-			job.add("geslacht", klant.getGeslacht());
+			System.out.println(klant.getId());
+			System.out.println(klant.getNaam());
+			System.out.println(klant.getEmail());
+			System.out.println(klant.getTel());
+			System.out.println(klant.getGeslacht());
+			String email =klant.getEmail();
+			String telefoon = klant.getTel();
+			if(email==null) {
+				if(telefoon == null) {
+					//heeft geen telefoon en email
+					job.add("id", klant.getId());
+					job.add("naam", klant.getNaam());
+					job.add("geslacht", klant.getGeslacht());
+				} else {
+					//geen email wel telefoon
+					job.add("id", klant.getId());
+					job.add("naam", klant.getNaam());
+					job.add("geslacht", klant.getGeslacht());				}
+					job.add("telefoon", klant.getTel());
+			} else if(telefoon == null) {
+				//alleen mail geen telefoon
+				job.add("id", klant.getId());
+				job.add("naam", klant.getNaam());
+				job.add("geslacht", klant.getGeslacht());				
+				job.add("email", klant.getEmail());
+			} else {
+				//heeft alles
+				job.add("id", klant.getId());
+				job.add("naam", klant.getNaam());
+				job.add("email", klant.getEmail());
+				job.add("telefoon", klant.getTel());
+				job.add("geslacht", klant.getGeslacht());
+			}
 
 			jab.add(job);
 

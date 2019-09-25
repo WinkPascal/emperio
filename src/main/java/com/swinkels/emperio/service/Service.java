@@ -1,15 +1,12 @@
 package com.swinkels.emperio.service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import com.swinkels.emperio.objects.UserMariadbDaoImpl;
-import com.swinkels.emperio.providers.MariadbBaseDao;
+import java.util.Date;
 
 public class Service {
 	public static void main(String [] args)
 	{
+		String date ="2019-08-23 10:00";
+		Date datum = ServiceFilter.StringToDateFormatter(date, "yyyy-MM-dd HH:mm");
+		System.out.println(datum);
 	}
 }

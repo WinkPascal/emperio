@@ -17,7 +17,10 @@
 	
 	<!-- opties van de gebruiker -->
 	<div class="cardHolder" id="cardHolder">
-		<span>
+		<span class="topBar">
+			<a class="dashoboardTag">Dashboard</a>
+			<a class="defaultButton" id="logoutButton">Uitloggen</a>
+			<a class="defaultButton"  id="settingsButton">Instellingen</a>
 		</span>
 		
 		<div class="card" id="klantenCard">
@@ -69,42 +72,23 @@
 				</h4>
 			</div>
 		</div>
-
-		<div class="card" id="logoutButton">
-			<img class="cardImg"
-				src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjmeOP5hv84080xuXYDDT3tzeQqTC9FJXkct5XikE3GP00kguqsQ">
-			<div class="container">
-				<h4>
-					<b>Uitloggen</b>
-				</h4>
-			</div>
-		</div>
-
-		<div class="card" id="settingsButton">
-			<img class="cardImg"
-				src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrWVcFi7u8J9CaWw21qMDdwRDAuSmQjK8LoP7QvNlJmHWCu7fEKQ">
-			<div class="container">
-				<h4>
-					<b>Instellingen</b>
-				</h4>
-			</div>
-		</div>
 	</div>
 
 	<!-- klanten -->
 	<div id="KlantenModel" class="modal">
 		<div class="modal-content">
 			<div id="searchBar">
-				<span class="navigatieButton">Terug</span>
+				<span class="navigatieButton" id="vorigeKlantenPagina">Terug</span>
 		
 				<input type="text" id="zoekKlantInput"/>
 				<span class="navigatieButton" id="zoekKlantButton">Zoek</span>
 				
-				<span class="navigatieButton">Volgende</span>
+				<span class="navigatieButton" id="volgendeKlantenPagina">Volgende</span>
 			</div>
 			
-			<div id="klantenLijst" class="klantenLijst">
-				
+			<div id="klantenLijstLinks" class="klantenLijstLinks">
+			</div>
+			<div id="klantenLijstRechts" class="klantenLijstRechts">
 			</div>
 		</div>
 	</div>
@@ -128,41 +112,61 @@
 		
 	<!-- inplannen -->
 	<div id="inplannenModal" class="modal">
-		<div class="modal-content">
-			<div class="topBar">
+		<div class="modal-content" id="inplannenModalContent">
+			<div class="topBarInplannen">
 				<input type="button" class="navigatieButton"  id="terugInplannen" value="Annuleer"/>
 				Inplannen
 				<input type="button" class="navigatieButton"  id="volgendeInplannen" value="Volgende"/>
 			</div>
 			
-			<!-- linker kant inplannen met overzicht -->
-			<div class="inplannenForm">
-				<h3>Klant</h3>
-				<span class="inplanFullRowOverzicht"><a>Geslacht: </a><a id="inplanGeslachtOverzicht"></a></span>				
+			<!-- overzicht inplannen -->
+			<form class="inplannenForm" id="inplannenForm">
+				<span>klant</span><br>
+				<span>Geslacht</span> 
+				<span id="inplanFormGeslacht"></span><br>
+				<span>Naam</span> 
+				<input type="text" name="klantNaam"><br>
+				<span>Email</span> 
+				<input type="text" name="klantEmail"><br>
+				<span>Telefoon nummer</span> 
+				<input type="text" name="klantTelefoon"><br>
 				
-				<h3>Afspraak</h3>
-				<span id="inplanBehandelingenOverzicht"></span>
-				<span class="inplanFullRowOverzicht"><a>Datum van afspraak: </a><a id="inplannenDatumOverzicht"></a></span>
-				<span class="inplanFullRowOverzicht"><a>Tijd van afspraak: </a><a id="inplannenTijdOverzicht"></a></span>
+				<span>Behandelingen:</span><br>
+				<span id="inplanBehandelingenForm"></span><br>
+				
+				<span>Afspraak</span><br>
+				<span>Datum: <a id="datumInplanForm"></a></span><br>
+				<span>Tijd: <a id="tijdInplanForm"></a></span>
+				
+				<br>
+				<span class="inplanBlokOverzicht">
+					Lengte
+					<span class="afspraakBlokWaarde" id="lengteAfspraakForm">0:00</span>
+				</span>
+				<span class="inplanBlokOverzicht">
+					Prijs
+					<span class="afspraakBlokWaarde" id="prijsAfspraakForm">€</span>
+				</span>
+				<br>
+				<input type="button" id="submitInplanFormButton" class="defaultButton" 
+				value="Inplannen" style="bottom: 10px;">
+			</form>
 					
-				<span class="inplanBlokOverzicht" id="lengteAfspraak">Uur</span><span class="inplanBlokOverzicht" id="prijsAfspraak"> %</span>
-				
-			</div>
-			
 			<!-- eerste scherm -->
 			<div id="inplannenGeslacht" class="inplannenRechts">
 				<span id="geslachtMan" class="geslachtButton">man</span>
 				<span id="geslachtVrouw" class="geslachtButton">Vrouw</span>
 				<span id="geslachtJongen" class="geslachtButton">Meisje</span>
 				<span id="geslachtMeisje" class="geslachtButton">Jongen</span>
+				<br>
 				<span id="inplannenBehnadelingToevoegen" class="geslachtButton">Behandeling toevoegen</span>
-
+				<span class="geslachtButton">Tijdelijke behandeling</span>
 				<div id="behandelingenKeuzeLijst">
 					<!-- De behandelingen waar uit gekozen kan worden -->
 				</div>
 			</div>
 
-			<!-- Datum en tijd -->
+			<!-- tweede scherm -->
 			<div id="inplannenDatum" class="inplannenRechts">
 				<span class="defaultButton" id="weekTerugInplannen">Week terug</span><span id="weekVerderInplannen" class="defaultButton">Week verder</span>
 				<span class="dagKiezen" id="dateSpanMaandag"><a>Maandag</a><br><a id="dateMaandag"></a></span>
@@ -174,47 +178,7 @@
 				<span class="dagKiezen" id="dateSpanZondag"><a>Zondag</a><br><a id="dateZondag"></a></span>
 			</div>
 			
-			<div id="inplannenTijd" class="inplannenRechts">
-							<input type="date" id="datumInplannen">
-			
-				<div class="behandelingKeuze" id="inplannenTijdKeuze" value="9:00">
-				</div>
-			</div>
-			
-			<div id="inplannenKlantInfo" class="inplannenRechts">
-				naam<br>
-				<input type="text" value="John" id="inplannenKlantNaam"><br>
-				email<br>
-				<input type="email" value="John@gmail.com" id="inplannenKlantEmail"><br>
-				telefoon nummer<br>
-				<input type="number" value="0615584840" id="inplannenKlantTel">
-			</div>
 		</div>	
-	</div>
-
-	<!-- Final step inplannen -->
-	<div class="modal">
-		<form id="inplannenForm" class="inplannenForm">
-			<span>klant</span><br>
-			<span>Geslacht</span> 
-			<span id="inplanFormGeslacht"></span><br>
-			<span>Naam</span> 
-			<span id="inplanFormnaam"></span><br>
-			<span>Email</span> 
-			<span id="inplanFormEmail"></span><br>
-			<span>Telefoon nummer</span> 
-			<span id="inplanFormTelefoon"></span><br>
-			
-			<span>Behandelingen:</span><br>
-			<span id="inplanFormBehandeling"></span><br>
-			<span>inplan datum</span>
-			<span id="inplanFormDatum"></span><br>				
-			<span>inplan tijd</span>
-			<span id="inplanFormTijd"></span><br>
-			<br>
-			<input type="button" id="submitInplanFormButton" class="defaultButton" 
-			value="Inplannen" style="bottom: 10px;">
-		</form>
 	</div>
 				
 	<!-- Behandeling toevoegen -->
@@ -239,7 +203,6 @@
 			</span>
 		</form>
 	</div>
-	
 	<!-- Settings -->
 	<div id="settings" class="modal">
 		<div class="modal-content">

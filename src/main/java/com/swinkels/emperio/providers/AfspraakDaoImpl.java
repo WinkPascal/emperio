@@ -40,28 +40,44 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 				
 				Behandeling behandeling = new Behandeling(behandelingnaam, lengte, prijs);
 
-				
 				//Afspraak
 				int id = dbResultSet.getInt("id");
-				for(Afspraak afspraak : afsprakenVandaag) {
-					if(afspraak.getId() == id) {
-						//afspraak bestaat al
-						//alleen de behandeling wordt toegevoegd
-						afspraak.addBehandeling(behandeling);
-					} else {
-						//afspraak wordt aangemaakt
-						String timestampString = dbResultSet.getString("timestamp");
-						
-						//klant
-						String klantNaam = dbResultSet.getString("klantNaam");
-						Klant klant = new Klant(klantNaam);
-						
+				if(afsprakenVandaag.size() == 0){
+					//Dit is de eerste afspraak die wordt aangemaakt
+					String timestampString = dbResultSet.getString("timestamp");
+					timestampString = timestampString.substring(0, timestampString.length()-5);
+					Date timestampDate =  ServiceFilter.StringToDateFormatter(timestampString, "yyyy-MM-dd HH:mm");
+					
+					//klant
+					String klantNaam = dbResultSet.getString("klantNaam");
+					Klant klant = new Klant(klantNaam);
+					
+					
+					Afspraak newAfspraak = new Afspraak(id, timestampDate, klant);
+					newAfspraak.addBehandeling(behandeling);
 
-						
-						Afspraak newAfspraak = new Afspraak(id, ServiceFilter.StringToDateFormatter(timestampString,"yyyy-MM-dd HH-mm"), klant);
+					afsprakenVandaag.add(newAfspraak);
+				} else {
+					for(Afspraak afspraak : afsprakenVandaag) {
 
-						afsprakenVandaag.add(newAfspraak);
+						if(afspraak.getId() == id) {
+							//afspraak bestaat al
+							//alleen de behandeling wordt toegevoegd
+							afspraak.addBehandeling(behandeling);
+						} else {
+							//afspraak wordt aangemaakt
+							String timestampString = dbResultSet.getString("timestamp");
+							
+							//klant
+							String klantNaam = dbResultSet.getString("klantNaam");
+							Klant klant = new Klant(klantNaam);
+						
+							Afspraak newAfspraak = new Afspraak(id, ServiceFilter.StringToDateFormatter(timestampString,"yyyy-MM-dd HH-mm"), klant);
+
+							afsprakenVandaag.add(newAfspraak);
+						}
 					}
+			
 				}
 			}
 		} catch (SQLException e) {

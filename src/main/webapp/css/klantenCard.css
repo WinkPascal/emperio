@@ -1,19 +1,45 @@
 @charset "UTF-8";
 
-.klantenLijst {
-	width: 100%;
+.klantenLijstLinks {
+	width: 50%;
 	height: 90%;
+	float: left;
+}
+
+.klantenLijstRechts{
+	width: 50%;
+	height: 90%;
+	float: right;
 }
 
 .klantDiv {
-	width: 250px;
-	height: 40px;
-	border-radius: 40px;
-	margin-top: 20px;
+	width: 400px;
+	border-radius: 10px;
+	border: 1px solid gray; 
+	margin-top : 20px;
 	background-color: white;
+	margin-top: 20px;
 }
 
-.navigatieButton{
+.klantNaam {
+	width: 100%;
+	font-size: 20px;
+}
+
+.klantGeslacht {
+	width: 100%;
+	top: 30px;
+}
+
+.klantEmail {
+	width: 100%;
+}
+
+.klantTelefoon {
+	width: 100%;
+}
+
+.navigatieButton {
 	display: inline-block;
 	text-align: center;
 	width: 150px;
