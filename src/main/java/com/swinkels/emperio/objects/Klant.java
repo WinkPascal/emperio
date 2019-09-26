@@ -41,9 +41,6 @@ public class Klant {
 	}
 
 	public void setEmail(String email) {
-		System.out.println(email);
-		System.out.println(email.equals(""));
-	
 		this.email = email;
 	}
 

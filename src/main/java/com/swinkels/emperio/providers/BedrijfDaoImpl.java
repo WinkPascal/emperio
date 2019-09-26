@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.swinkels.emperio.objects.Bedrijf;
+import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.service.ServiceFilter;
 
 public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
@@ -16,7 +17,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 	
 	public ArrayList<Date> getDagTijden(Bedrijf bedrijf, Date date){
 		ArrayList<Date> dagTijden = new ArrayList<Date>();
-		
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
@@ -43,5 +43,34 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 			return null;
 		}
 		return dagTijden;
+	}
+	
+	
+	public ArrayList<Dag> getWeekRooster(Bedrijf bedrijf){
+		ArrayList<Dag> dagen = new ArrayList<Dag>();
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"SELECT dag, openingstijd, sluitingstijd"
+				 + " FROM `dag` "
+				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"'");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				String openingsTijd = dbResultSet.getString("openingstijd");
+				String sluitingsTijd = dbResultSet.getString("sluitingstijd");
+				int dagNummer = dbResultSet.getInt("dag");
+				
+				Date openingsTijdDate = ServiceFilter.StringToDateFormatter(openingsTijd, "HH:mm");
+				Date sluitingsTijdDate = ServiceFilter.StringToDateFormatter(sluitingsTijd, "HH:mm");
+				
+				Dag  dag = new Dag(dagNummer, openingsTijdDate, sluitingsTijdDate);
+				
+				dagen.add(dag);
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		
+		return dagen;
 	}
 }

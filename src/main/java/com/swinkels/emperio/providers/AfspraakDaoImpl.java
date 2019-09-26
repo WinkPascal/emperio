@@ -4,10 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import com.swinkels.emperio.objects.Afspraak;
@@ -18,7 +16,7 @@ import com.swinkels.emperio.service.ServiceFilter;
 
 public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 
-	public ArrayList<Afspraak> getAfsprakenVandaag(Date date, Bedrijf bedrijf) {
+	public ArrayList<Afspraak> getAfsprakenBetweenDates(Date beginDate, Date eindDate, Bedrijf bedrijf) {
 		ArrayList<Afspraak> afsprakenVandaag = new ArrayList<Afspraak>();
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
@@ -28,7 +26,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"             join afspraakbehandeling ab on ab.afspraak = a.id \n" + 
 					"             join bedrijf m on k.bedrijf = m.email \n" + 
 					"             join behandeling b on b.id = ab.behandeling \n" + 
-					"where DATE(timestamp) = '"+ServiceFilter.DateToStringFormatter(date, "yyyy-MM-dd")+"' \n" + 
+					"where DATE(timestamp) = '"+ServiceFilter.DateToStringFormatter(beginDate, "yyyy-MM-dd")+"' \n" + 
 					"  and m.email = '"+bedrijf.getEmail()+"'");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
@@ -124,5 +122,38 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 	public ArrayList<Afspraak> getOpenPlekken(Date date, String behandelingen) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public ArrayList<Afspraak> getAfsprakenWeek(Bedrijf bedrijf, Date beginDate){
+		ArrayList<Afspraak> afspraken = new ArrayList<Afspraak>();
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(beginDate);            
+		calendar.add(Calendar.DAY_OF_YEAR, 7);
+		Date eindDate = calendar.getTime();
+		
+		String beginDateString = ServiceFilter.DateToStringFormatter(beginDate, "yyyy-MM-dd");
+		String eindDateString = ServiceFilter.DateToStringFormatter(eindDate, "yyyy-MM-dd");
+		
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement("SELECT * " + 
+					"FROM afspraak " + 
+					"WHERE timestamp " + 
+					"BETWEEN '"+beginDateString+"' AND " + 
+					"'"+eindDateString+"' " + 
+					"order by timestamp ");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				//afspraak
+
+				
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		
+		return afspraken;
 	}
 }
