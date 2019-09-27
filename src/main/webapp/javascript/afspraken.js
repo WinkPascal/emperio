@@ -1,8 +1,23 @@
 function onload(){
 	var datum = new Date();
 	var date = datum.getFullYear() +'-'+ datum.getMonth() +'-'+ datum.getDate();
-	alert(datum);
 	getAfspraken(date);
+}
+
+function getRooster(){
+	var fetchoptions = {
+			headers: {
+				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+			}
+		}
+	fetch("restservices/service/getWeekRooster/" + date, fetchoptions)
+	.then(response => response.json())
+	.then(function(dataArrays){
+
+	}).catch(function() {
+		// De gebruiker is niet ingelogt
+		alert("niet meer ingelogd");
+	});
 }
 
 function getAfspraken(date){
@@ -13,8 +28,8 @@ function getAfspraken(date){
 		}
 	fetch("restservices/service/getWeekRooster/" + date, fetchoptions)
 	.then(response => response.json())
-	.then(function(producten){
-		
+	.then(function(dataArrays){
+
 	}).catch(function() {
 		// De gebruiker is niet ingelogt
 		alert("niet meer ingelogd");

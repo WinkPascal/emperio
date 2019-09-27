@@ -106,8 +106,6 @@ public class ServiceProvider {
 		return jab.build().toString();
 	}
 	
-	
-	
 	@GET
 	@Path("/tijdslotenOphalen/{datum}")
 	@RolesAllowed("user")
@@ -221,13 +219,21 @@ public class ServiceProvider {
 		//dagen worden opgehaalt
 		ArrayList<Dag> dagen = bedrijfDao.getWeekRooster(bedrijf);
 		JsonArrayBuilder jab = Json.createArrayBuilder();
+		// 2 arrays	
+		// 1e array
+			//dagen
+		// 2e array
+			//afspraken
 		JsonArrayBuilder jab1 = Json.createArrayBuilder();
+		// weeknummer
+		// openingstijd
+		// sluitingstijd
 		for(Dag dag : dagen) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
-			job.add("id", dag.getDag());
+			job.add("weekNummer", dag.getDag());
 
 			String openingsTijd = ServiceFilter.DateToStringFormatter(dag.getOpeningsTijd(), "HH:mm");
-			job.add("openingsTijd", openingsTijd);
+			job.add("openingsTijd", "s");
 			
 			String sluitingsTijd = ServiceFilter.DateToStringFormatter(dag.getSluitingsTijd(), "HH:mm");
 			job.add("sluitingsTijd", sluitingsTijd);
