@@ -10,6 +10,7 @@ import java.util.Date;
 
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Dag;
+import com.swinkels.emperio.objects.Product;
 import com.swinkels.emperio.service.ServiceFilter;
 
 public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
@@ -26,7 +27,8 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 					"SELECT openingstijd, sluitingstijd"
 				 + " FROM `dag` "
 				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"' "
-				 + "and dag = "+dayOfWeek+"; ");
+				 + "and dag = "+dayOfWeek+" "
+				 + "ORDER BT dag;");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
@@ -52,7 +54,8 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 			PreparedStatement pstmt = con.prepareStatement(
 					"SELECT dag, openingstijd, sluitingstijd"
 				 + " FROM `dag` "
-				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"'");
+				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"' "
+				 + "ORDER BY dag");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
@@ -73,4 +76,31 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		
 		return dagen;
 	}
+	
+	public ArrayList<Product> getProductenByPage(Bedrijf bedrijf, int pageNummer){		
+		ArrayList<Product> producten = new ArrayList<Product>();
+		int top = pageNummer * 10;
+		int low = top - 10;
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"SELECT * \n" + 
+					"from product \n" + 
+					"where bedrijf = '"+bedrijf.getEmail()+"' " + 
+					"ORDER BY naam LIMIT "+low+", "+top+"");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				int id = dbResultSet.getInt("id");
+				int hoeveelheid = dbResultSet.getInt("hoeveelheid");
+				String naam = dbResultSet.getString("naam");
+				Product product = new Product(id, hoeveelheid, naam);
+				producten.add(product);
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}		
+		return producten;
+	}
+
+	
 }

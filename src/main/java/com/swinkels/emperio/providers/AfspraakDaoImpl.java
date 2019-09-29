@@ -18,6 +18,9 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 
 	public ArrayList<Afspraak> getAfsprakenBetweenDates(Date beginDate, Date eindDate, Bedrijf bedrijf) {
 		ArrayList<Afspraak> afsprakenVandaag = new ArrayList<Afspraak>();
+		System.out.println(ServiceFilter.DateToStringFormatter(beginDate, "yyyy-MM-dd"));
+		System.out.println(ServiceFilter.DateToStringFormatter(eindDate, "yyyy-MM-dd"));
+
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select a.id, a.timestamp, k.naam as klantnaam, \n" + 
@@ -26,8 +29,9 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"             join afspraakbehandeling ab on ab.afspraak = a.id \n" + 
 					"             join bedrijf m on k.bedrijf = m.email \n" + 
 					"             join behandeling b on b.id = ab.behandeling \n" + 
-					"where DATE(timestamp) = '"+ServiceFilter.DateToStringFormatter(beginDate, "yyyy-MM-dd")+"' \n" + 
-					"  and m.email = '"+bedrijf.getEmail()+"'");
+					"where m.email = '"+bedrijf.getEmail()+"' AND \n" + 
+					"timestamp BETWEEN '"+ServiceFilter.DateToStringFormatter(beginDate, "yyyy-MM-dd")+"' AND "
+							        + "'"+ServiceFilter.DateToStringFormatter(eindDate, "yyyy-MM-dd")+"'");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
@@ -56,31 +60,38 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 
 					afsprakenVandaag.add(newAfspraak);
 				} else {
+					boolean nietAlleenBehandeling = true;
 					for(Afspraak afspraak : afsprakenVandaag) {
-
+						//check of de afspraak al is opghehaalt
 						if(afspraak.getId() == id) {
-							//afspraak bestaat al
+							System.out.println(afspraak.getId());
 							//alleen de behandeling wordt toegevoegd
+							for(Behandeling behandeling1 : afspraak.getBehandelingen()) {
+								System.out.println("Behandeling "+behandeling1.getNaam());
+							}
+							nietAlleenBehandeling = false;
 							afspraak.addBehandeling(behandeling);
-						} else {
-							//afspraak wordt aangemaakt
-							String timestampString = dbResultSet.getString("timestamp");
-							
-							//klant
-							String klantNaam = dbResultSet.getString("klantNaam");
-							Klant klant = new Klant(klantNaam);
-						
-							Afspraak newAfspraak = new Afspraak(id, ServiceFilter.StringToDateFormatter(timestampString,"yyyy-MM-dd HH-mm"), klant);
-
-							afsprakenVandaag.add(newAfspraak);
 						}
 					}
-			
+					if(nietAlleenBehandeling) {
+						String timestampString = dbResultSet.getString("timestamp");
+						timestampString = timestampString.substring(0, timestampString.length()-5);
+						Date timestamp = ServiceFilter.StringToDateFormatter(timestampString,"yyyy-MM-dd HH:mm");
+						//klant
+						String klantNaam = dbResultSet.getString("klantNaam");
+						Klant klant = new Klant(klantNaam);
+					
+						Afspraak newAfspraak = new Afspraak(id, timestamp, klant);
+						newAfspraak.addBehandeling(behandeling);
+
+						afsprakenVandaag.add(newAfspraak);
+					}
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println("dsaiughdasihuldiuahliuhdiuhabsliudhuyh");
 		return afsprakenVandaag;
 	}
 
@@ -102,7 +113,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 	public Afspraak getAfspraakId(Afspraak afspraak) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"select * from afspraak "
+					"select id from afspraak "
 					+ "where klant = '"+afspraak.getKlant().getId()+"' "
 					+ "and timestamp = '"+ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"'");
 			System.out.println(pstmt);
@@ -119,11 +130,6 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		return afspraak;
 	}
 
-	public ArrayList<Afspraak> getOpenPlekken(Date date, String behandelingen) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	public ArrayList<Afspraak> getAfsprakenWeek(Bedrijf bedrijf, Date beginDate){
 		ArrayList<Afspraak> afspraken = new ArrayList<Afspraak>();
 		
@@ -146,14 +152,11 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				//afspraak
-
-				
-				
+		
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
-		
 		return afspraken;
 	}
 }

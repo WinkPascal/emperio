@@ -89,16 +89,16 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 							+ klant.getBedrijf().getEmail() + "', " + "'" + klant.getNaam() + "', " + "'"
 							+ klant.getGeslacht() + "', " + "'" + klant.getTel() + "')");
 				} else {
-					// heeft geen telefoon en geen email
-					// kan niet
-					return false;
+					pstmt = con.prepareStatement("insert into klant(bedrijf, naam, geslacht) values( " + "'"
+							+ klant.getBedrijf().getEmail() + "', " + "'" + klant.getNaam() + "', " + "'"
+							+ klant.getGeslacht() + "')");
 				}
 			}
 			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			System.out.println("=======klant bestaat al=======");
+			System.out.println(e);
 		}
 		return false;
 	}
@@ -126,9 +126,8 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 							+ klant.getBedrijf().getEmail() + "' " + "AND naam = '" + klant.getNaam() + "' "
 							+ "AND telefoon = '" + klant.getTel() + "'");
 				} else {
-					// heeft geen telefoon en geen email
-					// kan niet
-					return klant;
+					pstmt = con.prepareStatement("select id from klant where " + "bedrijf = '"
+							+ klant.getBedrijf().getEmail() + "' " + "AND naam = '" + klant.getNaam() + "'");
 				}
 			}
 			System.out.println(pstmt);

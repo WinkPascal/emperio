@@ -96,15 +96,19 @@
 	<!-- inventaris -->
 	<div id="inventarisModal" class="modal">
 		<div class="modal-content">
-			<div id="topBar" class="topBar">
-				<span class="navigatieButton">Terug</span>
+			<div id="topBar" class="topBarInventaris">
+				<span class="navigatieButton" id="terugButtonInventaris">Terug</span>
 		
 				<input type="text" id="zoekProductenInput"/>
 				<span class="navigatieButton" id="zoekProductButton">Zoek</span>
+				<input type="button" id="voegProductToe" value="Voeg Product Toe!">
 				
-				<span class="navigatieButton">Volgende</span>
+				<span class="navigatieButton" id="volgendeButtonInventaris">Volgende</span>
 			</div>
-			<div id="productenLijst">
+			<div id="inventarisLijstLinks">
+				
+			</div>			
+			<div id="inventarisLijstRechts">
 				
 			</div>
 		</div>
@@ -239,6 +243,7 @@
 	<script src="javascript/klantenCard.js"></script>
 	<script src="javascript/inplannenCard.js"></script>
 	<script src="javascript/errorManager.js"></script>
+	<script src="javascript/inventarisCard.js"></script>
 	
 </body>
 </html>

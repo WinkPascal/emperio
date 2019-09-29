@@ -2,7 +2,6 @@ document.getElementById("volgendeInplannen").addEventListener("click", function(
 	volgendeKnopInplannen();
 })
 function volgendeKnopInplannen(){	
-
 	// geslacht en behandelingen zijn ingevuld
 	if (status == "behandeling"){
 		// het geslacht en behandeling is ingevuld
@@ -121,7 +120,7 @@ function behandelingenOphalen(geslacht){
 			
 			behandelingsDiv.addEventListener("click", function() {
 				hideItem("d"+behandeling.id);
-				inplanVoorbereiding("tijdToevoegen", behandeling.lengte);
+				inplanVoorbereiding("lengteToevoegen", behandeling.lengte);
 				inplanVoorbereiding("prijsToevoegen", behandeling.prijs);
 				
 				document.getElementById("prijsAfspraakForm").innerHTML = "€ "+ prijs;
@@ -143,7 +142,7 @@ function behandelingenOphalen(geslacht){
 					removeItem(behandeling.id);
 					showItem("d"+behandeling.id);
 					
-					inplanVoorbereiding("tijdVerwijderen", behandeling.lengte);
+					inplanVoorbereiding("lengteVerwijderen", behandeling.lengte);
 					inplanVoorbereiding("prijsVerwijderen", behandeling.prijs);
 					
 					document.getElementById("prijsAfspraakForm").innerHTML = "€ "+ prijs;
@@ -339,6 +338,7 @@ function tijdslotenOphalen(){
 				}
 				function setEventListenerTijd(id){
 					document.getElementById(id).addEventListener("click", function(){
+						inplanVoorbereiding("tijd", id);
 						document.getElementById("tijdInplanForm").innerHTML = id;
 					})
 				}
@@ -352,7 +352,7 @@ function inplanVoorbereiding(state, value){
 		afspraakKlantGeslacht = value;
 	} else if(state == "behandelingToevoegen"){
 		behandelingenLijst.push(value);
-	} else if(state == "tijdToevoegen"){
+	} else if(state == "lengteToevoegen"){
 		var nieuw=value.split(":");
 		uren=uren + parseInt(nieuw[0]);
 		minuten = minuten + parseInt(nieuw[1]);
@@ -360,14 +360,14 @@ function inplanVoorbereiding(state, value){
 			 uren = uren +1;
 			 minuten = minuten - 60;
 		 }
-	} else if(state == "tijdVerwijderen"){
+	} else if(state == "lengteVerwijderen"){
 		var nieuw=value.split(":");
 		uren=uren - parseInt(nieuw[0]);
 		minuten = minuten - parseInt(nieuw[1]);
 		 if(minuten < 0){
 			 uren = uren - 1;
 			 minuten = minuten + 60;
-		 }	
+		 }
 	} else if(state == "prijsToevoegen"){
 		prijs = prijs + value;
 	} else if(state == "prijsVerwijderen"){
@@ -375,12 +375,12 @@ function inplanVoorbereiding(state, value){
 	} else if(state == "datum"){
 		afspraakDatum=value;
 	} else if(state == "tijd"){
-		afspraakTijd =value;
+		afspraakTijd = value;
 	} else if(state = "inplannen"){
 
 		var tijdInplannen = uren +":"+minuten;
 
-		inplannen(afspraakKlantGeslacht, behandelingenLijst, tijdInplannen, afspraakDatum);
+		inplannen(afspraakKlantGeslacht, behandelingenLijst, afspraakTijd, afspraakDatum);
 	}
 }
 

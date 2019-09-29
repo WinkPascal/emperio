@@ -32,47 +32,28 @@ body {
   background-color: white;
 }
 
-.cd-schedule {
+.rooster-timeline {
   position: relative;
   margin: 2em 0;
 }
 
-.cd-schedule .timeline {
+.rooster-timeline .timeline {
   display: none;
 }
 
-
-.cd-schedule .events .single-event:last-of-type {
-  margin-right: 5%;
-}
-
-.cd-schedule .events .single-event a {
-  display: block;
-  height: 100%;
-  padding: .8em;
-}
-
 @media only screen and (min-width: 550px) {
-  .cd-schedule .events .single-event {
+  .rooster-timeline .events .single-event {
     width: 40%;
   }
 }
 
 
-.cd-schedule.loading .events .single-event {
-  /* the class .loading is added by default to the .cd-schedule element
+.rooster-timeline.loading .rooster .single-event {
+  /* the class .loading is added by default to the .rooster-timeline element
 	   it is removed as soon as the single events are placed in the schedule plan (using javascript) */
   opacity: 0;
 }
 
-.cd-schedule .event-name {
+.rooster-timeline .event-name {
   font-size: 2.4rem;
-}
-
-.cd-schedule .event-date {
-  /* they are not included in the the HTML but added using JavScript */
-  font-size: 1.4rem;
-  opacity: .7;
-  line-height: 1.2;
-  margin-bottom: .2em;
 }

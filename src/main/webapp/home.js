@@ -20,16 +20,20 @@ function onload(){
 document.getElementById("inventarisCard").addEventListener("click", function() {
 	document.getElementById("inventarisModal").style.display = "block";
 	// de producten voor de eerste pagina worden opgehaalt
-	getAlleProducten(1);
-	
-	document.getElementById("volgendeKlanten").addEventListener("click", function() {
-		alert();
-		volgendeKnopInplannen();
+	var paginaNummerInventaris = 1;
+	getAlleProducten(paginaNummerInventaris);
+	document.getElementById("terugButtonInventaris").addEventListener("click", function() {
+		if(paginaNummerInventaris == 1){
+			alert("kan niet terug");
+		}
+		paginaNummerInventaris =paginaNummerInventaris - 1;
+
+		volgendeKnopInplannen(paginaNummerInventaris);
 	})
 	
-	document.getElementById("terugKlanten").addEventListener("click", function() {
-		alert();
-		terugKnopInplannen();
+	document.getElementById("volgendeButtonInventaris").addEventListener("click", function() {
+		paginaNummerInventaris++;
+		terugKnopInplannen(paginaNummerInventaris);
 	})
 })
 
