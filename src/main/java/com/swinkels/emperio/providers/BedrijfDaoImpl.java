@@ -28,7 +28,7 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 				 + " FROM `dag` "
 				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"' "
 				 + "and dag = "+dayOfWeek+" "
-				 + "ORDER BT dag;");
+				 + "ORDER BY dag;");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
