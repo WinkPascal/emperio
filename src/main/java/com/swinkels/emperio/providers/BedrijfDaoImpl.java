@@ -21,7 +21,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-		System.out.println(dayOfWeek);
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"SELECT openingstijd, sluitingstijd"
@@ -29,7 +28,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"' "
 				 + "and dag = "+dayOfWeek+" "
 				 + "ORDER BY dag;");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				String openingsTijd = dbResultSet.getString("openingstijd");
@@ -56,7 +54,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 				 + " FROM `dag` "
 				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"' "
 				 + "ORDER BY dag");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				String openingsTijd = dbResultSet.getString("openingstijd");
@@ -87,7 +84,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 					"from product \n" + 
 					"where bedrijf = '"+bedrijf.getEmail()+"' " + 
 					"ORDER BY naam LIMIT "+low+", "+top+"");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");

@@ -8,20 +8,32 @@
   <link rel="stylesheet" media="screen and (min-width: 800px)" href="css/afspraken800px.css">
 </head>
 <body onload="onload()">
-<br />
-<input type="button" class="defaultButton" value="Week Terug" id="weekTerug">
-<input type="button" class="defaultButton" value="Afspraak inplannen">
-<input type="button" class="defaultButton" value="Maanden">
-<input type="button" class="defaultButton" value="Week Verder" id="weekVerder">
+	<br />
+	<input type="button" class="defaultButton" value="Week Terug" id="weekTerug">
+	<input type="button" class="defaultButton" value="Afspraak inplannen">
+	<input type="button" class="defaultButton" value="Maanden">
+	<input type="button" class="defaultButton" value="Week Verder" id="weekVerder">
 
-<div class="rooster-timeline">
-	<div id="timeline" class="timeline">
-	</div> 
+	<div class="rooster-timeline">
+		<div id="timeline" class="timeline">
+		</div> 
 
-	<div id="rooster" class="rooster">
+		<div id="rooster" class="rooster">
+		</div>
 	</div>
-</div>
 
+	<div id="afspraakModal" class="modal">
+		<div class="modal-content">
+			<h2 id="klantNaam">Voornaam Achternaam</h2>
+			<p>email</p>
+			<p>Geslacht</p>
+			<p>telefoon</p>
+			<p>aantal afspraken</p>
+			<p> inkomsten klant</p>
+			<div id="afsprakenLijst"></div>
+		</div>
+	</div>
+	
 	<script src="javascript/afspraken.js"></script>
 </body>
 </html>

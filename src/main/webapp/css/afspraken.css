@@ -1,59 +1,89 @@
 body {
 	line-height: 1;
 }
+
 ol, ul {
 	list-style: none;
 }
+
+
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 600px;
+	background-color: orange; /* Black w/opacity/see-through */
+	height: 350px;
+
+  	animation-name: zoom;
+  	animation-duration: 0.6s;
+}
+
 blockquote, q {
 	quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
+
+blockquote:before, blockquote:after, q:before, q:after {
 	content: '';
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
 
 *, *::after, *::before {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 html {
-  font-size: 62.5%;
+	font-size: 62.5%;
 }
 
 body {
-  font-size: 1.6rem;
-  font-family: "Source Sans Pro", sans-serif;
-  color: #222222;
-  background-color: white;
+	font-size: 1.6rem;
+	font-family: "Source Sans Pro", sans-serif;
+	color: #222222;
+	background-color: white;
 }
 
 .rooster-timeline {
-  position: relative;
-  margin: 2em 0;
+	position: relative;
+	margin: 2em 0;
 }
 
 .rooster-timeline .timeline {
-  display: none;
+	display: none;
 }
 
 @media only screen and (min-width: 550px) {
-  .rooster-timeline .events .single-event {
-    width: 40%;
-  }
+	.rooster-timeline .events .single-event {
+		width: 40%;
+	}
 }
 
-
 .rooster-timeline.loading .rooster .single-event {
-  /* the class .loading is added by default to the .rooster-timeline element
+	/* the class .loading is added by default to the .rooster-timeline element
 	   it is removed as soon as the single events are placed in the schedule plan (using javascript) */
-  opacity: 0;
+	opacity: 0;
 }
 
 .rooster-timeline .event-name {
-  font-size: 2.4rem;
+	font-size: 2.4rem;
 }

@@ -15,5 +15,7 @@ public interface AfspraakDao {
 
 	public Afspraak getAfspraakId(Afspraak afspraak);
 	
+	public Afspraak getAfspraak(Bedrijf bedrijf, int id);
+	
 	public ArrayList<Afspraak> getAfsprakenWeek(Bedrijf bedrijf, Date date);
 }

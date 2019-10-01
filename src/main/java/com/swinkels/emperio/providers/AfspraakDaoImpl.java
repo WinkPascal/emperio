@@ -18,9 +18,6 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 
 	public ArrayList<Afspraak> getAfsprakenBetweenDates(Date beginDate, Date eindDate, Bedrijf bedrijf) {
 		ArrayList<Afspraak> afsprakenVandaag = new ArrayList<Afspraak>();
-		System.out.println(ServiceFilter.DateToStringFormatter(beginDate, "yyyy-MM-dd"));
-		System.out.println(ServiceFilter.DateToStringFormatter(eindDate, "yyyy-MM-dd"));
-
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select a.id, a.timestamp, k.naam as klantnaam, \n" + 
@@ -64,11 +61,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					for(Afspraak afspraak : afsprakenVandaag) {
 						//check of de afspraak al is opghehaalt
 						if(afspraak.getId() == id) {
-							System.out.println(afspraak.getId());
 							//alleen de behandeling wordt toegevoegd
-							for(Behandeling behandeling1 : afspraak.getBehandelingen()) {
-								System.out.println("Behandeling "+behandeling1.getNaam());
-							}
 							nietAlleenBehandeling = false;
 							afspraak.addBehandeling(behandeling);
 						}
@@ -91,7 +84,6 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("dsaiughdasihuldiuahliuhdiuhabsliudhuyh");
 		return afsprakenVandaag;
 	}
 
@@ -101,7 +93,6 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			"insert into afspraak(klant, timestamp) values("
 			+ "'"+afspraak.getKlant().getId()+"', "
 			+ "'"+ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"')");
-			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -116,7 +107,6 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"select id from afspraak "
 					+ "where klant = '"+afspraak.getKlant().getId()+"' "
 					+ "and timestamp = '"+ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"'");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				//afspraak
@@ -148,7 +138,6 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"BETWEEN '"+beginDateString+"' AND " + 
 					"'"+eindDateString+"' " + 
 					"order by timestamp ");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				//afspraak
@@ -158,5 +147,53 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			e.printStackTrace();
 		} 
 		return afspraken;
+	}
+
+	public Afspraak getAfspraak(Bedrijf bedrijf, int afspraakId) {
+		try (Connection con = super.getConnection()) {
+			Afspraak afspraak = new Afspraak();
+
+			PreparedStatement pstmt = con.prepareStatement( 
+					"select a.id, a.timestamp, k.naam as klantnaam, \n" + 
+					"       b.naam as behandelingnaam, b.lengte, b.prijs\n" + 
+					"from klant k join afspraak a on a.klant = k.id \n" + 
+					"             join afspraakbehandeling ab on ab.afspraak = a.id \n" + 
+					"             join bedrijf m on k.bedrijf = m.email \n" + 
+					"             join behandeling b on b.id = ab.behandeling \n" + 
+					"where m.email = '"+bedrijf.getEmail()+"' "+ 
+					"and a.id = "+afspraakId);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				//Behandeling
+				String behandelingnaam = dbResultSet.getString("behandelingnaam");
+				Date lengte = ServiceFilter.StringToDateFormatter(dbResultSet.getString("lengte"), "HH:mm");
+				double prijs = dbResultSet.getDouble("prijs");
+				
+				Behandeling behandeling = new Behandeling(behandelingnaam, lengte, prijs);
+
+				//Afspraak
+				int id = dbResultSet.getInt("id");
+				int i = 1;
+				if(i == 1) {
+					// de klant en afspraak met de eerste behandeling wordt aangemaakt
+					String timestampString = dbResultSet.getString("timestamp");
+					timestampString = timestampString.substring(0, timestampString.length()-5);
+					Date timestamp = ServiceFilter.StringToDateFormatter(timestampString,"yyyy-MM-dd HH:mm");
+					//klant
+					String klantNaam = dbResultSet.getString("klantNaam");
+					Klant klant = new Klant(klantNaam);
+				
+					afspraak = new Afspraak(id, timestamp, klant);
+					afspraak.addBehandeling(behandeling);
+					i++;
+				} else {
+					afspraak.addBehandeling(behandeling);
+				}
+			}
+			return afspraak;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return null;
 	}
 }

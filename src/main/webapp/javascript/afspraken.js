@@ -1,10 +1,13 @@
 function onload(){
 	datum = new Date();
 	getRooster();
-	getAfspraken(datum);
+	//afspraken van huidige week ophalen
+	getAfspraken(datum, true);
 }
 
 function getRooster(){ 
+	afsprakenLijst = [];
+	dagenLijst = [];
 	var fetchoptions = {
 			headers: {
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
@@ -23,7 +26,6 @@ function getRooster(){
 		weekdagen[5] = "Zaterdag";
 		weekdagen[6] = "Zondag";
 		var aantalDagen = 0;
-
 		beginUurRooster = 0;
 		beginMinuutRooster =0;
 
@@ -65,7 +67,6 @@ function getRooster(){
 						break;
 					}
 				}
-
 				document.getElementById("timeline").appendChild(ul);
 				i++;
 			} else{
@@ -79,10 +80,21 @@ function getRooster(){
 
 				var weekNaam = document.createElement('a');
 				weekNaam.innerHTML= weekdagen[dag.weekNummer] +"<br>";
+				
+				//datums onder de dag zetten
+				//get Date maandag van de week
+				var maandag = new Date(datum);
+				var day = maandag.getDay(),
+			    diff = maandag.getDate() - day + (day == 0 ? -6:1);
+				maandag.setDate(diff);
+				maandag.setDate(maandag.getDate() + dag.weekNummer);
+
+				var dagDate = maandag.getFullYear() +'-'+ maandag.getMonth() +'-'+ maandag.getDate();
+
+				
 				var weekDate = document.createElement('a');
 				weekDate.setAttribute('id', "dagDate"+dag.weekNummer);
-				weekDate.innerHTML = "dsa";
-				
+				weekDate.innerHTML = dagDate;
 				topinfo.appendChild(weekNaam);
 				topinfo.appendChild(weekDate);
 
@@ -123,12 +135,12 @@ function getRooster(){
 				var lengteAvond = uurEindLengte+":"+minuutEindLengte;
 				var avond = createAfspraak(eindTijdDag, lengteAvond, "avond", "nbsb");
 				events.appendChild(avond);
-
 				dagVanRooster.appendChild(events);
 				document.getElementById("rooster").appendChild(dagVanRooster);
 			}
-
 		}
+
+		//maken breedte css
 		var dagen = document.getElementsByClassName('dag');
 		var breedte = 100 / aantalDagen;
 		for(m = 0; m < dagen.length; m++) {
@@ -186,27 +198,42 @@ function createAfspraak(beginTijd ,lengte, innerhtml, soort){
 
 document.getElementById("weekTerug").addEventListener("click", function(){
 	datum.setDate(datum.getDate() - 7);
-	getAfspraken(datum);
+	getAfspraken(datum, false);
 });
 
 document.getElementById("weekVerder").addEventListener("click", function(){
 	datum.setDate(datum.getDate() + 7);
-	getAfspraken(datum);
+	getAfspraken(datum, false);
 });
 
-function getAfspraken(datum){
-	var maandag = new Date(datum);
-	var day = maandag.getDay(),
-    diff = maandag.getDate() - day + (day == 0 ? -6:1);
-	maandag.setDate(diff);
-	var i = 0;
-	while(i < 7){
-		var dagDate = maandag.getFullYear() +'-'+ maandag.getMonth() +'-'+ maandag.getDate();
-		document.getElementById("dagDate"+i).innerHTML = dagDate;
-		maandag.setDate(maandag.getDate() + 1);
-		i++;
-	}
+function getAfspraken(datum, onload){
+
 	
+	console.log(afsprakenLijst);
+	//alle afspraken worden uit het rooster gehaalt
+	for(let afspraak of afsprakenLijst){
+		afspraak.remove();
+	}
+	afsprakenLijst = [];
+	var i = 0;
+
+	//als het niet voor de eerste keer geladen wordt
+	if(!onload){
+		//datums onder de dag zetten
+		//get Date maandag van de week
+		var maandag = new Date(datum);
+		var day = maandag.getDay(),
+	    diff = maandag.getDate() - day + (day == 0 ? -6:1);
+		maandag.setDate(diff);
+		while(i < 7){
+			var dagDate = maandag.getFullYear() +'-'+ maandag.getMonth() +'-'+ maandag.getDate();
+			console.log(i);
+			document.getElementById("dagDate"+i).innerHTML = dagDate;
+			maandag.setDate(maandag.getDate() + 1);
+			i++;
+		}
+	}
+
 	var date = datum.getFullYear() +'-'+ datum.getMonth() +'-'+ datum.getDate();
 	var fetchoptions = {
 			headers: {
@@ -217,10 +244,14 @@ function getAfspraken(datum){
 	.then(response => response.json())
 	.then(function(afspraken){
 		for(let afspraak of afspraken){
+			//variabalen initializen
 			var uurLengte = 0;
 			var minuutLente = 0;
+
 			var behandelingen = "";
 			var prijs = 0;
+			
+			//behandelingen ophalen
 			for(let behandeling of afspraak.behandelingen){
 				var lengteArray = behandeling.lengte.split(":");
 				uurLengte = uurLengte+parseInt(lengteArray[0]);
@@ -232,20 +263,47 @@ function getAfspraken(datum){
 				prijs = prijs + behandeling.prijs;
 				behandelingen = behandelingen + behandeling.naam;
 			}
+			//afpsraak attributen en afspraak aanmaken
 			var afspraakLengte = uurLengte+":"+minuutLente;
 			var top = afspraak.timestamp.substring(16, 11);
 			var klant = afspraak.klant;
 			var afspraakText = "Klant: "+ klant +"<br> prijs: "+prijs +"<br> Begin tijd: "+ top +"<br> lengte: "+uurLengte+":"+minuutLente;
  			var event = createAfspraak(top, afspraakLengte, afspraakText, 1);
- 			
+ 
+ 			event.setAttribute('id', afspraak.id);
+ 			afsprakenLijst.push(event);
+			
+ 			console.log(afsprakenLijst);
+ 			//bepalen waar de afspraak wordt toegvoegdt
  			var afspraakDate = new Date(afspraak.timestamp.substring(0, 10));
- 			var dagNummer = afspraakDate.getDay() - 1;
- 			var dagId = "dag"+dagNummer;
+ 			var dagNummer = afspraakDate.getDay();
+			var dagId = "dag"+dagNummer;
  			console.log(dagId);
- 			document.getElementById(dagId).appendChild(event);
+
+			document.getElementById(dagId).appendChild(event);
+
+			createOnClickListener(afspraak.id);
 		}
 	}).catch(function() {
 		// De gebruiker is niet ingelogt
 		alert("niet meer ingelogd");
 	});
 }
+
+function createOnClickListener(id){
+	document.getElementById(id).addEventListener("click", function(){
+
+		document.getElementById("afspraakModal").style.display = "block";
+		var fetchoptions = {
+				headers: {
+					'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+				}
+			}
+		fetch("restservices/service/getAfspraak/" + id, fetchoptions)
+		.then(response => response.json())
+		.then(function(afspraak){
+				alert(afspraak.klantNaam);
+		})
+	})
+}
+

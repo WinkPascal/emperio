@@ -12,6 +12,16 @@
   to {top: 0; opacity: 1}
 }
 
+.afspraakSpan{
+ 	display: inline-block;
+	width: 80%;
+	margin-left: 10%;
+	border: 1px solid blue; 
+	height: 80px;	
+	margin-top: 10px;
+	border-radius: 5px;
+}
+
 .topBar{
  	display: inline-block;
 	top: 0px;

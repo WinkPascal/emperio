@@ -18,7 +18,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select * from klant where naam LIKE '%" + klantRequest + "%' and bedrijf = '" + bedrijf + "'");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
@@ -47,7 +46,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select * from klant where bedrijf = '" + bedrijf + "' ORDER BY naam LIMIT "+low+", "+top+"");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
@@ -66,7 +64,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 	}
 
 	public boolean setKlant(Klant klant) {
-		System.out.println("==========SETKLANT=============");
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt;
 			if (klant.getEmail() != null) {
@@ -94,7 +91,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 							+ klant.getGeslacht() + "')");
 				}
 			}
-			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -104,8 +100,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 	}
 
 	public Klant getKlantId(Klant klant) {
-		System.out.println("==========GETKLANT=============");
-
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt;
 			if (klant.getEmail() != null) {
@@ -130,7 +124,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 							+ klant.getBedrijf().getEmail() + "' " + "AND naam = '" + klant.getNaam() + "'");
 				}
 			}
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");

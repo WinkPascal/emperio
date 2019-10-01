@@ -1,19 +1,46 @@
 
 //eerste wat er gedaan wordt bij het laden van de pagina
 function onload(){
-	var onload = 1;
+	var date = new Date();
+	var dagDate = date.getFullYear() +'-'+ date.getMonth() +'-'+ date.getDate();
 	var fetchoptions = {
 			headers: {
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 			}
 		}
-	fetch("restservices/service/afsprakenVandaag", fetchoptions)
+	fetch("restservices/service/afsprakenByDate/"+dagDate, fetchoptions)
 	.then(response => response.json())
 	.then(function(afspraken){
-		
-		succesMessage("Succesvol ingelogd.");
+		var afsprakenLijst = document.getElementById("afsprakenVandaagLijst");
+		for(let afspraak of afspraken){
+			var afspraakSpan = document.createElement('span');
+			
+			afspraakSpan.setAttribute('id', afspraak.id);
+			afspraakSpan.setAttribute('class', 'afspraakSpan');
+
+			var tekst = "Klant: "+afspraak.klantNaam +"" +
+				   "<br> Tijd: "+ afspraak.timestamp +"" +
+			       "<br> Lengte: "+afspraak.lengte +""+
+			       "<br> Prijs: "+afspraak.prijs +"<br>";
+			afspraakSpan.innerHTML =  tekst;
+			afsprakenLijst.appendChild(afspraakSpan);
+			document.getElementById(afspraak.id).addEventListener("click", function(){
+				
+				document.getElementById("afspraakModal").style.display = "block";
+				var fetchoptions = {
+						headers: {
+							'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+						}
+					}
+				fetch("restservices/service/getAfspraak/" + afspraak.id, fetchoptions)
+				.then(response => response.json())
+				.then(function(afspraak){
+						alert(afspraak.klantNaam);
+				})			
+			})
+		}
 	}).catch(function() {
-		// De gebruiker is niet ingelogt
+		alert("fout G");
 	});
 }
 

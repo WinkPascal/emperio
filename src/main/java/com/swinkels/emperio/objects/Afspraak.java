@@ -11,6 +11,10 @@ public class Afspraak {
 	Date timestamp;
 	ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 
+	public Afspraak() {
+		
+	}
+	
 	public Afspraak(int id, Date timestamp, Klant klant) {
 		this.id = id;
 		this.timestamp = timestamp;
