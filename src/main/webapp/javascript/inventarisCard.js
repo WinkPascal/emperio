@@ -37,3 +37,27 @@ function getAlleProducten(paginaNummer){
 		alert("niet meer ingelogd");
 	});
 }
+
+function createProduct(){
+	var formData = new FormData(document.getElementById("ProductToevoegenForm"));
+	var encData = new URLSearchParams(formData.entries());
+	var fetchoptions = {
+			method: 'POST',
+			body: encData,
+			headers: {
+				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+			}
+		}
+	fetch("restservices/service/product", fetchoptions)
+	.then(function (response){
+		if(response.ok){
+			alert("toegevoegd");
+		} else{
+			alert("kapot fout");
+		}
+	}).catch(function() {
+		// De gebruiker is niet ingelogt
+		alert("niet meer ingelogd");
+	});
+}
+

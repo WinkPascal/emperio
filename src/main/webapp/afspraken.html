@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+  <link rel="stylesheet" href="css/inplannenCard.css">
   <link rel="stylesheet" href="css/afspraken.css">
+   <link rel="stylesheet" href="css/home.css">
+ 
   <link rel="stylesheet" media="screen and (min-width: 1000px)" href="css/afspraken1000px.css">
   <link rel="stylesheet" media="screen and (min-width: 800px)" href="css/afspraken800px.css">
 </head>
 <body onload="onload()">
 	<br />
 	<input type="button" class="defaultButton" value="Week Terug" id="weekTerug">
-	<input type="button" class="defaultButton" value="Afspraak inplannen">
+	<input type="button" class="defaultButton" value="Afspraak inplannen" id="afspraakInplannen">
 	<input type="button" class="defaultButton" value="Maanden">
 	<input type="button" class="defaultButton" value="Week Verder" id="weekVerder">
 
@@ -21,19 +25,131 @@
 		<div id="rooster" class="rooster">
 		</div>
 	</div>
-
+	<!-- als er op een afpsraak geklikt wordt -->
 	<div id="afspraakModal" class="modal">
-		<div class="modal-content">
+		<div class="afspraak-content">
 			<h2 id="klantNaam">Voornaam Achternaam</h2>
 			<p>email</p>
 			<p>Geslacht</p>
 			<p>telefoon</p>
 			<p>aantal afspraken</p>
-			<p> inkomsten klant</p>
+			<p>inkomsten klant</p>
 			<div id="afsprakenLijst"></div>
 		</div>
+	</div>	
+
+	<!-- inplannen -->
+	<div id="inplannenModal" class="modal">
+		<div class="inplan-content" id="inplannenModalContent">
+			<div class="topBarInplannen">
+				<input type="button" class="defaultButton"  id="terugInplannen" value="Annuleer"/>
+				<ul class="progressbar">
+          			<li class="done">Behandeling</li>
+          			<li class="active">Tijd</li>
+      	    		<li>Klant info</li>
+ 	 			</ul>
+				<input type="button" class="defaultButton"  id="volgendeInplannen" value="Volgende"/>
+			</div>
+			
+			<!-- overzicht inplannen -->
+			<form class="inplannenForm" id="inplannenForm">
+				<span id="klantInfo">
+					<span>klant</span><br>
+					<span>Geslacht</span> 
+	
+					<span id="inplanFormGeslacht"></span><br>
+					<span>Naam</span> 	
+					<input type="text" name="klantNaam"><br>
+
+					<span>Email</span> 
+					<input type="text" name="klantEmail"><br>
+
+					<span>Telefoon nummer</span> 
+					<input type="text" name="klantTelefoon"><br>
+				</span>
+				<span>Behandelingen:</span><br>
+				<span id="inplanBehandelingenForm"></span><br>
+				
+				<span id="tijdInplannen">
+					<span>Datum: <a id="datumInplanForm"></a></span><br>
+					<span>Tijd: <a id="tijdInplanForm"></a></span>
+				</span>
+				
+				<br>
+				<span class="inplanBlokOverzicht">
+					Lengte
+					<span class="afspraakBlokWaarde" id="lengteAfspraakForm">0:00</span>
+				</span>
+				<span class="inplanBlokOverzicht">
+					Prijs
+					<span class="afspraakBlokWaarde" id="prijsAfspraakForm">€</span>
+				</span>
+				<br>
+				<input type="button" id="submitInplanFormButton" class="defaultButton" 
+				value="Inplannen" style="bottom: 10px;">
+			</form>
+					
+			<!-- eerste scherm -->
+			<div id="inplannenGeslacht" class="inplannenRechts">
+				<input id="geslachtMan" class="geslachtButton" value="Man">
+				<input id="geslachtVrouw" class="geslachtButton" value="Vrouw">
+				<input id="geslachtJongen" class="geslachtButton" value="Meisje">
+				<input id="geslachtMeisje" class="geslachtButton" value="Jongen">
+				
+					<input id="inplannenBehnadelingToevoegen" class="geslachtButton" value="Behandeling toevoegen">
+					<input class="geslachtButton" value="Tijdelijke behandeling">
+				
+				<div class="popup" id="behandelingenOptions">:
+			  		<span class="popuptext" id="myPopup">
+			  			<input id="inplannenBehnadelingToevoegen" class="geslachtButton" value="Behandeling toevoegen">
+			  			<input class="geslachtButton" value="Tijdelijke behandeling">
+			  		</span>
+				</div>
+					
+				<div id="behandelingenKeuzeLijst">
+					<!-- De behandelingen waar uit gekozen kan worden -->
+				</div>
+			</div>
+
+			<!-- tweede scherm -->
+			<div id="inplannenDatum" class="inplannenRechts">
+				<span class="defaultButton" id="weekTerugInplannen">Week terug</span><span id="weekVerderInplannen" class="defaultButton">Week verder</span>
+				<span class="dagKiezen" id="dateSpanMaandag"><a>Maandag</a><br><a id="dateMaandag"></a></span>
+				<span class="dagKiezen" id="dateSpanDinsdag"><a>Dinsdag</a><br><a id="dateDinsdag"></a></span>
+				<span class="dagKiezen" id="dateSpanWoensdag"><a>Woensdag</a><br><a id="dateWoensdag"></a></span>
+				<span class="dagKiezen" id="dateSpanDonderdag"><a>Donderdag</a><br><a id="dateDonderdag"></a></span>
+				<span class="dagKiezen" id="dateSpanVrijdag"><a>Vrijdag</a><br><a id="dateVrijdag"></a></span>
+				<span class="dagKiezen" id="dateSpanZaterdag"><a>Zaterdag</a><br><a id="dateZaterdag"></a></span>
+				<span class="dagKiezen" id="dateSpanZondag"><a>Zondag</a><br><a id="dateZondag"></a></span>
+			</div>
+			
+		</div>	
+	</div>
+				
+	<!-- Behandeling toevoegen -->
+	<div id="BehandelingToevoegenModal" class="modal">
+		<form id="BehandelingToevoegenForm" class="modal-content-small">
+			<h2 style="align:center;">Behandeling Toevoegen</h2>
+			naam 				<input class="inputBehandelingToevoegen" type="text" name="naam"><br>
+			beschrijving 		<input class="inputBehandelingToevoegen" type="text" name="beschrijving"><br>
+			prijs 				<input class="inputBehandelingToevoegen" type="number" name="prijs"><br>
+			lengte 				<input type="number" name="uur"> : <input type="number" name="minuten"><br>
+			geslacht<br>
+			<span id="geslachtManToevoegen" class="geslachtButton">man</span>
+			<span id="geslachtVrouwToevoegen" class="geslachtButton">Vrouw</span>
+			<span id="geslachtJongenToevoegen" class="geslachtButton">Jongen</span>
+			<span id="geslachtMeisjeToevoegen" class="geslachtButton">Meisje</span>
+			<br>
+			<span id="inplannenBehandelingToevoegen" class="defaultButton">
+				<a class="defaultText">Toevoegen!</a>
+			</span>
+			<span id="annuleerBehandelingAnnuleren" class="defaultButton">
+				<a class="defaultText">Annuleer</a>
+			</span>
+		</form>
 	</div>
 	
 	<script src="javascript/afspraken.js"></script>
+	<script src="javascript/inplannenCard.js"></script>
 </body>
 </html>

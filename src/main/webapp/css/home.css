@@ -80,19 +80,16 @@
 
 .defaultButton{
   	display: inline-block;
-  	background-color:#3352ff;
-	border-radius: 20px;
+  	background-color: white;
+  	color: blue;
+	border-radius: 5px;
 	width: 150px;
-	color: white;
-	text-align: center;
    	height: 40px;
+   	border: 1px solid blue;
 }
-
-.defaultText{
-	font-size: 20px;
-  	font-family: Arial, Helvetica, sans-serif;
-	top: 10px;
-	position: static;
+.defaultButton:hover{
+	background-color: #3D5FC4;
+	color: white;	
 }
 
 .dagRooster {

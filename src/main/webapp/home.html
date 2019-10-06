@@ -2,7 +2,6 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Emperio</title>
 	<link rel="stylesheet" type="text/css" href="css/home.css">
 	<link rel="stylesheet" type="text/css" href="css/inplannenCard.css">
 	<link rel="stylesheet" type="text/css" href="css/klantenCard.css">
@@ -11,7 +10,6 @@
 <body onload="onload()">
 	<!-- rooster vandaag -->
 	<div class="dagRooster">
-		<h2 class="logo">Emperio</h2>
 		<h2>Afspraken vandaag</h2>
 		<div id="afsprakenVandaagLijst">
 		</div>
@@ -33,8 +31,8 @@
 	<div class="cardHolder" id="cardHolder">
 		<span class="topBar">
 			<a class="dashoboardTag">Dashboard</a>
-			<a class="defaultButton" id="logoutButton">Uitloggen</a>
-			<a class="defaultButton"  id="settingsButton">Instellingen</a>
+			<input type="button" class="defaultButton" id="logoutButton" value="Uitloggen"/>
+			<input type="button" class="defaultButton"  id="settingsButton" value="Instellingen"/>
 		</span>
 		
 		<div class="card" id="klantenCard">
@@ -86,6 +84,16 @@
 				</h4>
 			</div>
 		</div>
+		
+		<div class="card" id="inkomstenCard">
+			<img class="cardImg"
+				src="https://cdn.pixabay.com/photo/2014/04/03/00/41/people-309098_960_720.png">
+			<div class="container">
+				<h4>
+					<b>Inkomsten overzicht</b>
+				</h4>
+			</div>
+		</div>
 	</div>
 
 	<!-- klanten -->
@@ -131,14 +139,14 @@
 	<div id="ProductToevoegenModal" class="modal">
 		<form id="ProductToevoegenForm" class="modal-content-small">
 			<h2 style="align:center;">Product Toevoegen</h2>
-			naam 				<input class="inputBehandelingToevoegen" type="text" name="naam"><br>
-			hoeveelheid 				<input type="number" name="uur"> : <input type="number" name="minuten"><br>
+			naam 		<input id="naamProductToevoegen" type="text" name="naamProductToevoegen"><br>
+			hoeveelheid <input type="number" id="hoeveelheidProductToevoegen" name="hoeveelheidProductToevoegen"><br>
 			<br>
 			<span id="ProductToevoegen" class="defaultButton">
-				<a class="defaultText">Toevoegen!</a>
+				<a class="defaultText" id="productToevoegenKnop">Toevoegen!</a>
 			</span>
 			<span id="annuleerProductAnnuleren" class="defaultButton">
-				<a class="defaultText">Annuleer</a>
+				<a class="defaultText" id="annulerenProductToevoegenKnop">Annuleer</a>
 			</span>
 		</form>
 	</div>

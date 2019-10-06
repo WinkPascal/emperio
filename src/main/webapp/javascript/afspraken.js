@@ -206,9 +206,7 @@ document.getElementById("weekVerder").addEventListener("click", function(){
 	getAfspraken(datum, false);
 });
 
-function getAfspraken(datum, onload){
-
-	
+function getAfspraken(datum, onload){	
 	console.log(afsprakenLijst);
 	//alle afspraken worden uit het rooster gehaalt
 	for(let afspraak of afsprakenLijst){
@@ -307,3 +305,9 @@ function createOnClickListener(id){
 	})
 }
 
+document.getElementById("afspraakInplannen").addEventListener("click", function(){
+	document.getElementById("inplannenModal").style.display = "block";
+	document.getElementById("inplannenGeslacht").style.display = "block";
+
+	inplannenGeslachtKiezen();
+});

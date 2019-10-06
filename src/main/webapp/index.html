@@ -34,13 +34,32 @@
 					return response.json()
 				} else {
 					//het inloggen is niet gelukt
+					alert("er ging iets verkeerd");
 				};
 			})
 			.then(function(myJson){
 				//de JWTKey wordt in de sessionStorage gezet en de actor wordt doorverbonden naar de afspraken.html pagina
 				window.sessionStorage.setItem("sessionToken", myJson.JWT);
-				console.log(sessionStorage.getItem("sessionToken"));
-				window.location.href = "home.html";
+				var jwtData = sessionStorage.getItem("sessionToken").split('.')[1]
+				var decodedJwtJsonData = window.atob(jwtData)
+	
+				//rol een warde geven 
+				// decodedJwtJsonData.role werkte niet
+				var role = "";
+				let array = decodedJwtJsonData.split(",");
+				for(var item of array){
+					let items = item.split('"');
+
+					if(items[1] == "role"){
+						role = items[3];
+					}
+				}
+				
+				if(role == "user"){
+					window.location.href = "home.html";
+				} else if(role == "admin"){
+					window.location.href = "adminHome.html";
+				}
 			})
 		})
 	</script>

@@ -13,4 +13,10 @@ public interface BedrijfDao {
 	public ArrayList<Dag> getWeekRooster(Bedrijf bedrijf);
 	
 	public ArrayList<Product> getProductenByPage(Bedrijf bedrijf, int page);
+
+	public boolean setProduct(Product product);
+	
+	public ArrayList<Bedrijf> getBedrijven(int page);
+
+	public boolean saveBedrijf(Bedrijf bedrijf);
 }

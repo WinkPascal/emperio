@@ -1,6 +1,6 @@
 package com.swinkels.emperio.service;
 
-import java.text.ParseException;
+import java.text.ParseException; 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,6 +18,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 import org.json.JSONArray;
@@ -118,13 +120,12 @@ public class ServiceProvider {
 		}
 		return jab.build().toString();
 	}
-	
 	//inplannen
 	@GET
 	@Path("/tijdslotenOphalen/{datum}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String tijdslotenOphalen(@Context SecurityContext sc, 
+	public String tijdslotenOphalen(@Context SecurityContext sc,  
 			@PathParam("datum") String beginDateString) throws ParseException {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		
@@ -138,7 +139,14 @@ public class ServiceProvider {
 		calendarEindDate.setTime(beginDate);            
 		calendarEindDate.add(Calendar.DAY_OF_YEAR, 1);
 		Date eindDate = calendarEindDate.getTime();
-
+		
+//		if(beginDate.before()) {
+//			System.out.println(beginDate +" is voor "+new Date());
+//			JsonObjectBuilder job = Json.createObjectBuilder();
+//			job.add("error", "verleden");
+//			return job.build().toString();
+//		}
+		
 		ArrayList<Afspraak> afsprakenVandaagList = afspraakDao.getAfsprakenBetweenDates(beginDate, eindDate,  bedrijf);
 		
 		ArrayList<Date> dagTijden = bedrijfDao.getDagTijden(bedrijf, beginDate);
@@ -357,6 +365,27 @@ public class ServiceProvider {
 
 	@POST
 	@RolesAllowed("user")
+	@Path("/product")
+	@Produces("application/json")
+	public ResponseBuilder setAfspraak(@Context SecurityContext sc,  
+			@FormParam("hoeveelheidProductToevoegen") int hoeveelheidProductToevoegen,
+			@FormParam("naamProductToevoegen") String naamProductToevoegen) {
+
+		//hier moeten validaties gedaan worden
+		try {
+			Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+			Product product = new Product(bedrijf, hoeveelheidProductToevoegen, naamProductToevoegen);
+			bedrijfDao.setProduct(product);
+		} catch(Exception e){
+			System.out.println(e);
+			return Response.status(500);
+		}
+		
+		return Response.status(201);
+	}
+
+	@POST
+	@RolesAllowed("user")
 	@Path("/afspraak")
 	@Produces("application/json")
 	public Response setAfspraak(@Context SecurityContext sc,  
@@ -523,22 +552,6 @@ public class ServiceProvider {
 			jab.add(job);
 		}
 		return jab.build().toString();
-	}
-
-	@GET
-	@RolesAllowed("user")
-	@Path("/behandeling")
-	@Produces("application/json")
-	public String getKlant(@Context SecurityContext sc, @PathParam("klantid") int klantId) {
-			String bedrijf = sc.getUserPrincipal().getName();
-			//Klant klant = 
-			
-			//JsonArrayBuilder jab = Json.createArrayBuilder();
-			
-			//JsonObjectBuilder job = Json.createObjectBuilder();
-			
-			//jab.add(job);
-		return null;
 	}
 	
 	@GET

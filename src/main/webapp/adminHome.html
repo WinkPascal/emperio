@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+  <link rel="stylesheet" href="css/inplannenCard.css">
+
+</head>
+<body onload="onload()">
+	<form class="createKlant" id="createKlant">
+		naam 		<input id="naamToevoegen" name="naamToevoegen"> <br>
+		email 		<input id="emailToevoegen" name="emailToevoegen"><br>
+		wachtwoord 	<input id="wachtwoordToevoegen" name="wachtwoordToevoegen"><br>
+		telefoon 	<input id="telefoonToevoegen" name="telefoonToevoegen"><br>
+		adres 		<input id="adresToevoegen" name=adresToevoegen><br>
+		<input type="button" id="submitKlant" value="submitKlant"><br>
+	</form>
+	<div id="klantenLijst">
+		<input id="klantZoek" type="text"><input type="button" id="zoekKlant"><br>
+		<table style="width:40%" id="klantenTable">
+
+  		</table>
+	</div>
+	<div id="inkomstenLijst">
+	</div>
+	
+	<script src="javascript/adminHome.js"></script>
+</body>
+</html>

@@ -16,6 +16,36 @@ import com.swinkels.emperio.service.ServiceFilter;
 public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 	
 	
+	public ArrayList<Bedrijf> getBedrijven(int page){
+		ArrayList<Bedrijf> bedrijven = new ArrayList<Bedrijf>();
+		int top = page * 10;
+		int low = top - 10;
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"SELECT email, telefoon, adres, naam \n" + 
+					"FROM bedrijf \n" + 
+					"WHERE role = \"user\" \n" + 
+					"group by email LIMIT "+low+", "+top+"");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				
+				String email = dbResultSet.getString("email");
+				String telefoon = dbResultSet.getString("telefoon");
+				String adres = dbResultSet.getString("adres");
+				String naam = dbResultSet.getString("naam");
+
+				
+				Bedrijf bedrijf = new Bedrijf(email, naam, telefoon, adres);
+				bedrijven.add(bedrijf);
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		
+		return bedrijven;
+	}
+	
 	public ArrayList<Date> getDagTijden(Bedrijf bedrijf, Date date){
 		ArrayList<Date> dagTijden = new ArrayList<Date>();
 		Calendar c = Calendar.getInstance();
@@ -96,6 +126,41 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 			System.out.println(e);
 		}		
 		return producten;
+	}
+
+	public boolean setProduct(Product product) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(""
+					+ "INSERT INTO product(bedrijf, hoeveelheid, naam) VALUES("
+					+ "'"+product.getBedrijf().getEmail()+"', "
+					+ ""+product.getHoeveelheid()+", "
+					+ "'"+product.getNaam()+"');");
+			System.out.println(pstmt);
+			pstmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return false;
+	}
+
+	public boolean saveBedrijf(Bedrijf bedrijf) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"INSERT INTO bedrijf(adres, email, naam, role, telefoon, wachtwoord) VALUES('"
+				  +	bedrijf.getAdres()+"', '"
+				  + bedrijf.getEmail()+"', '"
+				  + bedrijf.getNaam() + "', '"
+				  + "user', '"
+				  + bedrijf.getTel()+"', '"
+				  + bedrijf.getWachtwoord()+"')");
+			System.out.println(pstmt);
+			pstmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return false;
 	}
 
 	

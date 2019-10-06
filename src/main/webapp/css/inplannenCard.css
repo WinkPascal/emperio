@@ -1,5 +1,30 @@
 @charset "UTF-8";
 
+.inplan-content {
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	border-radius: 20px;
+	width: 60%;
+	background-color: white; /* Black w/opacity/see-through */
+	height: 70%;
+	animation-name: zoom;
+	animation-duration: 0.6s;
+}
+
+#klantInfo{
+	display: none;
+}
+
+#tijdInplannen{
+	display: none;
+}
+
+.topBarInplannen{
+	height: 50px;
+	border: 1px solid black;
+}
+
 .inplannenLinks {
 	display: none; /* Hidden by default */
 	width: 40%;
@@ -7,25 +32,25 @@
 	float: left;
 }
 
-.inplannenForm{
+.inplannenForm {
 	width: 30%;
 	height: 80%;
-	border-radius: 30px; 
+	border-radius: 30px;
 	border: 1px solid black;
 	margin: 30px;
 	background-color: white;
 	float: left;
 }
 
-.inplanBlokOverzicht{
-  	display: inline-block;
+.inplanBlokOverzicht {
+	display: inline-block;
 	width: 100px;
 	height: 100px;
 	margin: 20px;
 	bottom: 50px;
 }
 
-.afspraakBlokWaarde{
+.afspraakBlokWaarde {
 	display: inline-block;
 	width: 100px;
 	margin: 20px;
@@ -33,8 +58,8 @@
 	bottom: 50px;
 }
 
-.dagKiezen{
-  	display: inline-block;
+.dagKiezen {
+	display: inline-block;
 	width: 60%;
 	margin-left: 20%;
 	margin-top: 10px;
@@ -44,12 +69,12 @@
 	text-align: center;
 }
 
-.dagKiezen:hover{
+.dagKiezen:hover {
 	background-color: blue;
 	color: white;
 }
 
-.afspraakTijdslot{
+.afspraakTijdslot {
 	display: inline-block;
 	width: 60%;
 	margin-left: 20%;
@@ -67,18 +92,18 @@
 	width: 50%;
 }
 
-.inplanFullRowOverzicht{
-  	display: inline-block;
+.inplanFullRowOverzicht {
+	display: inline-block;
 	width: 100%;
 }
 
-.inplanBehandelingenOverzicht{
+.inplanBehandelingenOverzicht {
 	width: 100%;
 	border: 1px solid black;
 }
 
-.inplannenBehandelingOverzicht{
-  	display: inline-block;
+.inplannenBehandelingOverzicht {
+	display: inline-block;
 	border: 1px solid blue;
 	margin: 5px;
 	width: 120px;
@@ -88,15 +113,15 @@
 	overflow: auto;
 }
 
-.inplannenBehandelingOverzicht:hover{
+.inplannenBehandelingOverzicht:hover {
 	background-color: red;
 }
 
-.textGekozenBehandeling{
-   margin: auto;
-}	
+.textGekozenBehandeling {
+	margin: auto;
+}
 
-.voegbehandelingToeForm{
+.voegbehandelingToeForm {
 	margin: auto;
 	width: 90%;
 	height: 80%;
@@ -106,15 +131,18 @@
 }
 
 .geslachtButton {
-	width: 70px;
-	height: 10%;
+	width: 130px;
+	height: 40px;
+	border: 1px solid blue;
+	border-radius: 5%;
+	color: blue;
 	background-color: white;
 	margin: 10px;
-	border-radius: 5%;
 }
 
 .geslachtButton:hover {
 	background-color: blue;
+	color: white;
 }
 
 .naamBehandelingKeuze {
@@ -141,8 +169,6 @@
 	float: right;
 }
 
-
-
 .behandelingKeuze {
 	height: 80px;
 	border: 1px solid blue;
@@ -150,10 +176,150 @@
 	margin: 20px;
 	background-color: white;
 	animation-name: animatetop;
-  	animation-duration: 0.6s;
+	animation-duration: 0.6s;
 }
 
 .behandelingKeuze:hover {
 	background-color: blue;
 	color: white;
 }
+
+
+
+#terugInplannen{
+	position: absolute;
+	margin: 0px; 
+	left: 5px;
+	top: 13%;
+}
+
+#volgendeInplannen{
+	position: absolute;
+	margin: 0px; 
+	right: 5px;
+	top: 13%;
+}
+
+.progressbar {
+	position: relative;
+	left: 20%;
+	counter-reset: step;
+	width: 60%;
+	height: 70px;
+	left: 20%;
+	top: 0px;
+}
+
+.progressbar li {
+	width: 25%;
+	float: left;
+	font-size: 12px;
+	position: relative;
+	text-align: center;
+	text-transform: uppercase;
+	color: #7d7d7d;
+}
+
+.progressbar li:before {
+	width: 30px;
+	height: 30px;
+	content: counter(step);
+	counter-increment: step;
+	line-height: 30px;
+	border: 2px solid #7d7d7d;
+	display: block;
+	text-align: center;
+	margin: 0 auto 10px auto;
+	border-radius: 50%;
+	background-color: white;
+}
+/* lijntje algemeen */
+.progressbar li:after {
+	width: 100%;
+	height: 2px;
+	content: '';
+	position: absolute;
+	background-color: #7d7d7d;
+	top: 15px;
+	left: -50%;
+	z-index: -1;
+}
+
+.progressbar li:first-child:after {
+	content: none;
+}
+/* de tekst als ingevuld*/
+.progressbar li.done {
+	color: blue;
+}
+/* het kopje als ingevuld */
+.progressbar li.done:before {
+	border-color: blue;
+}
+/* de lijn na de afgeronde stap*/
+.progressbar li.done+li:after {
+	background-color: blue;
+}
+
+.progressbar li.active:before {
+	border-color: green;
+}
+
+#behandelingenOptions{
+	border-radius: 50%;
+	background-color: blue;
+	color: white;
+	border: 0px;
+	width: 40px;
+	height: 40px;
+	font-size: 100%;	
+}
+
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+
+

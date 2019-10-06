@@ -1,10 +1,12 @@
 package com.swinkels.emperio.service;
 
-import java.security.Key;
+import java.security.Key; 
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
 
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -40,7 +42,6 @@ public class AuthenticationResource {
 			if (role == null) { throw new IllegalArgumentException("No user found!"); }
 			
 			String token = createToken(username , role);
-			
 			SimpleEntry<String, String> JWT = new SimpleEntry<String, String>("JWT", token);
 			return Response.ok(JWT).build();
 		} catch (JwtException | IllegalArgumentException e) {

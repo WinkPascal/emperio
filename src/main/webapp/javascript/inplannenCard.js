@@ -71,8 +71,17 @@ function inplannenGeslachtKiezen(){
 		behandelingenOphalen("meisje");
 	})
 }
+
+document.getElementById("behandelingenOptions").addEventListener("click", function() {
+	alert();  
+	var popup = document.getElementById("myPopup");
+	popup.classList.toggle("show");
+})
+
 //de behandelingen voor het gekozen geslacht worden opgehaalt
 function behandelingenOphalen(geslacht){
+
+	
 	afspraakKlantGeslacht = '';
 	behandelingenLijst = [];
 	afspraakDatum = '';
@@ -499,7 +508,7 @@ function behandelingToevoegen(){
 		if(response.ok){
 			alert("toegevoegd");
 		} else{
-			alert("fout");
+			alert("kapot fout");
 		}
 	})
 }
@@ -572,4 +581,3 @@ function formatDate(date){
 	var year = date.getFullYear();
 	return day + ' ' + monthNames[monthIndex] + ' ' + year;
 }
-//hulphulphulphulphulphulphulphulphulphulphulphulphulphulphulphulp

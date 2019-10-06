@@ -1,5 +1,5 @@
-
 //eerste wat er gedaan wordt bij het laden van de pagina
+//hier worden de afspraken van de eerste dag geladen
 function onload(){
 	var date = new Date();
 	var dagDate = date.getFullYear() +'-'+ date.getMonth() +'-'+ date.getDate();
@@ -44,7 +44,12 @@ function onload(){
 	});
 }
 
+//onclick listener voor aanklikken card
 document.getElementById("inventarisCard").addEventListener("click", function() {
+	inventarisCard();
+})
+//starten inventaris proces
+function inventarisCard(){
 	document.getElementById("inventarisModal").style.display = "block";
 	// de producten voor de eerste pagina worden opgehaalt
 	var paginaNummerInventaris = 1;
@@ -62,9 +67,28 @@ document.getElementById("inventarisCard").addEventListener("click", function() {
 		paginaNummerInventaris++;
 		terugKnopInplannen(paginaNummerInventaris);
 	})
+	
+	document.getElementById("voegProductToe").addEventListener("click", function(){
+		document.getElementById("inventarisModal").style.display = "none";
+		document.getElementById("ProductToevoegenModal").style.display = "block";
+		
+		document.getElementById("productToevoegenKnop").addEventListener("click", function(){
+			createProduct();
+		})
+		document.getElementById("annulerenProductToevoegenKnop").addEventListener("click", function(){
+			document.getElementById("inventarisModal").style.display = "block";
+			document.getElementById("ProductToevoegenModal").style.display = "none";
+		})
+	});
+}
+
+//onclick listener voor klanten card
+document.getElementById("klantenCard").addEventListener("click", function() {
+	klantenCard();
 })
 
-document.getElementById("klantenCard").addEventListener("click", function() {
+//starten klanten proces
+function klantenCard(){
 	document.getElementById("KlantenModel").style.display = "block";
 	getAlleKlanten();
 	
@@ -81,29 +105,39 @@ document.getElementById("klantenCard").addEventListener("click", function() {
 		alert();
 		terugKnopInplannen();
 	})
-})
+}
 
+//starten rooster proces
 document.getElementById("afsprakenCard").addEventListener("click", function(){
 	location.href = 'afspraken.html';
 })
-	
-
 
 document.getElementById("inplannenCard").addEventListener("click", function() {
+	inplannenCard();
+})
+
+function inplannenCard(){
 	document.getElementById("inplannenModal").style.display = "block";
 	document.getElementById("inplannenGeslacht").style.display = "block";
-
 	inplannenGeslachtKiezen();
-
-})
+}
 
 document.getElementById("logoutButton").addEventListener("click", function() {
-
+	logoutButton();
 })
 
+function logoutButton(){ 
+	window.sessionStorage.setItem("sessionToken", "");
+	location.href = 'index.html';
+}
 
 // settings card
 document.getElementById("settingsButton").addEventListener("click", function() {
+	settingsButton();
+})
+
+//starten instellingen proces
+function settingsButton(){
 	var settings = document.getElementById("settings");
 	var btn = document.getElementById("myBtn");
 	var span = document.getElementsByClassName("close")[0];
@@ -116,4 +150,5 @@ document.getElementById("settingsButton").addEventListener("click", function() {
 	toevoegingen = 0;
 
 	voegBehandelingItemToe();
-})
+}
+
