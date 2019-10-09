@@ -28,7 +28,8 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"             join behandeling b on b.id = ab.behandeling \n" + 
 					"where m.email = '"+bedrijf.getEmail()+"' AND \n" + 
 					"timestamp BETWEEN '"+ServiceFilter.DateToStringFormatter(beginDate, "yyyy-MM-dd")+"' AND "
-							        + "'"+ServiceFilter.DateToStringFormatter(eindDate, "yyyy-MM-dd")+"'");
+							        + "'"+ServiceFilter.DateToStringFormatter(eindDate, "yyyy-MM-dd")+"' "+
+					"ORDER BY timestamp");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {

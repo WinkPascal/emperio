@@ -12,6 +12,11 @@
   to {top: 0; opacity: 1}
 }
 
+.navigationMenu{
+	width: 100%;
+	background-color: gray;
+}
+
 .afspraakSpan{
  	display: inline-block;
 	width: 80%;

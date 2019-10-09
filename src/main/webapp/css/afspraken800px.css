@@ -60,6 +60,27 @@
 	max-width: 1400px;
 	margin: 2em auto;
 }
+.navigationAfspraken{
+	width: 100%;
+	max-width: 1400px;
+	margin: 2em auto;
+}
+
+#weekTerug{
+	float: left;
+}
+
+#afspraakInplannen{
+	margin-left: 20%;
+}
+
+#maandView{
+	margin-left:20%;
+}
+
+#weekVerder{
+	float: right;
+}
 
 .rooster-timeline .timeline {
 	display: block;

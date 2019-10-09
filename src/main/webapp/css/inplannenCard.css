@@ -5,132 +5,141 @@
 	padding: 20px;
 	border: 1px solid #888;
 	border-radius: 20px;
-	width: 60%;
+	width: 1200px;
 	background-color: white; /* Black w/opacity/see-through */
-	height: 70%;
+	height: 650px;
 	animation-name: zoom;
 	animation-duration: 0.6s;
 }
 
-#klantInfo{
-	display: none;
-}
-
-#tijdInplannen{
-	display: none;
-}
-
-.topBarInplannen{
+.topBarInplannen {
 	height: 50px;
-	border: 1px solid black;
 }
 
-.inplannenLinks {
-	display: none; /* Hidden by default */
-	width: 40%;
-	height: 100%;
-	float: left;
+.topBarInplannen #terugInplannen {
+	position: relative;
+	margin: 0px;
+	left: 5px;
+	top: 13%;
 }
 
+.topBarInplannen #volgendeInplannen {
+	position: relative;
+	float: right;
+	right: 5px;
+	top: 13%;
+	margin: 0px;
+	top: 13%;
+}
+
+/* overzicht links */
 .inplannenForm {
-	width: 30%;
-	height: 80%;
-	border-radius: 30px;
+	position: relative;
+	width: 300px;
+	height: 500px;
+	border-radius: 5px;
 	border: 1px solid black;
 	margin: 30px;
 	background-color: white;
 	float: left;
+	width: 30%;
 }
 
-.inplanBlokOverzicht {
-	display: inline-block;
-	width: 100px;
-	height: 100px;
-	margin: 20px;
-	bottom: 50px;
-}
-
-.afspraakBlokWaarde {
-	display: inline-block;
-	width: 100px;
-	margin: 20px;
+.inplannenForm #inplanBehandelingenForm {
 	border: 1px solid black;
-	bottom: 50px;
-}
-
-.dagKiezen {
-	display: inline-block;
-	width: 60%;
-	margin-left: 20%;
-	margin-top: 10px;
-	height: 50px;
-	border: 2px solid blue;
-	border-radius: 5px;
 	text-align: center;
+	width: 350px;
+	overflow: scroll;
+	height: 200px;
 }
 
-.dagKiezen:hover {
-	background-color: blue;
-	color: white;
-}
-
-.afspraakTijdslot {
-	display: inline-block;
-	width: 60%;
-	margin-left: 20%;
-	margin-top: 10px;
-	height: 50px;
-	border: 2px solid blue;
-	border-radius: 5px;
-	text-align: center;
-}
-
-.inplannenRechts {
-	display: none; /* Hidden by default */
-	float: right;
-	height: 100%;
-	width: 50%;
-}
-
-.inplanFullRowOverzicht {
-	display: inline-block;
-	width: 100%;
-}
-
-.inplanBehandelingenOverzicht {
-	width: 100%;
-	border: 1px solid black;
-}
-
-.inplannenBehandelingOverzicht {
+.inplannenForm .inplannenBehandelingOverzicht {
 	display: inline-block;
 	border: 1px solid blue;
 	margin: 5px;
-	width: 120px;
 	items-align: center;
 	height: 30px;
 	border-radius: 5px;
 	overflow: auto;
 }
 
-.inplannenBehandelingOverzicht:hover {
+.inplannenForm .textGekozenBehandeling {
+	margin: auto;
+}
+
+.inplannenForm .inplannenBehandelingOverzicht:hover {
 	background-color: red;
 }
 
-.textGekozenBehandeling {
-	margin: auto;
-}
-
-.voegbehandelingToeForm {
-	margin: auto;
-	width: 90%;
-	height: 80%;
+.inplannenForm #klantInfo {
 	display: none;
-	border-radius: 5px;
-	background-color: white;
+	float: right;
+	margin: 0px;
+	width: 400px;
+	text-align: center;
+	border: 1px solid black;
 }
 
-.geslachtButton {
+.inplannenForm .rechtsInplanForm{
+	width: 350px;
+	float: left;
+	margin: 0px;
+	border: 1px solid black;
+}
+
+.inplannenForm .dagGekozen{
+	display: inline-block;
+	width: 300px;
+	margin-top: 10px;
+	height: 50px;
+	border: 1px solid blue;
+	text-align: center;
+}
+
+.blokkenOverzicht{
+	border: 1px solid black;
+	width: 350px;
+	height: 150px;
+}
+
+.inplannenForm .inplanBlokOverzicht {
+	display: inline-block;
+	text-align: center;
+	width: 100px;
+	height: 90px;
+	margin: 30px;
+	border: 1px solid black;
+}
+
+.inplannenForm #datumInplanForm{
+	border: 1px solid black;
+	width: 350px;
+	height: 150px;
+}
+
+.inplannenForm .inplanBlokOverzicht .afspraakBlokWaarde {
+	display: inline-block;
+	height: 40px;
+	width: auto; 
+	margin : 20px;
+	border: 1px solid black;
+	border-radius: 20px;
+	bottom: 50px;
+	padding: 10px;
+	margin: 20px;
+}
+
+/* Eerste stap */
+.inplannenRechts {
+	display: none;
+	float: right;
+	height: 550px;
+	border: 1px solid black;
+	width: 750px;
+	overflow: scroll;
+}
+
+.inplannenRechts .geslachtButton {
 	width: 130px;
 	height: 40px;
 	border: 1px solid blue;
@@ -140,36 +149,50 @@
 	margin: 10px;
 }
 
-.geslachtButton:hover {
+.inplannenRechts .geslachtButton:hover {
 	background-color: blue;
 	color: white;
 }
 
-.naamBehandelingKeuze {
-	float: left;
-	width: 80%;
+.inplannenRechts .optieButton {
+	width: 40px;
+	height: 40px;
+	border: 1px solid blue;
+	border-radius: 50%;
+	background-color: white;
+	color: blue;
 }
 
-.beschrijvingBehandelingKeuze {
-	float: left;
-	width: 80%;
+.inplannenRechts .optieButton:hover {
+	background-color: blue;
+	color: white;
 }
 
-.prijsBehandelingKeuze {
-	float: right;
-	height: 50%;
-	border: 1px solid black;
+.inplannenRechts .behandelingenOpties{
+	display: none;
+	height: 60px;
+	width: 100%;
+	border-top: 1px solid blue;
+	border-bottom: 1px solid blue;
 }
 
-.lengteBehandelingKeuze {
-	top: 0px;
-	float: right;
-	border: 1px solid black;
-	height: 50%;
-	float: right;
+.inplannenRechts .behandelingenOpties .optieButtonBehandeling{
+	width: 180px;
+	height: 40px;
+	border: 1px solid blue;
+	border-radius: 5%;
+	color: blue;
+	background-color: white;
+	margin: 10px;
+	margin-left: 100px;
 }
 
-.behandelingKeuze {
+.inplannenRechts .optieButtonBehandeling:hover {
+	background-color: blue;
+	color: white;
+}
+
+.inplannenRechts .behandelingKeuze {
 	height: 80px;
 	border: 1px solid blue;
 	border-radius: 5px;
@@ -179,147 +202,80 @@
 	animation-duration: 0.6s;
 }
 
-.behandelingKeuze:hover {
+.inplannenRechts .behandelingKeuze:hover {
 	background-color: blue;
 	color: white;
 }
 
-
-
-#terugInplannen{
-	position: absolute;
-	margin: 0px; 
-	left: 5px;
-	top: 13%;
-}
-
-#volgendeInplannen{
-	position: absolute;
-	margin: 0px; 
-	right: 5px;
-	top: 13%;
-}
-
-.progressbar {
-	position: relative;
-	left: 20%;
-	counter-reset: step;
-	width: 60%;
-	height: 70px;
-	left: 20%;
-	top: 0px;
-}
-
-.progressbar li {
-	width: 25%;
+.inplannenRechts .behandelingKeuze .naamBehandelingKeuze {
 	float: left;
-	font-size: 12px;
-	position: relative;
-	text-align: center;
-	text-transform: uppercase;
-	color: #7d7d7d;
+	width: 80%;
 }
 
-.progressbar li:before {
-	width: 30px;
-	height: 30px;
-	content: counter(step);
-	counter-increment: step;
-	line-height: 30px;
-	border: 2px solid #7d7d7d;
-	display: block;
-	text-align: center;
-	margin: 0 auto 10px auto;
-	border-radius: 50%;
-	background-color: white;
-}
-/* lijntje algemeen */
-.progressbar li:after {
-	width: 100%;
-	height: 2px;
-	content: '';
-	position: absolute;
-	background-color: #7d7d7d;
-	top: 15px;
-	left: -50%;
-	z-index: -1;
+.inplannenRechts .behandelingKeuze .beschrijvingBehandelingKeuze {
+	float: left;
+	width: 80%;
 }
 
-.progressbar li:first-child:after {
-	content: none;
+.inplannenRechts .behandelingKeuze .prijsBehandelingKeuze {
+	float: right;
+	height: 50%;
+	border: 1px solid black;
 }
-/* de tekst als ingevuld*/
-.progressbar li.done {
-	color: blue;
+
+.inplannenRechts .behandelingKeuze .lengteBehandelingKeuze {
+	top: 0px;
+	float: right;
+	border: 1px solid black;
+	height: 50%;
+	float: right;
 }
-/* het kopje als ingevuld */
-.progressbar li.done:before {
-	border-color: blue;
+
+/* Tweede stap */
+.inplannenRechts .dagKiezen {
+	display: inline-block;
+	width: 60%;
+	margin-left: 20%;
+	margin-top: 10px;
+	height: 50px;
+	border: 2px solid blue;
+	border-radius: 5px;
+	text-align: center;
 }
-/* de lijn na de afgeronde stap*/
-.progressbar li.done+li:after {
+
+.inplannenRechts .dagKiezen:hover {
 	background-color: blue;
+	color: white;
 }
 
-.progressbar li.active:before {
-	border-color: green;
+.inplannenRechts .afspraakTijdslot {
+	display: inline-block;
+	width: 60%;
+	margin-left: 20%;
+	margin-top: 10px;
+	height: 50px;
+	border: 2px solid blue;
+	border-radius: 5px;
+	text-align: center;
 }
 
-#behandelingenOptions{
+.inplannenRechts .geplandeAfspraak{
+	display: inline-block;
+	width: 60%;
+	margin-left: 20%;
+	margin-top: 10px;
+	height: 30px;
+	border: 2px solid red;
+	border-radius: 5px;
+	text-align: center;
+}
+
+#behandelingenOptions {
 	border-radius: 50%;
 	background-color: blue;
 	color: white;
 	border: 0px;
 	width: 40px;
 	height: 40px;
-	font-size: 100%;	
+	font-size: 100%;
 }
-
-/* The actual popup */
-.popup .popuptext {
-  visibility: hidden;
-  width: 160px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -80px;
-}
-
-/* Popup arrow */
-.popup .popuptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-/* Toggle this class - hide and show the popup */
-.popup .show {
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s;
-}
-
-/* Add animation (fade in the popup) */
-@-webkit-keyframes fadeIn {
-  from {opacity: 0;} 
-  to {opacity: 1;}
-}
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity:1 ;}
-}
-
-
-

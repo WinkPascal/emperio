@@ -1,20 +1,26 @@
 document.getElementById("volgendeInplannen").addEventListener("click", function() {
 	volgendeKnopInplannen();
+	date = new Date();
 })
-function volgendeKnopInplannen(){	
+function volgendeKnopInplannen(){
 	// geslacht en behandelingen zijn ingevuld
 	if (status == "behandeling"){
-		// het geslacht en behandeling is ingevuld
-		status = "datum";
-		document.getElementById("inplannenDatum").style.display = "block";
-		document.getElementById("inplannenGeslacht").style.display = "none";
-		document.getElementById("behandelingenKeuzeLijst").style.display = "none";
-		
-		tijdslotenOphalen();
+		if(behandelingenLijst.length == 0){
+			alert("selecteer eerst een behandeling");
+		} else{
+			// het geslacht en behandeling is ingevuld
+
+			status = "datum";
+			document.getElementById("inplannenDatum").style.display = "block";
+			document.getElementById("inplannenGeslacht").style.display = "none";
+			document.getElementById("behandelingenKeuzeLijst").style.display = "none";
+			
+			tijdslotenOphalen();
+		}
 	} else if(status == "datum"){
 		document.getElementById("inplannenDatum").style.display = "none";
-		var inplannenForm = document.getElementById("inplannenForm");
-		inplannenForm.style.width = "800px";
+		document.getElementById("inplannenForm").style.width = "800px";
+		document.getElementById("klantInfo").style.display = "block";
 	} 
 }
 
@@ -38,6 +44,13 @@ function terugKnopInplannen(){
 // de eerste functie die word aangeroepen om eet geslacht te kiezen
 function inplannenGeslachtKiezen(){
 	// wordt gebruikt bij het navigeren van de volgende en terug knop
+	afspraakKlantGeslacht = '';
+	behandelingenLijst = [];
+	afspraakDatum = '';
+	
+	prijs = 0;
+	uren = 0;
+	minuten = 0;
 	status = "behandeling"
 	// geslacht word gekozen
 	document.getElementById("geslachtMan").addEventListener("click", function() {
@@ -72,24 +85,17 @@ function inplannenGeslachtKiezen(){
 	})
 }
 
-document.getElementById("behandelingenOptions").addEventListener("click", function() {
-	alert();  
-	var popup = document.getElementById("myPopup");
-	popup.classList.toggle("show");
+document.getElementById("optiesBehandeling").addEventListener("click", function() {
+	var opties = document.getElementById("behandelingenOpties");
+	if(opties.style.display == "block"){
+		opties.style.display="none";
+	} else{
+		opties.style.display="block";
+	}
 })
 
-//de behandelingen voor het gekozen geslacht worden opgehaalt
-function behandelingenOphalen(geslacht){
-
-	
-	afspraakKlantGeslacht = '';
-	behandelingenLijst = [];
-	afspraakDatum = '';
-	
-	prijs = 0;
-	uren = 0;
-	minuten = 0;
-		
+// de behandelingen voor het gekozen geslacht worden opgehaalt
+function behandelingenOphalen(geslacht){	
 	document.getElementById("inplanFormGeslacht").innerHTML = geslacht;
 
 	inplanVoorbereiding("geslacht", geslacht);
@@ -132,7 +138,7 @@ function behandelingenOphalen(geslacht){
 				inplanVoorbereiding("lengteToevoegen", behandeling.lengte);
 				inplanVoorbereiding("prijsToevoegen", behandeling.prijs);
 				
-				document.getElementById("prijsAfspraakForm").innerHTML = "€ "+ prijs;
+				document.getElementById("prijsAfspraakForm").innerHTML = "€"+ prijs;
 				
 				document.getElementById("lengteAfspraakForm").innerHTML = uren +":"+ minuten;
 
@@ -154,208 +160,275 @@ function behandelingenOphalen(geslacht){
 					inplanVoorbereiding("lengteVerwijderen", behandeling.lengte);
 					inplanVoorbereiding("prijsVerwijderen", behandeling.prijs);
 					
-					document.getElementById("prijsAfspraakForm").innerHTML = "€ "+ prijs;
+					document.getElementById("prijsAfspraakForm").innerHTML = "€"+ prijs;
 					document.getElementById("lengteAfspraakForm").innerHTML = uren +":"+ minuten;
 				})
-				//behandeling toevoegen aan inplanForm
+				// behandeling toevoegen aan inplanForm
 				document.getElementById("inplanBehandelingenForm").appendChild(gekozenBehandelingsSpan);
 
 			})
-			//voeg toe aan keuzelijst
+			// voeg toe aan keuzelijst
 			document.getElementById("behandelingenKeuzeLijst").appendChild(behandelingsDiv);
 		}			
 	}).catch(function() {
 		// De gebruiker is niet ingelogt
 	});
 }
-//de datum en tijden worden opgehaalt
-function tijdslotenOphalen(){
-	var date = new Date();
-	datumsOphalen(date);
-	var week = 7 * 24 * 60 * 60 * 1000;
-	var dag = 24 * 60 * 60 * 1000;
-	document.getElementById("weekVerderInplannen").addEventListener("click", function(){
-		date.setTime(date.getTime() + week);
-		datumsOphalen(date);
-	})
 
-	document.getElementById("weekTerugInplannen").addEventListener("click", function(){
-		date.setTime(date.getTime() - week);
-		datumsOphalen(date);
-	})
+document.getElementById("weekVerderInplannen").addEventListener("click", function(){
+	var weekMiliSeconden = 7 * 24 * 60 * 60 * 1000;
+	date.setTime(date.getTime() + weekMiliSeconden);
+	document.getElementById("tijslotenLijst").innerHTML = "";
+	tijdslotenOphalen();
+})
+
+document.getElementById("weekTerugInplannen").addEventListener("click", function(){
+	var weekMiliSeconden = 7 * 24 * 60 * 60 * 1000;
+	date.setTime(date.getTime() - weekMiliSeconden);
+	document.getElementById("tijslotenLijst").innerHTML = "";
+	tijdslotenOphalen();
+})
+
+// de datum en tijden worden opgehaalt
+function tijdslotenOphalen(){ 	 
+	var weekMiliSeconden = 7 * 24 * 60 * 60 * 1000;
+	var dagMiliSeconden = 24 * 60 * 60 * 1000;
 	
-	var dateSpanMaandag = document.getElementById("dateSpanMaandag");
-	var dateSpanDinsdag = document.getElementById("dateSpanDinsdag");
-	var dateSpanWoensdag=document.getElementById("dateSpanWoensdag");
-	var dateSpanDonderdag= document.getElementById("dateSpanDonderdag");
-	var dateSpanVrijdag=document.getElementById("dateSpanVrijdag");
-	var dateSpanZaterdag=document.getElementById("dateSpanZaterdag");
-	var dateSpanZondag=document.getElementById("dateSpanZondag");
-	
-	dateSpanMaandag.addEventListener("click", function(){
-		hideDagen("dateSpanMaandag");
-
-		var costumDate = getMaandag(date);
-		date.setTime(costumDate.getTime() + dag*0);
-		ophalen(date);
-	})
-	dateSpanDinsdag.addEventListener("click", function(){
-		hideDagen("dateSpanDinsdag");
-		var costumDate = getMaandag(date);
-		date.setTime(costumDate.getTime() + dag*1);
-		ophalen(date);
-	})
-	dateSpanWoensdag.addEventListener("click", function(){
-		hideDagen("dateSpanWoensdag");
-		var costumDate = getMaandag(date);
-		date.setTime(costumDate.getTime() + dag*2);
-		ophalen(date);
-	})
-	dateSpanDonderdag.addEventListener("click", function(){
-		hideDagen("dateSpanDonderdag");
-		var costumDate = getMaandag(date);
-		date.setTime(costumDate.getTime() + dag*3);
-		ophalen(date);
-	})
-	dateSpanVrijdag.addEventListener("click", function(){
-		hideDagen("dateSpanVrijdag");
-		var costumDate = getMaandag(date);
-		date.setTime(costumDate.getTime() + dag*4);
-		ophalen(date);
-	})
-	dateSpanZaterdag.addEventListener("click", function(){
-		hideDagen("dateSpanZaterdag");
-		var costumDate = getMaandag(date);
-		date.setTime(costumDate.getTime() + dag*5);
-		ophalen(date);
-	})
-	dateSpanZondag.addEventListener("click", function(){
-		hideDagen("dateSpanZondag");
-		var costumDate = getMaandag(date);
-		date.setTime(costumDate.getTime() + dag*6);
-		ophalen(date);
-	})
-	function ophalen(datum){
-		var date = datum.getFullYear() +'-'+ datum.getMonth() +'-'+ datum.getDate();
-		inplanVoorbereiding("datum",date);
-		document.getElementById("datumInplanForm").innerHTML = date;
-
-		var fetchoptions = {
-				headers: {
-					'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
-				}
+	var werkdagenLijst = [];
+	var dagNamen = [
+		"Maandag", "Dinsdag",
+		"Woensdag", "Donderdag", 
+		"Vrijdag", "Zaterdag", 
+		"Zondag"
+	];
+	var fetchoptions = {
+			headers: {
+				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 			}
-		fetch("restservices/service/tijdslotenOphalen/"+date, fetchoptions)
-		.then(response => response.json())
-		.then(function(afspraken){
-			var i = 0;
-			
-			var openingsTijdUur = null;
-			var openingsTijdMinuut = null;
-			
-			var sluitingsTijdUur = null;
-			var sluitingsTijdMinuut = null;
-			
-			var beginUren = [];
-			var beginMinuten = [];
-			var eindUren = [];
-			var eindMinuten = [];
-			
-			//variableen worden toegewezen
-			var tijdsloten = document.getElementById("inplannenDatum");
-			for(let afspraak of afspraken){
-				if(i == 0){
-					i++;
-					openingsTijdUur = afspraak.openingsTijdUur;
-					openingsTijdMinuut = afspraak.openingsTijdMinuut;					
-					
-					sluitingsTijdUur = afspraak.sluitingsTijdUur;
-					sluitingsTijdMinuut = afspraak.sluitingsTijdMinuut;
-				} else{
-					beginUren.push(afspraak.beginUur);
-					beginMinuten.push(afspraak.beginMinuut);
-					eindUren.push(afspraak.eindUur);
-					eindMinuten.push(afspraak.eindMinuut);
-				}
-			}
-			
-			var afspraak = 0;
-			//tijdsloten worden aan gemaakt
-			while(true){
-				if(openingsTijdUur == beginUren[afspraak]){
-					//het uur van een afspraak komt overeenn met het uur van tijdslot				
-					var afspraakTijdSpan = document.createElement('span');
-					afspraakTijdSpan.setAttribute('class', 'afspraakTijdslot');
-					afspraakTijdSpan.style.background ='red';
-					afspraakTijdSpan.innerHTML= beginUren[afspraak] +":"+beginMinuten[afspraak] 
-					+" tot "+eindUren[afspraak] +":"+eindMinuten[afspraak];
-					tijdsloten.appendChild(afspraakTijdSpan);
-					
-					afspraak ++;					
-				}
-				//geen geplande afspraken op dit uur
-				var afspraakTijdSpan = document.createElement('span');
-				afspraakTijdSpan.setAttribute('class', 'afspraakTijdslot');
-				afspraakTijdSpan.innerHTML= openingsTijdUur +":"+openingsTijdMinuut;
-				
-				var id = openingsTijdUur +":"+openingsTijdMinuut;
-				
-				afspraakTijdSpan.setAttribute('id', id);
-				tijdsloten.appendChild(afspraakTijdSpan);
-				
-				setEventListener(id);
-				
-				
-				// uur erbij
-				openingsTijdUur = openingsTijdUur + 1;
-				
-				//stopt als de tijdsloten bij de sluitingstijd zijn
-				if(openingsTijdUur == sluitingsTijdUur){
-					break;
-				}
-				function setEventListener(id){
-					document.getElementById(id).addEventListener("click", function(){											
-						var tijdSlot = document.getElementById(id).innerHTML;
-						var nieuw=tijdSlot.split(":");
-						var tijdslotUur = parseInt(nieuw[0]);
-						var tijdslotMinuut = parseInt(nieuw[1]);
-						
-						document.getElementById("inplannenDatum").innerHTML = "";
-						
-						while(tijdslotMinuut<59){
-							var afspraakTijdMinuutSpan = document.createElement('span');
-							afspraakTijdMinuutSpan.setAttribute('class', 'afspraakTijdslot');
+		}
+	fetch("restservices/service/werkdagen", fetchoptions)
+	.then(response => response.json())
+	.then(function(dagen){
+		var inplanDatum = document.getElementById("tijslotenLijst");
+		for(let dag of dagen){
+			var dagNummmer = dag.dagNummmer;
+			werkdagenLijst.push(dagNummmer);
 
-							var tijdslotUurEind = tijdslotUur + uren;
-							var tijdslotMinuutEind = tijdslotMinuut +minuten;
-							if(tijdslotMinuutEind > 59){
-								tijdslotMinuutEind =tijdslotMinuutEind-60;
-								tijdslotUurEind = tijdslotUurEind+1;
-							}
-							var tijdslotUurMetMinuut = tijdslotUur +":"+ tijdslotMinuut;
-							afspraakTijdMinuutSpan.innerHTML = tijdslotUurMetMinuut +" tot "+ tijdslotUurEind +":"+ tijdslotMinuutEind;
-							
-							afspraakTijdMinuutSpan.setAttribute('id', tijdslotUurMetMinuut);
-							
-							document.getElementById("inplannenDatum").appendChild(afspraakTijdMinuutSpan);
-							
-							setEventListenerTijd(tijdslotUurMetMinuut);
-							
-							tijdslotMinuut = tijdslotMinuut +10;
-						}
-					})
-				}
-				function setEventListenerTijd(id){
-					document.getElementById(id).addEventListener("click", function(){
-						inplanVoorbereiding("tijd", id);
-						document.getElementById("tijdInplanForm").innerHTML = id;
-					})
-				}
-			}
-		})
-	}
+			var dagSpan = document.createElement('span');
+			dagSpan.setAttribute('class', 'dagKiezen');
+			dagSpan.setAttribute('id', "dagKeuze"+dagNummmer);
+
+			var dagNaam = document.createElement('a');
+			dagNaam.innerHTML = dagNamen[dagNummmer] +"<br>";
+			dagSpan.appendChild(dagNaam);
+			
+			var dagDatum = document.createElement('a');
+			var datum = new Date();
+			datum.setTime(getMaandag(date).getTime() + dagMiliSeconden*dagNummmer);
+
+			var formattedDate = formatDate(datum);
+
+			dagDatum.innerHTML = formattedDate;
+			dagDatum.setAttribute('id', 'date'+dagNamen[dagNummmer]);
+			dagSpan.appendChild(dagDatum);
+		
+			inplanDatum.appendChild(dagSpan);
+			
+			dagKlik(dagNummmer);
+		}
+		
+		/* De dagkeuzes worden hidden en de gekozen dag komt in het form */
+		function dagKlik(dagNummmer){
+			console.log("dagKeuze"+dagNummmer);
+			document.getElementById("dagKeuze"+dagNummmer).addEventListener("click", function(){
+				toggle('dagKiezen', 'none');
+				dagKlik(dagNummmer, formattedDate);
+				var costumDate = getMaandag(date);
+				date.setTime(costumDate.getTime() + dagMiliSeconden*dagNummmer);
+				ophalen(date);
+				
+				var dagSpan = document.createElement('span');
+				dagSpan.setAttribute('class', 'dagGekozen');
+				
+				var dagNaam = document.createElement('p');
+				dagNaam.innerHTML = dagNamen[dagNummmer];
+				dagSpan.appendChild(dagNaam);
+				
+				var dagDatum = document.createElement('p');
+				var datum = new Date();
+				datum.setTime(getMaandag(date).getTime() + dagMiliSeconden*dagNummmer);				
+				var formattedDate = formatDate(datum);
+				dagDatum.setAttribute('id', 'dagDatum');
+
+				dagDatum.innerHTML = formattedDate;
+				dagSpan.appendChild(dagDatum);
+
+				var dagTijd = document.createElement('a');
+				dagTijd.setAttribute('id', 'dagTijd');
+				dagSpan.appendChild(dagTijd);
+
+				document.getElementById("datumInplanForm").appendChild(dagSpan);
+			})
+		}
+	})
 }
 
+function toggle(className, displayState){
+    var elements = document.getElementsByClassName(className)
+
+    for (var i = 0; i < elements.length; i++){
+        elements[i].style.display = displayState;
+    }
+}
+
+function ophalen(datum){
+	var date = datum.getFullYear() +'-'+ datum.getMonth() +'-'+ datum.getDate();
+	var fetchoptions = {
+			headers: {
+				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+			}
+		}
+	fetch("restservices/service/tijdslotenOphalen/"+date, fetchoptions)
+	.then(response => response.json())
+	.then(function(afspraken){
+		beginTijdslotUur = null;
+		beginTijdslotMinuut = null;
+		
+		tijdslotUren = [];
+		tijdslotMinuten = [];
+		tijdslotenDag = [];
+					
+		var tijdsloten = document.getElementById("tijslotenLijst");
+		
+		var i = 0;
+		for(let afspraak of afspraken){
+			if(i == 0){
+				i++;
+				openingsTijd = afspraak.openingsTijd;
+				
+				var openingsTijden = openingsTijd.split(":");
+				beginTijdslotUur = parseInt(openingsTijden[0]);
+				beginTijdslotMinuut = parseInt(openingsTijden[1]);
+				
+				var openingsTijdSpan = document.createElement('span');
+				openingsTijdSpan.setAttribute('class', 'openingsTijdInplannen');
+				openingsTijdSpan.innerHTML = openingsTijd;
+				
+				tijdsloten.appendChild(openingsTijdSpan);
+			} else{					
+				var afspraakBeginTijden = afspraak.beginTijd.split(":");
+				var afspraakBeginUur = parseInt(afspraakBeginTijden[0]);
+				var afspraakBeginMinuten = parseInt(afspraakBeginTijden[1]);
+				
+				var afspraakEindTijden = afspraak.eindTijd.split(":");
+				var afspraakEindUur = parseInt(afspraakEindTijden[0]);
+				var afspraakEindMinuten = parseInt(afspraakEindTijden[1]);
+			
+				 while(true){
+
+					var eindTijdslotUur = parseInt(beginTijdslotUur) + parseInt(uren);
+					var eindTijdslotMinuut = parseInt(beginTijdslotMinuut) + parseInt(minuten);
+					if(eindTijdslotMinuut > 59){
+						eindTijdslotUur++;
+						eindTijdslotMinuut=eindTijdslotMinuut-60;
+					}
+
+					if(eindTijdslotUur >= afspraakBeginUur && eindTijdslotMinuut > afspraakBeginMinuten){
+						 // er is al een afspraak op dit tijdslot
+						 if(afspraakEindUur == "NaN"){
+								var openingsTijdSpan = document.createElement('span');
+								openingsTijdSpan.setAttribute('class', 'openingsTijdInplannen');
+								openingsTijdSpan.innerHTML = afspraakBeginUur +":"+afspraakBeginMinuten;
+								
+								tijdsloten.appendChild(openingsTijdSpan);
+						 } else{
+							 var afspraakTijdSpan = document.createElement('span');
+							 afspraakTijdSpan.setAttribute('class', 'geplandeAfspraak');
+							 afspraakTijdSpan.innerHTML= afspraakBeginUur+":"+ afspraakBeginMinuten +
+							 "tot"+ afspraakEindUur+":"+afspraakEindMinuten;
+							 tijdsloten.appendChild(afspraakTijdSpan);
+							 // Er kan geen afspraak gemaakt worden omdat
+								// er al een afspraak is
+							 beginTijdslotUur = afspraakEindUur;
+							 beginTijdslotMinuut = afspraakEindMinuten;
+						 }
+						break;							
+					 } else{
+						 // er word een tijdslot aangermaakt
+						 // beschikbare minuten van het uur wordt hieraan
+							// toegevoegd
+						 tijdslotMinuten.push(beginTijdslotMinuut);
+						 nietGemaakt = true;
+
+						 for(var uur of tijdslotUren){
+							 if(uur == beginTijdslotUur){
+								 nietGemaakt = false;
+							 }
+						 }
+						 if(nietGemaakt){
+								 tijdslotUren.push(beginTijdslotUur);
+							 var afspraakTijdSpan = document.createElement('span');
+							 afspraakTijdSpan.setAttribute('class', 'afspraakTijdslot');
+							 afspraakTijdSpan.setAttribute('id', "dagTijdslot"+beginTijdslotUur);
+							 afspraakTijdSpan.innerHTML= beginTijdslotUur +":"+ tijdslotMinuten[0];
+							 tijdsloten.appendChild(afspraakTijdSpan);
+							 getTijdsloten(beginTijdslotUur);
+						 }
+						 beginTijdslotMinuut = beginTijdslotMinuut+10;
+						 if(beginTijdslotMinuut > 59){								 
+							 beginTijdslotMinuut = beginTijdslotMinuut - 60;
+							 
+							 tijdslotenDag.push(tijdslotMinuten);
+							 // minuten worden leeggemaakt voor het
+							// volgende uur
+							 tijdslotMinuten = [];
+							 beginTijdslotUur++;
+						 }
+					 }
+				 }
+			 }
+		}
+		function getTijdsloten(id){
+			document.getElementById("dagTijdslot"+id).addEventListener("click", function(){
+				toggle("afspraakTijdslot", "none");
+				toggle("geplandeAfspraak", "none");
+				toggle("openingsTijdInplannen", "none");
+				var i = 0;
+				for(var uur of tijdslotUren){
+					if(uur == id){
+						for(tijdslotMinuut of tijdslotenDag[i]){
+							var eindTijdslotMinuut = tijdslotMinuut +parseInt(minuten);								
+							var eindTijdslotUur = parseInt(uur) + parseInt(uren);
+							
+							if(eindTijdslotMinuut > 59){
+								eindTijdslotUur++;
+								eindTijdslotMinuut=eindTijdslotMinuut-60;
+							}
+							
+							
+							var afspraakTijdSpan = document.createElement('span');
+							afspraakTijdSpan.setAttribute('class', 'afspraakTijdslot');
+							afspraakTijdSpan.setAttribute('id', "tijdslotInplan"+id+":"+tijdslotMinuut);
+							
+							var text = uur +":"+tijdslotMinuut +" tot " + eindTijdslotMinuut +" : "+eindTijdslotMinuut;
+							
+							afspraakTijdSpan.innerHTML=text;
+							tijdsloten.appendChild(afspraakTijdSpan);
+							setTijdslot(id+":"+tijdslotMinuut);
+						}
+						break;
+					}
+					i++;
+				}
+			});
+		}
+		function setTijdslot(id){
+			document.getElementById("tijdslotInplan"+id).addEventListener("click", function(){
+				document.getElementById("dagTijd").innerHTML = id;
+			})
+		}
+	})
+}
 function inplanVoorbereiding(state, value){
 	if(state == "geslacht"){
 		afspraakKlantGeslacht = value;
@@ -383,13 +456,10 @@ function inplanVoorbereiding(state, value){
 		prijs = prijs - value;
 	} else if(state == "datum"){
 		afspraakDatum=value;
-	} else if(state == "tijd"){
-		afspraakTijd = value;
+	
 	} else if(state = "inplannen"){
-
-		var tijdInplannen = uren +":"+minuten;
-
-		inplannen(afspraakKlantGeslacht, behandelingenLijst, afspraakTijd, afspraakDatum);
+		console.log("inplannen");
+		inplannen(afspraakKlantGeslacht, behandelingenLijst);
 	}
 }
 
@@ -397,13 +467,14 @@ document.getElementById("submitInplanFormButton").addEventListener("click", func
 	inplanVoorbereiding("inplannen","");
 })
 
-function inplannen(geslacht, behandelingenlijst, tijd, datum){
+function inplannen(geslacht, behandelingenlijst){
 	var formData = new FormData(document.getElementById("inplannenForm"));
-	
+	console.log("inplannsssen");
+
 	formData.append("klantGeslacht", geslacht);
 	formData.append("afspraakBehandeling", JSON.stringify(behandelingenlijst));
-	formData.append("afspraakTijd", tijd);
-	formData.append("afspraakDatum", datum);
+	formData.append("afspraakTijd", document.getElementById("dagTijd").innerHTML);
+	formData.append("afspraakDatum", document.getElementById("dagDatum").innerHTML);
 
 	var encData = new URLSearchParams(formData.entries());
 	alert(encData);
@@ -426,7 +497,7 @@ function inplannen(geslacht, behandelingenlijst, tijd, datum){
 }
 
 
-//hier worden behandelingen toegevoegd
+// hier worden behandelingen toegevoegd
 document.getElementById("inplannenBehnadelingToevoegen").addEventListener("click", function(){
 	behandelignToevoegenForm();
 })
@@ -513,7 +584,7 @@ function behandelingToevoegen(){
 	})
 }
 
-//hulphulphulphulphulphulphulphulphulphulphulphulphulphulphulphulp
+// hulphulphulphulphulphulphulphulphulphulphulphulphulphulphulphulp
 function hideDagen(id){
 	var dagen = [
 		"dateSpanMaandag", "dateSpanDinsdag",
@@ -537,24 +608,7 @@ function getMaandag(d){
 	return d;
 }
 
-function datumsOphalen(d){
 
-	d = new Date(getMaandag(d));
-	
-	document.getElementById("dateMaandag").innerHTML = formatDate(d);
-	d.setDate(d.getDate() + 1)
-	document.getElementById("dateDinsdag").innerHTML = formatDate(d);
-	d.setDate(d.getDate() + 1)
-	document.getElementById("dateWoensdag").innerHTML = formatDate(d);
-	d.setDate(d.getDate() + 1)
-	document.getElementById("dateDonderdag").innerHTML = formatDate(d);
-	d.setDate(d.getDate() + 1)
-	document.getElementById("dateVrijdag").innerHTML = formatDate(d);
-	d.setDate(d.getDate() + 1)
-	document.getElementById("dateZaterdag").innerHTML = formatDate(d);
-	d.setDate(d.getDate() + 1)
-	document.getElementById("dateZondag").innerHTML = formatDate(d);
-}
 
 function hideItem(id){
 	document.getElementById(id).style.display = "none";
@@ -571,9 +625,9 @@ function removeItem(id){
 function formatDate(date){
 	var date = new Date(date);
 	var monthNames = [
-		"January", "February", "March",
-		"April", "May", "June", "July",
-		"August", "September", "October",
+		"Januari", "Februari", "Maart",
+		"April", "Mei", "Juni", "Juli",
+		"Augustus", "September", "Oktober",
 		"November", "December"
 	];
 	var day = date.getDate();
