@@ -112,6 +112,13 @@ document.getElementById("afsprakenCard").addEventListener("click", function(){
 	location.href = 'afspraken.html';
 })
 
+//starten rooster proces
+document.getElementById("inkomstenCard").addEventListener("click", function(){
+	location.href = 'inkomsten.html';
+})
+
+
+
 document.getElementById("inplannenCard").addEventListener("click", function() {
 	inplannenCard();
 })

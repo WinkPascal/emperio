@@ -10,7 +10,7 @@ public class Behandeling {
 	Date lengte;
 	double prijs;
 	String geslacht;
-	
+	int count;
 	
 	public Behandeling(String behandelingsNaam) {
 		this.naam = behandelingsNaam;
@@ -45,6 +45,12 @@ public class Behandeling {
 	}
 
 	
+	public Behandeling(int id, String naam, int count) {
+		this.id = id;
+		this.naam = naam;
+		this.count = count;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -56,7 +62,13 @@ public class Behandeling {
 	public Bedrijf getBedrijf() {
 		return bedrijf;
 	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 
+	public int getCount() {
+		return count;
+	}
 	public void setBedrijf(Bedrijf bedrijf) {
 		this.bedrijf = bedrijf;
 	}

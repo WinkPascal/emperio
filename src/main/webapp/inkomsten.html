@@ -3,30 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <title>Inkomsten overzicht</title>
-	<link rel="stylesheet" type="text/css" href="css/inkomsten.css">
+<link rel="stylesheet" type="text/css" href="css/inkomsten.css">
+<link rel="stylesheet" type="text/css" href="css/home.css">
 </head>
-<body>
+<body onload="onload()">
 	<div>
-		<input class="defaultButton" type="button" value="Deze week">
-		<input class="defaultButton" type="button" value="Deze maand">
-		<input class="defaultButton" type="button" value="Dit jaar">
-		<input class="defaultButton" type="button" value="Altijd">
+		<input class="defaultButton" type="button" value="Deze week" id="weekButton"> <br>
+		<input class="defaultButton" type="button" value="Deze maand" id="maandButton"><br>
+		<input class="defaultButton" type="button" value="Dit jaar" id="jaarButton"> <br>
+		<input class="defaultButton" type="button" value="Altijd" id="altijdButton"><br>
 	</div>
-	
 	<div>
-		<div class="grafiek">
-			<!-- per dag -->
-		</div>
-		<div class="besteKlanten">
-			<!-- top 10 -->
-		</div>
-		<div class="besteBehandelingen">
-			<!-- top 10 -->
-		</div>
-		<div class="aantalBehandelingen">
-		</div>
+		<div id="behandelingen"></div>
+		
 		<div class="aantalAfsrpaken">
+			<div class="infoBlok">
+				<span id="aantalAfspraken"></span><br>
+				afspraken
+			</div><br>
+			<div class="infoBlok">
+				<span id="inkomsten"></span><br>
+				inkomsten
+			 </div>
 		</div>
 	</div>
+	<div id="columnchart_values"></div>
+
+
+			<div class="besteBehandelingen">
+			</div>
+	
+	
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="javascript/inkomsten.js"></script>
 </body>
 </html>

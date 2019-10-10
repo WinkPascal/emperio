@@ -197,4 +197,30 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		} 
 		return null;
 	}
+	
+	public ArrayList<Double> getInkomsten(Bedrijf bedrijf, Date date){
+		try (Connection con = super.getConnection()) {
+			ArrayList<Double> data = new ArrayList<Double>();
+			PreparedStatement pstmt = con.prepareStatement(
+					"select count(a.id) as afspraken, sum(b.prijs) as inkomsten \n" + 
+					"from afspraak a join afspraakbehandeling ab on a.id =ab.afspraak\n" + 
+					"				join behandeling b on b.id = ab.behandeling\n" + 
+					"WHERE b.bedrijf = 'pawiwink@gmail.com' \n" + 
+					"AND a.timestamp < SYSDATE() \n" + 
+					"AND a.timestamp > '"+ServiceFilter.DateToStringFormatter(date, "YYYY-MM-dd")+"';");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				double afspraken = dbResultSet.getDouble("afspraken");
+				double inkomsten = dbResultSet.getDouble("inkomsten");
+				data.add(afspraken);
+				data.add(inkomsten);
+				return data;
+			} 
+		}catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return null;
+	}
+
 }

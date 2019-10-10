@@ -18,4 +18,6 @@ public interface AfspraakDao {
 	public Afspraak getAfspraak(Bedrijf bedrijf, int id);
 	
 	public ArrayList<Afspraak> getAfsprakenWeek(Bedrijf bedrijf, Date date);
+
+	public ArrayList<Double> getInkomsten(Bedrijf bedrijf, Date vanDate);
 }
