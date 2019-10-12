@@ -4,10 +4,133 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="css/home.css">
 </head>
 <body>
+	 <div class="topnav">
+  		<input type="button" id="contactNav" class="defaultButton" value="Contact">
+	  	<input type="button" id="registreerNav" class="defaultButton" value="Registreren">
+	  	<input type="button" id="loginNav" class="defaultButton" value="Inloggen">
+	</div>
+	
+	<div id="topImg">
+		<h2>Fenta</h2>
+		<span id="qoute">Vooruitgang enzo <br> Gemaakt voor kleine eenmanszaken</span>
+	</div>
+	
+	<div id="verkoopPunten">
+		<span class="verkoopPunt" id="verkoopPuntBeschikbaar">
+			<img width="200px" style="border-radius:50%;" src="https://images.all-free-download.com/images/graphiclarge/devices_icons_6813813.jpg">
+			<a>Op elke apparaat beschikbaar</a>
+		</span>
+		
+		<span class="verkoopPunt" id="verkoopPuntVoorraad">
+			<img width="200px" src="https://www.shareicon.net/download/2016/07/22/800272_storage_512x512.png">
+			<a>Voorraad beheer</a>
+		</span>	
+		
+		<span class="verkoopPunt" id="verkoopPuntMarketing">
+			<img width="200px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkaPNcFTMbWgBk-6j0XVvt8OEXjjbdqdom7Nm0S5oStfvUz9-t">
+			<a>Marketing</a>
+		</span>		
+		
+		<span class="verkoopPunt" id="verkoopPuntAgenda">
+			<img width="200px" src="https://freeiconshop.com/wp-content/uploads/edd/calendar-flat.png">
+			<a>Agenda</a>
+		</span>		
+		
+		<span class="verkoopPunt" id="verkoopPuntKlantenbeheer">
+			<img width="200px" src="https://www.freeiconspng.com/uploads/customers-icon-20.png">
+			<a>Klantenbeheer</a>
+		</span>
+		
+		<span class="verkoopPunt" id="verkoopPuntStatistieken">
+			<img width="200px" src="https://cdn1.iconfinder.com/data/icons/data-science-flat-1/64/statistics-pie-chart-label-data-report-512.png"><br>
+			<a>Statistieken</a>
+		</span>
+		
+		<span class="verkoopPunt" id="verkoopPuntTelefoon">
+			<img width="200px" src="https://i.pinimg.com/474x/c4/ca/c2/c4cac2095464ce2787ee8b1043fc0994--time-saving-free-time.jpg">
+			<a>Bespaar tijd</a>
+		</span>
+		
+		<span class="verkoopPunt" id="verkoopPuntWebsite">
+			<img width="200px" src="https://image.flaticon.com/icons/png/512/1413/1413310.png">
+			<a>Eigen website</a>
+		</span>
+	</div>
+
+	<div id="verkoopPuntenUitleg" id="marketingPuntUitleg">
+		<div class="verkoopPuntDiv">
+			<div class="verkooppuntText verkoopPuntDivLeft">
+				<h2>Marketing</h2>
+				<a>
+					Bij het maken van een afspraak word de klant opgeslagen in uw systeem. 
+					Als de klant zijn email adres heeft ingevuld kann deze gebruikt worden voor 
+					updates over uw bedrijf, nieuwsbrieven, herinnneringen voor de afspraak en 
+					gepersonaliseerd berichten. <br> <br>
+					Bij het maken van een email kunt u uit de lijst met uw klanten kiezen of 
+					u kunt een email naar alle klanten sturen, zodat iedereen geinformeerd is.
+				</a>
+			</div>
+			<img class="verkoopPuntDivRight verkoopPuntImage" src="https://craftindustryalliance.org/wp-content/uploads/2016/09/emailmarketing-1024x671.jpg">
+		</div>
+		
+		<div class="verkoopPuntDiv" id="agendaPuntUitleg">
+			<div class="verkooppuntText verkoopPuntDivRight">
+				<h2>Agenda</h2>
+				<a>
+					Plan overzichtelijk en effiecient. Met Tenfa kunt u makkelijk een week 
+					overzzicht zien van de geplande afspraken. Per geplanden afspraak kunt u makelijk 
+					alle informatie die bij de afspraak hoort opvragen, zoals de tijd, datum, 
+					voorspelde lengte, behandelingen en prijs. Ook kunt u bij de afspraak de informatie 
+					opvragen van de klant die de afspraak heeft gemaakt.
+				</a>
+			</div>
+			<img class="verkoopPuntImage verkoopPuntDivLeft" src="https://codyhouse.co/assets/img/gems/hero-sharing/schedule-template-featured.png">
+		</div>	
+		
+		<div class="verkoopPuntDiv" id="klantBeheerPuntUitleg">
+			<div class="verkooppuntText verkoopPuntDivLeft">			
+				<h2>Klantenbeheer</h2>
+				<a>Met uw account kunt u makkelijk de informatie van uw klanten opvragen.</a>
+			</div>
+			<img class="verkoopPuntImage verkoopPuntDivRight"  src="https://capsulecrm.com/assets/posts/2018-05-01-new-contacts-list/new-list-page.png?v=335cc73fe">
+		</div>	
+		
+		<div class="verkoopPuntDiv" id="statistiekenPuntUitleg">
+			<div class="verkooppuntText verkoopPuntDivRight">
+				<h2>Statistieken</h2>
+				<a>
+					Voor uw inkomsten zijn overzichtelijke grafieken, charts en rapportages op te 
+					vragen met een klik op de knop.
+				</a>
+			</div>
+			<img class="verkoopPuntImage verkoopPuntDivLeft"  src="https://techcrunch.com/wp-content/uploads/2019/06/GettyImages-1031924616.jpg?w=730&crop=1">
+		</div>	
+		
+		<div class="verkoopPuntDiv" id="tijdVerkoopPuntDivUitleg">
+			<div class="verkooppuntText verkoopPuntDivLeft">
+				<h2>Bespaar tijd</h2>
+				<a>
+					Bij uw eigen website krijgt u een mogelijkheid om da klant zijn eigen afspraak te laten inplannen.
+				</a>
+			</div>
+			<img class="verkoopPuntImage verkoopPuntDivRight"  src="https://www.callcentrehelper.com/images/stories/2019/04/push-sphere-not-cubes-vector-760.png">
+		</div>	
+		
+		<div class="verkooppuntText" id="websiteVerkoopPuntDivUitleg">
+			<div class="verkooppuntText verkoopPuntDivRight">
+				<h2>Eigen website</h2>
+				<a>Via uw eigen website kunt </a>
+			</div>
+			<img class="verkoopPuntImage verkoopPuntDivLeft" src="https://mikekhorev.com/wp-content/uploads/2019/01/JKHGoNd.jpg">	
+		</div>
+	</div>
+
+	
 	<div class="modal" id="loginModal">
-		<form id="loginForm" class="modal-content">
+		<form id="loginForm" class="loginModal-content">
 			<h2>login</h2>
 			<em>email adres</em><br> 
 			<input type="text" value="pawiwink@gmail.com" name="username" id="emailLogin" class="loginInput" placeholder="email adres"><br>
@@ -22,47 +145,8 @@
 	<div id="errorLijst" class="errorLijst">
 	</div>
 	
-	<script>
-		document.getElementById("loginButton").addEventListener("click", function(){
-			var formData = new FormData(document.querySelector("#loginForm"));
-			var encData = new URLSearchParams(formData.entries());
-			console.log(encData);
-			fetch("restservices/authentication", {method : 'POST', body : encData})
-			.then(function(response){
-				if(response.ok){
-					//het inloggen is geslaagdt
-					return response.json()
-				} else {
-					//het inloggen is niet gelukt
-					alert("er ging iets verkeerd");
-				};
-			})
-			.then(function(myJson){
-				//de JWTKey wordt in de sessionStorage gezet en de actor wordt doorverbonden naar de afspraken.html pagina
-				window.sessionStorage.setItem("sessionToken", myJson.JWT);
-				var jwtData = sessionStorage.getItem("sessionToken").split('.')[1]
-				var decodedJwtJsonData = window.atob(jwtData)
-	
-				//rol een warde geven 
-				// decodedJwtJsonData.role werkte niet
-				var role = "";
-				let array = decodedJwtJsonData.split(",");
-				for(var item of array){
-					let items = item.split('"');
+	<script src="javascript/index.js"></script>
 
-					if(items[1] == "role"){
-						role = items[3];
-					}
-				}
-				
-				if(role == "user"){
-					window.location.href = "home.html";
-				} else if(role == "admin"){
-					window.location.href = "adminHome.html";
-				}
-			})
-		})
-	</script>
 	<script src="javascript/errorManager.js"></script>
 </body>
 </html>
