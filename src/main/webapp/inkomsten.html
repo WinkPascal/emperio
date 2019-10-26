@@ -7,32 +7,38 @@
 <link rel="stylesheet" type="text/css" href="css/home.css">
 </head>
 <body onload="onload()">
-	<div>
-		<input class="defaultButton" type="button" value="Deze week" id="weekButton"> <br>
-		<input class="defaultButton" type="button" value="Deze maand" id="maandButton"><br>
-		<input class="defaultButton" type="button" value="Dit jaar" id="jaarButton"> <br>
-		<input class="defaultButton" type="button" value="Altijd" id="altijdButton"><br>
-	</div>
-	<div>
-		<div id="behandelingen"></div>
+	<div class="topRow">
+		<div class="timeSelect">
+			<input class="defaultButton" type="button" value="Deze week" id="weekButton"> <br>
+			<input class="defaultButton" type="button" value="Deze maand" id="maandButton"><br>
+			<input class="defaultButton" type="button" value="Dit jaar" id="jaarButton"> <br>
+			<input class="defaultButton" type="button" value="Altijd" id="altijdButton"><br>
+		</div>
 		
-		<div class="aantalAfsrpaken">
+		<div id="behandelingenChart"></div>
+		<div class="getallenDiv">
 			<div class="infoBlok">
-				<span id="aantalAfspraken"></span><br>
-				afspraken
-			</div><br>
+				Aantal afspraken: <span id="aantalAfspraken"></span>
+			</div>
 			<div class="infoBlok">
-				<span id="inkomsten"></span><br>
-				inkomsten
-			 </div>
+				Hoeveelheid inkomsten: €<span id="inkomsten"></span>
+			</div>
+		</div>	
+
+	</div>
+	
+	<div class="grafiek" id="columnchart_values"></div>
+	
+	<div class="topLijsten">
+		<h3>Beste Klanten</h3>
+		<div id="besteKlanten">
+			
+		</div>
+		<h3>Beste Behandelingen</h3>
+		<div id="besteBehandelingen">
+		
 		</div>
 	</div>
-	<div id="columnchart_values"></div>
-
-
-			<div class="besteBehandelingen">
-			</div>
-	
 	
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="javascript/inkomsten.js"></script>

@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
+import com.swinkels.emperio.objects.Dag;
 
 public interface AfspraakDao {
 	
@@ -20,4 +21,6 @@ public interface AfspraakDao {
 	public ArrayList<Afspraak> getAfsprakenWeek(Bedrijf bedrijf, Date date);
 
 	public ArrayList<Double> getInkomsten(Bedrijf bedrijf, Date vanDate);
+
+	public ArrayList<Dag> getAantalAfsprakenPerDag(Bedrijf bedrijf, Date endDate);
 }

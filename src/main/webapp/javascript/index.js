@@ -2,6 +2,12 @@ document.getElementById("loginNav").addEventListener("click", function(){
 	login();
 })
 
+document.getElementById("anulleer").addEventListener("click", function(){
+	errorMessage("geanulleerd");
+})
+
+
+
 function login(){
 	document.getElementById("loginModal").style.display = "block";
 	document.getElementById("loginButton").addEventListener("click", function(){

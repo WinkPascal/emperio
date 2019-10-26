@@ -11,6 +11,7 @@ import java.util.Date;
 import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
+import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Klant;
 import com.swinkels.emperio.service.ServiceFilter;
 
@@ -89,11 +90,16 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 	}
 
 	public boolean setAfspraak(Afspraak afspraak) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(afspraak.getTimeStamp());
+		int dagNummer = calendar.get(Calendar.DAY_OF_WEEK)-1;
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-			"insert into afspraak(klant, timestamp) values("
+			  "insert into afspraak(dag_nr, klant, timestamp) values(" 
+			+ ""+dagNummer+", "
 			+ "'"+afspraak.getKlant().getId()+"', "
 			+ "'"+ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"')");
+			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -205,10 +211,9 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"select count(a.id) as afspraken, sum(b.prijs) as inkomsten \n" + 
 					"from afspraak a join afspraakbehandeling ab on a.id =ab.afspraak\n" + 
 					"				join behandeling b on b.id = ab.behandeling\n" + 
-					"WHERE b.bedrijf = 'pawiwink@gmail.com' \n" + 
+					"WHERE b.bedrijf = '"+ bedrijf.getEmail() +"' \n" + 
 					"AND a.timestamp < SYSDATE() \n" + 
 					"AND a.timestamp > '"+ServiceFilter.DateToStringFormatter(date, "YYYY-MM-dd")+"';");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				double afspraken = dbResultSet.getDouble("afspraken");
@@ -217,6 +222,36 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 				data.add(inkomsten);
 				return data;
 			} 
+		}catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return null;
+	}
+
+	public ArrayList<Dag> getAantalAfsprakenPerDag(Bedrijf bedrijf, Date date) {
+		try (Connection con = super.getConnection()) {
+			ArrayList<Dag> dagen = new ArrayList<Dag>();
+			PreparedStatement pstmt = con.prepareStatement(
+					"select a.dag_nr, count(a.id) as aantalAfspraken \n" + 
+					"FROM afspraak a join afspraakbehandeling h on a.id = h.afspraak\n" + 
+					"				join behandeling b on b.id = h.behandeling\n" + 
+					"WHERE b.bedrijf = '"+ bedrijf.getEmail() +"' \n" + 
+					"AND timestamp < SYSDATE() \n" + 
+					"AND timestamp > "+ServiceFilter.DateToStringFormatter(date, "YYYY-MM-dd")+" "+ 
+					"group by a.dag_nr \n" + 
+					"ORDER BY a.dag_nr"); 
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				int dag_nr = dbResultSet.getInt("dag_nr");
+				int aantalAfspraken = dbResultSet.getInt("aantalAfspraken");
+				System.out.println(dag_nr);
+
+				Dag dag = new Dag(dag_nr, aantalAfspraken);
+				
+				dagen.add(dag);
+			} 
+			return dagen;
 		}catch (SQLException e) {
 			e.printStackTrace();
 		} 

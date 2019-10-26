@@ -5,11 +5,11 @@ import java.util.Date;
 
 public class Afspraak {
 
-	int id;
-	Klant klant;
-	Bedrijf bedrijf;
-	Date timestamp;
-	ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
+	private int id;
+	private Klant klant;
+	private Bedrijf bedrijf;
+	private Date timestamp;
+	private ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 
 	public Afspraak() {
 		

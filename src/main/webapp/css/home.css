@@ -12,10 +12,6 @@
   to {top: 0; opacity: 1}
 }
 
-.navigationMenu{
-	width: 100%;
-	background-color: gray;
-}
 
 .afspraakSpan{
  	display: inline-block;
@@ -24,7 +20,6 @@
 	border: 1px solid blue; 
 	height: 80px;	
 	margin-top: 10px;
-	border-radius: 5px;
 }
 
 .topBar{
@@ -32,7 +27,21 @@
 	top: 0px;
 	width: 100%;
 	height: 70%;
-	background-color: gray;
+	background-color: #202E5D;
+	padding: 5px;
+	color: white;
+	font-size: 25px;
+	text-align: center;	
+}
+.topBar #homeButton{
+	float: left;
+}
+.topBar #settingButton{
+	float: right;
+}
+.topBar #logoutButton{
+	float: right;
+	margin-left: 5px;
 }
 
 .modal {
@@ -73,7 +82,6 @@
 	height: 70%;
 }
 
-
 .logo {
 	color: orange;
 	left: 0px;
@@ -98,8 +106,26 @@
 }
 
 .dagRooster {
+	position: absolute; 
 	width: 30%;
 	text-align: center;
+	height: 90%; 
+}
+
+.dagRooster #afsprakenVandaagLijst{
+	border-right: 2px solid black;
+	height: 100%;
+}
+
+#geenAfsprakenGevonden{
+	position: absolute;
+	top: 25%;
+	left: -80px;
+	width: 600px;
+	height: 350px;
+    object-fit: none;
+   	background-image:
+		url("https://cdn.dribbble.com/users/24885/screenshots/1797793/events-empty-data-set.png");
 }
 
 .cardHolder {
@@ -107,6 +133,7 @@
 	top: 0px;
 	position: absolute;
 	margin-left: 30%;
+    text-align:center;
 }
 
 .card {

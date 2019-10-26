@@ -3,11 +3,12 @@ package com.swinkels.emperio.objects;
 import java.util.Date;
 
 public class Dag {
-	int id;
-	Bedrijf bedrijf;
-	Date openingsTijd;
-	Date sluitingsTijd;
-	int dag;
+	private int id;
+	private Bedrijf bedrijf;
+	private Date openingsTijd;
+	private Date sluitingsTijd;
+	private int aantalAfspraken;
+	private int dag;
 	
 	public Dag(Date openingsTijd, Date sluitingsTijd) {
 		this.openingsTijd = openingsTijd;
@@ -19,7 +20,20 @@ public class Dag {
 		this.sluitingsTijd = sluitingsTijdDate;
 		this.dag = dagNummer; 
 	}
+	
+	public Dag(int dagNummer, int aantalAfspraken) {
+		this.dag = dagNummer;
+		this.aantalAfspraken = aantalAfspraken;
+	}
 
+	public int getAantalAfspraken() {
+		return aantalAfspraken;
+	}
+
+	public void setAantalAfspraken(int aantalAfspraken) {
+		this.aantalAfspraken = aantalAfspraken;
+	}
+	
 	public int getId() {
 		return id;
 	}

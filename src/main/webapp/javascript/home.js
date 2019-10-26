@@ -3,6 +3,7 @@
 function onload(){
 	var date = new Date();
 	var dagDate = date.getFullYear() +'-'+ date.getMonth() +'-'+ date.getDate();
+	//ophalen van afspraken vandaag
 	var fetchoptions = {
 			headers: {
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
@@ -13,6 +14,8 @@ function onload(){
 	.then(function(afspraken){
 		var afsprakenLijst = document.getElementById("afsprakenVandaagLijst");
 		for(let afspraak of afspraken){
+			document.getElementById("geenAfsprakenGevonden").style.display="none";
+			
 			var afspraakSpan = document.createElement('span');
 			
 			afspraakSpan.setAttribute('id', afspraak.id);
@@ -23,9 +26,23 @@ function onload(){
 			       "<br> Lengte: "+afspraak.lengte +""+
 			       "<br> Prijs: "+afspraak.prijs +"<br>";
 			afspraakSpan.innerHTML =  tekst;
+			if(afspraak.prijs > 30){
+				//prijs van de afspraak is groter dan 30
+				afspraakSpan.style.backgroundColor = "#FF5733" ;
+				 
+			} else if(afspraak.prijs > 10){
+				//prijs van afspraak is groter dan 10
+				afspraakSpan.style.backgroundColor = "blue";
+
+			} else{
+				//prijs van afspraak is kleiner dan 10
+				afspraakSpan.style.backgroundColor = "green";
+			}
+			//beslissen wat de kleur wordt
 			afsprakenLijst.appendChild(afspraakSpan);
+			
+			//als op de afspraak wordt geklikt
 			document.getElementById(afspraak.id).addEventListener("click", function(){
-				
 				document.getElementById("afspraakModal").style.display = "block";
 				var fetchoptions = {
 						headers: {
@@ -89,22 +106,7 @@ document.getElementById("klantenCard").addEventListener("click", function() {
 
 //starten klanten proces
 function klantenCard(){
-	document.getElementById("KlantenModel").style.display = "block";
-	getAlleKlanten();
-	
-	document.getElementById("zoekKlantButton").addEventListener("click", function() {
-		zoekKlanten();
-	})
-	
-	document.getElementById("volgendeKlanten").addEventListener("click", function() {
-		alert();
-		volgendeKnopInplannen();
-	})
-	
-	document.getElementById("terugKlanten").addEventListener("click", function() {
-		alert();
-		terugKnopInplannen();
-	})
+	location.href = 'klanten.html';
 }
 
 //starten rooster proces

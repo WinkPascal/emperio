@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="css/home.css">
+	<link rel="stylesheet" type="text/css" href="css/klanten.css">
+</head>
+<body onload="onload()">
+	<span class="topBar">
+		<input type="button" value="Home" class="defaultButton" id="homeButton">
+		<input type="button" value="Settings" class="defaultButton" id="settingButton">
+		<a>Rooster</a>
+	</span>
+
+	<div class="klanten">
+		<div>
+			<input type="text" id="zoekKlantInput"/><input type="button" value="Zoek" id="zoekKlant">
+			<select>
+	  			<option value="vAfspraken">Meeste afspraken</option>
+				<option value="mAfspraken">Minste afspraken</option>
+				<option value="opel">Opel</option>
+				<option value="audi">Audi</option>
+			</select>
+		</div>
+				
+		<table id="klantenLijst">
+	  	</table>
+	  	
+	  	<input type="button" value="Terug" class="defaultButton" id="vorigeKlantenPagina">
+	  	
+	  	<input type="button" value="Volgende" class="defaultButton" id="volgendeKlantenPagina">
+	 </div> 	
+	 
+  	<script src="javascript/klanten.js"></script>
+</body>
+</html>

@@ -50,7 +50,7 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		ArrayList<Date> dagTijden = new ArrayList<Date>();
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
-		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK)-1;
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"SELECT openingstijd, sluitingstijd"
@@ -58,6 +58,7 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"' "
 				 + "and dag = "+dayOfWeek+" "
 				 + "ORDER BY dag;");
+			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				String openingsTijd = dbResultSet.getString("openingstijd");

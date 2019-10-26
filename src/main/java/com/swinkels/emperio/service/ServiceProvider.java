@@ -79,6 +79,7 @@ public class ServiceProvider {
 									@PathParam("lengte") String lengte){
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		Date date = new Date();
+		//de geselecteerde lengte word berekent
 		if(lengte.equals("week")) {
 			Calendar dateCal = Calendar.getInstance();
 			dateCal.setTime(date);
@@ -102,13 +103,14 @@ public class ServiceProvider {
 		    date = calendarBeginDate.getTime();		
 		}
 		JsonArrayBuilder jab = Json.createArrayBuilder();
+		//inkomsten / hoeveelheid afspraken worden opgeroepen
 		ArrayList<Double> aantalAfsprakenEnInkomsten = afspraakDao.getInkomsten(bedrijf, date);
 		JsonObjectBuilder job = Json.createObjectBuilder();
 		job.add("afspraken", aantalAfsprakenEnInkomsten.get(0));
 		job.add("inkomsten", aantalAfsprakenEnInkomsten.get(1));
 		jab.add(job);
 		
-		
+		//top 5 behandelingen worden opgehaalt
 		ArrayList<Behandeling> behandelingen = behandelingDao.getTop5Behandelingen(bedrijf, date);
 		JsonArrayBuilder jab1 = Json.createArrayBuilder();
 		for(Behandeling behandeling : behandelingen) {
@@ -117,12 +119,24 @@ public class ServiceProvider {
 			job1.add("count", behandeling.getCount());
 			job1.add("naam", behandeling.getNaam());
 			job1.add("id", behandeling.getId());
-			System.out.println(behandeling.getCount());
+			
 			jab1.add(job1);
 		}
 		jab.add(jab1);
 		
-		ArrayList<Dag> dagen = 
+		//per dag worden de hoeveelheid afspraken opgeroepen
+		JsonArrayBuilder jab2 = Json.createArrayBuilder();
+		ArrayList<Dag> dagen = afspraakDao.getAantalAfsprakenPerDag(bedrijf, date);
+		for(Dag dag : dagen) {
+			JsonObjectBuilder job1 = Json.createObjectBuilder();
+			System.out.println(dag.getDag() +" == "+ dag.getAantalAfspraken());
+			job1.add("dagNummer", dag.getDag());
+			job1.add("aantalAfspraken", dag.getAantalAfspraken());
+			
+			jab2.add(job1);
+		}
+		jab.add(jab2);
+
 		
 		return jab.build().toString();
 	}
@@ -134,7 +148,6 @@ public class ServiceProvider {
 	public String getWerkdagen(@Context SecurityContext sc) {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		ArrayList<Dag> dagen = bedrijfDao.getWeekRooster(bedrijf);
-		System.out.println("========dsajkbdsajdjksan");
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		for (Dag dag : dagen) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
@@ -146,7 +159,6 @@ public class ServiceProvider {
 			jab.add(job);
 
 		}
-		System.out.println("========dsajkbdsajdjksan");
 
 		return jab.build().toString();
 	}
@@ -156,7 +168,6 @@ public class ServiceProvider {
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String afsprakenByDate(@Context SecurityContext sc, @PathParam("date") String datum) throws ParseException {
-		System.out.println("afsprakenByDate");
 
 		Date beginDate = ServiceFilter.StringToDateFormatter(datum, "yyyy-MM-dd");
 		Calendar calendarBeginDate = Calendar.getInstance();
@@ -172,10 +183,8 @@ public class ServiceProvider {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		// vraag de afspraken op van het bedrijf en de datum van vandaag
 		ArrayList<Afspraak> afsprakenVandaagList = afspraakDao.getAfsprakenBetweenDates(beginDate, eindDate, bedrijf);
-		System.out.println(datum);
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		for (Afspraak afspraak : afsprakenVandaagList) {
-			System.out.println(afspraak.getId());
 			double prijs = 0;
 			int uren = 0;
 			int minuten = 0;
@@ -188,7 +197,6 @@ public class ServiceProvider {
 				prijs = prijs + behandeling.getPrijs();
 			}
 			JsonObjectBuilder job = Json.createObjectBuilder();
-			System.out.println(prijs);
 			job.add("id", afspraak.getId());
 			job.add("timestamp", ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm"));
 			job.add("klantNaam", afspraak.getKlant().getNaam());
@@ -204,16 +212,17 @@ public class ServiceProvider {
 	@Path("/tijdslotenOphalen/{datum}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String tijdslotenOphalen(@Context SecurityContext sc, @PathParam("datum") String beginDateString)
+	public String tijdslotenOphalen(@Context SecurityContext sc, 
+			@PathParam("datum") String datum)
 			throws ParseException {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-
-		Date beginDate = ServiceFilter.StringToDateFormatter(beginDateString, "yyyy-MM-dd");
-		Calendar calendarBeginDate = Calendar.getInstance();
-		calendarBeginDate.setTime(beginDate);
-		calendarBeginDate.add(Calendar.MONTH, 1);
-		beginDate = calendarBeginDate.getTime();
-
+		//format de date naar de java format
+		String[] beginDateString = datum.split("-");
+		int maand = Integer.parseInt(beginDateString[1]) + 1;
+		String dateFormatted = beginDateString[0] + "-" + maand + "-" + beginDateString[2];
+		Date beginDate = ServiceFilter.StringToDateFormatter(dateFormatted, "yyyy-MM-dd");
+		
+		//de volgende dag
 		Calendar calendarEindDate = Calendar.getInstance();
 		calendarEindDate.setTime(beginDate);
 		calendarEindDate.add(Calendar.DAY_OF_YEAR, 1);
@@ -225,16 +234,19 @@ public class ServiceProvider {
 		// openingstijd
 		// sluitingstijd
 		// per afpsraak
-		// beginTijd
-		// eindTijd
+			// beginTijd
+			// eindTijd
 
 		if (dagTijden.get(0) != null) {
-			JsonObjectBuilder job1 = Json.createObjectBuilder();
+			JsonObjectBuilder job = Json.createObjectBuilder();
 			String openingsTijd = ServiceFilter.DateToStringFormatter(dagTijden.get(0), "HH:mm");
+			String sluitingstijd = ServiceFilter.DateToStringFormatter(dagTijden.get(1), "HH:mm");
+			
+			
+			job.add("openingsTijd", openingsTijd);
+			job.add("sluitingstijd", sluitingstijd);
 
-			job1.add("openingsTijd", openingsTijd);
-
-			jab.add(job1);
+			jab.add(job);
 		} else {
 			System.out.println("gesloten");
 		}
@@ -264,6 +276,7 @@ public class ServiceProvider {
 					minuten = minuten - 60;
 				}
 			}
+			//begin tijd bekerekenen
 			String timestampString = ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm");
 
 			String beginUurString = timestampString.substring(11, 13);
@@ -271,31 +284,16 @@ public class ServiceProvider {
 
 			int beginUur = Integer.parseInt(beginUurString);
 			int beginMinuut = Integer.parseInt(beginMinuutString);
-
-			int eindUur = beginUur + uur;
-			int eindMinuut = beginMinuut + minuten;
-			if (eindMinuut > 59) {
-				eindMinuut = eindMinuut - 60;
-				eindUur++;
-			}
-
+			
 			String beginTijd = beginUur + ":" + beginMinuut;
-			String eindTijd = eindUur + ":" + eindMinuut;
+			String lengte = uur + ":" + minuten;
 
 			job.add("beginTijd", beginTijd);
-			job.add("eindTijd", eindTijd);
+			job.add("lengte", lengte);
 
-			System.out.println(beginTijd);
-			System.out.println(eindTijd);
 			jab.add(job);
 		}
-		JsonObjectBuilder job = Json.createObjectBuilder();
 
-		String sluitingstijd = ServiceFilter.DateToStringFormatter(dagTijden.get(1), "HH:mm");
-		job.add("eindTijd", "eind:eind");
-
-		job.add("beginTijd", sluitingstijd);
-		jab.add(job);
 		return jab.build().toString();
 	}
 
@@ -351,14 +349,12 @@ public class ServiceProvider {
 	@Produces("application/json")
 	public String getWeekAfspraken(@Context SecurityContext sc, @PathParam("date") String datum) {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+		//format de date naar de java format
 		String[] beginDateString = datum.split("-");
 		int maand = Integer.parseInt(beginDateString[1]) + 1;
 		String dateFormatted = beginDateString[0] + "-" + maand + "-" + beginDateString[2];
 		Date beginDate = ServiceFilter.StringToDateFormatter(dateFormatted, "yyyy-MM-dd");
-
-		System.out.println("dahdyuiahsliudhsauiddsadsadsadasdasdsadsadsadasdsadsadsadasliusahdiuasnliuiuh");
-		System.out.println(beginDate);
-
+		
 		Calendar calendarEindDate = Calendar.getInstance();
 		calendarEindDate.setTime(beginDate);
 		calendarEindDate.add(Calendar.DAY_OF_YEAR, 7);
@@ -451,17 +447,24 @@ public class ServiceProvider {
 	@RolesAllowed("user")
 	@Path("/afspraak")
 	@Produces("application/json")
-	public Response setAfspraak(@Context SecurityContext sc, @FormParam("klantNaam") String afspraakKlantNaam,
+	public Response setAfspraak(@Context SecurityContext sc, 
+			@FormParam("klantNaam") String afspraakKlantNaam,
 			@FormParam("klantGeslacht") String afspraakKlantGeslacht,
-			@FormParam("klantEmail") String afspraakKlantEmail, @FormParam("klantTelefoon") String afspraakKlantTel,
+			@FormParam("klantEmail") String afspraakKlantEmail, 
+			@FormParam("klantTelefoon") String afspraakKlantTel,
 
 			@FormParam("afspraakBehandeling") String afspraakBehandelingen,
-			@FormParam("afspraakTijd") String afspraakTijd, @FormParam("afspraakDatum") String afspraakDatum)
+			@FormParam("afspraakTijd") String afspraakTijd, 
+			@FormParam("afspraakDatum") String datum)
 			throws ParseException {
 		// objecten van de behandelingen van de afspraak maken
 		JSONArray jsonArray = new JSONArray(afspraakBehandelingen);
-		System.out.println(afspraakDatum);
-		// lijst met behandelingen word gemaakt
+		
+		String[] beginDateString = datum.split("-");
+		int maand = Integer.parseInt(beginDateString[1]) + 1;
+		String dateFormatted = beginDateString[0] + "-" + maand + "-" + beginDateString[2];
+		Date afspraakDatum = ServiceFilter.StringToDateFormatter(dateFormatted, "yyyy-MM-dd");		// lijst met behandelingen word gemaakt
+		
 		ArrayList<Behandeling> behandelingenList = new ArrayList<Behandeling>();
 		for (int i = 0; i < jsonArray.length(); i++) {
 			Behandeling behandeling = new Behandeling(jsonArray.get(i).toString());
@@ -484,29 +487,6 @@ public class ServiceProvider {
 			klant.setTel(afspraakKlantTel);
 		}
 
-		String[] datumString = afspraakDatum.split(" ");
-		String[] monthNames = { "", "Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus",
-				"September", "Oktober", "November", "December" };
-		int maandNummer = 0;
-		for (String month : monthNames) {
-			System.out.println(month + " " + datumString[1]);
-			if (month.equals(datumString[1])) {
-				break;
-			} else {
-				maandNummer++;
-			}
-		}
-
-		String afspraakDatumFormated = datumString[2] + "-" + maandNummer + "-" + datumString[0];
-		// aanmaken afspraak object
-		String timestampString = afspraakDatumFormated + " " + afspraakTijd;
-
-		SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		Date timestamp = timestampFormat.parse(timestampString);
-		System.out.println(timestamp);
-
-		Afspraak afspraak = new Afspraak(timestamp, bedrijf, klant);
-
 		// contact met de database
 		// klant wordt in de database gezet
 
@@ -517,6 +497,16 @@ public class ServiceProvider {
 			klantDao.setKlant(klant);
 			klant = klantDao.getKlantId(klant);
 		}
+		
+		// aanmaken afspraak object
+		String timestampString = dateFormatted + " " + afspraakTijd;
+		System.out.println(timestampString);
+
+		SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date timestamp = timestampFormat.parse(timestampString);
+
+		Afspraak afspraak = new Afspraak(timestamp, bedrijf, klant);
+		
 		// afspraak word in de database gezet
 		afspraakDao.setAfspraak(afspraak);
 		// afspraak id wordt opgehaalt
@@ -638,11 +628,13 @@ public class ServiceProvider {
 		// hieraan wordt toegevoegd:
 		// afspraak.id
 		// afspraak.beginTijd
+		
 		// klant.naam
 		// klant.email
 		// klant.telefoon
 		// klant.geslacht
 		// klant.aantalafspraken
+		
 		// aparte json array binnen jab1
 		// behandeling.naam
 		// behandeling.lengte

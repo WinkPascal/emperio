@@ -45,6 +45,11 @@
 	width: 30%;
 }
 
+.material-icons{
+	font-size:15px; 
+	border: 1px solid black;
+}
+
 .inplannenForm #inplanBehandelingenForm {
 	border: 1px solid black;
 	text-align: center;
@@ -55,16 +60,10 @@
 
 .inplannenForm .inplannenBehandelingOverzicht {
 	display: inline-block;
-	border: 1px solid blue;
+	border-bottom: 1px solid gray;
 	margin: 5px;
-	items-align: center;
 	height: 30px;
-	border-radius: 5px;
-	overflow: auto;
-}
-
-.inplannenForm .textGekozenBehandeling {
-	margin: auto;
+	width: 90%;
 }
 
 .inplannenForm .inplannenBehandelingOverzicht:hover {
@@ -80,14 +79,14 @@
 	border: 1px solid black;
 }
 
-.inplannenForm .rechtsInplanForm{
+.inplannenForm .rechtsInplanForm {
 	width: 350px;
 	float: left;
 	margin: 0px;
 	border: 1px solid black;
 }
 
-.inplannenForm .dagGekozen{
+.inplannenForm .dagGekozen {
 	display: inline-block;
 	width: 300px;
 	margin-top: 10px;
@@ -96,37 +95,35 @@
 	text-align: center;
 }
 
-.blokkenOverzicht{
+.blokkenOverzicht {
 	border: 1px solid black;
 	width: 350px;
-	height: 150px;
+	height: 50px;
 }
 
 .inplannenForm .inplanBlokOverzicht {
-	display: inline-block;
-	text-align: center;
+	margin-left: 30px;
 	width: 100px;
-	height: 90px;
-	margin: 30px;
-	border: 1px solid black;
-}
-
-.inplannenForm #datumInplanForm{
-	border: 1px solid black;
-	width: 350px;
-	height: 150px;
 }
 
 .inplannenForm .inplanBlokOverzicht .afspraakBlokWaarde {
 	display: inline-block;
 	height: 40px;
-	width: auto; 
-	margin : 20px;
+	width: auto;
+}
+
+#lengteAfspraakFormDiv {
+	float: left;
+}
+
+#prijsAfspraakFormDiv {
+	float: right;
+}
+
+.inplannenForm #datumInplanFormDiv {
 	border: 1px solid black;
-	border-radius: 20px;
-	bottom: 50px;
-	padding: 10px;
-	margin: 20px;
+	width: 350px;
+	height: 150px;
 }
 
 /* Eerste stap */
@@ -136,7 +133,7 @@
 	height: 550px;
 	border: 1px solid black;
 	width: 750px;
-	overflow: scroll;
+	overflow: hidden;
 }
 
 .inplannenRechts .geslachtButton {
@@ -168,7 +165,7 @@
 	color: white;
 }
 
-.inplannenRechts .behandelingenOpties{
+.inplannenRechts .behandelingenOpties {
 	display: none;
 	height: 60px;
 	width: 100%;
@@ -176,7 +173,7 @@
 	border-bottom: 1px solid blue;
 }
 
-.inplannenRechts .behandelingenOpties .optieButtonBehandeling{
+.inplannenRechts .behandelingenOpties .optieButtonBehandeling {
 	width: 180px;
 	height: 40px;
 	border: 1px solid blue;
@@ -259,7 +256,7 @@
 	text-align: center;
 }
 
-.inplannenRechts .geplandeAfspraak{
+.inplannenRechts .geplandeAfspraak {
 	display: inline-block;
 	width: 60%;
 	margin-left: 20%;
@@ -270,6 +267,86 @@
 	text-align: center;
 }
 
+/* Derde stap */
+.inplannenRechts .stelTijdInTextdiv {
+	width: 40%;
+	top: 30px;
+	float: left;
+	height: 200px;
+	text-align: center;
+}
+
+.inplannenRechts .stelTijdInTextdiv #tijdInstellen {
+	display: block;
+	font-size: 35px;
+}
+
+.inplannenRechts .stelTijdInTextdiv #tijdInstellen #urenInplannen {
+	top: 0px;
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	border: 1px solid black;
+}
+
+.inplannenRechts .stelTijdInTextdiv #tijdInstellen #minutenInplannen {
+	top: 0px;
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	border: 1px solid black;
+}
+
+.inplannenRechts #agendaInplannen {
+	width: 60%;
+	float: right;
+	height: 100%;
+	overflow: scroll;
+}
+
+#inplanAfspraak {
+	display: inline-block;
+	min-width: 40px;
+	padding: 2em 0.5em;
+	color: #fff;
+	background-color: #29e;
+	border: solid 2px #fff;
+	touch-action: none;
+	-webkit-transform: translate(0px, 0px);
+	transform: translate(0px, 0px);
+	transition: background-color 0.3s;
+}
+
+.inplannenRechts #agendaInplannen .timelineInplanAgenda {
+	display: block;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.nietBeschikbaarAfspraak {
+	width: 350px;
+	left: 80px;
+}
+
+/* elke streep */
+.inplannenRechts #agendaInplannen .timelineInplanAgenda li {
+	position: relative;
+	height: 50px;
+}
+
+/* Hier worden de horizontale strepen van het rooster gemaakt*/
+.inplannenRechts #agendaInplannen .timelineInplanAgenda li::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	background: #EAEAEA;
+}
+
 #behandelingenOptions {
 	border-radius: 50%;
 	background-color: blue;
@@ -278,4 +355,32 @@
 	width: 40px;
 	height: 40px;
 	font-size: 100%;
+}
+
+.drop-active {
+	border-color: #aaa;
+}
+
+.drop-target {
+	background-color: #29e;
+	border-color: #fff;
+	border-style: solid;
+}
+
+.drag-drop {
+	display: inline-block;
+	min-width: 40px;
+	padding: 2em 0.5em;
+	color: #fff;
+	background-color: #29e;
+	border: solid 2px #fff;
+	touch-action: none;
+	-webkit-transform: translate(0px, 0px);
+	transform: translate(0px, 0px);
+	transition: background-color 0.3s;
+}
+
+.drag-drop.can-drop {
+	color: #000;
+	background-color: #4e4;
 }

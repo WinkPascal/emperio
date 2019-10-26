@@ -6,12 +6,17 @@
 	<link rel="stylesheet" type="text/css" href="css/inplannenCard.css">
 	<link rel="stylesheet" type="text/css" href="css/klantenCard.css">
 	<link rel="stylesheet" type="text/css" href="css/instellingenCard.css">
+	<!-- edit icon -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
 </head>
 <body onload="onload()">
 	<!-- rooster vandaag -->
 	<div class="dagRooster">
 		<h2>Afspraken vandaag</h2>
 		<div id="afsprakenVandaagLijst">
+			<div id="geenAfsprakenGevonden">
+			</div>
 		</div>
 	</div>
 	
@@ -30,14 +35,14 @@
 	<!-- opties van de gebruiker -->
 	<div class="cardHolder" id="cardHolder">
 		<span class="topBar">
-			<a class="dashoboardTag">Dashboard</a>
 			<input type="button" class="defaultButton" id="logoutButton" value="Uitloggen"/>
-			<input type="button" class="defaultButton"  id="settingsButton" value="Instellingen"/>
+			<input type="button" value="Settings" class="defaultButton" id="settingButton">
+			<a>Dashboard</a>
 		</span>
 		
 		<div class="card" id="klantenCard">
 			<img class="cardImg"
-				src="https://cdn.pixabay.com/photo/2014/04/03/00/41/people-309098_960_720.png">
+				src="https://www.workana.com/i/wp-content/uploads/2019/02/buyer-personas.jpg">
 			<div class="container">
 				<h4>
 					<b>Klanten</b>
@@ -47,7 +52,7 @@
 
 		<div class="card" id="inventarisCard">
 			<img class="cardImg"
-				src="http://www.maranatha-rijssen.nl/fileadmin/user_upload/barbershop-blue-blur-1319458.jpg">
+				src="https://www.ginesys.in/sites/default/files/blogs/image/inventory%20mgt%20sw.png">
 			<div class="container">
 				<h4>
 					<b>Inventaris</b>
@@ -57,7 +62,7 @@
 
 		<div class="card" id="afsprakenCard">
 			<img class="cardImg"
-				src="https://globalaffairs.fiu.edu/wp-content/uploads/sites/40/2017/05/appointment_policy_pic-1024x683.jpg">
+				src="https://www.marketmotive.com/market_motive/content-calendar-cover-image.jpg">
 			<div class="container">
 				<h4>
 					<b>Afspraken</b>
@@ -67,7 +72,7 @@
 
 		<div class="card" id="inplannenCard">
 			<img class="cardImg"
-				src="https://images.pexels.com/photos/7103/writing-notes-idea-conference.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+				src="https://www.mvbcn.org/wp-content/uploads/crisis-plan.jpg">
 			<div class="container">
 				<h4>
 					<b>Inplannen</b>
@@ -77,7 +82,7 @@
 		
 		<div class="card" id="marketingCard">
 			<img class="cardImg"
-				src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjmeOP5hv84080xuXYDDT3tzeQqTC9FJXkct5XikE3GP00kguqsQ">
+				src="https://c1.sfdcstatic.com/content/dam/blogs/ca/Blog%20Posts/aquire-new-customers-open-graph.png">
 			<div class="container">
 				<h4>
 					<b>Marketing</b>
@@ -86,31 +91,12 @@
 		</div>
 		
 		<div class="card" id="inkomstenCard">
-			<img class="cardImg"
-				src="https://cdn1.iconfinder.com/data/icons/perfect-pixel/512/mac_computer_stats_statistics-512.png">
+			<img class="cardImg" width="130%"
+				src="http://code-idwebdesign.nl/images/1696198979_1-4-terahash-s-to-bitcoin.png">
 			<div class="container">
 				<h4>
-					<b>Inkomsten overzicht</b>
+					<b>Statestieken</b>
 				</h4>
-			</div>
-		</div>
-	</div>
-
-	<!-- klanten -->
-	<div id="KlantenModel" class="modal">
-		<div class="modal-content">
-			<div id="searchBar">
-				<span class="navigatieButton" id="vorigeKlantenPagina">Terug</span>
-		
-				<input type="text" id="zoekKlantInput"/>
-				<span class="navigatieButton" id="zoekKlantButton">Zoek</span>
-				
-				<span class="navigatieButton" id="volgendeKlantenPagina">Volgende</span>
-			</div>
-			
-			<div id="klantenLijstLinks" class="klantenLijstLinks">
-			</div>
-			<div id="klantenLijstRechts" class="klantenLijstRechts">
 			</div>
 		</div>
 	</div>
@@ -153,55 +139,70 @@
 		
 	<!-- inplannen -->
 	<div id="inplannenModal" class="modal">
-		<div class="modal-content" id="inplannenModalContent">
+		<div class="inplan-content" id="inplannenModalContent">
 			<div class="topBarInplannen">
-				<input type="button" class="navigatieButton"  id="terugInplannen" value="Annuleer"/>
-				Inplannen
-				<input type="button" class="navigatieButton"  id="volgendeInplannen" value="Volgende"/>
+				<input type="button" class="defaultButton"  id="terugInplannen" value="Annuleer"/>
+				<input type="button" class="defaultButton"  id="volgendeInplannen" value="Volgende"/>
 			</div>
 			
 			<!-- overzicht inplannen -->
 			<form class="inplannenForm" id="inplannenForm">
-				<span>klant</span><br>
-				<span>Geslacht</span> 
-				<span id="inplanFormGeslacht"></span><br>
-				<span>Naam</span> 
-				<input type="text" name="klantNaam"><br>
-				<span>Email</span> 
-				<input type="text" name="klantEmail"><br>
-				<span>Telefoon nummer</span> 
-				<input type="text" name="klantTelefoon"><br>
-				
-				<span>Behandelingen:</span><br>
-				<span id="inplanBehandelingenForm"></span><br>
-				
-				<span>Afspraak</span><br>
-				<span>Datum: <a id="datumInplanForm"></a></span><br>
-				<span>Tijd: <a id="tijdInplanForm"></a></span>
-				
-				<br>
-				<span class="inplanBlokOverzicht">
-					Lengte
-					<span class="afspraakBlokWaarde" id="lengteAfspraakForm">0:00</span>
-				</span>
-				<span class="inplanBlokOverzicht">
-					Prijs
-					<span class="afspraakBlokWaarde" id="prijsAfspraakForm">€</span>
-				</span>
-				<br>
-				<input type="button" id="submitInplanFormButton" class="defaultButton" 
-				value="Inplannen" style="bottom: 10px;">
+				<div class="rechtsInplanForm">
+					<div id="inplanBehandelingenForm">
+						
+						<h4><i class="material-icons">&#xe254;</i>Behandelingen</h4><br>
+					</div>
+					<div class="blokkenOverzicht">
+						<div class="inplanBlokOverzicht" id="lengteAfspraakFormDiv">
+							<a>Lengte: </a>
+							<span class="afspraakBlokWaarde" id="lengteAfspraakForm">0:00</span>
+						</div>
+						<div class="inplanBlokOverzicht" id="prijsAfspraakFormDiv">
+							<a>Totaal: €</a>
+							<span class="afspraakBlokWaarde" id="prijsAfspraakForm"></span>
+						</div>
+					</div>
+					<div id="datumInplanFormDiv">
+						<i class="material-icons">&#xe254;</i>
+						<a>Datum:</a><a id="datumInplanForm"></a>
+						<br>
+						<i class="material-icons">&#xe254;</i>
+						<a>Tijd:</a><a id="tijdInplanForm"></a>
+					</div>
+
+				</div>
+				<div id="klantInfo">
+					<h4>klant</h4>
+					<span>Geslacht</span> 
+	
+					<span id="inplanFormGeslacht"></span><br><br>
+					<span>Naam</span> <br>
+					<input type="text" name="klantNaam"><br><br>
+
+					<span>Email</span> <br>
+					<input type="text" name="klantEmail"><br><br>
+
+					<span>Telefoon nummer</span> <br>
+					<input type="text" name="klantTelefoon"><br><br>
+						
+					<input type="button" id="submitInplanFormButton" class="defaultButton" value="Inplannen">
+				</div>
 			</form>
 					
 			<!-- eerste scherm -->
 			<div id="inplannenGeslacht" class="inplannenRechts">
-				<span id="geslachtMan" class="geslachtButton">man</span>
-				<span id="geslachtVrouw" class="geslachtButton">Vrouw</span>
-				<span id="geslachtJongen" class="geslachtButton">Meisje</span>
-				<span id="geslachtMeisje" class="geslachtButton">Jongen</span>
-				<br>
-				<span id="inplannenBehnadelingToevoegen" class="geslachtButton">Behandeling toevoegen</span>
-				<span class="geslachtButton">Tijdelijke behandeling</span>
+				<div class="topbarGeslacht">
+					<input type="button" id="geslachtMan" class="geslachtButton" value="Man">
+					<input type="button" id="geslachtVrouw" class="geslachtButton" value="Vrouw">
+					<input type="button" id="geslachtJongen" class="geslachtButton" value="Meisje">
+					<input type="button" id="geslachtMeisje" class="geslachtButton" value="Jongen">
+					<input type="button" id="optiesBehandeling" class="optieButton" value=":" >
+				</div>
+				<div class="behandelingenOpties" id="behandelingenOpties">
+					<input id="inplannenBehnadelingToevoegen" class="optieButtonBehandeling" value="Behandeling toevoegen">
+					<input id="inplannenTijdelijkeBehnadelingToevoegen" class="optieButtonBehandeling" value="Tijdelijke behandeling">
+				</div>
+			
 				<div id="behandelingenKeuzeLijst">
 					<!-- De behandelingen waar uit gekozen kan worden -->
 				</div>
@@ -209,16 +210,39 @@
 
 			<!-- tweede scherm -->
 			<div id="inplannenDatum" class="inplannenRechts">
-				<span class="defaultButton" id="weekTerugInplannen">Week terug</span><span id="weekVerderInplannen" class="defaultButton">Week verder</span>
-				<span class="dagKiezen" id="dateSpanMaandag"><a>Maandag</a><br><a id="dateMaandag"></a></span>
-				<span class="dagKiezen" id="dateSpanDinsdag"><a>Dinsdag</a><br><a id="dateDinsdag"></a></span>
-				<span class="dagKiezen" id="dateSpanWoensdag"><a>Woensdag</a><br><a id="dateWoensdag"></a></span>
-				<span class="dagKiezen" id="dateSpanDonderdag"><a>Donderdag</a><br><a id="dateDonderdag"></a></span>
-				<span class="dagKiezen" id="dateSpanVrijdag"><a>Vrijdag</a><br><a id="dateVrijdag"></a></span>
-				<span class="dagKiezen" id="dateSpanZaterdag"><a>Zaterdag</a><br><a id="dateZaterdag"></a></span>
-				<span class="dagKiezen" id="dateSpanZondag"><a>Zondag</a><br><a id="dateZondag"></a></span>
+				<div class="navigatieTijdslotKiezenKiezen">
+					<input type="button" class="defaultButton" id="weekTerugInplannen" value="Week terug">
+				
+					<input type="button" class="defaultButton" id="terugDag" value="< Week">	
+					<input type="button" class="defaultButton" id="terugDag" value="< Dag">	
+				
+					<input type="button" id="weekVerderInplannen" class="defaultButton" value="Week verder">
+				</div>
+				<div id="dagenLijst">
+				
+				</div>
 			</div>
 			
+			<!-- tijd inplannen -->
+			<div id="inplannenTijd" class="inplannenRechts">
+				<div class="stelTijdInTextdiv">
+					<span id="stelTijdInText">
+						<img width="150px" height="150px" src="https://www.stickpng.com/assets/images/580b57fcd9996e24bc43c44f.png"><br>
+						<a>Sleep de afspraak naar de gewenste tijd.</a>
+					</span>						
+
+					<span id="tijdInstellen">
+						<span id="urenInplannen"></span> 
+						:
+						<input type="number" id="minutenInplannen">
+					</span>
+				</div>
+				
+				<div id="agendaInplannen">
+					<div id="timelineInplanAgenda" class="timelineInplanAgenda">
+					</div> 
+				</div>
+			</div>
 		</div>	
 	</div>
 				
@@ -244,6 +268,7 @@
 			</span>
 		</form>
 	</div>
+	
 	<!-- Settings -->
 	<div id="settings" class="modal">
 		<div class="modal-content">
@@ -276,11 +301,14 @@
 	</div>
 	
 	<!-- Scripts -->
-	<script src="home.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+	
+	<script src="javascript/home.js"></script>
 	<script src="javascript/klantenCard.js"></script>
 	<script src="javascript/inplannenCard.js"></script>
 	<script src="javascript/errorManager.js"></script>
 	<script src="javascript/inventarisCard.js"></script>
+	<!-- Voor de drag and drop -->
 	
 </body>
 </html>

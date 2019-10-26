@@ -1,11 +1,11 @@
 package com.swinkels.emperio.objects;
 
 public class Bedrijf {
-	String email;
-	String naam;
-	String tel;
-	String adres;
-	String wachtwoord;
+	private String email;
+	private String naam;
+	private String tel;
+	private String adres;
+	private String wachtwoord;
 	
 	public Bedrijf(String bedrijfsNaam) {
 		this.email = bedrijfsNaam;

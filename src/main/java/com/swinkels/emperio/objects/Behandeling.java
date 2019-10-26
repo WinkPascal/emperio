@@ -3,14 +3,14 @@ package com.swinkels.emperio.objects;
 import java.util.Date;
 
 public class Behandeling {
-	int id;
-	Bedrijf bedrijf;
-	String naam;
-	String beschrijving;
-	Date lengte;
-	double prijs;
-	String geslacht;
-	int count;
+	private int id;
+	private Bedrijf bedrijf;
+	private String naam;
+	private String beschrijving;
+	private Date lengte;
+	private double prijs;
+	private String geslacht;
+	private int count;
 	
 	public Behandeling(String behandelingsNaam) {
 		this.naam = behandelingsNaam;

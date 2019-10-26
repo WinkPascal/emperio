@@ -58,22 +58,37 @@ function getData(lengte){
 					// Optional; add a title and set the width and height of the chart
 					var options = {'title':'Behandelingen', 'width':550, 'height':400};
 					// Display the chart inside the <div> element with id="piechart"
-					var chart = new google.visualization.PieChart(document.getElementById("behandelingen"));
+					var chart = new google.visualization.PieChart(document.getElementById("behandelingenChart"));
 					chart.draw(data, options);
 				}
 			}
 			else if(i == 3){
+				var weekdagen = new Array(7);
+				weekdagen[0] = "Zondag";
+				weekdagen[1] = "Maandag";
+				weekdagen[2] = "Dinsdag";
+				weekdagen[3] = "Woensdag";
+				weekdagen[4] = "Donderdag";
+				weekdagen[5] = "Vrijdag";
+				weekdagen[6] = "Zaterdag";
 				
+				var dagen = [];
+				var topRow = ["Element", "Aantal afspraken", { role: "style" } ];
+				dagen.push(topRow);
+				for(let dag of dataArray){
+					console.log(dag.dagNummer);
+					var dagArray = [];
+					
+					dagArray.push(weekdagen[dag.dagNummer]);
+					dagArray.push(dag.aantalAfspraken);
+					dagArray.push("blue");
+
+					dagen.push(dagArray);
+				}
 				google.charts.load("current", {packages:['corechart']});
 				google.charts.setOnLoadCallback(drawAfsprakenStats);
 				function drawAfsprakenStats() {
-				  var data = google.visualization.arrayToDataTable([
-				    ["Element", "Density", { role: "style" } ],
-				    ["Copper", 8.94, "#b87333"],
-				    ["Silver", 10.49, "silver"],
-				    ["Gold", 19.30, "gold"],
-				    ["Platinum", 211.45, "color: #e5e4e2"]
-				  ]);
+				  var data = google.visualization.arrayToDataTable(dagen);
 
 				  var view = new google.visualization.DataView(data);
 				  view.setColumns([0, 1,
@@ -99,7 +114,6 @@ function getData(lengte){
 		// De gebruiker is niet ingelogt
 		alert("niet meer ingelogd");
 	});
-	// Draw the chart and set the chart values
 }
 
 

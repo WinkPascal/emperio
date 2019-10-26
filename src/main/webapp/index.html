@@ -5,8 +5,13 @@
 <title>Insert title here</title>
 	<link rel="stylesheet" type="text/css" href="css/index.css">
 	<link rel="stylesheet" type="text/css" href="css/home.css">
+	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+	<script>
+	  AOS.init();
+	</script>
 	 <div class="topnav">
   		<input type="button" id="contactNav" class="defaultButton" value="Contact">
 	  	<input type="button" id="registreerNav" class="defaultButton" value="Registreren">
@@ -60,8 +65,8 @@
 		</span>
 	</div>
 
-	<div id="verkoopPuntenUitleg" id="marketingPuntUitleg">
-		<div class="verkoopPuntDiv">
+	<div id="verkoopPuntenUitleg">
+		<div class="verkoopPuntDiv" id="marketingPuntUitleg">
 			<div class="verkooppuntText verkoopPuntDivLeft">
 				<h2>Marketing</h2>
 				<a>
@@ -73,7 +78,7 @@
 					u kunt een email naar alle klanten sturen, zodat iedereen geinformeerd is.
 				</a>
 			</div>
-			<img class="verkoopPuntDivRight verkoopPuntImage" src="https://craftindustryalliance.org/wp-content/uploads/2016/09/emailmarketing-1024x671.jpg">
+			<img data-aos="fade-left" class="verkoopPuntDivRight verkoopPuntImage" src="https://craftindustryalliance.org/wp-content/uploads/2016/09/emailmarketing-1024x671.jpg">
 		</div>
 		
 		<div class="verkoopPuntDiv" id="agendaPuntUitleg">
@@ -110,24 +115,27 @@
 		</div>	
 		
 		<div class="verkoopPuntDiv" id="tijdVerkoopPuntDivUitleg">
-			<div class="verkooppuntText verkoopPuntDivLeft">
+			<div class="verkooppuntText verkoopPuntDivRight">
 				<h2>Bespaar tijd</h2>
 				<a>
 					Bij uw eigen website krijgt u een mogelijkheid om da klant zijn eigen afspraak te laten inplannen.
 				</a>
 			</div>
-			<img class="verkoopPuntImage verkoopPuntDivRight"  src="https://www.callcentrehelper.com/images/stories/2019/04/push-sphere-not-cubes-vector-760.png">
+			<img class="verkoopPuntImage verkoopPuntDivLeft"  src="https://www.callcentrehelper.com/images/stories/2019/04/push-sphere-not-cubes-vector-760.png">
 		</div>	
 		
-		<div class="verkooppuntText" id="websiteVerkoopPuntDivUitleg">
+		<div class="verkoopPuntDiv" id="websiteVerkoopPuntDivUitleg">
 			<div class="verkooppuntText verkoopPuntDivRight">
-				<h2>Eigen website</h2>
-				<a>Via uw eigen website kunt </a>
+				<h2>Statistieken</h2>
+				<a>
+					Voor uw inkomsten zijn overzichtelijke grafieken, charts en rapportages op te 
+					vragen met een klik op de knop.
+				</a>
 			</div>
-			<img class="verkoopPuntImage verkoopPuntDivLeft" src="https://mikekhorev.com/wp-content/uploads/2019/01/JKHGoNd.jpg">	
-		</div>
+			<img class="verkoopPuntImage verkoopPuntDivLeft" src="https://mikekhorev.com/wp-content/uploads/2019/01/JKHGoNd.jpg">
 	</div>
 
+	
 	
 	<div class="modal" id="loginModal">
 		<form id="loginForm" class="loginModal-content">
@@ -140,9 +148,6 @@
 			<input type="button" id="anulleer" value="anulleer" /> 
 			<a>wachtwoord vergeten</a>
 		</form>
-	</div>
-	
-	<div id="errorLijst" class="errorLijst">
 	</div>
 	
 	<script src="javascript/index.js"></script>

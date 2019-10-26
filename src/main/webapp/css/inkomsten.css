@@ -1,6 +1,61 @@
-.infoBlok{
+.topRow {
+	float: left;
+	height: 40%;
+	width: 75%;
+}
+
+.topRow .timeSelect {
+	height: 300px;
+	width: 200px;
+}
+
+.topRow .timeSelect .defaultButton {
+	margin: 20px;
+}
+
+.topRow #behandelingenChart {
+	width: 600px;
+	position: absolute;
+	left: 200px;
+	top: 0px;
+}
+
+.topRow .getallenDiv {
+	position: absolute;
+	width: 400px;
+	left: 800px;
+	top: 0px;
+	height: 100%;
+}
+
+.infoBlok {
+	margin-top: 50px;
+	width: 400px;
+	font-size: 23px;
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+.grafiek {
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	float: left;
+	height: 60%;
+}
+
+.topLijsten{
+	position: absolute;
+	right: 0px;
 	border: 1px solid black;
-	height: 100px;
-	width: 100px; 
-	text-align: center;
+	width: 35%;
+	height: 100%;
+}
+
+#besteKlanten{
+	border: 1px solid black;
+	height: 50%;
+}
+#besteBehandelingen{
+	border: 1px solid black;
+	height: 50%;
 }

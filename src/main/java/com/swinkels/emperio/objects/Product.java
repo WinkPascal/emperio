@@ -1,10 +1,10 @@
 package com.swinkels.emperio.objects;
 
 public class Product {
-	int id;
-	int hoeveelheid;
-	String naam;
-	Bedrijf bedrijf;
+	private int id;
+	private int hoeveelheid;
+	private String naam;
+	private Bedrijf bedrijf;
 
 	public Product(int id, int hoeveelheid, String naam) {
 		this.naam = naam;

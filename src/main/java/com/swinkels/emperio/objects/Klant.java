@@ -1,12 +1,12 @@
 package com.swinkels.emperio.objects;
 
 public class Klant {
-	int id;
-	String naam;
-	String email;
-	String tel;
-	String geslacht;
-	Bedrijf bedrijf;
+	private int id;
+	private String naam;
+	private String email;
+	private String tel;
+	private String geslacht;
+	private Bedrijf bedrijf;
 
 	public Klant(int id, String naam, String email, String tel, String geslacht) {
 		this.id = id;

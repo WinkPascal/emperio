@@ -6,6 +6,7 @@ function onload(){
 }
 
 function createAfspraak(beginTijd ,lengte, innerhtml, soort){
+	console.log(lengte +"--------"+ beginTijd);
 	//event aanmaken
 	var event = document.createElement('li');
 	event.setAttribute('class', 'afspraak');

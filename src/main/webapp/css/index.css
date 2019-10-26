@@ -76,6 +76,26 @@
 	margin-top: 30px;
 }
 
+#verkoopPuntenUitleg #marketingPuntUitleg{
+	background-color: #F37B58;
+}
+
+#verkoopPuntenUitleg #agendaPuntUitleg{
+	background-color: #443355;
+	color: white;
+}
+#verkoopPuntenUitleg #tijdVerkoopPuntDivUitleg{
+	background-color: #7ED2DC;
+}
+ 
+#verkoopPuntenUitleg #statistiekenPuntUitleg{
+	background-color: #78A8FC;
+}
+#verkoopPuntenUitleg #websiteVerkoopPuntDivUitleg{
+	background-color: #80D4EE;
+}
+
+
 #verkoopPuntenUitleg .verkoopPuntDiv .verkooppuntText {
 	display: inline-block;
 	width: 600px;

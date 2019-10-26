@@ -1,94 +1,70 @@
-var _containerHeight = 4000;
-var _width, _height, _scrollHeight;
-var letters = document.getElementsByTagName('span');
-var _movingElements = [];
-var _scrollPercent = 0;
-var pre = prefix();
-var _jsPrefix  = pre.lowercase;
-if(_jsPrefix == 'moz') _jsPrefix = 'Moz'
-var _cssPrefix = pre.css;
-var _positions = [
-  {
-    name: 'joey', 
-    start: {
-        percent: 0.2, x: -1, y: 0.2
-    },
-    end: {
-      percent: 0.8, x: 0.9, y: 0.9
-    }
+// enable draggables to be dropped into this
+interact('.dropzone').dropzone({
+  // only accept elements matching this CSS selector
+  accept: '#yes-drop',
+  // Require a 75% element overlap for a drop to be possible
+  overlap: 0.75,
+
+  // listen for drop related events:
+
+  ondropactivate: function (event) {
+    // add active dropzone feedback
+    event.target.classList.add('drop-active')
+  },
+  ondragenter: function (event) {
+    var draggableElement = event.relatedTarget
+    var dropzoneElement = event.target
+
+    // feedback the possibility of a drop
+    dropzoneElement.classList.add('drop-target')
+    draggableElement.classList.add('can-drop')
+    draggableElement.textContent = 'Dragged in'
+  },
+  ondragleave: function (event) {
+    // remove the drop feedback style
+    event.target.classList.remove('drop-target')
+    event.relatedTarget.classList.remove('can-drop')
+    event.relatedTarget.textContent = 'Dragged out'
+  },
+  ondrop: function (event) {
+    event.relatedTarget.textContent = 'Dropped'
+  },
+  ondropdeactivate: function (event) {
+    // remove active dropzone feedback
+    event.target.classList.remove('drop-active')
+    event.target.classList.remove('drop-target')
   }
-]
+})
 
-resize();
-initMovingElements();
+interact('.drag-drop')
+  .draggable({
+    inertia: true,
+    modifiers: [
+      interact.modifiers.restrictRect({
+        restriction: 'parent',
+        endOnly: true
+      })
+    ],
+    autoScroll: true,
+    // dragMoveListener from the dragging demo above
+    onmove: dragMoveListener
+  })
 
-function initMovingElements() {
-  for (var i = 0; i < _positions.length; i++) {
-    _positions[i].diff = {
-      percent: _positions[i].end.percent - _positions[i].start.percent,
-      x: _positions[i].end.x - _positions[i].start.x,
-      y: _positions[i].end.y - _positions[i].start.y,
-    }
-    var el = document.getElementsByClassName('boy '+_positions[i].name)[0];
-    _movingElements.push(el);
-  }
+function dragMoveListener (event) {
+  var target = event.target
+  // keep the dragged position in the data-x/data-y attributes
+  var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+  var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+  // translate the element
+  target.style.webkitTransform =
+    target.style.transform =
+      'translate(' + x + 'px, ' + y + 'px)'
+
+  // update the posiion attributes
+  target.setAttribute('data-x', x)
+  target.setAttribute('data-y', y)
 }
 
-function resize() {
-    _width = window.innerWidth;
-  _height = window.innerHeight;
-  _scrollHeight = _containerHeight-_height;
-}
-
-function rotateLetters() {
-  for (var i = 0; i < letters.length; i++) {
-    letters[i].style[_jsPrefix+'Transform'] = 'rotateY('+(_scrollPercent*500)+'deg)'
-  }
-}
-
-function updateElements() {
-  for (var i = 0; i < _movingElements.length; i++) {
-    var p = _positions[i];
-    if(_scrollPercent <= p.start.percent) {
-      _movingElements[i].style[_jsPrefix+'Transform'] = 'translate3d('+(p.start.x*_width)+'px, '+(p.start.y*_containerHeight)+'px, 0px)';
-    } else if(_scrollPercent >= p.end.percent) {
-      _movingElements[i].style[_jsPrefix+'Transform'] = 'translate3d('+(p.end.x*_width)+'px, '+(p.end.y*_containerHeight)+'px, 0px)';
-    } else {
-      _movingElements[i].style[_jsPrefix+'Transform'] = 'translate3d('+(p.start.x*_width + (p.diff.x*(_scrollPercent-p.start.percent)/p.diff.percent*_width))+'px, '+
-        (p.start.y*_containerHeight + (p.diff.y*(_scrollPercent-p.start.percent)/p.diff.percent*_containerHeight))+'px, 0px)';
-    }
-  }
-}
-
-
-
-function loop() {
-  _scrollOffset = window.pageYOffset || window.scrollTop;
-  _scrollPercent = _scrollOffset/_scrollHeight || 0;
-  rotateLetters();
-  updateElements();
-  
-  requestAnimationFrame(loop);
-}
-
-loop();
-
-window.addEventListener('resize', resize);
-
-/* prefix detection http://davidwalsh.name/vendor-prefix */
-
-function prefix() {
-  var styles = window.getComputedStyle(document.documentElement, ''),
-    pre = (Array.prototype.slice
-      .call(styles)
-      .join('') 
-      .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
-    )[1],
-    dom = ('WebKit|Moz|MS|O').match(new RegExp('(' + pre + ')', 'i'))[1];
-  return {
-    dom: dom,
-    lowercase: pre,
-    css: '-' + pre + '-',
-    js: pre[0].toUpperCase() + pre.substr(1)
-  };
-}
+// this is used later in the resizing and gesture demos
+window.dragMoveListener = dragMoveListener
