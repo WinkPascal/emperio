@@ -76,7 +76,7 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		return dagTijden;
 	}
 	
-	
+	//wordt gebruikt bij: getWerkdagen
 	public ArrayList<Dag> getWeekRooster(Bedrijf bedrijf){
 		ArrayList<Dag> dagen = new ArrayList<Dag>();
 		try (Connection con = super.getConnection()) {
@@ -91,6 +91,7 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 				String sluitingsTijd = dbResultSet.getString("sluitingstijd");
 				int dagNummer = dbResultSet.getInt("dag");
 				
+				//format de tijden
 				Date openingsTijdDate = ServiceFilter.StringToDateFormatter(openingsTijd, "HH:mm");
 				Date sluitingsTijdDate = ServiceFilter.StringToDateFormatter(sluitingsTijd, "HH:mm");
 				
@@ -99,12 +100,15 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 				dagen.add(dag);
 			}
 		} catch (SQLException e) {
+			System.out.println(e);
 			return null;
 		}
 		
 		return dagen;
 	}
 	
+	// wordt gebruikt bij
+		//getProductenByPage();
 	public ArrayList<Product> getProductenByPage(Bedrijf bedrijf, int pageNummer){		
 		ArrayList<Product> producten = new ArrayList<Product>();
 		int top = pageNummer * 10;
@@ -114,7 +118,8 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 					"SELECT * \n" + 
 					"from product \n" + 
 					"where bedrijf = '"+bedrijf.getEmail()+"' " + 
-					"ORDER BY naam LIMIT "+low+", "+top+"");
+					"ORDER BY naam " +
+					"LIMIT "+low+", "+top+"");
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");

@@ -16,7 +16,7 @@ import com.swinkels.emperio.objects.Klant;
 import com.swinkels.emperio.service.ServiceFilter;
 
 public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
-
+	//wordt gebruikt bij: afsprakenByDate
 	public ArrayList<Afspraak> getAfsprakenBetweenDates(Date beginDate, Date eindDate, Bedrijf bedrijf) {
 		ArrayList<Afspraak> afsprakenVandaag = new ArrayList<Afspraak>();
 		try (Connection con = super.getConnection()) {

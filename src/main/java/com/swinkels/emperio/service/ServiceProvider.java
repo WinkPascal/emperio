@@ -49,59 +49,60 @@ public class ServiceProvider {
 	AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
 	BedrijfDao bedrijfDao = new BedrijfDaoImpl();
 
+	//wordt gebruikt bij: prodcuten pagina
 	@GET
 	@Path("/producten/{page}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getProductenByPage(@Context SecurityContext sc, @PathParam("page") int page) throws ParseException {
-
+	public String getProductenByPage(@Context SecurityContext sc, @PathParam("page") int page) throws ParseException {  
+		//uitvoer
+			// 10 producten (id, hoeveelheid, naam)
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+		
 		ArrayList<Product> producten = bedrijfDao.getProductenByPage(bedrijf, page);
+		
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		for (Product product : producten) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
-
 			job.add("id", product.getId());
 			job.add("hoeveelheid", product.getHoeveelheid());
 			job.add("naam", product.getNaam());
-
 			jab.add(job);
-
 		}
 		return jab.build().toString();
 	}
 
+	//wordt gebruikt bij: 
+		//statestieken pagina
 	@GET
 	@Path("/getData/{lengte}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getData(@Context SecurityContext sc, 
+	public String getData(@Context SecurityContext sc,   
 									@PathParam("lengte") String lengte){
+		//uitvoer
+			// hoeveelheid afspraken, inkomsten
+			//top 5 behandelingen
+				//hoeveelheid, naam, id
+			// per dag
+				//aantal afspraken
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		Date date = new Date();
+		Calendar dateCal = Calendar.getInstance();
+		dateCal.setTime(date);
 		//de geselecteerde lengte word berekent
 		if(lengte.equals("week")) {
-			Calendar dateCal = Calendar.getInstance();
-			dateCal.setTime(date);
 			dateCal.set(Calendar.DAY_OF_WEEK, dateCal.getFirstDayOfWeek());
-			date = dateCal.getTime();
 		} else if(lengte.equals("maand")) {
-			Calendar calendarBeginDate = Calendar.getInstance();
-			calendarBeginDate.setTime(date);
-			calendarBeginDate.set(Calendar.DAY_OF_MONTH, 1);
-		    date = calendarBeginDate.getTime();
+			dateCal.set(Calendar.DAY_OF_MONTH, 1);
 		} else if(lengte.equals("jaar")) {
-			Calendar calendarBeginDate = Calendar.getInstance();
-			calendarBeginDate.setTime(date);
-			calendarBeginDate.set(Calendar.DAY_OF_MONTH, 1);
-			calendarBeginDate.set(Calendar.DATE, 1);
-		    date = calendarBeginDate.getTime();
+			dateCal.set(Calendar.DAY_OF_MONTH, 1);
+			dateCal.set(Calendar.DATE, 1);
 		} else {
-			Calendar calendarBeginDate = Calendar.getInstance();
-			calendarBeginDate.setTime(date);
-			calendarBeginDate.set(Calendar.YEAR, 2000);
-		    date = calendarBeginDate.getTime();		
+			dateCal.set(Calendar.YEAR, 2000);
 		}
+		date = dateCal.getTime();
+
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		//inkomsten / hoeveelheid afspraken worden opgeroepen
 		ArrayList<Double> aantalAfsprakenEnInkomsten = afspraakDao.getInkomsten(bedrijf, date);
@@ -141,11 +142,16 @@ public class ServiceProvider {
 		return jab.build().toString();
 	}
 	
+	// wordt gebruikt bij
+		// inplannen datum kiezen
 	@GET
 	@Path("/werkdagen")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getWerkdagen(@Context SecurityContext sc) {
+	public String getWerkdagen(@Context SecurityContext sc) {    
+		//uitvoer
+			// per dag 
+				//dagnummer, sluitingstijd, openingstijd
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		ArrayList<Dag> dagen = bedrijfDao.getWeekRooster(bedrijf);
 		JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -162,23 +168,29 @@ public class ServiceProvider {
 
 		return jab.build().toString();
 	}
+	
+	// wordt gebruikt bij
+		// startscherm afspraken vandaag
 
 	@GET
 	@Path("/afsprakenByDate/{date}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String afsprakenByDate(@Context SecurityContext sc, @PathParam("date") String datum) throws ParseException {
-
+	public String afsprakenByDate(@Context SecurityContext sc, 
+			@PathParam("date") String datum) throws ParseException {  
+		//uitvoer
+			// Per afspraak
+				//id, timestamp, klantnaam, lengte, prijs
+		//format de datum
 		Date beginDate = ServiceFilter.StringToDateFormatter(datum, "yyyy-MM-dd");
 		Calendar calendarBeginDate = Calendar.getInstance();
 		calendarBeginDate.setTime(beginDate);
 		calendarBeginDate.add(Calendar.MONTH, 1);
 		beginDate = calendarBeginDate.getTime();
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(beginDate);
-		calendar.add(Calendar.DAY_OF_YEAR, 1);
-		Date eindDate = calendar.getTime();
+		
+		// de datum van de volgende dag
+		calendarBeginDate.add(Calendar.DAY_OF_YEAR, 1);
+		Date eindDate = calendarBeginDate.getTime();
 
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		// vraag de afspraken op van het bedrijf en de datum van vandaag
@@ -188,12 +200,13 @@ public class ServiceProvider {
 			double prijs = 0;
 			int uren = 0;
 			int minuten = 0;
+			// lengte wordt berekent
 			for (Behandeling behandeling : afspraak.getBehandelingen()) {
 				String lengteString = ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm");
 				String[] lengteArray = lengteString.split(":");
+
 				uren = uren + Integer.parseInt(lengteArray[0]);
 				minuten = minuten + Integer.parseInt(lengteArray[1]);
-
 				prijs = prijs + behandeling.getPrijs();
 			}
 			JsonObjectBuilder job = Json.createObjectBuilder();
@@ -207,14 +220,20 @@ public class ServiceProvider {
 		return jab.build().toString();
 	}
 
-	// inplannen
+	// wordt gebruikt bij
+		// inplannen dag ophalen
 	@GET
 	@Path("/tijdslotenOphalen/{datum}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String tijdslotenOphalen(@Context SecurityContext sc, 
-			@PathParam("datum") String datum)
-			throws ParseException {
+	public String tijdslotenOphalen(@Context SecurityContext sc,   
+			@PathParam("datum") String datum) {
+		//uitvoer
+		// openingstijd
+		// sluitingstijd
+		// per afspraak
+			// beginTijd
+			// eindTijd	
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		//format de date naar de java format
 		String[] beginDateString = datum.split("-");
@@ -231,11 +250,7 @@ public class ServiceProvider {
 		ArrayList<Date> dagTijden = bedrijfDao.getDagTijden(bedrijf, beginDate);
 
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-		// openingstijd
-		// sluitingstijd
-		// per afpsraak
-			// beginTijd
-			// eindTijd
+
 
 		if (dagTijden.get(0) != null) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
@@ -296,13 +311,19 @@ public class ServiceProvider {
 
 		return jab.build().toString();
 	}
-
-	// begintijd, eindtijd, dagen
+	
+	// wordt gebruikt bij
+		// rooster vullen bij afspraken pagina
+	//uitvoer
+		// per dag
+			// weeknummer
+			// openingstijd
+			// sluitingstijd
 	@GET
 	@Path("/getWeekRooster")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getWeekRooster(@Context SecurityContext sc) {
+	public String getWeekRooster(@Context SecurityContext sc) { 
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		// dagen worden opgehaalt
 		ArrayList<Dag> dagen = bedrijfDao.getWeekRooster(bedrijf);
@@ -325,9 +346,7 @@ public class ServiceProvider {
 		job.add("laatsteSluitingsTijd", ServiceFilter.DateToStringFormatter(laatsteSluitingsTijd, "HH:mm"));
 		jab.add(job);
 
-		// weeknummer
-		// openingstijd
-		// sluitingstijd
+
 		for (Dag dag : dagen) {
 			JsonObjectBuilder job1 = Json.createObjectBuilder();
 			job1.add("weekNummer", dag.getDag());
@@ -342,12 +361,19 @@ public class ServiceProvider {
 		}
 		return jab.build().toString();
 	}
-
+	
+	//
+							// conflict met andre getWeekAfspraken
+	//
+	// wordt gebruikt bij
+		// week rooster vullen
+	//uitvoer
+		//
 	@GET
 	@Path("/getWeekAfspraken/{date}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getWeekAfspraken(@Context SecurityContext sc, @PathParam("date") String datum) {
+	public String getWeekAfspraken(@Context SecurityContext sc, @PathParam("date") String datum) { 
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		//format de date naar de java format
 		String[] beginDateString = datum.split("-");
@@ -400,11 +426,16 @@ public class ServiceProvider {
 		return jab.build().toString();
 	};
 
+	// wordt gebruikt bij
+		//inplannen behnadelingen kiezen
+	//uitvoer
+		// per behandeling
+			// id, naam ,beschrijving, lengte, prijs
 	@GET
 	@Path("/behandelingen/{geslacht}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getBehandelingenByGeslacht(@Context SecurityContext sc, @PathParam("geslacht") String geslacht) {
+	public String getBehandelingenByGeslacht(@Context SecurityContext sc, @PathParam("geslacht") String geslacht) { 
 
 		// haal de behandelingen op
 		ArrayList<Behandeling> behandelingen = behandelingDao.behandelingenByGeslacht(geslacht,
@@ -421,12 +452,18 @@ public class ServiceProvider {
 		}
 		return jab.build().toString();
 	}
-
+	
+	// wordt gebruikt bij
+		// product toevoegen
+	//uitvoer
+		// response
+			// ok
+			// error
 	@POST
 	@RolesAllowed("user")
 	@Path("/product")
 	@Produces("application/json")
-	public ResponseBuilder setAfspraak(@Context SecurityContext sc,
+	public ResponseBuilder setProduct(@Context SecurityContext sc, 
 			@FormParam("hoeveelheidProductToevoegen") int hoeveelheidProductToevoegen,
 			@FormParam("naamProductToevoegen") String naamProductToevoegen) {
 
@@ -442,7 +479,14 @@ public class ServiceProvider {
 
 		return Response.status(201);
 	}
-
+	
+	// wordt gebruikt bij
+		// afspraak inplannen
+	//uitvoer
+		// respone
+			//ok
+			//error
+				//validaties
 	@POST
 	@RolesAllowed("user")
 	@Path("/afspraak")
@@ -519,12 +563,20 @@ public class ServiceProvider {
 		}
 		return Response.ok().build();
 	}
-
+	
+	// wordt gebruikt bij
+		// klanten pagina zoeken klant
+	//uitvoer
+		//per klant
+			// id, naam, geslacht 
+			//opt
+				//telefoon
+				//email
 	@GET
 	@Path("/klantenZoekReq/{request}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getKlantenZoekRequest(@Context SecurityContext sc, @PathParam("request") String request) {
+	public String getKlantenZoekRequest(@Context SecurityContext sc, @PathParam("request") String request) { 
 		String bedrijf = sc.getUserPrincipal().getName();
 		ArrayList<Klant> klanten = klantDao.zoekKlant(bedrijf, request);
 		JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -568,12 +620,20 @@ public class ServiceProvider {
 		}
 		return jab.build().toString();
 	}
-
+	
+	// wordt gebruikt bij
+		// klanten pagina klanten lijst
+	//uitvoer
+		//per klant
+		// id, naam, geslacht 
+		//opt
+			//telefoon
+			//email	
 	@GET
 	@Path("/alleKlanten/{pageNummer}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getKlanten(@Context SecurityContext sc, @PathParam("pageNummer") int pageNummer) {
+	public String getKlanten(@Context SecurityContext sc, @PathParam("pageNummer") int pageNummer) { 
 		String bedrijf = sc.getUserPrincipal().getName();
 		ArrayList<Klant> klanten = klantDao.getKlanten(bedrijf, pageNummer);
 		JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -617,28 +677,30 @@ public class ServiceProvider {
 		}
 		return jab.build().toString();
 	}
-
-	@GET
-	@RolesAllowed("user")
-	@Path("/getAfspraak/{id}")
-	@Produces("application/json")
-	public String getAfspraak(@Context SecurityContext sc, @PathParam("id") int afspraakId) {
-		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		Afspraak afspraak = afspraakDao.getAfspraak(bedrijf, afspraakId);
-		// hieraan wordt toegevoegd:
+	
+	// wordt gebruikt bij
+		// home / rooster voor opennen van een afspraak
+	//uitvoer
 		// afspraak.id
 		// afspraak.beginTijd
-		
+	
 		// klant.naam
 		// klant.email
 		// klant.telefoon
 		// klant.geslacht
 		// klant.aantalafspraken
-		
+	
 		// aparte json array binnen jab1
 		// behandeling.naam
 		// behandeling.lengte
 		// behandeling.prijs
+	@GET
+	@RolesAllowed("user")
+	@Path("/getAfspraak/{id}")
+	@Produces("application/json")
+	public String getAfspraak(@Context SecurityContext sc, @PathParam("id") int afspraakId) { 
+		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+		Afspraak afspraak = afspraakDao.getAfspraak(bedrijf, afspraakId);
 		JsonObjectBuilder job = Json.createObjectBuilder();
 
 		job.add("id", afspraak.getId());
@@ -663,12 +725,18 @@ public class ServiceProvider {
 
 		return job.build().toString();
 	}
-
+	
+	// wordt gebruikt bij
+		// behandeling maken
+	//uitvoer
+		// response
+			//ok
+			// error
 	@POST
 	@RolesAllowed("user")
 	@Path("/behandeling")
 	@Produces("application/json")
-	public Response setBehandeling(@Context SecurityContext sc, @FormParam("naam") String naam,
+	public Response setBehandeling(@Context SecurityContext sc, @FormParam("naam") String naam, 
 			@FormParam("beschrijving") String beschrijving, @FormParam("prijs") double prijs,
 			@FormParam("uur") String uur, @FormParam("minuten") String minuten,
 			@FormParam("geslachten") String geslachten) {
