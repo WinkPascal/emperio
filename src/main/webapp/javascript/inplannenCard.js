@@ -253,6 +253,16 @@ function datumOphalen(){
 
 function dagOphalen(dagNummer, datum){
 	document.getElementById("dagKeuze"+dagNummer).addEventListener("click", function(){
+		
+		
+		//aanmaken potentiele afspraak div
+		var plan = document.getElementById("grid-snap");
+		plan.innerHTML = "lengte:  "+document.getElementById("lengteAfspraakForm").innerHTML+"<br><br> Datum: "+document.getElementById("datumInplanForm").innerHTML;
+		var hoogte = 10 * 2;
+		
+		plan.style.height = hoogte+"px";
+
+		
 		document.getElementById("inplannenDatum").style.display = "none";
 		document.getElementById("inplannenTijd").style.display = "block";
 		var i = 0;
@@ -276,24 +286,38 @@ function dagOphalen(dagNummer, datum){
 					var beginTijd= afspraak.openingsTijd.split(":");
 					beginUur = parseInt(beginTijd[0]);
 					beginMinuut = parseInt(beginTijd[1]);
-		
+					
+					beginUurGlobal = beginUur;
+					beginMinuutGlobal = beginMinuut;
+					
 					var eindTijd = afspraak.sluitingstijd.split(":");
 					eindUur = parseInt(eindTijd[0]);
 					eindMinuut = parseInt(eindTijd[1]);
 		
 					var ul = document.createElement('ul');
+					var timeLi = document.createElement('li');
+					timeLi.setAttribute('tijd', beginUur +":"+ beginMinuut);
+
+					ul.appendChild(timeLi);
+					timeLi.setAttribute('class', 'dropzone line');
+					timeLi.innerHTML = beginUur +":"+ beginMinuut;
+					
 					while(true){
+						beginMinuut = beginMinuut + 10;
 						var timeLi = document.createElement('li');
-						
-						timeLi.setAttribute('class', 'dropzone');
-						timeLi.innerHTML = beginUur +":"+ beginMinuut;
-						
+						timeLi.setAttribute('tijd', beginUur +":"+ beginMinuut);
 						ul.appendChild(timeLi);
-		
-						beginMinuut = beginMinuut + 30;
-						if(beginMinuut > 59){
+						
+						if(beginMinuut == 30){
+							timeLi.setAttribute('class', 'dropzone line');
+							timeLi.innerHTML = beginUur +":"+ beginMinuut;
+						} else if(beginMinuut > 59){
 							beginUur = beginUur + 1;
-							beginMinuut = beginMinuut - 60;
+							beginMinuut = 0;
+							timeLi.setAttribute('class', 'dropzone line');
+							timeLi.innerHTML = beginUur +":"+ beginMinuut;
+						} else{
+							timeLi.setAttribute('class', 'dropzone');
 						}
 		
 						if(beginUur >= eindUur && beginMinuut >= eindMinuut){
@@ -303,6 +327,7 @@ function dagOphalen(dagNummer, datum){
 					document.getElementById("timelineInplanAgenda").appendChild(ul);
 					i++;
 				} else{
+					//gemaakte afsprraken worden in de timeline gezet
 					var event = createAfspraak(afspraak.beginTijd, afspraak.lengte);
 					
 					document.getElementById("timelineInplanAgenda").appendChild(event);
@@ -329,13 +354,13 @@ function createAfspraak(beginTijd ,lengte){
 	var minuutTop = parseInt(topArray[1]);
 
 	var minuutVerschilTop = minuutTop + uurTop*60;
-	var minuutBegin = beginMinuut + beginUur*60;
-
+	var minuutBegin = beginMinuutGlobal + beginUurGlobal*60;
+	
 	var topMinuten = minuutVerschilTop-minuutBegin;
-	var a = 5/3;
-	var top = topMinuten * a;	
+	var top = topMinuten * 2;
+	console.log(top);
 	event.style.top = top+"px";
-
+	event.style.zIndex = 2;
 	//lengte van afspraak
 	var lengteArray = lengte.split(":");
 	var uurLengte = parseInt(lengteArray[0]);
@@ -350,13 +375,35 @@ function createAfspraak(beginTijd ,lengte){
 }
 
 //de afspraak die je naar een tijd kan slepen
-function createDraggable(){ 
-	var afspraak = document.createElement('span');
-	afspraak.innerHTML = "test";
-	afspraak.setAttribute('id', 'inplanAfspraak');
-	afspraak.setAttribute('class', 'drag-drop');
-	
-	document.getElementById("inplannenTijd").appendChild(afspraak);
+function createDraggable(){  
+	var element = document.getElementById('grid-snap')
+	var y = 0
+
+	interact(element)
+	  .draggable({
+	    modifiers: [
+	      interact.modifiers.snap({
+	        targets: [
+	          interact.createSnapGrid({ x: 30, y: 30 })
+	        ],
+	        range: Infinity,
+	        relativePoints: [ { x: 0, y: 0 } ]
+	      }),
+	      interact.modifiers.restrict({
+	        restriction: element.parentNode,
+	        elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
+	        endOnly: true
+	      })
+	    ],
+	    inertia: true
+	  })
+	  .on('dragmove', function (event) {
+	    y += event.dy
+
+	    event.target.style.webkitTransform =
+	    event.target.style.transform =
+	        'translate(0px, ' + y + 'px)'
+	  })
 }
 
 function toggle(className, displayState){
@@ -405,7 +452,7 @@ document.getElementById("submitInplanFormButton").addEventListener("click", func
 	inplanVoorbereiding("inplannen","");
 })
 
-function inplannen(geslacht, behandelingenlijst){
+function inplannen(geslacht, behandelingenlijst){ 
 	var formData = new FormData(document.getElementById("inplannenForm"));
 	console.log(geslacht);
 	console.log(JSON.stringify(behandelingenlijst));
@@ -583,7 +630,7 @@ function formatDate(date){
 //enable draggables to be dropped into this
 interact('.dropzone').dropzone({
 	// Require a 75% element overlap for a drop to be possible
-	overlap: 0.50,
+	overlap: 0.01,
 
   	ondropactivate: function (event) {
   		// add active dropzone feedback
@@ -594,8 +641,8 @@ interact('.dropzone').dropzone({
     	var dropzoneElement = event.target
     	// feedback the possibility of a drop
     	dropzoneElement.classList.add('drop-target')
+    	console.log(dropzoneElement.innerHTML);
     	draggableElement.classList.add('can-drop')
-    	draggableElement.textContent = 'Dragged in'
   	},
   	ondragleave: function (event) {
 	  var draggableElement = event.relatedTarget
@@ -603,50 +650,23 @@ interact('.dropzone').dropzone({
     	// remove the drop feedback style
 		dropzoneElement.classList.remove('drop-target')
     	draggableElement.classList.remove('can-drop')
-    	draggableElement.textContent = 'Dragged out'
   	},
   	ondrop: function (event) {
 	  	var draggableElement = event.relatedTarget
-	  	draggableElement.textContent = 'Dropped';
-		var tijd= document.getElementsByClassName("drop-target")[0].innerHTML.split(":");
+		var tijd= document.getElementsByClassName("drop-target")[0].getAttribute("tijd").split(":");
 		var uur = parseInt(tijd[0]);
 		var minuut = parseInt(tijd[1]);
 		
 		document.getElementById("urenInplannen").innerHTML = uur;
 		document.getElementById("minutenInplannen").value = minuut;
 		
-  	}
+  	},
+    ondropdeactivate: function (event) {
+        // remove active dropzone feedback
+        event.target.classList.remove('drop-active')
+        event.target.classList.remove('drop-target')
+      }
 })
 
-interact('.drag-drop')
-  .draggable({
-    inertia: true,
-    modifiers: [
-      interact.modifiers.restrictRect({
-        restriction: 'parent',
-        endOnly: true
-      })
-    ],
-    autoScroll: true,
-    // dragMoveListener from the dragging demo above
-    onmove: dragMoveListener
-  })
 
-function dragMoveListener (event) {
-  var target = event.target
-  // keep the dragged position in the data-x/data-y attributes
-  var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-  var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-
-  // translate the element
-  target.style.webkitTransform =
-    target.style.transform =
-      'translate(' + x + 'px, ' + y + 'px)'
-
-  // update the posiion attributes
-  target.setAttribute('data-x', x)
-  target.setAttribute('data-y', y)
-}
-
-// this is used later in the resizing and gesture demos
-window.dragMoveListener = dragMoveListener
+  

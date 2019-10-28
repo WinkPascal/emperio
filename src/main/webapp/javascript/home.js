@@ -141,7 +141,7 @@ function logoutButton(){
 }
 
 // settings card
-document.getElementById("settingsButton").addEventListener("click", function() {
+document.getElementById("instellingenButton").addEventListener("click", function() {
 	settingsButton();
 })
 
@@ -152,6 +152,23 @@ function settingsButton(){
 	var span = document.getElementsByClassName("close")[0];
 
 	settings.style.display = "block";
+	
+	//de opties openen en sluiten
+	var coll = document.getElementsByClassName("collapsible");
+	var i;
+
+	for (i = 0; i < coll.length; i++) {
+	  coll[i].addEventListener("click", function() {
+	    this.classList.toggle("active");
+	    var content = this.nextElementSibling;
+	    if (content.style.maxHeight){
+	      content.style.maxHeight = null;
+	    } else {
+	      content.style.maxHeight = content.scrollHeight + "px";
+	    } 
+	  });
+	}
+	
 	// de sluitknop
 	span.onclick = function() {
 		settings.style.display = "none";

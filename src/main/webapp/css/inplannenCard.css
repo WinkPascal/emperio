@@ -304,9 +304,12 @@
 	overflow: scroll;
 }
 
+.inplannenRechts #agendaInplannen ul{
+	  list-style-type: none;
+}
+
 #inplanAfspraak {
 	display: inline-block;
-	min-width: 40px;
 	padding: 2em 0.5em;
 	color: #fff;
 	background-color: #29e;
@@ -315,6 +318,7 @@
 	-webkit-transform: translate(0px, 0px);
 	transform: translate(0px, 0px);
 	transition: background-color 0.3s;
+	overflow: hidden;
 }
 
 .inplannenRechts #agendaInplannen .timelineInplanAgenda {
@@ -326,25 +330,26 @@
 }
 
 .nietBeschikbaarAfspraak {
-	width: 350px;
-	left: 80px;
+	margin-left: 100px;
+	width: 300px;
 }
 
 /* elke streep */
-.inplannenRechts #agendaInplannen .timelineInplanAgenda li {
+.inplannenRechts #agendaInplannen .timelineInplanAgenda .dropzone {
 	position: relative;
-	height: 50px;
+	height: 20px;
 }
 
 /* Hier worden de horizontale strepen van het rooster gemaakt*/
-.inplannenRechts #agendaInplannen .timelineInplanAgenda li::after {
+.inplannenRechts #agendaInplannen .timelineInplanAgenda .line::after {
 	content: '';
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	width: 100%;
 	height: 1px;
-	background: #EAEAEA;
+	background: black;
+	z-index: -1;
 }
 
 #behandelingenOptions {
@@ -367,9 +372,12 @@
 	border-style: solid;
 }
 
-.drag-drop {
+.grid-snap {
+	position: absolute;
+	z-index: 3;
 	display: inline-block;
-	min-width: 40px;
+	margin-left: 100px;
+	width: 300px;
 	padding: 2em 0.5em;
 	color: #fff;
 	background-color: #29e;

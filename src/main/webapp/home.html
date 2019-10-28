@@ -36,7 +36,7 @@
 	<div class="cardHolder" id="cardHolder">
 		<span class="topBar">
 			<input type="button" class="defaultButton" id="logoutButton" value="Uitloggen"/>
-			<input type="button" value="Settings" class="defaultButton" id="settingButton">
+			<input type="button" value="Instellingen" class="defaultButton" id="instellingenButton">
 			<a>Dashboard</a>
 		</span>
 		
@@ -237,8 +237,11 @@
 						<input type="number" id="minutenInplannen">
 					</span>
 				</div>
-				
+
 				<div id="agendaInplannen">
+					<div id="grid-snap" class="grid-snap">
+					 	Dragging is constrained to the corners of a grid
+					</div>
 					<div id="timelineInplanAgenda" class="timelineInplanAgenda">
 					</div> 
 				</div>
@@ -271,32 +274,128 @@
 	
 	<!-- Settings -->
 	<div id="settings" class="modal">
-		<div class="modal-content">
-			<p class="settingsTitle">Instellingen</p>
-			<span class="close">&times;</span>
-			
-			<!-- Behandelingen toevoegen -->
-			<div class="settingItem">
-				<b>Toevoegen behandelingen</b><br>
-				<div class="toevoegLijst" id="toevoegLijst">
-				
-				</div>
-				<b id="plus" class="plus">+ Voeg nog een behandeling toe</b>
-				<strong	id="voegBehandelingToe" class="addAll">Voeg toe!</strong>
-			</div>
-			
-			<div class="settingItem">
-				<b>Wijzigen behandelingen</b>
-				<div class="wijzigLijst" id="wijzigLijst">
+		<div class="setting-content">
+			<h3>Instellingen</h3>
+			<span class="collapsible">Afspraken</span>
+			<div class="content">
+				<p class="subclassSetting">Afspraak kleur</p>
+				<div class="afspraakColor">
+					<div class="price-picker">
+						<a>Prijsklasse 1 <br>
+						van € <input type="number" class="prijsVeld"> <br>
+						Tot € <input type="number" class="prijsVeld"></a>
+					</div>
 					
+					<div class="color-picker">
+						<label class="container">
+						  <input type="radio" checked="checked" name="radio">
+						  <span class="checkmark"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+						</label>
+						
+						<label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+					  </label>
+					  <label class="container">
+					  	  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+					  </label>
+					  <label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+					  </label>
+					</div>
 				</div>
-				<b>Bevestig</b>
+				<br>
+				<div class="afspraakColor">
+					<div class="price-picker">
+						<a>Prijsklasse 2 <br>
+						van € <input type="number" class="prijsVeld"> <br>
+						Tot € <input type="number" class="prijsVeld"></a>
+					</div>
+					
+					<div class="color-picker">
+						<label class="container">
+						  <input type="radio" checked="checked" name="radio">
+						  <span class="checkmark"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+						</label>
+						
+						<label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+					  </label>
+					  <label class="container">
+					  	  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+					  </label>
+					  <label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+					  </label>
+					</div>
+				</div>
+				<br>
+				<div class="afspraakColor">
+					<div class="price-picker">
+						<a>Prijsklasse 3 <br>
+						van € <input type="number" class="prijsVeld"> <br>
+						Tot € <input type="number" class="prijsVeld"></a>
+					</div>
+					
+					<div class="color-picker">
+						<label class="container">
+						  <input type="radio" checked="checked" name="radio">
+						  <span class="checkmark"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+						</label>
+						
+						<label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+					  </label>
+					  <label class="container">
+					  	  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+					  </label>
+					  <label class="container">
+						  <input type="radio" name="radio">
+						  <span class="checkmark"></span>
+					  </label>
+					</div>
+				</div>
 			</div>
 			
-			<div>
-				<b>Openings tijden aanpassen</b>
-				
-			</div>
+			<span class="collapsible">Afspraken</span>
+			<div class="content"></div>
+			
+			<span class="collapsible">Afspraken</span>
+			<div class="content"></div>
+			
+			<span class="collapsible">Afspraken</span>
+			<div class="content"></div>
 		</div>
 	</div>
 	
