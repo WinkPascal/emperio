@@ -5,13 +5,12 @@ function onload(){
 	getAfspraken(datum, true);
 }
 
-function createAfspraak(beginTijd ,lengte, innerhtml, soort){
-	console.log(lengte +"--------"+ beginTijd);
+function createAfspraakRooster(beginTijd ,lengte, innerhtml, soort){
 	//event aanmaken
 	var event = document.createElement('li');
 	event.setAttribute('class', 'afspraak');
 	if(soort == 0){
-		event.style.backgroundImage= "url('https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0567/6689/rshark_19_shop_thumb.png')";
+		event.style.backgroundColor= "gray";
 	} if(soort == 1){
 		event.style.backgroundColor= "#34D77B";
 	} if(soort == 2){
@@ -27,13 +26,12 @@ function createAfspraak(beginTijd ,lengte, innerhtml, soort){
 	var minuutTop = parseInt(topArray[1]);
 
 	var minuutVerschilTop = minuutTop + uurTop*60;
-	var minuutBegin = beginMinuutRooster+beginUurRooster*60;
+	var minuutBegin = beginMinuutRooster + beginUurRooster*60;
 
 	var topMinuten = minuutVerschilTop-minuutBegin;
 	var a = 5/3;
-	var top = topMinuten * a;	
+	var top = topMinuten * a;
 	event.style.top = top+"px";
-
 
 	//lengte van afspraak
 	var lengteArray = lengte.split(":");
@@ -43,6 +41,9 @@ function createAfspraak(beginTijd ,lengte, innerhtml, soort){
 
 	var a = 5/3;
 	var hoogte = minuutVerschilLengte * a;
+	if(hoogte == 0){
+		return null;
+	}
 	event.style.height = hoogte+"px";
 
 	return event;
@@ -68,9 +69,9 @@ function getRooster(){
 		weekdagen[4] = "Donderdag";
 		weekdagen[5] = "Vrijdag";
 		weekdagen[6] = "Zaterdag";
-		var aantalDagen = 0;
+		aantalDagen = 0;
 		beginUurRooster = 0;
-		beginMinuutRooster =0;
+		beginMinuutRooster = 0;
 
 		eindUurRooster = 0;
 		eindMinuutRooster = 0;
@@ -160,8 +161,10 @@ function getRooster(){
 				}
 				var lengteOchtend = uurVerschilLengte+":"+minuutVerschilLengte;
 				var topOchtend = beginUurRooster+":"+beginMinuutRooster;
-				var ochtend = createAfspraak(topOchtend, lengteOchtend, "ochtend", 0);
-				events.appendChild(ochtend);
+				var ochtend = createAfspraakRooster(topOchtend, lengteOchtend, "ochtend", 0);
+				if(ochtend != null){
+					events.appendChild(ochtend);
+				}
 
 				//avond wordt aangemaakt
 				var sluitingsTijdDag = dag.sluitingsTijd.split(":");
@@ -176,8 +179,10 @@ function getRooster(){
 					uurEindLengte = uurEindLengte -1;
 				}
 				var lengteAvond = uurEindLengte+":"+minuutEindLengte;
-				var avond = createAfspraak(eindTijdDag, lengteAvond, "avond", "nbsb");
-				events.appendChild(avond);
+				var avond = createAfspraakRooster(eindTijdDag, lengteAvond, "avond", "nbsb");
+				if(avond != null){
+					events.appendChild(avond);
+				}
 				dagVanRooster.appendChild(events);
 				document.getElementById("rooster").appendChild(dagVanRooster);
 			}
@@ -189,10 +194,7 @@ function getRooster(){
 		for(m = 0; m < dagen.length; m++) {
 			dagen[m].style.width = breedte +"%";
 		}
-	}).catch(function() {
-		// De gebruiker is niet ingelogt
-		alert("niet meer ingelogd");
-	});
+	})
 }
 
 document.getElementById("weekTerug").addEventListener("click", function(){
@@ -264,7 +266,7 @@ function getAfspraken(datum, onload){
 			var top = afspraak.timestamp.substring(16, 11);
 			var klant = afspraak.klant;
 			var afspraakText = "Klant: "+ klant +"<br> prijs: "+prijs +"<br> Begin tijd: "+ top +"<br> lengte: "+uurLengte+":"+minuutLente;
- 			var event = createAfspraak(top, afspraakLengte, afspraakText, 1);
+ 			var event = createAfspraakRooster(top, afspraakLengte, afspraakText, 1);
  
  			event.setAttribute('id', afspraak.id);
  			afsprakenLijst.push(event);
@@ -278,10 +280,15 @@ function getAfspraken(datum, onload){
 
 			createOnClickListener(afspraak.id);
 		}
-	}).catch(function() {
-		// De gebruiker is niet ingelogt
-		alert("niet meer ingelogd");
-	});
+	    var elements = document.getElementsByClassName("afspraak");
+	    var breedte = document.getElementsByClassName("dag")[0].offsetWidth;
+	    for (var i = 0; i < elements.length; i++) {
+	        elements[i].style.width=(breedte+"px");
+	    }
+	})
+	
+	
+
 }
 
 function createOnClickListener(id){

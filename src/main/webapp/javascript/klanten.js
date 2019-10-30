@@ -1,4 +1,5 @@
 function onload(){
+	//errorMessage("error");
 	getKlanten("load");
 }
 
@@ -16,8 +17,14 @@ function getKlanten(functie){
 	} else if(functie == "volgende"){
 		blz = blz +1;
 	} else if(functie == "terug"){
-		blz = blz - 1;
+		if(blz != 1){
+			blz = blz - 1;
+		} else{
+			errorMessage("u kunt niet verder terug");
+			return;
+		}
 	}
+	document.getElementById("paginaNummer").innerHTML = blz;
 	var klantenLijst = document.getElementById("klantenLijst");
 	klantenLijst.innerHTML="";
 	var fetchoptions = {
@@ -28,6 +35,12 @@ function getKlanten(functie){
 	fetch("restservices/service/alleKlanten/"+blz, fetchoptions)
 	.then(response => response.json())
 	.then(function(klanten){
+		if(klanten.length == 0){
+			errorMessage("er zijn geen klanten gevonden");
+			return;			
+		}
+		succesMessage("klanten zijn opgehaald");
+		
 		var topRow = document.createElement('tr');
 
 		var klantNaam = document.createElement('th');
@@ -49,6 +62,7 @@ function getKlanten(functie){
 		klantenLijst.appendChild(topRow);
 		for(let klant of klanten){
 			var row = document.createElement('tr');
+			row.id = klant.id;
 			
 			var klantNaam = document.createElement('td');
 			klantNaam.innerHTML = klant.naam;
@@ -67,10 +81,34 @@ function getKlanten(functie){
 			row.appendChild(klantTelefoon);
 			
 			klantenLijst.appendChild(row);
+			document.getElementById(klant.id).addEventListener("click", function(){
+				document.getElementById("klantModal").style.display = "block";
+				getKlant(klant.id);
+			})
 		}
 	}).catch(function() {
 		alert("ging iets fout");
 	});	
+}
+
+function getKlant(id){
+	var fetchoptions = {
+			headers: {
+				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+			}
+		}
+	fetch("restservices/service/klant/"+id, fetchoptions)
+	.then(response => response.json())
+	.then(function(klant){
+		document.getElementById("naam").innerHTML = klant.naam;
+		document.getElementById("geslacht").innerHTML = klant.geslacht;
+		document.getElementById("email").innerHTML = klant.email;
+		document.getElementById("telefoon").innerHTML = klant.telefoon;
+		document.getElementById("email").addEventListener("click", function(){
+			alert("email optie van "+id);
+		})
+
+	})
 }
 
 document.getElementById("zoekKlant").addEventListener("click", function(){

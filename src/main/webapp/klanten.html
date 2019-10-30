@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="css/home.css">
+	
+	<link rel="stylesheet" type="text/css" href="css/global.css">
 	<link rel="stylesheet" type="text/css" href="css/klanten.css">
 </head>
 <body onload="onload()">
@@ -13,23 +15,42 @@
 	</span>
 
 	<div class="klanten">
-		<div>
-			<input type="text" id="zoekKlantInput"/><input type="button" value="Zoek" id="zoekKlant">
-			<select>
+		<div class="controleDiv">
+			<input type="text" id="zoekKlantInput"/>
+			<input type="button" value="Zoek" id="zoekKlant">
+			<select id="selectList">
 	  			<option value="vAfspraken">Meeste afspraken</option>
 				<option value="mAfspraken">Minste afspraken</option>
-				<option value="opel">Opel</option>
-				<option value="audi">Audi</option>
+				<option value="opel">optie3</option>
+				<option value="audi">optie4</option>
 			</select>
 		</div>
 				
 		<table id="klantenLijst">
 	  	</table>
-	  	
-	  	<input type="button" value="Terug" class="defaultButton" id="vorigeKlantenPagina">
-	  	
-	  	<input type="button" value="Volgende" class="defaultButton" id="volgendeKlantenPagina">
-	 </div> 	
+	  	<div>
+  		  	<input type="button" value="Terug" class="defaultButton" id="vorigeKlantenPagina">
+  		  	<span id="paginaNummer"></span>	  	
+		  	<input type="button" value="Volgende" class="defaultButton" id="volgendeKlantenPagina">
+	  	</div>
+	 </div> 
+	 
+	<div id="klantModal" class="modal">
+		<div class="klant-content">
+			<a id="naam"></a><br>
+			<a id="geslacht"></a><br>
+			<a id="telefoon"></a><br>
+			<a id="email"></a><br>
+			aantal afspraken<br>
+			hoeveelheid inkomsten<br>
+			
+			mooie grafiek van aantal bezoeken per maand
+			<input type="button" value="sluit"><input type="button" value="email" id="email">
+			
+		</div>
+	</div>
+	 
+	 <script src="javascript/global.js"></script>
 	 
   	<script src="javascript/klanten.js"></script>
 </body>

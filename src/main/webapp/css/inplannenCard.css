@@ -95,7 +95,7 @@
 	text-align: center;
 }
 
-.blokkenOverzicht {
+.inplannenForm .blokkenOverzicht {
 	border: 1px solid black;
 	width: 350px;
 	height: 50px;
@@ -112,11 +112,11 @@
 	width: auto;
 }
 
-#lengteAfspraakFormDiv {
+.inplannenForm .inplanBlokOverzicht #lengteAfspraakFormDiv {
 	float: left;
 }
 
-#prijsAfspraakFormDiv {
+.inplannenForm .inplanBlokOverzicht #prijsAfspraakFormDiv {
 	float: right;
 }
 
@@ -302,36 +302,37 @@
 	float: right;
 	height: 100%;
 	overflow: scroll;
+    position: relative;
 }
 
 .inplannenRechts #agendaInplannen ul{
 	  list-style-type: none;
 }
 
-#inplanAfspraak {
+.inplannenRechts #agendaInplannen .potentieleAfspraak {
+	z-index: 2;
 	display: inline-block;
-	padding: 2em 0.5em;
+	margin-left: 100px;
+	width: 320px;
 	color: #fff;
 	background-color: #29e;
-	border: solid 2px #fff;
+	
 	touch-action: none;
 	-webkit-transform: translate(0px, 0px);
 	transform: translate(0px, 0px);
 	transition: background-color 0.3s;
-	overflow: hidden;
 }
 
 .inplannenRechts #agendaInplannen .timelineInplanAgenda {
-	display: block;
-	top: 0;
-	left: 0;
+    display : block;
+	z-index: 1;
+    top: 0px;
 	height: 100%;
+	position: absolute;
 	width: 100%;
 }
-
-.nietBeschikbaarAfspraak {
-	margin-left: 100px;
-	width: 300px;
+.inplannenRechts #agendaInplannen .timelineInplanAgenda ul{
+	margin: 0px; 
 }
 
 /* elke streep */
@@ -349,8 +350,23 @@
 	width: 100%;
 	height: 1px;
 	background: black;
-	z-index: -1;
 }
+
+.inplannenRechts #agendaInplannen .roosterInplanAgenda {
+    display: block;
+	top: 0px;
+	height: 100%;
+	width: 100%;
+	
+}
+
+.inplannenRechts #agendaInplannen .roosterInplanAgenda .nietBeschikbaarAfspraak {
+	z-index: 1;
+	width: 320px;
+	position: absolute;
+	margin-left: 100px;
+}
+
 
 #behandelingenOptions {
 	border-radius: 50%;
@@ -372,23 +388,3 @@
 	border-style: solid;
 }
 
-.grid-snap {
-	position: absolute;
-	z-index: 3;
-	display: inline-block;
-	margin-left: 100px;
-	width: 300px;
-	padding: 2em 0.5em;
-	color: #fff;
-	background-color: #29e;
-	border: solid 2px #fff;
-	touch-action: none;
-	-webkit-transform: translate(0px, 0px);
-	transform: translate(0px, 0px);
-	transition: background-color 0.3s;
-}
-
-.drag-drop.can-drop {
-	color: #000;
-	background-color: #4e4;
-}

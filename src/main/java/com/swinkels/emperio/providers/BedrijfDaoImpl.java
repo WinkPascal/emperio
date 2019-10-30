@@ -26,7 +26,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 					"FROM bedrijf \n" + 
 					"WHERE role = \"user\" \n" + 
 					"group by email LIMIT "+low+", "+top+"");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				
@@ -58,7 +57,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"' "
 				 + "and dag = "+dayOfWeek+" "
 				 + "ORDER BY dag;");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				String openingsTijd = dbResultSet.getString("openingstijd");
@@ -141,7 +139,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 					+ "'"+product.getBedrijf().getEmail()+"', "
 					+ ""+product.getHoeveelheid()+", "
 					+ "'"+product.getNaam()+"');");
-			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -160,7 +157,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 				  + "user', '"
 				  + bedrijf.getTel()+"', '"
 				  + bedrijf.getWachtwoord()+"')");
-			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {

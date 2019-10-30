@@ -2,6 +2,7 @@ package com.swinkels.emperio.providers;
 
 import java.util.ArrayList;
 
+import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Klant;
 
 public interface KlantDao {
@@ -13,4 +14,6 @@ public interface KlantDao {
 	public boolean setKlant(Klant klant);
 	
 	public Klant getKlantId(Klant klant);
+
+	public Klant getKlant(Bedrijf bedrijf, int id);
 }

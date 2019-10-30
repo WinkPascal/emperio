@@ -1,0 +1,14 @@
+.meldingDiv {
+	right: 0px;
+	z-index: 5;
+	position: absolute;
+	top: 0px;
+	width: 300px;
+	height: 50px;
+	margin: 10px;
+	color: white;
+	border: 2px solid black;
+	font-size: 20px;
+	text-align: center;
+	border-radius: 10px;
+}

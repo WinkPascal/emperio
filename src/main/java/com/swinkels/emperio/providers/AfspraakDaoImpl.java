@@ -31,7 +31,6 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"timestamp BETWEEN '"+ServiceFilter.DateToStringFormatter(beginDate, "yyyy-MM-dd")+"' AND "
 							        + "'"+ServiceFilter.DateToStringFormatter(eindDate, "yyyy-MM-dd")+"' "+
 					"ORDER BY timestamp");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				//Behandeling
@@ -99,7 +98,6 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			+ ""+dagNummer+", "
 			+ "'"+afspraak.getKlant().getId()+"', "
 			+ "'"+ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"')");
-			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -240,12 +238,10 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"AND timestamp > "+ServiceFilter.DateToStringFormatter(date, "YYYY-MM-dd")+" "+ 
 					"group by a.dag_nr \n" + 
 					"ORDER BY a.dag_nr"); 
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int dag_nr = dbResultSet.getInt("dag_nr");
 				int aantalAfspraken = dbResultSet.getInt("aantalAfspraken");
-				System.out.println(dag_nr);
 
 				Dag dag = new Dag(dag_nr, aantalAfspraken);
 				

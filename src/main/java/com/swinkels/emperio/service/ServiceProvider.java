@@ -130,7 +130,6 @@ public class ServiceProvider {
 		ArrayList<Dag> dagen = afspraakDao.getAantalAfsprakenPerDag(bedrijf, date);
 		for(Dag dag : dagen) {
 			JsonObjectBuilder job1 = Json.createObjectBuilder();
-			System.out.println(dag.getDag() +" == "+ dag.getAantalAfspraken());
 			job1.add("dagNummer", dag.getDag());
 			job1.add("aantalAfspraken", dag.getAantalAfspraken());
 			
@@ -419,9 +418,11 @@ public class ServiceProvider {
 
 				jab1.add(job1);
 			}
+
 			job.add("behandelingen", jab1);
 			jab.add(job);
 		}
+		System.out.println("s");
 
 		return jab.build().toString();
 	};
@@ -544,7 +545,6 @@ public class ServiceProvider {
 		
 		// aanmaken afspraak object
 		String timestampString = dateFormatted + " " + afspraakTijd;
-		System.out.println(timestampString);
 
 		SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date timestamp = timestampFormat.parse(timestampString);
@@ -566,17 +566,17 @@ public class ServiceProvider {
 	
 	// wordt gebruikt bij
 		// klanten pagina zoeken klant
-	//uitvoer
+	@GET
+	@Path("/klantenZoekReq/{request}")
+	@RolesAllowed("user")
+	@Produces("application/json")
+	public String getKlantenZoekRequest(@Context SecurityContext sc, @PathParam("request") String request) {
+		//uitvoer
 		//per klant
 			// id, naam, geslacht 
 			//opt
 				//telefoon
 				//email
-	@GET
-	@Path("/klantenZoekReq/{request}")
-	@RolesAllowed("user")
-	@Produces("application/json")
-	public String getKlantenZoekRequest(@Context SecurityContext sc, @PathParam("request") String request) { 
 		String bedrijf = sc.getUserPrincipal().getName();
 		ArrayList<Klant> klanten = klantDao.zoekKlant(bedrijf, request);
 		JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -623,17 +623,17 @@ public class ServiceProvider {
 	
 	// wordt gebruikt bij
 		// klanten pagina klanten lijst
-	//uitvoer
-		//per klant
-		// id, naam, geslacht 
-		//opt
-			//telefoon
-			//email	
 	@GET
 	@Path("/alleKlanten/{pageNummer}")
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String getKlanten(@Context SecurityContext sc, @PathParam("pageNummer") int pageNummer) { 
+		//uitvoer
+		//per klant
+		// id, naam, geslacht 
+		//opt
+			//telefoon
+			//email			
 		String bedrijf = sc.getUserPrincipal().getName();
 		ArrayList<Klant> klanten = klantDao.getKlanten(bedrijf, pageNummer);
 		JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -753,5 +753,35 @@ public class ServiceProvider {
 		}
 
 		return Response.ok().build();
+	}
+	
+	// wordt gebruikt bij
+		// klanten pagina klanten lijst
+	@GET
+	@Path("/klant/{id}")
+	@RolesAllowed("user")
+	@Produces("application/json")
+	public String getKlant(@Context SecurityContext sc, @PathParam("id") int id) { 
+		//uitvoer
+		// naam, geslacht,  email, telefoon, 
+			//aantal afspraken, hoeveelheid inkomsten, per maand aantal bezoeken
+		String bedrijfsNaam = sc.getUserPrincipal().getName();
+		Bedrijf bedrijf = new Bedrijf(bedrijfsNaam);
+		Klant klant = klantDao.getKlant(bedrijf, id);
+		
+		JsonObjectBuilder job = Json.createObjectBuilder();
+		job.add("naam", klant.getNaam());
+		job.add("geslacht", klant.getGeslacht());
+		
+		String email = klant.getEmail();
+		if(email != null) {
+			job.add("email", email);
+
+		}
+		String tel = klant.getTel();
+		if(tel != null) {
+			job.add("telefoon", tel);
+		}
+		return job.build().toString();
 	}
 }

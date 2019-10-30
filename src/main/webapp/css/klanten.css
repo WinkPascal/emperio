@@ -1,24 +1,88 @@
-
-.klanten{
+.klanten {
 	width: 100%;
 	max-width: 1400px;
 	margin: 2em auto;
-	
 }
 
-#klantenLijst{
+.klanten .controleDiv {
+	height: 50px;
+	background-color: gray;
+}
+
+.klanten .controleDiv #zoekKlantInput {
+	width: 40%;
+	height: 35px ;
+	margin: 8px;
+	left: 0px;
+	border: 2px solid blue;
+	border-radius: 20px;
+	font-size: 20px;
+}
+
+.klanten .controleDiv #zoekKlant {
+	width: 130px;
+	height: 40px;
+	border: 2px solid blue;
+	border-radius: 9px; 
+	background-color: white;
+	color: blue;
+	background-color: white;
+}
+
+.klanten .controleDiv #selectList{
+	border: 3px solid blue;
+	border-radius: 5px;
+	color: blue;
+	width: 200px;
+	height: 40px;
+	background-color: white;
+	float: right;
+	margin-top: 5px; 
+	margin-right: 10%;
+}
+
+.klanten #klantenLijst {
 	width: 100%;
 }
 
-#klantenLijst th {
-  background-color: #4CAF50;
-  color: white;
+.klanten #klantenLijst th {
+	background-color: #4CAF50;
+	color: white;
 }
 
-#volgendeKlantenPagina{
-	float: right;	
+.klanten #klantenLijst tr:hover {
+	background-color: #4CAF50;
+	color: white;
 }
 
-#vorigeKlantenPagina{
+.klanten #volgendeKlantenPagina {
+	float: right;
+}
+
+.klanten #paginaNummer {
+	left: 50%;
+	position: absolute;
+	font-size: 20px;
+}
+
+.klanten #vorigeKlantenPagina {
 	float: left;
 }
+
+
+.klant-content{
+	width: 900px;
+	margin: auto;
+	height: 400px;
+	background-color:orange;
+}
+
+
+
+
+
+
+
+
+
+

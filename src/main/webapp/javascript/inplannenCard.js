@@ -253,16 +253,20 @@ function datumOphalen(){
 
 function dagOphalen(dagNummer, datum){
 	document.getElementById("dagKeuze"+dagNummer).addEventListener("click", function(){
-		
-		
 		//aanmaken potentiele afspraak div
-		var plan = document.getElementById("grid-snap");
+		var plan = document.getElementById("potentieleAfspraak");
 		plan.innerHTML = "lengte:  "+document.getElementById("lengteAfspraakForm").innerHTML+"<br><br> Datum: "+document.getElementById("datumInplanForm").innerHTML;
-		var hoogte = 10 * 2;
-		
+		console.log(uren +" "+ minuten);
+		var uur = uren * 60;
+		var minuut = uur + minuten;
+		console.log("min " +  minuut);
+		var hoogte = minuut * 2;
+		console.log("hoogte "+ hoogte);
+
 		plan.style.height = hoogte+"px";
 
-		
+		createDraggable();
+
 		document.getElementById("inplannenDatum").style.display = "none";
 		document.getElementById("inplannenTijd").style.display = "block";
 		var i = 0;
@@ -330,10 +334,9 @@ function dagOphalen(dagNummer, datum){
 					//gemaakte afsprraken worden in de timeline gezet
 					var event = createAfspraak(afspraak.beginTijd, afspraak.lengte);
 					
-					document.getElementById("timelineInplanAgenda").appendChild(event);
+					document.getElementById("roosterInplanAgenda").appendChild(event);
 				}
-			}
-			createDraggable();
+			}			
 		});
 	});
 }
@@ -346,7 +349,7 @@ function createAfspraak(beginTijd ,lengte){
 
 	event.style.backgroundColor= "#34D77B";
 
-	event.innerHTML = "event";
+	event.innerHTML = beginTijd +" <br> "+ lengte;
 
 	//begin punt van de afspraak
 	var topArray = beginTijd.split(":");
@@ -357,34 +360,32 @@ function createAfspraak(beginTijd ,lengte){
 	var minuutBegin = beginMinuutGlobal + beginUurGlobal*60;
 	
 	var topMinuten = minuutVerschilTop-minuutBegin;
-	var top = topMinuten * 2;
-	console.log(top);
+	var top = topMinuten * 2 + 20;
 	event.style.top = top+"px";
-	event.style.zIndex = 2;
 	//lengte van afspraak
 	var lengteArray = lengte.split(":");
 	var uurLengte = parseInt(lengteArray[0]);
 	var minuutLengte = parseInt(lengteArray[1]);
 	var minuutVerschilLengte = minuutLengte + uurLengte*60;
 
-	var a = 5/3;
-	var hoogte = minuutVerschilLengte * a;
+	var hoogte = minuutVerschilLengte * 2;
+	console.log(hoogte);
 	event.style.height = hoogte+"px";
 
 	return event;
 }
 
 //de afspraak die je naar een tijd kan slepen
-function createDraggable(){  
-	var element = document.getElementById('grid-snap')
+function createDraggable(){   
+	var element = document.getElementById('potentieleAfspraak')
 	var y = 0
-
+	// de afspraak verplaatsbaar maken
 	interact(element)
 	  .draggable({
 	    modifiers: [
 	      interact.modifiers.snap({
 	        targets: [
-	          interact.createSnapGrid({ x: 30, y: 30 })
+	          interact.createSnapGrid({ x: 0, y: 20 })
 	        ],
 	        range: Infinity,
 	        relativePoints: [ { x: 0, y: 0 } ]
@@ -403,6 +404,47 @@ function createDraggable(){
 	    event.target.style.webkitTransform =
 	    event.target.style.transform =
 	        'translate(0px, ' + y + 'px)'
+	  }),
+	  
+	  //de dropzone maken
+	  interact('.dropzone').dropzone({
+	  	overlap: 0.01,
+
+	    	ondropactivate: function (event) {
+	    		event.target.classList.add('drop-active')
+	    	},
+	    	ondragenter: function (event) {
+	    		var draggableElement = event.relatedTarget
+	    		var dropzoneElement = event.target
+	    		// feedback the possibility of a drop
+	    		dropzoneElement.classList.add('drop-target')
+	      		console.log(dropzoneElement.innerHTML);
+	    	},
+	    	ondragleave: function (event) {
+	    		var draggableElement = event.relatedTarget
+	    		var dropzoneElement = event.target
+	    		// remove the drop feedback style
+	    		dropzoneElement.classList.remove('drop-target')
+	    	},
+	    	ondrop: function (event) {
+	  	  		var draggableElement = event.relatedTarget
+	  	  		var tijd= document.getElementsByClassName("drop-target")[0].getAttribute("tijd").split(":");
+	  	  		var potentieelUur = parseInt(tijd[0]) - uren;
+	  	  		var potentieelMinuut = parseInt(tijd[1] - minuten);
+	  	  		
+	  	  		if(potentieelMinuut < 0){
+	  	  			potentieelMinuut = potentieelMinuut + 60;
+	  	  			potentieelUur = potentieelUur - 1;
+	  	  		}
+	  	  		
+	  	  		document.getElementById("urenInplannen").innerHTML = potentieelUur;
+	  	  		document.getElementById("minutenInplannen").value = potentieelMinuut;
+	    	},
+	      ondropdeactivate: function (event) {
+	          // remove active dropzone feedback
+	          event.target.classList.remove('drop-active')
+	          event.target.classList.remove('drop-target')
+	        }
 	  })
 }
 
@@ -483,7 +525,6 @@ function inplannen(geslacht, behandelingenlijst){
 		}
 	})
 }
-
 
 // hier worden behandelingen toegevoegd
 document.getElementById("inplannenBehnadelingToevoegen").addEventListener("click", function(){
@@ -627,46 +668,6 @@ function formatDate(date){
 
 
 
-//enable draggables to be dropped into this
-interact('.dropzone').dropzone({
-	// Require a 75% element overlap for a drop to be possible
-	overlap: 0.01,
-
-  	ondropactivate: function (event) {
-  		// add active dropzone feedback
-  		event.target.classList.add('drop-active')
-  	},
-  	ondragenter: function (event) {
-  		var draggableElement = event.relatedTarget
-    	var dropzoneElement = event.target
-    	// feedback the possibility of a drop
-    	dropzoneElement.classList.add('drop-target')
-    	console.log(dropzoneElement.innerHTML);
-    	draggableElement.classList.add('can-drop')
-  	},
-  	ondragleave: function (event) {
-	  var draggableElement = event.relatedTarget
-		var dropzoneElement = event.target
-    	// remove the drop feedback style
-		dropzoneElement.classList.remove('drop-target')
-    	draggableElement.classList.remove('can-drop')
-  	},
-  	ondrop: function (event) {
-	  	var draggableElement = event.relatedTarget
-		var tijd= document.getElementsByClassName("drop-target")[0].getAttribute("tijd").split(":");
-		var uur = parseInt(tijd[0]);
-		var minuut = parseInt(tijd[1]);
-		
-		document.getElementById("urenInplannen").innerHTML = uur;
-		document.getElementById("minutenInplannen").value = minuut;
-		
-  	},
-    ondropdeactivate: function (event) {
-        // remove active dropzone feedback
-        event.target.classList.remove('drop-active')
-        event.target.classList.remove('drop-target')
-      }
-})
 
 
   

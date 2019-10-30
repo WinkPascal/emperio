@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Klant;
 
@@ -40,8 +41,8 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 		ArrayList<Klant> klanten = new ArrayList<Klant>();
 		
 		
-		int top = pageNummer * 10;
-		int low = top - 9;
+		int top = pageNummer * 20;
+		int low = top - 19;
 		
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
@@ -135,4 +136,30 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 		return klant;
 	}
 
+	public Klant getKlant(Bedrijf bedrijf, int id) {
+		
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"SELECT naam, geslacht, email, telefoon "
+				+ "from klant "
+				+ "where bedrijf = '"+bedrijf.getEmail()+"' "
+				+ "and id = "+id);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				
+				String naam = dbResultSet.getString("naam");
+				String geslacht = dbResultSet.getString("geslacht");
+				String email = dbResultSet.getString("email");
+				String telefoon = dbResultSet.getString("telefoon");
+				
+				Klant klant = new Klant(id, naam, email, telefoon, geslacht);
+
+
+				return klant;
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

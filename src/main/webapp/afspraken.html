@@ -58,19 +58,27 @@
 			<form class="inplannenForm" id="inplannenForm">
 				<div class="rechtsInplanForm">
 					<div id="inplanBehandelingenForm">
-						<h4>Behandelingen</h4><br>					
+						
+						<h4><i class="material-icons">&#xe254;</i>Behandelingen</h4><br>
 					</div>
-					<div id="datumInplanForm"></div>
 					<div class="blokkenOverzicht">
-						<div class="inplanBlokOverzicht">
-							<a>Lengte</a>
+						<div class="inplanBlokOverzicht" id="lengteAfspraakFormDiv">
+							<a>Lengte: </a>
 							<span class="afspraakBlokWaarde" id="lengteAfspraakForm">0:00</span>
 						</div>
-						<div class="inplanBlokOverzicht">
-							<a>Prijs</a>
-							<span class="afspraakBlokWaarde" id="prijsAfspraakForm">€</span>
+						<div class="inplanBlokOverzicht" id="prijsAfspraakFormDiv">
+							<a>Totaal: €</a>
+							<span class="afspraakBlokWaarde" id="prijsAfspraakForm"></span>
 						</div>
 					</div>
+					<div id="datumInplanFormDiv">
+						<i class="material-icons">&#xe254;</i>
+						<a>Datum:</a><a id="datumInplanForm"></a>
+						<br>
+						<i class="material-icons">&#xe254;</i>
+						<a>Tijd:</a><a id="tijdInplanForm"></a>
+					</div>
+
 				</div>
 				<div id="klantInfo">
 					<h4>klant</h4>
@@ -119,10 +127,35 @@
 				
 					<input type="button" id="weekVerderInplannen" class="defaultButton" value="Week verder">
 				</div>
-				<div id="tijslotenLijst">
+				<div id="dagenLijst">
 				
 				</div>
-			</div>	
+			</div>
+			
+			<!-- tijd inplannen -->
+			<div id="inplannenTijd" class="inplannenRechts">
+				<div class="stelTijdInTextdiv">
+					<span id="stelTijdInText">
+						<img width="150px" height="150px" src="https://www.stickpng.com/assets/images/580b57fcd9996e24bc43c44f.png"><br>
+						<a>Sleep de afspraak naar de gewenste tijd.</a>
+					</span>						
+
+					<span id="tijdInstellen">
+						<span id="urenInplannen"></span> 
+						:
+						<input type="number" id="minutenInplannen">
+					</span>
+				</div>
+
+				<div id="agendaInplannen">
+					<div id="potentieleAfspraak" class="potentieleAfspraak">
+					</div>
+					<div id="timelineInplanAgenda" class="timelineInplanAgenda">
+					</div> 
+					<div id="roosterInplanAgenda" class="roosterInplanAgenda">
+		    		</div>
+				</div>
+			</div>
 		</div>	
 	</div>
 				
@@ -149,7 +182,11 @@
 		</form>
 	</div>
 	
+	<!-- Drag and drop script -->
+	<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+	
 	<script src="javascript/afspraken.js"></script>
 	<script src="javascript/inplannenCard.js"></script>
+	
 </body>
 </html>

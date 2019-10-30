@@ -70,7 +70,6 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 					"GROUP by b.id\n" + 
 					"ORDER by COUNT(b.id) desc\n" + 
 					"LIMIT 5;");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				
