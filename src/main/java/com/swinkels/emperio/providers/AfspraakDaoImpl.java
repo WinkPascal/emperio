@@ -253,5 +253,60 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		} 
 		return null;
 	}
+	
+	public ArrayList<Double> getAantalAfsprakenEnInkomstenByklant(Bedrijf bedrijf, Klant klant) {
+		try (Connection con = super.getConnection()) {
+			ArrayList<Double> data = new ArrayList<Double>();
+			PreparedStatement pstmt = con.prepareStatement(
+					"select count(a.id) as afspraken, sum(b.prijs) as prijs \n" + 
+					"from afspraak a join klant k on a.klant = k.id \n" + 
+					"                join afspraakbehandeling l on l.afspraak = a.id\n" + 
+					"                join behandeling b on b.id = l.behandeling\n" + 
+					"WHERE k.id= "+klant.getId()+" \n" + 
+					"AND k.bedrijf = '"+bedrijf.getEmail()+"'"); 
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				double afspraken = dbResultSet.getInt("afspraken");
+				double prijs = dbResultSet.getInt("prijs");
 
+				data.add(afspraken);
+				data.add(prijs);
+			} 
+			return data;
+		}catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		
+		return null;
+	}
+	
+	public ArrayList<Afspraak> getLaatste3Afspraken(Bedrijf bedrijf, Klant klant) {
+		try (Connection con = super.getConnection()) {
+			ArrayList<Afspraak> afspraken = new ArrayList<Afspraak>();
+			PreparedStatement pstmt = con.prepareStatement(
+					"SELECT a.timestamp as timestamp, sum(b.prijs) as prijs \n" + 
+					"from afspraak a join afspraakbehandeling f on a.id = f.afspraak \n" + 
+					"				join behandeling b on f.behandeling = b.id \n" + 
+					"				join klant k on k.id = a.klant \n" + 
+					"where b.bedrijf = '"+bedrijf.getEmail()+"' \n" + 
+					"AND k.id="+klant.getId()+" \n" + 
+					"GROUP by a.timestamp \n" + 
+					"limit 5;"); 
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				String timestamp = dbResultSet.getString("timestamp");
+				
+				double prijs = dbResultSet.getDouble("prijs");
+				Afspraak afspraak = new Afspraak(ServiceFilter.StringToDateFormatter(timestamp, "YYYY-MM-dd HH:mm"));
+				afspraak.setPrijs(prijs);
+				
+				afspraken.add(afspraak);
+			} 
+			return afspraken;
+		}catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		
+		return null;
+	}
 }

@@ -764,7 +764,12 @@ public class ServiceProvider {
 	public String getKlant(@Context SecurityContext sc, @PathParam("id") int id) { 
 		//uitvoer
 		// naam, geslacht,  email, telefoon, 
-			//aantal afspraken, hoeveelheid inkomsten, per maand aantal bezoeken
+		
+		//aantal afspraken, hoeveelheid inkomsten
+		
+		// laatste 3 afspraken
+		JsonArrayBuilder jab = Json.createArrayBuilder();
+
 		String bedrijfsNaam = sc.getUserPrincipal().getName();
 		Bedrijf bedrijf = new Bedrijf(bedrijfsNaam);
 		Klant klant = klantDao.getKlant(bedrijf, id);
@@ -776,12 +781,35 @@ public class ServiceProvider {
 		String email = klant.getEmail();
 		if(email != null) {
 			job.add("email", email);
-
 		}
 		String tel = klant.getTel();
 		if(tel != null) {
 			job.add("telefoon", tel);
 		}
-		return job.build().toString();
+		jab.add(job);
+		// de aantal afspraken en hoeveel heid inkomsten van de klant 
+		JsonObjectBuilder job1 = Json.createObjectBuilder();
+
+		ArrayList<Double> data = afspraakDao.getAantalAfsprakenEnInkomstenByklant(bedrijf, klant);
+		job1.add("afspraken", data.get(0));
+		job1.add("inkomsten", data.get(1));
+		jab.add(job1);
+
+		//laatste 3 afspraken ophalen
+
+		ArrayList<Afspraak> afspraken = afspraakDao.getLaatste3Afspraken(bedrijf, klant);
+		for(Afspraak afspraak : afspraken) {
+			JsonObjectBuilder job2 = Json.createObjectBuilder();
+			
+			job2.add("prijs", afspraak.getPrijs());
+
+			String timestampString = ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "YYYY-MM-dd HH:mm");
+			job2.add("datum", timestampString.substring(0, 10));
+			System.out.println(timestampString.substring(0, 10));
+			job2.add("tijd", timestampString.substring(11));
+			jab.add(job2);
+		}
+
+		return jab.build().toString();
 	}
 }

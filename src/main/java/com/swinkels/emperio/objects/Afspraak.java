@@ -9,12 +9,13 @@ public class Afspraak {
 	private Klant klant;
 	private Bedrijf bedrijf;
 	private Date timestamp;
+	private Double prijs;
 	private ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 
 	public Afspraak() {
-		
+
 	}
-	
+
 	public Afspraak(int id, Date timestamp, Klant klant) {
 		this.id = id;
 		this.timestamp = timestamp;
@@ -22,11 +23,11 @@ public class Afspraak {
 	}
 
 	public Afspraak(Date afspraakTimestamp, Bedrijf bedrijf, Klant klant) {
-		this.timestamp= afspraakTimestamp;
-		this.bedrijf= bedrijf;
-		this.klant= klant;
+		this.timestamp = afspraakTimestamp;
+		this.bedrijf = bedrijf;
+		this.klant = klant;
 	}
-	
+
 	public Afspraak(Date timestamp) {
 		this.timestamp = timestamp;
 	}
@@ -34,13 +35,21 @@ public class Afspraak {
 	public int getId() {
 		return id;
 	}
-	
+
 	public void addBehandeling(Behandeling behandeling) {
 		behandelingen.add(behandeling);
 	}
-	
-	public ArrayList<Behandeling> getBehandelingen(){
+
+	public ArrayList<Behandeling> getBehandelingen() {
 		return behandelingen;
+	}
+
+	public void setPrijs(double prijs) {
+		this.prijs = prijs;
+	}
+
+	public Double getPrijs() {
+		return prijs;
 	}
 
 	public void setId(int id) {

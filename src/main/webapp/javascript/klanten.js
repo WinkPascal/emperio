@@ -99,15 +99,53 @@ function getKlant(id){
 		}
 	fetch("restservices/service/klant/"+id, fetchoptions)
 	.then(response => response.json())
-	.then(function(klant){
-		document.getElementById("naam").innerHTML = klant.naam;
-		document.getElementById("geslacht").innerHTML = klant.geslacht;
-		document.getElementById("email").innerHTML = klant.email;
-		document.getElementById("telefoon").innerHTML = klant.telefoon;
-		document.getElementById("email").addEventListener("click", function(){
-			alert("email optie van "+id);
-		})
+	.then(function(dataArray){
+		var i = 0;
+		for(let data of dataArray){
+			if(i == 0){
+				document.getElementById("naamInfo").innerHTML = data.naam;
+			
+				document.getElementById("geslachtInfo").innerHTML = data.geslacht;
+				if(data.email == undefined){
+					document.getElementById("emailInfo").innerHTML = "-";
+				} else{
+					document.getElementById("emailInfo").innerHTML = data.email;
+				}
+				if(data.telefoon == undefined){
+					document.getElementById("telefoonInfo").innerHTML = "-";		
+				} else{
+					document.getElementById("telefoonInfo").innerHTML = data.telefoon;
+				}
+				document.getElementById("email").addEventListener("click", function(){
+					alert("email optie van "+id);
+				})
+				i++;
+			} else if(i == 1){
+				document.getElementById("aantalAfsprakenInfo").innerHTML = data.afspraken;
+			    document.getElementById("hoeveelheidInkomstenInfo").innerHTML = data.inkomsten;
+				i++;
+			} else{
+				var afspraak = document.createElement('span');
+				afspraak.setAttribute('class', "afspraakKlant");
+				var afspraakDatum = document.createElement('a');
+				afspraakDatum.setAttribute('class', "afspraakDatum");
+				afspraakDatum.innerHTML = data.datum;
+				afspraak.appendChild(afspraakDatum);
+				
+				var afspraakTijd = document.createElement('a');
+				afspraakDatum.setAttribute('class', "afspraakTijd");
+				afspraakDatum.innerHTML = data.tijd;
+				afspraak.appendChild(afspraakTijd);
+				
+				var afspraakPrijs = document.createElement('a');
+				afspraakDatum.setAttribute('class', "afspraakPrijs");
+				afspraakPrijs.innerHTML = "€"+ data.prijs;
+				afspraak.appendChild(afspraakPrijs);
 
+				document.getElementById("afsprakenLijst").appendChild(afspraak);
+
+			}
+		}	
 	})
 }
 

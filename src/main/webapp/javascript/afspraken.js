@@ -286,9 +286,6 @@ function getAfspraken(datum, onload){
 	        elements[i].style.width=(breedte+"px");
 	    }
 	})
-	
-	
-
 }
 
 function createOnClickListener(id){
