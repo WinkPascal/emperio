@@ -81,38 +81,39 @@
 	border:1px solid black;
 	float: left;
 	width: 50%;
+	top: 0px;
 	height: 100%;
-	position: relative;
 }
 
 .klant-content .klantInfo span{
 	margin: 5px;
 	width: 100%;
-	position: relative;
 	height: 30px;
 	font-size: 20px;
 }
 
 
 .klant-content #afsprakenLijst{
-	width: 50%;
+	top: 0px;
+	width: 49%;
 	height: 100%;
+	border: 1px solid black;
 	overflow: scroll;
 	float: right;
-	position: relative;
-	text-align: center;
 }
 
 .klant-content #afsprakenLijst .afspraakKlant{
  	display: inline-block;
 	width: 80%;
 	position: relative;
-	border: 1px solid black;
-	margin: 5px;
+	border-bottom: 1px solid black;
+	height: 30px;
+	margin-left: 10%;
+	margin: 10px;
 }
 
 .klant-content #afsprakenLijst .afspraakKlant .afspraakDatum{
-	
+	float: left;
 }
 
 .klant-content #afsprakenLijst .afspraakKlant .afspraakTijd{
@@ -120,7 +121,7 @@
 }
 
 .klant-content #afsprakenLijst .afspraakKlant .afspraakPrijs{
-	
+	float: right;
 }
 
 

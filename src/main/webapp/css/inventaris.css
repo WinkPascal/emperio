@@ -1,0 +1,36 @@
+.inventaris {
+	width: 100%;
+	max-width: 1400px;
+	margin: 2em auto;
+}
+
+.inventaris .controleDiv {
+	height: 50px;
+	width: 100%;
+	background-color: gray;
+}
+
+.inventaris #inventarisItems .inventarisItem {
+	display: inline-block;
+	border: 1px solid black;
+	width: 250px;
+	height: 120px;
+	background-color: orange;
+	margin: 10px;
+	text-align: center;
+}
+
+.inventaris #inventarisItems .inventarisItem .productHoeveelheid {
+	display: inline-block;
+	height: 60px;
+	font-size: 30px;
+}
+
+.inventaris #inventarisItems .inventarisItem .productNaam {
+	display: inline-block;
+	height: 40px;
+	width: 100%;
+	background-color: white;
+	font-size: 20px;
+	top: 60px;
+}

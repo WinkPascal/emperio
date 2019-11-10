@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.swinkels.emperio.objects.Bedrijf;
-import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Klant;
 
 public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {

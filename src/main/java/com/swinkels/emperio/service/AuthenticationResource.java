@@ -5,8 +5,6 @@ import java.security.Key;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;

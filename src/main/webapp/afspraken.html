@@ -7,12 +7,12 @@
   <link rel="stylesheet" href="css/inplannenCard.css">
   <link rel="stylesheet" href="css/afspraken.css">
    <link rel="stylesheet" href="css/home.css">
+   <link rel="stylesheet" href="css/global.css">
  
   <link rel="stylesheet" media="screen and (min-width: 1000px)" href="css/afspraken1000px.css">
   <link rel="stylesheet" media="screen and (min-width: 800px)" href="css/afspraken800px.css">
 </head>
 <body onload="onload()">
-	
 	<span class="topBar">
 		<input type="button" value="Home" class="defaultButton" id="homeButton">
 		<input type="button" value="Settings" class="defaultButton" id="settingButton">
@@ -36,13 +36,26 @@
 	<!-- als er op een afpsraak geklikt wordt -->
 	<div id="afspraakModal" class="modal">
 		<div class="afspraak-content">
-			<h2 id="klantNaam">Voornaam Achternaam</h2>
-			<p>email</p>
-			<p>Geslacht</p>
-			<p>telefoon</p>
-			<p>aantal afspraken</p>
-			<p>inkomsten klant</p>
-			<div id="afsprakenLijst"></div>
+			<div class="klantInfo">
+				<h2 id="naamInfo">Voornaam Achternaam</h2>
+				<span>Geslacht: <a id="geslachtInfo"></a></span><br>
+				<span>Email adres: <a id="emailInfo"></a></span><br>
+				<span>Telefoon nummer: <a id="telefoonInfo"></a></span><br>
+				<span>Afspraken: <a id="aantalAfsprakenInfo"></a></span><br>
+				<span>Inkomsten: <a id="hoeveelheidInkomstenInfo"></a></span><br>
+				<input type="button" id="sluitAfspraakInfo" class="defaultButton" value="Sluit">
+				<input type="button" id="mailKlantAfspraak" class="defaultButton" value="Mail klant">
+			</div>	
+			<div class="afspraakInfo">
+				<h2>Afspraak</h2>
+				<span>Prijs: <a id="prijsInfo"></a></span><br>
+				<span>Lengte: <a id="lengteInfo"></a></span><br>		
+				<span>Datum: <a id="datumInfo"></a></span><br>		
+				<span>Tijd: <a id="tijdInfo"></a></span><br>
+				<div id="behandelingenLijst">
+					<h4>Behandelingen</h4>
+				</div>
+			</div>
 		</div>
 	</div>	
 
@@ -184,7 +197,7 @@
 	
 	<!-- Drag and drop script -->
 	<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-	
+ 	 <script src="javascript/global.js"></script>	
 	<script src="javascript/afspraken.js"></script>
 	<script src="javascript/inplannenCard.js"></script>
 	

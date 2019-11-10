@@ -388,3 +388,62 @@
 	border-style: solid;
 }
 
+.afspraak-content {
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 900px;
+	background-color: orange; /* Black w/opacity/see-through */
+	height: 350px;
+	animation-name: zoom;
+	animation-duration: 0.6s;
+}
+
+.afspraak-content .klantInfo {
+	float: left;
+	width: 50%;
+	border: 1px solid black;
+	height: 100%;
+}
+
+.afspraak-content .klantInfo span {
+	font-size: 20px;
+	margin: 5px;
+}
+
+.afspraak-content .klantInfo #sluitAfspraakInfo {
+	bottom: 0px;
+	left: 10px;
+}
+
+.afspraak-content .klantInfo #mailKlantAfspraak {
+	bottom: 0px;
+	right: 0px;
+}
+
+.afspraak-content .afspraakInfo {
+	font-size: 20px;
+	float: right;
+	border: 1px solid black;
+	width: 50%;
+	height: 100%;
+}
+
+.afspraak-content .afspraakInfo #behandelingenLijst {
+	top: 40%;
+	border: 1px solid black;
+	width: 100%;
+	height: 60%;
+	align: center;
+	overflow: scroll;
+}
+
+.afspraak-content .afspraakInfo #behandelingenLijst .behandelingSpan {
+	margin-left: 10%;
+	width: 80%;
+	display: inline-block;
+	margin-top: 5px;
+	font-size: 18px;
+	border-bottom: 1px solid black;
+}
+

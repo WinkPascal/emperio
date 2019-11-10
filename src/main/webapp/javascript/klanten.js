@@ -1,5 +1,4 @@
 function onload(){
-	//errorMessage("error");
 	getKlanten("load");
 }
 
@@ -15,7 +14,7 @@ function getKlanten(functie){
 	if(functie == "load"){
 		blz=1;
 	} else if(functie == "volgende"){
-		blz = blz +1;
+		blz = blz + 1;
 	} else if(functie == "terug"){
 		if(blz != 1){
 			blz = blz - 1;
@@ -32,7 +31,7 @@ function getKlanten(functie){
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 			}
 		}
-	fetch("restservices/service/alleKlanten/"+blz, fetchoptions)
+	fetch("restservices/klanten/alleKlanten/"+blz, fetchoptions)
 	.then(response => response.json())
 	.then(function(klanten){
 		if(klanten.length == 0){
@@ -82,70 +81,75 @@ function getKlanten(functie){
 			
 			klantenLijst.appendChild(row);
 			document.getElementById(klant.id).addEventListener("click", function(){
-				document.getElementById("klantModal").style.display = "block";
 				getKlant(klant.id);
 			})
 		}
-	}).catch(function() {
-		alert("ging iets fout");
-	});	
+	})
 }
 
 function getKlant(id){
+	document.getElementById("klantModal").style.display = "block";
+	document.getElementById("sluitKlantInfo").addEventListener("click", function(){
+		document.getElementById("naamInfo").innerHTML = "";
+		document.getElementById("geslachtInfo").innerHTML = "";
+		document.getElementById("telefoonInfo").innerHTML = "";
+		document.getElementById("emailInfo").innerHTML = "";
+		document.getElementById("aantalAfsprakenInfo").innerHTML = "";
+		document.getElementById("hoeveelheidInkomstenInfo").innerHTML = "";
+		document.getElementById("afsprakenLijst").innerHTML = "";
+		document.getElementById("klantModal").style.display = "none";
+	})
 	var fetchoptions = {
 			headers: {
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 			}
 		}
-	fetch("restservices/service/klant/"+id, fetchoptions)
+	fetch("restservices/klanten/klant/"+id, fetchoptions)
 	.then(response => response.json())
-	.then(function(dataArray){
+	.then(function(data){
 		var i = 0;
-		for(let data of dataArray){
-			if(i == 0){
-				document.getElementById("naamInfo").innerHTML = data.naam;
+		document.getElementById("naamInfo").innerHTML = data.naam;
+		
+		document.getElementById("geslachtInfo").innerHTML = data.geslacht;
+		if(data.email == undefined){
+			document.getElementById("emailInfo").innerHTML = "-";
+		} else{
+			document.getElementById("emailInfo").innerHTML = data.email;
+		}
+		if(data.telefoon == undefined){
+			document.getElementById("telefoonInfo").innerHTML = "-";		
+		} else{
+			document.getElementById("telefoonInfo").innerHTML = data.telefoon;
+		}
+		document.getElementById("emailKlant").addEventListener("click", function(){
+			alert("email optie van "+id);
+		})
+		document.getElementById("aantalAfsprakenInfo").innerHTML = data.afspraken;
+		document.getElementById("hoeveelheidInkomstenInfo").innerHTML = data.inkomsten;
+		var afspraakListHeader = document.createElement('h2');
+		afspraakListHeader.innerHTML = "laatste 5 afspraken";
+		document.getElementById("afsprakenLijst").appendChild(afspraakListHeader);
+
+		for(let afspraak of data.afspraken){
+			var afspraakSpan = document.createElement('span');
+			afspraakSpan.setAttribute('class', "afspraakKlant");
+			var afspraakDatum = document.createElement('a');
+			afspraakDatum.setAttribute('class', "afspraakDatum");
+			afspraakDatum.innerHTML = afspraak.datum;
+			afspraakSpan.appendChild(afspraakDatum);
 			
-				document.getElementById("geslachtInfo").innerHTML = data.geslacht;
-				if(data.email == undefined){
-					document.getElementById("emailInfo").innerHTML = "-";
-				} else{
-					document.getElementById("emailInfo").innerHTML = data.email;
-				}
-				if(data.telefoon == undefined){
-					document.getElementById("telefoonInfo").innerHTML = "-";		
-				} else{
-					document.getElementById("telefoonInfo").innerHTML = data.telefoon;
-				}
-				document.getElementById("email").addEventListener("click", function(){
-					alert("email optie van "+id);
-				})
-				i++;
-			} else if(i == 1){
-				document.getElementById("aantalAfsprakenInfo").innerHTML = data.afspraken;
-			    document.getElementById("hoeveelheidInkomstenInfo").innerHTML = data.inkomsten;
-				i++;
-			} else{
-				var afspraak = document.createElement('span');
-				afspraak.setAttribute('class', "afspraakKlant");
-				var afspraakDatum = document.createElement('a');
-				afspraakDatum.setAttribute('class', "afspraakDatum");
-				afspraakDatum.innerHTML = data.datum;
-				afspraak.appendChild(afspraakDatum);
+			var afspraakTijd = document.createElement('a');
+			afspraakDatum.setAttribute('class', "afspraakTijd");
+			afspraakDatum.innerHTML = afspraak.tijd;
+			afspraakSpan.appendChild(afspraakTijd);
 				
-				var afspraakTijd = document.createElement('a');
-				afspraakDatum.setAttribute('class', "afspraakTijd");
-				afspraakDatum.innerHTML = data.tijd;
-				afspraak.appendChild(afspraakTijd);
-				
-				var afspraakPrijs = document.createElement('a');
-				afspraakDatum.setAttribute('class', "afspraakPrijs");
-				afspraakPrijs.innerHTML = "€"+ data.prijs;
-				afspraak.appendChild(afspraakPrijs);
-
-				document.getElementById("afsprakenLijst").appendChild(afspraak);
-
-			}
-		}	
+			var afspraakPrijs = document.createElement('a');
+			afspraakDatum.setAttribute('class', "afspraakPrijs");
+			afspraakPrijs.innerHTML = "€"+ afspraak.prijs;
+			afspraakSpan.appendChild(afspraakPrijs);
+			
+			document.getElementById("afsprakenLijst").appendChild(afspraakSpan);
+		}
 	})
 }
 
@@ -163,7 +167,7 @@ function zoekKlanten(){
 		}
 	var klantenLijst = document.getElementById("klantenLijst");
 	klantenLijst.innerHTML = "";
-	fetch("restservices/service/klantenZoekReq/"+requestKlant, fetchoptions)
+	fetch("restservices/klanten/klantenZoekReq/"+requestKlant, fetchoptions)
 	.then(response => response.json())
 	.then(function(klanten){
 		var topRow = document.createElement('tr');
@@ -206,8 +210,6 @@ function zoekKlanten(){
 			
 			klantenLijst.appendChild(row);
 		}
-	}).catch(function() {
-		alert("ging iets fout");
-	});	
+	})
 }
  

@@ -24,7 +24,7 @@ function getData(lengte){
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 			}
 		}
-	fetch("restservices/service/getData/"+lengte, fetchoptions)
+	fetch("restservices/statistics/getData/"+lengte, fetchoptions)
 	.then(response => response.json())
 	.then(function(dataArrays){
 		var i= 1;

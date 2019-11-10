@@ -9,7 +9,7 @@ function onload(){
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 			}
 		}
-	fetch("restservices/service/afsprakenByDate/"+dagDate, fetchoptions)
+	fetch("restservices/afspraak/afsprakenByDate/"+dagDate, fetchoptions)
 	.then(response => response.json())
 	.then(function(afspraken){
 		var afsprakenLijst = document.getElementById("afsprakenVandaagLijst");
@@ -49,11 +49,46 @@ function onload(){
 							'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 						}
 					}
-				fetch("restservices/service/getAfspraak/" + afspraak.id, fetchoptions)
+				fetch("restservices/afspraak/getAfspraak/" + afspraak.id, fetchoptions)
 				.then(response => response.json())
 				.then(function(afspraak){
-						alert(afspraak.klantNaam);
-				})			
+					//klant info
+					document.getElementById("naamInfo").innerHTML = afspraak.klantNaam;
+					document.getElementById("emailInfo").innerHTML = afspraak.klantEmail;
+					document.getElementById("geslachtInfo").innerHTML = afspraak.klantGeslacht;
+					document.getElementById("telefoonInfo").innerHTML = afspraak.klantTelefoon;
+					document.getElementById("aantalAfsprakenInfo").innerHTML = afspraak.aantalAfspraken;
+					document.getElementById("hoeveelheidInkomstenInfo").innerHTML = afspraak.hoeveelheidInkomsten;
+					//afspraak info
+					document.getElementById("prijsInfo").innerHTML = afspraak.totaalPrijs;
+					document.getElementById("lengteInfo").innerHTML = afspraak.totaalLengte;
+					document.getElementById("datumInfo").innerHTML = afspraak.datum;
+					document.getElementById("tijdInfo").innerHTML = afspraak.tijd;		
+					//behandelingen
+					var behandelingenLijst = document.getElementById("behandelingenLijst");
+					for(let behandeling of afspraak.behandelingen){
+						var behandelingSpan = document.createElement('span');
+						behandelingSpan.setAttribute('class', 'behandelingSpan');
+						behandelingSpan.innerHTML = behandeling.naam + " " + behandeling.lengte;
+						behandelingenLijst.appendChild(behandelingSpan);
+					}
+					document.getElementById("sluitAfspraakInfo").addEventListener("click", function(){
+						document.getElementById("afspraakModal").style.display = "none";
+						document.getElementById("naamInfo").innerHTML = "";
+						document.getElementById("emailInfo").innerHTML = "";
+						document.getElementById("geslachtInfo").innerHTML = "";
+						document.getElementById("telefoonInfo").innerHTML = "";
+						//afspraak info
+						document.getElementById("prijsInfo").innerHTML = "";
+						document.getElementById("lengteInfo").innerHTML = "";
+						document.getElementById("datumInfo").innerHTML = "";
+						document.getElementById("tijdInfo").innerHTML = "";
+						behandelingenLijst.innerHTML="";
+					})
+					document.getElementById("mailKlantAfspraak").addEventListener("click", function(){
+						
+					})
+				})		
 			})
 		}
 	}).catch(function() {
@@ -63,51 +98,13 @@ function onload(){
 
 //onclick listener voor aanklikken card
 document.getElementById("inventarisCard").addEventListener("click", function() {
-	inventarisCard();
+	location.href = 'inventaris.html';
 })
-//starten inventaris proces
-function inventarisCard(){
-	document.getElementById("inventarisModal").style.display = "block";
-	// de producten voor de eerste pagina worden opgehaalt
-	var paginaNummerInventaris = 1;
-	getAlleProducten(paginaNummerInventaris);
-	document.getElementById("terugButtonInventaris").addEventListener("click", function() {
-		if(paginaNummerInventaris == 1){
-			alert("kan niet terug");
-		}
-		paginaNummerInventaris =paginaNummerInventaris - 1;
-
-		volgendeKnopInplannen(paginaNummerInventaris);
-	})
-	
-	document.getElementById("volgendeButtonInventaris").addEventListener("click", function() {
-		paginaNummerInventaris++;
-		terugKnopInplannen(paginaNummerInventaris);
-	})
-	
-	document.getElementById("voegProductToe").addEventListener("click", function(){
-		document.getElementById("inventarisModal").style.display = "none";
-		document.getElementById("ProductToevoegenModal").style.display = "block";
-		
-		document.getElementById("productToevoegenKnop").addEventListener("click", function(){
-			createProduct();
-		})
-		document.getElementById("annulerenProductToevoegenKnop").addEventListener("click", function(){
-			document.getElementById("inventarisModal").style.display = "block";
-			document.getElementById("ProductToevoegenModal").style.display = "none";
-		})
-	});
-}
 
 //onclick listener voor klanten card
 document.getElementById("klantenCard").addEventListener("click", function() {
-	klantenCard();
-})
-
-//starten klanten proces
-function klantenCard(){
 	location.href = 'klanten.html';
-}
+})
 
 //starten rooster proces
 document.getElementById("afsprakenCard").addEventListener("click", function(){
@@ -116,7 +113,7 @@ document.getElementById("afsprakenCard").addEventListener("click", function(){
 
 //starten rooster proces
 document.getElementById("inkomstenCard").addEventListener("click", function(){
-	location.href = 'inkomsten.html';
+	location.href = 'statestieken.html';
 })
 
 

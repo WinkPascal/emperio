@@ -2,6 +2,7 @@ document.getElementById("volgendeInplannen").addEventListener("click", function(
 	volgendeKnopInplannen();
 	date = new Date();
 })
+
 function volgendeKnopInplannen(){ 
 	// geslacht en behandelingen zijn ingevuld
 	if (status == "behandeling"){
@@ -111,7 +112,7 @@ function behandelingenOphalen(geslacht){
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 			}
 		}
-	fetch("restservices/service/behandelingen/" + geslacht, fetchoptions)
+	fetch("restservices/plan/behandelingen/" + geslacht, fetchoptions)
 	.then(response => response.json())
 	.then(function(behandelingen){
 		for (let behandeling of behandelingen){
@@ -138,17 +139,17 @@ function behandelingenOphalen(geslacht){
 			behandelingsDiv.appendChild(behandelingsBeschrijving);
 			behandelingsDiv.appendChild(behandelingsLengte);
 			behandelingsDiv.appendChild(behandelingsPrijs);
-			//behandeling is gekozen
+			// behandeling is gekozen
 			behandelingsDiv.addEventListener("click", function() {
 				hideItem("d"+behandeling.id);
-				//totaal blokken worden geupdate
+				// totaal blokken worden geupdate
 				inplanVoorbereiding("lengteToevoegen", behandeling.lengte);
 				inplanVoorbereiding("prijsToevoegen", behandeling.prijs);
 				document.getElementById("prijsAfspraakForm").innerHTML = "€"+ prijs;
 				document.getElementById("lengteAfspraakForm").innerHTML = uren +":"+ minuten;
 
 				inplanVoorbereiding("behandelingToevoegen", behandeling.id);
-				//blok in de lijst wordt aangemaakt
+				// blok in de lijst wordt aangemaakt
 				var gekozenBehandelingsSpan = document.createElement('span');
 				gekozenBehandelingsSpan.setAttribute('id', behandeling.id);
 				gekozenBehandelingsSpan.setAttribute('class', 'inplannenBehandelingOverzicht');
@@ -163,12 +164,12 @@ function behandelingenOphalen(geslacht){
 				prijsGekozenBehandeling.innerHTML = " €"+behandeling.prijs;
 				gekozenBehandelingsSpan.appendChild(prijsGekozenBehandeling);
 
-				//behandeling verwijderen uit gekozen lijst
+				// behandeling verwijderen uit gekozen lijst
 				gekozenBehandelingsSpan.addEventListener("click", function(){
 					removeItem(behandeling.id);
 					showItem("d"+behandeling.id);
 					
-					//totaal blokken worden geupdate
+					// totaal blokken worden geupdate
 					inplanVoorbereiding("lengteVerwijderen", behandeling.lengte);
 					inplanVoorbereiding("prijsVerwijderen", behandeling.prijs);
 					document.getElementById("prijsAfspraakForm").innerHTML = "€"+ prijs;
@@ -217,7 +218,7 @@ function datumOphalen(){
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 			}
 		}
-	fetch("restservices/service/werkdagen", fetchoptions)
+	fetch("restservices/plan/werkdagen", fetchoptions)
 	.then(response => response.json())
 	.then(function(dagen){
 		var inplanDatum = document.getElementById("dagenLijst");
@@ -245,7 +246,7 @@ function datumOphalen(){
 		
 			inplanDatum.appendChild(dagSpan);
 			
-			// op elke dag kan  geklikt worden
+			// op elke dag kan geklikt worden
 			dagOphalen(dagNummer, datum);
 		}
 	})
@@ -253,7 +254,7 @@ function datumOphalen(){
 
 function dagOphalen(dagNummer, datum){
 	document.getElementById("dagKeuze"+dagNummer).addEventListener("click", function(){
-		//aanmaken potentiele afspraak div
+		// aanmaken potentiele afspraak div
 		var plan = document.getElementById("potentieleAfspraak");
 		plan.innerHTML = "lengte:  "+document.getElementById("lengteAfspraakForm").innerHTML+"<br><br> Datum: "+document.getElementById("datumInplanForm").innerHTML;
 		console.log(uren +" "+ minuten);
@@ -279,7 +280,7 @@ function dagOphalen(dagNummer, datum){
 					'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 				}
 			}
-		fetch("restservices/service/tijdslotenOphalen/"+date, fetchoptions)
+		fetch("restservices/plan/tijdslotenOphalen/"+date, fetchoptions)
 		.then(response => response.json())
 		.then(function(afspraken){
 			for(let afspraak of afspraken){
@@ -331,7 +332,7 @@ function dagOphalen(dagNummer, datum){
 					document.getElementById("timelineInplanAgenda").appendChild(ul);
 					i++;
 				} else{
-					//gemaakte afsprraken worden in de timeline gezet
+					// gemaakte afsprraken worden in de timeline gezet
 					var event = createAfspraak(afspraak.beginTijd, afspraak.lengte);
 					
 					document.getElementById("roosterInplanAgenda").appendChild(event);
@@ -341,9 +342,9 @@ function dagOphalen(dagNummer, datum){
 	});
 }
 
-//het vullen van de afspraken lijst bij de tijd instellen
+// het vullen van de afspraken lijst bij de tijd instellen
 function createAfspraak(beginTijd ,lengte){ 
-	//event aanmaken
+	// event aanmaken
 	var event = document.createElement('li');
 	event.setAttribute('class', 'nietBeschikbaarAfspraak');
 
@@ -351,7 +352,7 @@ function createAfspraak(beginTijd ,lengte){
 
 	event.innerHTML = beginTijd +" <br> "+ lengte;
 
-	//begin punt van de afspraak
+	// begin punt van de afspraak
 	var topArray = beginTijd.split(":");
 	var uurTop = parseInt(topArray[0]);
 	var minuutTop = parseInt(topArray[1]);
@@ -362,7 +363,7 @@ function createAfspraak(beginTijd ,lengte){
 	var topMinuten = minuutVerschilTop-minuutBegin;
 	var top = topMinuten * 2 + 20;
 	event.style.top = top+"px";
-	//lengte van afspraak
+	// lengte van afspraak
 	var lengteArray = lengte.split(":");
 	var uurLengte = parseInt(lengteArray[0]);
 	var minuutLengte = parseInt(lengteArray[1]);
@@ -375,7 +376,7 @@ function createAfspraak(beginTijd ,lengte){
 	return event;
 }
 
-//de afspraak die je naar een tijd kan slepen
+// de afspraak die je naar een tijd kan slepen
 function createDraggable(){   
 	var element = document.getElementById('potentieleAfspraak')
 	var y = 0
@@ -406,7 +407,7 @@ function createDraggable(){
 	        'translate(0px, ' + y + 'px)'
 	  }),
 	  
-	  //de dropzone maken
+	  // de dropzone maken
 	  interact('.dropzone').dropzone({
 	  	overlap: 0.01,
 
@@ -516,7 +517,7 @@ function inplannen(geslacht, behandelingenlijst){
 			}
 		}
 	// De wijziging wordt verstuurt naar de backend
-	fetch("restservices/service/afspraak", fetchoptions)
+	fetch("restservices/plan/afspraak", fetchoptions)
 	.then(function (response){
 		if(response.ok){
 			alert("ingepland");
@@ -603,7 +604,7 @@ function behandelingToevoegen(){
 			}
 		}
 	// De wijziging wordt verstuurt naar de backend
-	fetch("restservices/service/behandeling", fetchoptions)
+	fetch("restservices/plan/behandeling", fetchoptions)
 	.then(function (response){
 		if(response.ok){
 			alert("toegevoegd");

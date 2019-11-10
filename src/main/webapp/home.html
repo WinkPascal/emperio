@@ -5,6 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="css/home.css">
 	<link rel="stylesheet" type="text/css" href="css/inplannenCard.css">
 	<link rel="stylesheet" type="text/css" href="css/klantenCard.css">
+	<link rel="stylesheet" type="text/css" href="css/global.css">
 	<link rel="stylesheet" type="text/css" href="css/instellingenCard.css">
 	<!-- edit icon -->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -20,17 +21,31 @@
 		</div>
 	</div>
 	
+	<!-- als er op een afpsraak geklikt wordt -->
 	<div id="afspraakModal" class="modal">
-		<div class="modal-content">
-			<h2 id="klantNaam">Voornaam Achternaam</h2>
-			<p>email</p>
-			<p>Geslacht</p>
-			<p>telefoon</p>
-			<p>aantal afspraken</p>
-			<p> inkomsten klant</p>
-			<div id="afsprakenLijst"></div>
+		<div class="afspraak-content">
+			<div class="klantInfo">
+				<h2 id="naamInfo">Voornaam Achternaam</h2>
+				<span>Geslacht: <a id="geslachtInfo"></a></span><br>
+				<span>Email adres: <a id="emailInfo"></a></span><br>
+				<span>Telefoon nummer: <a id="telefoonInfo"></a></span><br>
+				<span>Afspraken: <a id="aantalAfsprakenInfo"></a></span><br>
+				<span>Inkomsten: <a id="hoeveelheidInkomstenInfo"></a></span><br>
+				<input type="button" id="sluitAfspraakInfo" class="defaultButton" value="Sluit">
+				<input type="button" id="mailKlantAfspraak" class="defaultButton" value="Mail klant">
+			</div>	
+			<div class="afspraakInfo">
+				<h2>Afspraak</h2>
+				<span>Prijs: <a id="prijsInfo"></a></span><br>
+				<span>Lengte: <a id="lengteInfo"></a></span><br>		
+				<span>Datum: <a id="datumInfo"></a></span><br>		
+				<span>Tijd: <a id="tijdInfo"></a></span><br>
+				<div id="behandelingenLijst">
+					<h4>Behandelingen</h4>
+				</div>
+			</div>
 		</div>
-	</div>
+	</div>	
 	
 	<!-- opties van de gebruiker -->
 	<div class="cardHolder" id="cardHolder">
@@ -99,42 +114,6 @@
 				</h4>
 			</div>
 		</div>
-	</div>
-	
-	<!-- inventaris -->
-	<div id="inventarisModal" class="modal">
-		<div class="modal-content">
-			<div id="topBar" class="topBarInventaris">
-				<span class="navigatieButton" id="terugButtonInventaris">Terug</span>
-		
-				<input type="text" id="zoekProductenInput"/>
-				<span class="navigatieButton" id="zoekProductButton">Zoek</span>
-				<input type="button" id="voegProductToe" value="Voeg Product Toe!">
-				
-				<span class="navigatieButton" id="volgendeButtonInventaris">Volgende</span>
-			</div>
-			<div id="inventarisLijstLinks">
-				
-			</div>			
-			<div id="inventarisLijstRechts">
-				
-			</div>
-		</div>
-	</div>
-		<!-- product toevoegen -->
-	<div id="ProductToevoegenModal" class="modal">
-		<form id="ProductToevoegenForm" class="modal-content-small">
-			<h2 style="align:center;">Product Toevoegen</h2>
-			naam 		<input id="naamProductToevoegen" type="text" name="naamProductToevoegen"><br>
-			hoeveelheid <input type="number" id="hoeveelheidProductToevoegen" name="hoeveelheidProductToevoegen"><br>
-			<br>
-			<span id="ProductToevoegen" class="defaultButton">
-				<a class="defaultText" id="productToevoegenKnop">Toevoegen!</a>
-			</span>
-			<span id="annuleerProductAnnuleren" class="defaultButton">
-				<a class="defaultText" id="annulerenProductToevoegenKnop">Annuleer</a>
-			</span>
-		</form>
 	</div>
 		
 	<!-- inplannen -->
@@ -400,12 +379,10 @@
 	</div>
 	
 	<!-- Scripts -->
-		<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-	
-	<script src="javascript/home.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 	<script src="javascript/inplannenCard.js"></script>
-	<script src="javascript/errorManager.js"></script>
-	<script src="javascript/inventarisCard.js"></script>
+	<script src="javascript/home.js"></script>
+	<script src="javascript/global.js"></script>
 	<!-- Voor de drag and drop -->
 </body>
 </html>

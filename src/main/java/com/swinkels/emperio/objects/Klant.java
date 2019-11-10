@@ -16,6 +16,13 @@ public class Klant {
 		this.geslacht = geslacht;
 	}
 
+	public Klant(String naam, String email, String tel, String geslacht) {
+		this.naam = naam;
+		this.email = email;
+		this.tel = tel;
+		this.geslacht = geslacht;
+	}
+
 	public Klant(String afspraakKlantGeslacht, String afspraakKlantNaam, Bedrijf bedrijf) {
 		this.geslacht = afspraakKlantGeslacht;
 		this.bedrijf = bedrijf;
@@ -26,8 +33,8 @@ public class Klant {
 		this.naam = klantNaam;
 	}
 
-	//getters and setters
-	
+	// getters and setters
+
 	public int getId() {
 		return id;
 	}
@@ -67,7 +74,7 @@ public class Klant {
 	public String getNaam() {
 		return naam;
 	}
-	
+
 	public Bedrijf getBedrijf() {
 		return bedrijf;
 	}

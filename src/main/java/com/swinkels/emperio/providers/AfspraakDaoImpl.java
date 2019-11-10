@@ -160,13 +160,15 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 
 			PreparedStatement pstmt = con.prepareStatement( 
 					"select a.id, a.timestamp, k.naam as klantnaam, \n" + 
-					"       b.naam as behandelingnaam, b.lengte, b.prijs\n" + 
+					"       b.naam as behandelingnaam, b.lengte, b.prijs, \n" +
+					"		k.email as email, k.geslacht as geslacht, k.telefoon as telefoon \n" +
 					"from klant k join afspraak a on a.klant = k.id \n" + 
 					"             join afspraakbehandeling ab on ab.afspraak = a.id \n" + 
 					"             join bedrijf m on k.bedrijf = m.email \n" + 
 					"             join behandeling b on b.id = ab.behandeling \n" + 
 					"where m.email = '"+bedrijf.getEmail()+"' "+ 
 					"and a.id = "+afspraakId);
+			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				//Behandeling
@@ -186,7 +188,17 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					Date timestamp = ServiceFilter.StringToDateFormatter(timestampString,"yyyy-MM-dd HH:mm");
 					//klant
 					String klantNaam = dbResultSet.getString("klantNaam");
-					Klant klant = new Klant(klantNaam);
+					String klantEmail = dbResultSet.getString("email");
+					if(klantEmail == null) {
+						klantEmail = "-";
+					}
+					String klantTelefoon = dbResultSet.getString("telefoon");
+					if(klantTelefoon == null) {
+						klantTelefoon = "-";
+					}
+					String klantGeslacht = dbResultSet.getString("geslacht");
+					
+					Klant klant = new Klant(klantNaam, klantEmail, klantTelefoon, klantGeslacht);
 				
 					afspraak = new Afspraak(id, timestamp, klant);
 					afspraak.addBehandeling(behandeling);

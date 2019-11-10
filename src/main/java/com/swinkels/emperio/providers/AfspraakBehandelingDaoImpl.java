@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Behandeling;
-import com.swinkels.emperio.service.ServiceFilter;
 
 public class AfspraakBehandelingDaoImpl extends MariadbBaseDao implements AfspraakBehandelingDao{
 

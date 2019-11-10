@@ -23,7 +23,6 @@ public class UserMariadbDaoImpl extends MariadbBaseDao implements UserDao {
 			}
 		} catch (SQLException e) {
 			System.out.println(" sadasds");
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;

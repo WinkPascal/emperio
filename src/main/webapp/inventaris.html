@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="css/inventaris.css">
+<link rel="stylesheet" type="text/css" href="css/global.css">
+</head>
+<body onload="onload()">
+	<span class="topBar">
+		<input type="button" value="Home" class="defaultButton" id="homeButton">
+		<a>Inventaris</a>
+		<input type="button" value="Settings" class="defaultButton" id="settingButton">
+	</span>
+
+	<div class="inventaris">
+		<div class="controleDiv">
+			<input type="text" id="zoekProductenInput"/>
+			<span class="navigatieButton" id="zoekProductButton">Zoek</span>
+			<input class="defaultButton" type="button" id="voegProductToe" value="Voeg Product Toe!">
+		</div>
+	
+		<div id="inventarisItems">
+		</div>
+		<input type="button" class="defaultButton" id="terugKnop" value="Terug">
+		<input type="button" class="defaultButton" id="volgendeKnop" value="Volgende">
+	</div>
+
+				
+	<!-- product toevoegen -->
+	<div id="ProductToevoegenModal" class="modal">
+		<form id="ProductToevoegenForm" class="modal-content-small">
+			<h2 style="align:center;">Product Toevoegen</h2>
+			naam 		<input id="naamProductToevoegen" type="text" name="naamProductToevoegen"><br>
+			hoeveelheid <input type="number" id="hoeveelheidProductToevoegen" name="hoeveelheidProductToevoegen"><br>
+			<br>
+			<span id="ProductToevoegen" class="defaultButton">
+				<a class="defaultText" id="productToevoegenKnop">Toevoegen!</a>
+			</span>
+			<span id="annuleerProductAnnuleren" class="defaultButton">
+				<a class="defaultText" id="annulerenProductToevoegenKnop">Annuleer</a>
+			</span>
+		</form>
+	</div>	
+	
+	
+	<script src="javascript/global.js"></script>
+	<script src="javascript/inventaris.js"></script>
+</body>
+</html>

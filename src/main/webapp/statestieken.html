@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Inkomsten overzicht</title>
-<link rel="stylesheet" type="text/css" href="css/inkomsten.css">
-<link rel="stylesheet" type="text/css" href="css/home.css">
+	<meta charset="UTF-8">
+	<title>Inkomsten overzicht</title>
+	<link rel="stylesheet" type="text/css" href="css/statestieken.css">
+	<link rel="stylesheet" type="text/css" href="css/home.css">
+	<link rel="stylesheet" type="text/css" href="css/global.css">
 </head>
 <body onload="onload()">
+	<span class="topBar">
+		<input type="button" value="Home" class="defaultButton" id="homeButton">
+		<input type="button" value="Settings" class="defaultButton" id="settingButton">
+		<a>Statestieken</a>
+	</span>
 	<div class="topRow">
 		<div class="timeSelect">
 			<input class="defaultButton" type="button" value="Deze week" id="weekButton"> <br>
@@ -41,6 +47,8 @@
 	</div>
 	
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-	<script src="javascript/inkomsten.js"></script>
+	 <script src="javascript/global.js"></script>	
+	<script src="javascript/statestieken.js"></script>
+	
 </body>
 </html>

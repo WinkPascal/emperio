@@ -22,3 +22,7 @@ function succesMessage(message){
 		messageDiv.remove();
 	}, 1000);
 }
+
+document.getElementById("homeButton").addEventListener("click", function(){
+	location.href = 'home.html';
+})
