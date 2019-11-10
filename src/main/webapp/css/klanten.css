@@ -50,6 +50,10 @@
 	color: white;
 }
 
+.klanten #klantenLijst tr{
+	height: 30px;
+}
+
 .klanten #klantenLijst tr:hover {
 	background-color: #4CAF50;
 	color: white;

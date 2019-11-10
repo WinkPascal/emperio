@@ -116,8 +116,6 @@ document.getElementById("inkomstenCard").addEventListener("click", function(){
 	location.href = 'statestieken.html';
 })
 
-
-
 document.getElementById("inplannenCard").addEventListener("click", function() {
 	inplannenCard();
 })
