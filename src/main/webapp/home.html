@@ -5,6 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="css/home.css">
 	<link rel="stylesheet" type="text/css" href="css/inplannenCard.css">
 	<link rel="stylesheet" type="text/css" href="css/klantenCard.css">
+	<link rel="stylesheet" type="text/css" href="css/klantenPaginaBeheer.css">
 	<link rel="stylesheet" type="text/css" href="css/global.css">
 	<link rel="stylesheet" type="text/css" href="css/instellingenCard.css">
 	<!-- edit icon -->
@@ -125,12 +126,12 @@
 			</div>
 		</div>
 		
-		<div class="card" id="klantPaginaInstel">
+		<div class="card" id="klantenPaginaBeheer">
 			<img class="cardImg"
 				src="https://www.workana.com/i/wp-content/uploads/2019/02/buyer-personas.jpg">
 			<div class="container">
 				<h4>
-					<b>klantPaginaInstel</b>
+					<b>klantenPaginaBeheer</b>
 				</h4>
 			</div>
 		</div>
@@ -398,9 +399,46 @@
 		</div>
 	</div>
 	
+	
+	<div id="klantenPaginaBeheerModal" class="modal">
+		<div class="klantenPaginaBeheerModal-content" id="KlantenPaginaBeheerModalContent">
+			<h2>klantenPaginaBeheer</h2>
+			<div class="contact">
+				<a>verplichte contact</a><br>
+				Email: <input type="radio" id="emailPrimary" name="contact"><br>
+				Telefoon: <input type="radio" id="phonePrimary" name="contact">
+			</div>
+			<div class="backgroundKlantPagina">
+				<a>Achtergrond</a><br>
+				<input type="image">
+			</div>		
+			<div class="invoervelden">
+				<a>Invoervelden</a><br>
+				<span>
+					Telefoon 
+					<input type="checkbox" name="invoerveld" id="telefoonInvoerVeld">
+				</span><br>
+				<span>
+					Email: 
+					<input type="checkbox" name="invoerveld" id="emailInvoerVeld">
+				</span><br>
+				<span>
+					Adres: 
+					<input type="checkbox" name="invoerveld" id="adresInvoerVeld">
+				</span>
+			</div>
+			<div class="controle">
+				<input type="button" value="Opslaan" id="opslaanKlantenBeheer" class="defaultButton">
+				<input type="button" value="Sluit" id="sluitKlantenBeheer" class="defaultButton">
+			</div>
+			
+		</div>
+	</div>
+	
 	<!-- Scripts -->
 	<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 	<script src="javascript/inplannenCard.js"></script>
+	<script src="javascript/klantenBeheerPagina.js"></script>
 	<script src="javascript/home.js"></script>
 	<script src="javascript/global.js"></script>
 	<!-- Voor de drag and drop -->

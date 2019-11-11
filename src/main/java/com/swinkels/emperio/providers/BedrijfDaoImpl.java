@@ -164,6 +164,22 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		}
 		return false;
 	}
-
 	
+	public boolean setInvoerKlant(Bedrijf bedrijf, String contact, boolean telefoon, boolean email, boolean adres) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"UPDATE bedrijf"+
+					" SET invoerveldEmail = "+email+", \n" + 
+					"invoerveldTelefoon = "+telefoon+", \n" + 
+					"invoerveldAdres = "+adres+",\n" + 
+					"verplichtContactVeld = 'email'\n" + 
+					"WHERE email='"+ bedrijf.getEmail()+"';");
+			System.out.println(pstmt);
+			pstmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return false;
+	}	
 }

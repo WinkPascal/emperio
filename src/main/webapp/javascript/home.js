@@ -126,6 +126,10 @@ function inplannenCard(){
 	inplannenGeslachtKiezen();
 }
 
+document.getElementById("klantenPaginaBeheer").addEventListener("click", function() {
+	onloadKlantenBeheer();
+})
+
 document.getElementById("logoutButton").addEventListener("click", function() {
 	logoutButton();
 })

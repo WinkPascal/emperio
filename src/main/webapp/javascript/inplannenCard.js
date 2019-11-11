@@ -10,7 +10,6 @@ function volgendeKnopInplannen(){
 			alert("selecteer eerst een behandeling");
 		} else{
 			// het geslacht en behandeling is ingevuld
-
 			status = "datum";
 			document.getElementById("inplannenDatum").style.display = "block";
 			document.getElementById("inplannenGeslacht").style.display = "none";

@@ -19,4 +19,6 @@ public interface BedrijfDao {
 	public ArrayList<Bedrijf> getBedrijven(int page);
 
 	public boolean saveBedrijf(Bedrijf bedrijf);
+
+	public boolean setInvoerKlant(Bedrijf bedrijf, String contact, boolean telefoon, boolean email, boolean adres);
 }

@@ -1,8 +1,7 @@
 function onload(){
 	datum = new Date();
 	getRooster();
-	// afspraken van huidige week ophalen
-	getAfspraken(datum, true);
+
 }
 
 function createAfspraakRooster(beginTijd ,lengte, klant, prijs){
@@ -13,6 +12,9 @@ function createAfspraakRooster(beginTijd ,lengte, klant, prijs){
 	var klasse2 = localStorage.getItem("klasse2");
 	var klasse3 = localStorage.getItem("klasse3");
 
+	var beginMinuutRooster = parseInt(sessionStorage.getItem('beginMinuutRooster'));
+	var beginUurRooster = parseInt(sessionStorage.getItem('beginUurRooster'));
+	
 	if(prijs <  klasse1 && prijs > 0){
 		event.style.backgroundColor= getComputedStyle(document.documentElement)
 	    .getPropertyValue("--afspraakKlasse1");
@@ -85,12 +87,10 @@ function getRooster(){
 		weekdagen[4] = "Donderdag";
 		weekdagen[5] = "Vrijdag";
 		weekdagen[6] = "Zaterdag";
-		aantalDagen = 0;
-		beginUurRooster = 0;
-		beginMinuutRooster = 0;
+		this.aantalDagen = 0;
 
-		eindUurRooster = 0;
-		eindMinuutRooster = 0;
+		var eindUurRooster = 0;
+		var eindMinuutRooster = 0;
 
 		for(let dag of dagen){
 			if(i == 1){
@@ -107,6 +107,10 @@ function getRooster(){
 				eindMinuut = parseInt(eindTijd[1]);
 				eindMinuutRooster=eindMinuut;
 
+				//wordt gebruikt bij het maken van de afspraken 
+				sessionStorage.setItem('beginMinuutRooster', beginMinuutRooster);
+				sessionStorage.setItem('beginUurRooster', beginUurRooster);
+				
 				var ul = document.createElement('ul');
 				while(true){
 					var timeLi = document.createElement('li');
@@ -150,7 +154,6 @@ function getRooster(){
 				maandag.setDate(maandag.getDate() + dag.weekNummer);
 
 				var dagDate = formatDate(maandag);
-
 				
 				var weekDate = document.createElement('a');
 				weekDate.setAttribute('id', "dagDate"+dag.weekNummer);
@@ -210,18 +213,21 @@ function getRooster(){
 		for(m = 0; m < dagen.length; m++) {
 			dagen[m].style.width = breedte +"%";
 		}
+		document.getElementById("weekTerug").addEventListener("click", function(){
+			datum.setDate(datum.getDate() - 7);
+			getAfspraken(datum, false);
+		});
+
+		document.getElementById("weekVerder").addEventListener("click", function(){
+			datum.setDate(datum.getDate() + 7);
+			getAfspraken(datum, false);
+		});
+		// afspraken van huidige week ophalen
+		getAfspraken(datum, true);
 	})
 }
 
-document.getElementById("weekTerug").addEventListener("click", function(){
-	datum.setDate(datum.getDate() - 7);
-	getAfspraken(datum, false);
-});
 
-document.getElementById("weekVerder").addEventListener("click", function(){
-	datum.setDate(datum.getDate() + 7);
-	getAfspraken(datum, false);
-});
 
 function getAfspraken(datum, onload){	
 	// alle afspraken worden uit het rooster gehaalt
@@ -281,7 +287,9 @@ function getAfspraken(datum, onload){
 			var afspraakLengte = uurLengte+":"+minuutLente;
 			var top = afspraak.timestamp.substring(16, 11);
 			var klant = afspraak.klant;
- 			var event = createAfspraakRooster(top, afspraakLengte, klant, prijs, afspraakLengte);
+
+			
+ 			var event = createAfspraakRooster(top, afspraakLengte, klant, prijs);
  
  			event.setAttribute('id', afspraak.id);
  			afsprakenLijst.push(event);
