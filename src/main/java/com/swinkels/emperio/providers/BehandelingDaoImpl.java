@@ -18,6 +18,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select * from behandeling where geslacht = '"+geslacht+"' and bedrijf = '"+bedrijf+"'");
+			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");

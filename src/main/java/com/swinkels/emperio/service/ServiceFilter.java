@@ -8,21 +8,19 @@ import java.util.regex.Pattern;
 
 public class ServiceFilter {
 	
-	public static String emailCheck(String email) {
+	public static boolean emailCheck(String email) {
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
 
         if(mat.matches()){
-        	return "email";
-        }if(email.length() == 0){
-        	return "leeg";
+        	return true;
         } else {
-            return "fout";	
+            return false;	
         }
     }
 	
 	public static boolean phoneCheck(String phone) {
-		if(phone.length() != 0) {
+		if(phone.length() > 9 || phone.length() < 13) {
 			return true;
 		} else {
 			return false;

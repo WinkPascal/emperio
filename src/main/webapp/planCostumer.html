@@ -5,55 +5,68 @@
 	<link rel="stylesheet" type="text/css" href="css/global.css">
 	<link rel="stylesheet" type="text/css" href="css/planCostumer.css">
 </head>
-<body onload="onload()">
-			<!-- inplannen -->
-		<h1 style="color: white; left: 45%;" id="bedrijfNaam">Bedrijf</h1>
-		<div class="inplan-content" id="inplannenModalContent">
-			<div class="topBarInplannen">
-				<input type="button" class="defaultButton"  id="terugInplannen" value="Annuleer"/>
-				<input type="button" class="defaultButton"  id="volgendeInplannen" value="Volgende"/>
-			</div>
+	<body onload="onload()">
+		<!-- inplannen -->
+		<div id="mySidebar" class="sidebar">
+		  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+		  <br>
+		  <a href="#">Email</a>
+		  <a href="#">Telefoon</a>
+		  <a href="#">Adres</a>
+		</div>
+		<span id="openContactBar" onclick="openNav()">☰ Contact</span>
+		<div class="topBar">
+			<span id="bedrijfsnaam">Bedrijf</span>
+		</div>
 			
+		<div class="inplanDiv">				
 			<!-- overzicht inplannen -->
 			<form class="inplannenForm" id="inplannenForm">
-				<div class="rechtsInplanForm">
-					<div id="inplanBehandelingenForm">
-						
-						<h4><i class="material-icons">&#xe254;</i>Behandelingen</h4><br>
-					</div>
+				<div class="behandelingenOverzicht">
+					<h4>Behandelingen</h4>
+					<div id="inplanBehandelingenForm"></div>
 					<div class="blokkenOverzicht">
-						<div class="inplanBlokOverzicht" id="lengteAfspraakFormDiv">
+						<div class="totaalLengte">
 							<a>Lengte: </a>
 							<span class="afspraakBlokWaarde" id="lengteAfspraakForm">0:00</span>
 						</div>
-						<div class="inplanBlokOverzicht" id="prijsAfspraakFormDiv">
+						<div class="totaalPrijs" >
 							<a>Totaal: €</a>
-							<span class="afspraakBlokWaarde" id="prijsAfspraakForm"></span>
+							<span class="afspraakBlokWaarde" id="prijsAfspraakForm">0.00</span>
 						</div>
 					</div>
-					<div id="datumInplanFormDiv">
-						<i class="material-icons">&#xe254;</i>
-						<a>Datum:</a><a id="datumInplanForm"></a>
-						<br>
-						<i class="material-icons">&#xe254;</i>
-						<a>Tijd:</a><a id="tijdInplanForm"></a>
-					</div>
-
+				</div>
+				
+				<div id="datumInplanFormDiv">
+					
 				</div>
 				<div id="klantInfo">
-					<h4>klant</h4>
-					<span>Geslacht</span> 
-	
-					<span id="inplanFormGeslacht"></span><br><br>
-					<span>Naam</span> <br>
-					<input type="text" name="klantNaam"><br><br>
+					<h3>klant</h3>
+					<div id="klantGeslacht">
+						<span>Geslacht</span> 
+						<span id="inplanFormGeslacht"></span><br><br>					
+					</div>
 
-					<span>Email</span> <br>
-					<input type="text" name="klantEmail"><br><br>
+					<div id="klantNaam">
+						<span>Naam</span>
+						<input type="text" name="klantNaam"><br>
+					</div>
 
-					<span>Telefoon nummer</span> <br>
-					<input type="text" name="klantTelefoon"><br><br>
-						
+					<div id="klantEmail">
+						<span>Email</span>
+						<input type="text" name="klantEmail">					
+					</div>
+
+					<div id="klantTelefoon">
+						<span>Telefoon nummer</span>
+						<input type="text" name="klantTelefoon">	
+					</div>
+					
+					<div id="klantAdres">
+						<span>Adres</span> 
+						<input type="text" name="klantAdres">	
+					</div>
+
 					<input type="button" id="submitInplanFormButton" class="defaultButton" value="Inplannen">
 				</div>
 			</form>
@@ -65,26 +78,21 @@
 					<input type="button" id="geslachtVrouw" class="geslachtButton" value="Vrouw">
 					<input type="button" id="geslachtJongen" class="geslachtButton" value="Meisje">
 					<input type="button" id="geslachtMeisje" class="geslachtButton" value="Jongen">
-					<input type="button" id="optiesBehandeling" class="optieButton" value=":" >
+					<input type="button" class="defaultButton"  id="volgendeInplannen" value="Volgende"/>
 				</div>
-				<div class="behandelingenOpties" id="behandelingenOpties">
-					<input id="inplannenBehnadelingToevoegen" class="optieButtonBehandeling" value="Behandeling toevoegen">
-					<input id="inplannenTijdelijkeBehnadelingToevoegen" class="optieButtonBehandeling" value="Tijdelijke behandeling">
-				</div>
-			
+
 				<div id="behandelingenKeuzeLijst">
 					<!-- De behandelingen waar uit gekozen kan worden -->
 				</div>
 			</div>
-
+	
 			<!-- tweede scherm -->
 			<div id="inplannenDatum" class="inplannenRechts">
 				<div class="navigatieTijdslotKiezenKiezen">
+					<input type="button" class="defaultButton"  id="terugInplannen" value="Terug"/>
+					
 					<input type="button" class="defaultButton" id="weekTerugInplannen" value="Week terug">
-				
-					<input type="button" class="defaultButton" id="terugDag" value="< Week">	
-					<input type="button" class="defaultButton" id="terugDag" value="< Dag">	
-				
+								
 					<input type="button" id="weekVerderInplannen" class="defaultButton" value="Week verder">
 				</div>
 				<div id="dagenLijst">
@@ -95,18 +103,20 @@
 			<!-- tijd inplannen -->
 			<div id="inplannenTijd" class="inplannenRechts">
 				<div class="stelTijdInTextdiv">
+					<input type="button" class="defaultButton" id="terugDag" value="< Terug">	
+				
 					<span id="stelTijdInText">
 						<img width="150px" height="150px" src="https://www.stickpng.com/assets/images/580b57fcd9996e24bc43c44f.png"><br>
 						<a>Sleep de afspraak naar de gewenste tijd.</a>
 					</span>						
-
+	
 					<span id="tijdInstellen">
 						<span id="urenInplannen"></span>
 						:
 						<input type="number" id="minutenInplannen">
 					</span>
 				</div>
-
+	
 				<div id="agendaInplannen">
 					<div id="potentieleAfspraak" class="potentieleAfspraak">
 					</div>
@@ -116,7 +126,10 @@
 		    		</div>
 				</div>
 			</div>
-		</div>	
-		<script src="javascript/inplannenCard.js"></script>
+		</div>		
+		
+		<script src="javascript/planCostumer.js"></script>
+		<script src="javascript/global.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 	</body>
 </html>

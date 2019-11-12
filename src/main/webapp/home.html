@@ -403,29 +403,40 @@
 	<div id="klantenPaginaBeheerModal" class="modal">
 		<div class="klantenPaginaBeheerModal-content" id="KlantenPaginaBeheerModalContent">
 			<h2>klantenPaginaBeheer</h2>
+			<div class="backgroundKlantPagina">
+				<a>Informatie</a><br>
+				<span>Email</span><input type="text"><br>
+				<span>Telefoon</span><input type="text"><br>
+				<span>Adres</span><input type="text"><br>
+			</div>	
 			<div class="contact">
 				<a>verplichte contact</a><br>
-				Email: <input type="radio" id="emailPrimary" name="contact"><br>
-				Telefoon: <input type="radio" id="phonePrimary" name="contact">
-			</div>
-			<div class="backgroundKlantPagina">
-				<a>Achtergrond</a><br>
-				<input type="image">
-			</div>		
+				<label class="container">Email: 
+					<input type="radio" id="emailPrimary" name="contact">
+					<span class="checkmark"></span>
+				</label>
+				<label class="container">Telefoon: 
+					<input type="radio" id="phonePrimary" name="contact">
+					<span class="checkmark"></span>
+				</label>	
+			</div>	
 			<div class="invoervelden">
-				<a>Invoervelden</a><br>
-				<span>
-					Telefoon 
+			
+				<label class="container">Telefoon: 
 					<input type="checkbox" name="invoerveld" id="telefoonInvoerVeld">
-				</span><br>
-				<span>
-					Email: 
-					<input type="checkbox" name="invoerveld" id="emailInvoerVeld">
-				</span><br>
-				<span>
-					Adres: 
-					<input type="checkbox" name="invoerveld" id="adresInvoerVeld">
-				</span>
+				  	<span class="checkmark"></span>
+				</label>
+				<label class="container">Email adres: 
+				  	<input type="checkbox" name="invoerveld" id="emailInvoerVeld">
+				  	<span class="checkmark"></span>
+				</label>
+				<label class="container">Adres: 
+				  	<input type="checkbox" name="invoerveld" id="adresInvoerVeld">
+				 	<span class="checkmark"></span>
+				</label>
+			</div>
+			<div>
+				<h2>Vakanties en vrije dagen inplannen</h2>
 			</div>
 			<div class="controle">
 				<input type="button" value="Opslaan" id="opslaanKlantenBeheer" class="defaultButton">

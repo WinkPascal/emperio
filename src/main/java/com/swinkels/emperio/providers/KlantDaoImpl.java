@@ -136,7 +136,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 	}
 
 	public Klant getKlant(Bedrijf bedrijf, int id) {
-		
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"SELECT naam, geslacht, email, telefoon "
@@ -160,5 +159,43 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public Klant getKlantIdByEmail(Klant klant) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"select id from klant where " +
+				    "bedrijf = '"+ klant.getBedrijf().getEmail() + "' " + 
+				    "AND naam = '" + klant.getNaam() + "' " +
+				    "AND email = '"+klant.getEmail()+"'");
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				int id = dbResultSet.getInt("id");
+				klant.setId(id);	
+				return klant;
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return klant;
+	}
+
+	public Klant getKlantIdByPhone(Klant klant) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"select id from klant where " +
+				    "bedrijf = '"+ klant.getBedrijf().getEmail() + "' " + 
+				    "AND naam = '" + klant.getNaam() + "' " +
+				    "AND telefoon = '"+klant.getTel()+"'");
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				int id = dbResultSet.getInt("id");
+				klant.setId(id);	
+				return klant;
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return klant;
 	}
 }

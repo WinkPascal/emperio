@@ -6,6 +6,10 @@ public class Bedrijf {
 	private String tel;
 	private String adres;
 	private String wachtwoord;
+	private String verplichtContactVeld;
+	private boolean invoerveldEmail;
+	private boolean invoerveldTelefoon;
+	private boolean invoerveldAdres;
 	
 	public Bedrijf(String bedrijfsNaam) {
 		this.email = bedrijfsNaam;
@@ -18,6 +22,38 @@ public class Bedrijf {
 		this.adres = adres;
 	}
 	
+	public String getVerplichtContactVeld() {
+		return verplichtContactVeld;
+	}
+
+	public void setVerplichtContactVeld(String verplichtContactVeld) {
+		this.verplichtContactVeld = verplichtContactVeld;
+	}
+
+	public boolean getInvoerveldEmail() {
+		return invoerveldEmail;
+	}
+
+	public void setInvoerveldEmail(boolean invoerveldEmail) {
+		this.invoerveldEmail = invoerveldEmail;
+	}
+
+	public boolean getInvoerveldTelefoon() {
+		return invoerveldTelefoon;
+	}
+
+	public void setInvoerveldTelefoon(boolean invoerveldTelefoon) {
+		this.invoerveldTelefoon = invoerveldTelefoon;
+	}
+
+	public boolean getInvoerveldAdres() {
+		return invoerveldAdres;
+	}
+
+	public void setInvoerveldAdres(boolean invoerveldAdres) {
+		this.invoerveldAdres = invoerveldAdres;
+	}
+
 	public Bedrijf(String email, String naam, String tel, String adres, String wachtwoord) {
 		this.email = email;
 		this.naam = naam;
@@ -26,6 +62,9 @@ public class Bedrijf {
 		this.wachtwoord = wachtwoord;
 	}
 	
+	public Bedrijf() {
+	}
+
 	public String getWachtwoord() {
 		return wachtwoord;
 	}

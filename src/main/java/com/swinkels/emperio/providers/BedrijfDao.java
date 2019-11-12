@@ -21,4 +21,6 @@ public interface BedrijfDao {
 	public boolean saveBedrijf(Bedrijf bedrijf);
 
 	public boolean setInvoerKlant(Bedrijf bedrijf, String contact, boolean telefoon, boolean email, boolean adres);
+
+	public Bedrijf getKlantPaginaSettings(Bedrijf bedrijf);
 }

@@ -1,23 +1,78 @@
 @charset "UTF-8";
-body{
-	background-image:  url("https://backgroundcheckall.com/wp-content/uploads/2017/12/netflix-background-9.jpg");
+
+body {
+	overflow: hidden;
 }
 
-.inplan-content {
-  	position: absolute;
-  	top: 50%;
-  	-ms-transform: translateY(-50%);
-  	transform: translateY(-50%);
-	background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */	
+#openContactBar {
+	position: absolute;
+	margin: 10px;
+	font-size: 30px;
+	background-color: #111;
+	height: 40px;
+	z-index: 1;
+	color: white;
+	text-align: center;
+}
+
+.sidebar {
+	height: 100%;
+	width: 250px;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: #111;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 60px;
+}
+
+.sidebar a {
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	font-size: 25px;
+	color: #818181;
+	display: block;
+	transition: 0.3s;
+}
+
+.sidebar a:hover {
+	color: #f1f1f1;
+}
+
+.sidebar .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+}
+
+.openbtn {
+	font-size: 20px;
+	cursor: pointer;
+	background-color: #111;
+	color: white;
+	padding: 10px 15px;
+	border: none;
+}
+
+.openbtn:hover {
+	background-color: #444;
+}
+
+.inplanDiv {
+	left: 0px;
+	top: 60px;
 	left: 300px;
-	padding: 20px;
-	width: 1200px;
-	height: 650px;
-	border: 1px solid #888;
-	border-radius: 20px;
+	width: calc(100% - 300px);
+	height: 100%;
+	position: absolute;
 }
 
 .topBarInplannen {
+	width: 100%;
 	height: 50px;
 }
 
@@ -39,35 +94,28 @@ body{
 
 /* overzicht links */
 .inplannenForm {
-	position: relative;
-	width: 300px;
-	height: 500px;
-	border-radius: 5px;
-	border: 1px solid black;
+	float: left;
+	height: 90%;
 	margin: 30px;
-	background-color: white;
+	top: 80px;
+	border-right: 1px solid blue; background-color : white;
 	float: left;
 	width: 30%;
+	background-color: white;
 }
 
-.material-icons{
-	font-size:15px; 
-	border: 1px solid black;
-}
-
-.inplannenForm #inplanBehandelingenForm {
-	border: 1px solid black;
+.inplannenForm .behandelingenOverzicht {
 	text-align: center;
-	width: 350px;
+	width: 100%;
+	max-height: calc(100% - 350px);
 	overflow: scroll;
-	height: 200px;
 }
 
 .inplannenForm .inplannenBehandelingOverzicht {
 	display: inline-block;
 	border-bottom: 1px solid gray;
-	margin: 5px;
-	height: 30px;
+	margin: 5%;
+	height: 50px;
 	width: 90%;
 }
 
@@ -76,19 +124,16 @@ body{
 }
 
 .inplannenForm #klantInfo {
-	display: none;
 	float: right;
 	margin: 0px;
-	width: 400px;
-	text-align: center;
-	border: 1px solid black;
+	width: 100%;
+	height: 300px;
 }
 
 .inplannenForm .rechtsInplanForm {
 	width: 350px;
 	float: left;
 	margin: 0px;
-	border: 1px solid black;
 }
 
 .inplannenForm .dagGekozen {
@@ -101,16 +146,33 @@ body{
 }
 
 .inplannenForm .blokkenOverzicht {
-	border: 1px solid black;
-	width: 350px;
+	width: 100%;
 	height: 50px;
 }
 
-.inplannenForm .inplanBlokOverzicht {
-	margin-left: 30px;
-	width: 100px;
+.inplannenForm .totaalLengte {
+	float: left;
+	margin-left: 25px;
 }
 
+.inplannenForm .totaalPrijs {
+	float: right;
+	margin-right: 25px;
+}
+
+.inplannenForm #datumInplanFormDiv {
+	width: 100%;
+}
+.inplannenForm #datumInplanFormDiv {
+	display: none;
+	width: 100%;
+	height: 50px;
+	border: 2px solid blue;
+	border-radius: 5px;
+	text-align: center;
+
+}
+	
 .inplannenForm .inplanBlokOverzicht .afspraakBlokWaarde {
 	display: inline-block;
 	height: 40px;
@@ -125,20 +187,14 @@ body{
 	float: right;
 }
 
-.inplannenForm #datumInplanFormDiv {
-	border: 1px solid black;
-	width: 350px;
-	height: 150px;
-}
-
-/* Eerste stap */
 .inplannenRechts {
-	display: none;
+	display: block;
+	height: 90%;
 	float: right;
-	height: 550px;
-	border: 1px solid black;
-	width: 750px;
+	width: 60%;
 	overflow: hidden;
+	margin: 30px;
+	top: 80px;
 }
 
 .inplannenRechts .geslachtButton {
@@ -152,44 +208,6 @@ body{
 }
 
 .inplannenRechts .geslachtButton:hover {
-	background-color: blue;
-	color: white;
-}
-
-.inplannenRechts .optieButton {
-	width: 40px;
-	height: 40px;
-	border: 1px solid blue;
-	border-radius: 50%;
-	background-color: white;
-	color: blue;
-}
-
-.inplannenRechts .optieButton:hover {
-	background-color: blue;
-	color: white;
-}
-
-.inplannenRechts .behandelingenOpties {
-	display: none;
-	height: 60px;
-	width: 100%;
-	border-top: 1px solid blue;
-	border-bottom: 1px solid blue;
-}
-
-.inplannenRechts .behandelingenOpties .optieButtonBehandeling {
-	width: 180px;
-	height: 40px;
-	border: 1px solid blue;
-	border-radius: 5%;
-	color: blue;
-	background-color: white;
-	margin: 10px;
-	margin-left: 100px;
-}
-
-.inplannenRechts .optieButtonBehandeling:hover {
 	background-color: blue;
 	color: white;
 }
@@ -267,9 +285,9 @@ body{
 	margin-left: 20%;
 	margin-top: 10px;
 	height: 30px;
-	border: 2px solid red;
-	border-radius: 5px;
+	border: 2px solid red; border-radius : 5px;
 	text-align: center;
+	border-radius: 5px;
 }
 
 /* Derde stap */
@@ -307,11 +325,11 @@ body{
 	float: right;
 	height: 100%;
 	overflow: scroll;
-    position: relative;
+	position: relative;
 }
 
-.inplannenRechts #agendaInplannen ul{
-	  list-style-type: none;
+.inplannenRechts #agendaInplannen ul {
+	list-style-type: none;
 }
 
 .inplannenRechts #agendaInplannen .potentieleAfspraak {
@@ -321,7 +339,6 @@ body{
 	width: 320px;
 	color: #fff;
 	background-color: #29e;
-	
 	touch-action: none;
 	-webkit-transform: translate(0px, 0px);
 	transform: translate(0px, 0px);
@@ -329,15 +346,16 @@ body{
 }
 
 .inplannenRechts #agendaInplannen .timelineInplanAgenda {
-    display : block;
+	display: block;
 	z-index: 1;
-    top: 0px;
+	top: 0px;
 	height: 100%;
 	position: absolute;
 	width: 100%;
 }
-.inplannenRechts #agendaInplannen .timelineInplanAgenda ul{
-	margin: 0px; 
+
+.inplannenRechts #agendaInplannen .timelineInplanAgenda ul {
+	margin: 0px;
 }
 
 /* elke streep */
@@ -358,20 +376,19 @@ body{
 }
 
 .inplannenRechts #agendaInplannen .roosterInplanAgenda {
-    display: block;
+	display: block;
 	top: 0px;
 	height: 100%;
 	width: 100%;
-	
 }
 
-.inplannenRechts #agendaInplannen .roosterInplanAgenda .nietBeschikbaarAfspraak {
+.inplannenRechts #agendaInplannen .roosterInplanAgenda .nietBeschikbaarAfspraak
+	{
 	z-index: 1;
 	width: 320px;
 	position: absolute;
 	margin-left: 100px;
 }
-
 
 #behandelingenOptions {
 	border-radius: 50%;
@@ -403,52 +420,3 @@ body{
 	animation-name: zoom;
 	animation-duration: 0.6s;
 }
-
-.afspraak-content .klantInfo {
-	float: left;
-	width: 50%;
-	border: 1px solid black;
-	height: 100%;
-}
-
-.afspraak-content .klantInfo span {
-	font-size: 20px;
-	margin: 5px;
-}
-
-.afspraak-content .klantInfo #sluitAfspraakInfo {
-	bottom: 0px;
-	left: 10px;
-}
-
-.afspraak-content .klantInfo #mailKlantAfspraak {
-	bottom: 0px;
-	right: 0px;
-}
-
-.afspraak-content .afspraakInfo {
-	font-size: 20px;
-	float: right;
-	border: 1px solid black;
-	width: 50%;
-	height: 100%;
-}
-
-.afspraak-content .afspraakInfo #behandelingenLijst {
-	top: 40%;
-	border: 1px solid black;
-	width: 100%;
-	height: 60%;
-	align: center;
-	overflow: scroll;
-}
-
-.afspraak-content .afspraakInfo #behandelingenLijst .behandelingSpan {
-	margin-left: 10%;
-	width: 80%;
-	display: inline-block;
-	margin-top: 5px;
-	font-size: 18px;
-	border-bottom: 1px solid black;
-}
-

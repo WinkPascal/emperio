@@ -172,7 +172,7 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 					" SET invoerveldEmail = "+email+", \n" + 
 					"invoerveldTelefoon = "+telefoon+", \n" + 
 					"invoerveldAdres = "+adres+",\n" + 
-					"verplichtContactVeld = 'email'\n" + 
+					"verplichtContactVeld = '"+contact+"'\n" + 
 					"WHERE email='"+ bedrijf.getEmail()+"';");
 			System.out.println(pstmt);
 			pstmt.executeUpdate();
@@ -182,4 +182,34 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		}
 		return false;
 	}	
+	
+	public Bedrijf getKlantPaginaSettings(Bedrijf bedrijf) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"SELECT verplichtContactVeld, "
+					+ "invoerveldEmail, "
+					+ "invoerveldTelefoon, "
+					+ "invoerveldAdres "
+					+ "FROM bedrijf "
+					+ "WHERE email = '"+bedrijf.getEmail()+"';");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				String verplichtContactVeld = dbResultSet.getString("verplichtContactVeld");
+				boolean invoerveldEmail = dbResultSet.getBoolean("invoerveldEmail");
+				boolean invoerveldTelefoon = dbResultSet.getBoolean("invoerveldTelefoon");
+				boolean invoerveldAdres = dbResultSet.getBoolean("invoerveldAdres");
+				bedrijf.setVerplichtContactVeld(verplichtContactVeld);
+				bedrijf.setInvoerveldEmail(invoerveldEmail);
+				bedrijf.setInvoerveldTelefoon(invoerveldTelefoon);
+				bedrijf.setInvoerveldAdres(invoerveldAdres);
+				return bedrijf;
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}		
+		return bedrijf;
+	}
+
+
 }

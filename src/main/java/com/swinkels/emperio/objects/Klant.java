@@ -22,13 +22,12 @@ public class Klant {
 		this.tel = tel;
 		this.geslacht = geslacht;
 	}
-
-	public Klant(String afspraakKlantGeslacht, String afspraakKlantNaam, Bedrijf bedrijf) {
-		this.geslacht = afspraakKlantGeslacht;
-		this.bedrijf = bedrijf;
-		this.naam = afspraakKlantNaam;
+	
+	public Klant(String naam, String email, String tel, String geslacht, Bedrijf bedrijf) {
+		
 	}
 
+	
 	public Klant(String klantNaam) {
 		this.naam = klantNaam;
 	}

@@ -53,10 +53,6 @@ public class PlanProvider {
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String getBehandelingenByGeslacht(@Context SecurityContext sc, @PathParam("geslacht") String geslacht) {
-		// uitvoer
-		// per behandeling
-		// id, naam ,beschrijving, lengte, prijs
-		// haal de behandelingen op
 		ArrayList<Behandeling> behandelingen = behandelingDao.behandelingenByGeslacht(geslacht,
 				sc.getUserPrincipal().getName());
 		JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -268,32 +264,4 @@ public class PlanProvider {
 		return Response.ok().build();
 	}
 
-	// wordt gebruikt bij
-	// behandeling maken
-	//uitvoer
-	// response
-	// ok
-	// error
-	@POST
-	@RolesAllowed("user")
-	@Path("/behandeling")
-	@Produces("application/json")
-	public Response setBehandeling(@Context SecurityContext sc, @FormParam("naam") String naam,
-			@FormParam("beschrijving") String beschrijving, @FormParam("prijs") double prijs,
-			@FormParam("uur") String uur, @FormParam("minuten") String minuten,
-			@FormParam("geslachten") String geslachten) {
-		String bedrijfsNaam = sc.getUserPrincipal().getName();
-		Bedrijf bedrijf = new Bedrijf(bedrijfsNaam);
-		String lengteString = uur + ":" + minuten;
-		Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
 
-		JSONArray jsonArray = new JSONArray(geslachten);
-		for (int i = 0; i < jsonArray.length(); i++) {
-			Behandeling behandeling = new Behandeling(bedrijf, naam, beschrijving, prijs, lengte,
-					jsonArray.get(i).toString());
-			behandelingDao.setBehandeling(behandeling);
-		}
-
-		return Response.ok().build();
-	}
-}

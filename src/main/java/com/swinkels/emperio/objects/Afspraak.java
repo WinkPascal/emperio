@@ -44,6 +44,11 @@ public class Afspraak {
 		return behandelingen;
 	}
 
+	public void setBehandelingen(ArrayList<Behandeling> behandelingen) {
+		this.behandelingen = behandelingen;
+	}
+
+	
 	public void setPrijs(double prijs) {
 		this.prijs = prijs;
 	}

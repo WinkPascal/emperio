@@ -177,3 +177,65 @@ function settingsButton(){
 	voegBehandelingItemToe();
 }
 
+//hier worden behandelingen toegevoegd
+document.getElementById("inplannenBehnadelingToevoegen").addEventListener("click", function(){
+	behandelignToevoegenForm();
+})
+
+function behandelignToevoegenForm(){
+	geslachten = [];
+	
+	document.getElementById("BehandelingToevoegenModal").style.display = "block";
+	document.getElementById("inplannenModal").style.display = "none";
+	
+	document.getElementById("annuleerBehandelingAnnuleren").addEventListener("click", function(){
+		document.getElementById("BehandelingToevoegenModal").style.display = "none";
+		document.getElementById("inplannenModal").style.display = "block";
+	})
+	
+	document.getElementById("geslachtManToevoegen").addEventListener("click", function(){
+		if(behandelingManager("man")){
+			document.getElementById("geslachtManToevoegen").style.background = "blue";
+		} else{
+			document.getElementById("geslachtManToevoegen").style.background = "white";
+		}
+	})
+	document.getElementById("geslachtVrouwToevoegen").addEventListener("click", function(){
+		if(behandelingManager("vrouw")){
+			document.getElementById("geslachtVrouwToevoegen").style.background = "blue";
+		} else{
+			document.getElementById("geslachtVrouwToevoegen").style.background = "white";
+		}
+	})	
+	document.getElementById("geslachtJongenToevoegen").addEventListener("click", function(){
+		if(behandelingManager("jongen")){
+			document.getElementById("geslachtJongenToevoegen").style.background = "blue";
+		} else{
+			document.getElementById("geslachtJongenToevoegen").style.background = "white";
+		}
+	})	
+	document.getElementById("geslachtMeisjeToevoegen").addEventListener("click", function(){
+		if(behandelingManager("meisje")){
+			document.getElementById("geslachtMeisjeToevoegen").style.background = "blue";
+		} else{
+			document.getElementById("geslachtMeisjeToevoegen").style.background = "white";
+		}
+	})
+
+	function behandelingManager(geslacht){
+		if(geslachten.includes(geslacht)){
+			for( var i = 0; i < geslachten.length; i++){ 
+				if (geslachten[i] === geslacht) {
+					geslachten.splice(i, 1); 
+					i--;
+					return false;
+				}
+			}
+			
+		} else{
+			geslachten.push(geslacht);
+			return true;
+		}
+	}
+}
+
