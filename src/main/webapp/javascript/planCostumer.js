@@ -14,37 +14,13 @@ function onload(){
 	.then(response => response.json())
 	.then(function(data){
 		for(let dataPunten in data){
-			document.getElementById("klantEmail").hidden = data.invoerveldEmail;
-			document.getElementById("klantTelefoon").hidden = data.invoerveldTelefoon;
-			document.getElementById("klantAdres").hidden = data.invoerveldAdres;
+			document.getElementById("klantEmail").hidden = !data.invoerveldEmail;
+			document.getElementById("klantTelefoon").hidden = !data.invoerveldTelefoon;
+			document.getElementById("klantAdres").hidden = !data.invoerveldAdres;
 			document.getElementById("bedrijfsnaam").innerHTML = data.bedrijfEmail;
 		}
 	})
 	inplannenGeslachtKiezen();
-	status = "behandeling"
-
-
-	
-	document.getElementById("terugInplannen").addEventListener("click", function() {
-		terugKnopInplannen();
-	})
-}
-
-function volgendeKnopInplannen(){  
-	// geslacht en behandelingen zijn ingevuld
-
-}
-
-function terugKnopInplannen(){
-	if(status == "datum"){
-		// het geslacht en behandeling is ingevuld
-		status = "behandeling"
-		document.getElementById("dagenLijst").innerHTML = "";
-		document.getElementById("inplannenDatum").style.display = "none";
-		document.getElementById("inplannenGeslacht").style.display = "block";
-		document.getElementById("behandelingenKeuzeLijst").style.display = "block";
-
-	} 
 }
 
 // de eerste functie die word aangeroepen om eet geslacht te kiezen
@@ -94,17 +70,16 @@ function inplannenGeslachtKiezen(){
 
 //de behandelingen voor het gekozen geslacht worden opgehaalt
 function behandelingenOphalen(geslacht){
-	deleteParam("geslacht");
-	deleteParam("behandelingen");
+
 	document.getElementById("inplanBehandelingenForm").innerHTML = "";
 	document.getElementById("lengteAfspraakForm").innerHTML = "0:00";
 	document.getElementById("prijsAfspraakForm").innerHTML = "0.00";
 	document.getElementById("inplanFormGeslacht").innerHTML = geslacht;
 
-	insertParam("geslacht", geslacht);
 	document.getElementById("behandelingenKeuzeLijst").innerHTML = "";
 	let behandelingenLijstFinal = [];
 	var url = window.location.href.split("?")[1];;
+	url = url + "&geslacht="+ geslacht;
 	fetch("restservices/klantenPlanProvider/getBehandelingenByGeslacht/"+ url)
 	.then(response => response.json())
 	.then(function(behandelingen){
@@ -157,7 +132,6 @@ function behandelingenOphalen(geslacht){
 			    }
 				
 			    if(gekozen){
-					insertParam("behandelingen", lijstVanBehandelingen);
 					document.getElementById("d"+behandeling.id).style.backgroundColor = "white";
 				} else{
 					document.getElementById("d"+behandeling.id).style.backgroundColor = "green";
@@ -166,7 +140,6 @@ function behandelingenOphalen(geslacht){
 					inplanVoorbereiding("prijsToevoegen", behandeling.prijs);
 					document.getElementById("prijsAfspraakForm").innerHTML = "€"+ prijs;
 					document.getElementById("lengteAfspraakForm").innerHTML = uren +":"+ minuten;
-					insertParam("behandelingen", behandeling.id);
 					// blok in de lijst wordt aangemaakt
 					var gekozenBehandelingsSpan = document.createElement('span');
 					gekozenBehandelingsSpan.setAttribute('id', behandeling.id);
@@ -189,20 +162,16 @@ function behandelingenOphalen(geslacht){
 		}
 	})
 	document.getElementById("volgendeInplannen").addEventListener("click", function() {
-		if (status == "behandeling"){
-		    let url = new URL(window.document.location);
-		    let params = new URLSearchParams(url.search.slice(1));
-			if(params.has("behandelingen")){
+		console.log(behandelingenLijstFinal.length);
+		if (behandelingenLijstFinal.length > 0){
 				// het geslacht en behandeling is ingevuld
 				document.getElementById("inplannenDatum").style.display = "block";
 				document.getElementById("inplannenGeslacht").style.display = "none";
 				document.getElementById("behandelingenKeuzeLijst").style.display = "none";
 	
-				status = "datum";
 				datumOphalen(geslacht, behandelingenLijstFinal);
-			} else{
-				errorMessage("selecteer eerst een behandeling");
-			}
+		} else{
+			errorMessage("selecteer eerst een behandeling");
 		}
 	})
 }
@@ -250,7 +219,7 @@ function datumOphalen(geslacht, behandelingenLijstFinal){
 			inplanDatum.appendChild(dagSpan);
 			
 			// op elke dag kan geklikt worden
-			dagOphalen(geslacht, behandelingenLijstFinal, dagNummer, datum, formattedDate, weekNaam);
+			dagOphalen(geslacht, behandelingenLijstFinal, dagNummer, formattedDate, weekNaam, datum);
 		}
 	})
 	function getMaandag(d){
@@ -273,7 +242,13 @@ function datumOphalen(geslacht, behandelingenLijstFinal){
 		var year = date.getFullYear();
 		return day + ' ' + monthNames[monthIndex] + ' ' + year;
 	}
-
+	document.getElementById("terugInplannen").addEventListener("click", function() {
+		// het geslacht en behandeling is ingevuld
+		document.getElementById("dagenLijst").innerHTML = "";
+		document.getElementById("inplannenDatum").style.display = "none";
+		document.getElementById("inplannenGeslacht").style.display = "block";
+		document.getElementById("behandelingenKeuzeLijst").style.display = "block"; 	
+	})
 	document.getElementById("weekVerderInplannen").addEventListener("click", function(){
 		var weekMiliSeconden = 7 * 24 * 60 * 60 * 1000;
 		date.setTime(date.getTime() + weekMiliSeconden);
@@ -290,7 +265,7 @@ function datumOphalen(geslacht, behandelingenLijstFinal){
 }
 
 
-function dagOphalen(geslacht, behandelingenLijstFinal, dagNummer, formattedDate, weekNaam){
+function dagOphalen(geslacht, behandelingenLijstFinal, dagNummer, formattedDate, weekNaam, datum){
 	document.getElementById("dagKeuze"+dagNummer).addEventListener("click", function(){
 		//behandelingen lijst toevoeging van datum
 		var dagSpan = document.createElement('span');
@@ -317,9 +292,11 @@ function dagOphalen(geslacht, behandelingenLijstFinal, dagNummer, formattedDate,
 		document.getElementById("inplannenTijd").style.display = "block";
 		
 		var i = 0;
-		insertParam("datum", formattedDate);
 		var url = window.location.href.split("?")[1];
 		
+		datum = datum.getFullYear() +'-'+ datum.getMonth() +'-'+ datum.getDate();
+		
+		url = url +"&datum="+ datum;
 		fetch("restservices/klantenPlanProvider/tijdslotenOphalen/"+url)
 		.then(response => response.json())
 		.then(function(afspraken){
@@ -379,19 +356,19 @@ function dagOphalen(geslacht, behandelingenLijstFinal, dagNummer, formattedDate,
 				}
 			}			
 		});
+		document.getElementById("terugDag").addEventListener("click", function(){
+			document.getElementById("inplannenDatum").style.display = "block";
+			document.getElementById("inplannenTijd").style.display = "none";
+			document.getElementById("timelineInplanAgenda").innerHTML = "";
+			document.getElementById("roosterInplanAgenda").innerHTML = "";
+		})
+		document.getElementById("submitInplanFormButton").addEventListener("click", function(){
+			inplannen(geslacht, behandelingenLijstFinal, datum);
+		})
 	});
-	document.getElementById("terugDag").addEventListener("click", function(){
-		document.getElementById("inplannenDatum").style.display = "block";
-		document.getElementById("inplannenTijd").style.display = "none";
-		document.getElementById("timelineInplanAgenda").innerHTML = "";
-		document.getElementById("roosterInplanAgenda").innerHTML = "";
-	})
-	document.getElementById("submitInplanFormButton").addEventListener("click", function(){
-		inplannen(geslacht, behandelingenLijstFinal, formattedDate);
-	})
 }
 
-function inplannen(geslacht, behandelingenLijstFinal, formattedDate){ 
+function inplannen(geslacht, behandelingenLijstFinal, datum){ 
 	var formData = new FormData(document.getElementById("inplannenForm"));
 	var afspraakTijd = document.getElementById("urenInplannen").innerHTML 
 						+":"+
@@ -401,7 +378,17 @@ function inplannen(geslacht, behandelingenLijstFinal, formattedDate){
 	
 	var encData = new URLSearchParams(formData.entries());
 	var url = window.location.href.split("?")[1];
-	alert(encData);
+	console.log(url);
+	console.log("geslacht "+geslacht);
+	console.log("behandelingen" + behandelingenLijstFinal);
+	for(var behandeling in behandelingenLijstFinal){
+		console.log(behandeling);
+	}
+	console.log("afspraakTijd "+afspraakTijd);
+	console.log("formattedDate " +datum);
+	url = url + "&geslacht="+geslacht +"&behandelingen=" + behandelingenLijstFinal + "&datum=" + datum +"&afspraakTijd="+afspraakTijd;
+	console.log(url);
+	console.log(encData);
 	// De wijziging wordt verstuurt naar de backend
 	var fetchoptions = {
 			method: 'POST',
@@ -409,14 +396,48 @@ function inplannen(geslacht, behandelingenLijstFinal, formattedDate){
 		}
 	fetch("restservices/klantenPlanProvider/afspraak/"+url, fetchoptions)
 	.then(function (response){
-		if(response.status = 201){
+		if(response.ok){
 			alert("ingepland");
-		} else if(response.status = 201){
+		} else if(response.status = 409){
 			alert("door validatie");
 		} else{
 			alert("idk wtf");
 		}
 	})
+}
+
+//het vullen van de afspraken lijst bij de tijd instellen
+function createAfspraak(beginTijd ,lengte){ 
+	// event aanmaken
+	var event = document.createElement('li');
+	event.setAttribute('class', 'nietBeschikbaarAfspraak');
+
+	event.style.backgroundColor= "#34D77B";
+
+	event.innerHTML = beginTijd +" <br> "+ lengte;
+
+	// begin punt van de afspraak
+	var topArray = beginTijd.split(":");
+	var uurTop = parseInt(topArray[0]);
+	var minuutTop = parseInt(topArray[1]);
+
+	var minuutVerschilTop = minuutTop + uurTop*60;
+	var minuutBegin = beginMinuutGlobal + beginUurGlobal*60;
+	
+	var topMinuten = minuutVerschilTop-minuutBegin;
+	var top = topMinuten * 2 + 20;
+	event.style.top = top+"px";
+	// lengte van afspraak
+	var lengteArray = lengte.split(":");
+	var uurLengte = parseInt(lengteArray[0]);
+	var minuutLengte = parseInt(lengteArray[1]);
+	var minuutVerschilLengte = minuutLengte + uurLengte*60;
+
+	var hoogte = minuutVerschilLengte * 2;
+	console.log(hoogte);
+	event.style.height = hoogte+"px";
+
+	return event;
 }
 
 //de afspraak die je naar een tijd kan slepen
@@ -491,7 +512,6 @@ function createDraggable(){
 	        }
 	  })
 }
-
 
 function inplanVoorbereiding(state, value){
 	if(state == "geslacht"){

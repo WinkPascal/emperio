@@ -196,6 +196,8 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		klant.setId(0);	
+
 		return klant;
 	}
 }

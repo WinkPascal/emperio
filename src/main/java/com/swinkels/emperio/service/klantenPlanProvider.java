@@ -264,9 +264,8 @@ public class klantenPlanProvider {
 			}
 			if (dataPuntDetail[0].equals("behandelingen")) {
 				// behandelingen worden opgehaalt
-				String[] behandelingenStringLijst = dataPuntDetail[1].split("%2C");
+				String[] behandelingenStringLijst = dataPuntDetail[1].split(",");
 				for (String behandelingId : behandelingenStringLijst) {
-					System.out.println(behandelingId);
 					Behandeling behandeling = new Behandeling(Integer.parseInt(behandelingId));
 					behandelingen.add(behandeling);
 				}
@@ -277,49 +276,64 @@ public class klantenPlanProvider {
 			}
 		}
 		// validaties
+		System.out.println("validaties doorgaan");
 		if (timestamp.before(new Date())) {
+			System.out.println(timestamp);
 			return Response.status(409).build();
 		}
 		if (geslacht == null) {
+			System.out.println("geslacht");
 			return Response.status(409).build();
 		}
 		if (bedrijf.getVerplichtContactVeld() == null) {
+			System.out.println("getVerplichtContactVeld");
 			return Response.status(409).build();
 		}
 		if (behandelingen.size() < 1) {
+			System.out.println("behandelingen");
 			return Response.status(409).build();
 		}
 		if (bedrijf.getInvoerveldEmail()) {
 			if (afspraakKlantEmail == null) {
+				System.out.println("afspraakKlantEmail");
 				return Response.status(409).build();
 			}
 			if (!ServiceFilter.emailCheck(afspraakKlantEmail)) {
+				System.out.println("afspraakKlantEmail");
 				return Response.status(409).build();
 			}
 		}
 		if (bedrijf.getInvoerveldTelefoon()) {
 			if (ServiceFilter.phoneCheck(afspraakKlantTel)) {
+				System.out.println("afspraakKlantTel");
 				return Response.status(409).build();
 			}
 		}
 		if (afspraakKlantNaam.length() < 2) {
+			System.out.println("afspraakKlantNaam");
 			return Response.status(409).build();
 		}
+		System.out.println("alle validaties doorgegaan");
 
 		// aanmaken klant object
 		Klant klant = new Klant(afspraakKlantNaam, afspraakKlantEmail, afspraakKlantTel, geslacht, bedrijf);
 
 		// een klant zoeken in de database
 		if (bedrijf.getVerplichtContactVeld().equals("email")) {
+			System.out.println("getVerplichtContactVeld email");
 			klantDao.getKlantIdByEmail(klant);
 		} else {
+			System.out.println("getVerplichtContactVeld telefoon");
 			klantDao.getKlantIdByPhone(klant);
 		}
+		System.out.println("goedgegdaan");
 		if (klant.getId() == 0) {
 			// er is geen klant gevonden in de database
 			klantDao.setKlant(klant);
 			klant = klantDao.getKlantId(klant);
 		}
+		System.out.println("die ook");
+
 		Afspraak afspraak = new Afspraak(timestamp, bedrijf, klant);
 		afspraak.setBehandelingen(behandelingen);
 
@@ -334,6 +348,6 @@ public class klantenPlanProvider {
 				return Response.status(409).build();
 			}
 		}
-		return Response.status(201).build();
+		return Response.ok().build();
 	}
 }
