@@ -1,0 +1,168 @@
+.behandelingen {
+	width: 100%;
+	max-width: 1400px;
+	margin: 2em auto;
+}
+
+.behandelingen .controleDiv {
+	height: 50px;
+	background-color: gray;
+}
+
+.behandelingen .controleDiv #zoekBehandelingInput {
+	width: 40%;
+	height: 35px;
+	margin: 8px;
+	left: 0px;
+	border: 2px solid blue;
+	border-radius: 20px;
+	font-size: 20px;
+}
+
+.behandelingen .controleDiv #zoekKlant {
+	width: 130px;
+	height: 40px;
+	border: 2px solid blue;
+	border-radius: 9px;
+	background-color: white;
+	color: blue;
+	background-color: white;
+}
+
+.behandelingen .controleDiv #selectList {
+	border: 3px solid blue;
+	border-radius: 5px;
+	color: blue;
+	width: 200px;
+	height: 40px;
+	background-color: white;
+	float: right;
+	margin-top: 5px;
+	margin-right: 10%;
+}
+
+.behandelingen #behandelingenLijst {
+	width: 100%;
+	max-height: 600px;
+}
+
+.behandelingen #behandelingenLijst th {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.behandelingen #behandelingenLijst tr {
+	height: 30px;
+}
+
+.behandelingen #behandelingenLijst tr:hover {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.behandelingen .navigatieSpan {
+	top: 700px;
+	display: inline-block;
+	text-align: center;
+	width: 100%;
+	background: #4CAF50;
+}
+
+.behandelingen .navigatieSpan #volgendebehandelingenPagina {
+	float: right;
+}
+
+.behandelingen .navigatieSpan #paginaNummer {
+	left: 50%;
+	position: absolute;
+	font-size: 20px;
+}
+
+.behandelingen .navigatieSpan #vorigebehandelingenPagina {
+	float: left;
+}
+
+.BehandelingToevoegenForm {
+	width: 600px;
+	margin: auto;
+	height: 600px;
+	top: 200px;
+	background-color: white;
+}
+
+.BehandelingToevoegenForm .inputDiv {
+	width: 100%;
+	height: 60%;
+}
+
+.BehandelingToevoegenForm .inputDiv .inputField {
+	width: 100%;
+	height: 50px;
+}
+
+.BehandelingToevoegenForm .inputDiv .inputField .inputNaam {
+	float: left;
+}
+
+.inputBehandelingToevoegen {
+	float: right;
+}
+
+.BehandelingToevoegenForm .inputDiv .inputBehandelingToevoegen {
+	width: 70%;
+	right: 5px;
+}
+
+.BehandelingToevoegenForm .inputDiv .inputPrijsToevoegen {
+	width: 40px;
+	height: 40px;
+}
+
+.BehandelingToevoegenForm .inputDiv .inputLengteToevoegen {
+	width: 60px;
+	height: 35px;
+}
+
+.BehandelingToevoegenForm .geslachtDiv {
+	width: 100%;
+	height: 20%;
+}
+
+.geslachtButton {
+	width: 20%;
+	background-color: white;
+	margin-left: 3%;
+	height: 50px;
+	border: 2px solid blue;
+	border-radius: 4px;
+	color: blue;
+}
+.geslachtButton:hover {
+	color: white;
+	background-color: #3D5FC4;
+}
+
+.selectedGeslachtButtton{
+	width: 20%;
+	margin-left: 3%;
+	height: 50px;
+	border: 2px solid blue;
+	border-radius: 4px;
+	color: white;
+	background-color: #3D5FC4;
+}
+
+.BehandelingToevoegenForm .submitController {
+	width: 100%;
+	height: 20%;
+}
+
+#inplannenBehandelingToevoegen {
+	margin-left: 20px;
+	float: left;
+}
+
+#annuleerBehandelingAnnuleren {
+	float: right;
+	margin-right: 20px;
+}

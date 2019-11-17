@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-US">
+
 <head>
-<link rel="stylesheet" type="text/css" href="test.css">
-
+  	<meta charset="UTF-8">
+	  <link rel="stylesheet" type="text/css" href="css/global.css">
+    <title>test</title>
 </head>
-<body>
 
+<body onload="showLoadingScreen(); removeLoadingScreen()">
 
-<div id="no-drop" class="drag-drop"> #no-drop </div>
-
-<div id="yes-drop" class="drag-drop"> #yes-drop </div>
-
-<div id="outer-dropzone" class="dropzone">
-  #outer-dropzone
-  <div id="inner-dropzone" class="dropzone">#inner-dropzone</div>
- </div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-	<script type="text/javascript" src="test.js"></script>
-	
+  <script type="text/javascript" src="javascript/global.js"></script>
 </body>
+
 </html>

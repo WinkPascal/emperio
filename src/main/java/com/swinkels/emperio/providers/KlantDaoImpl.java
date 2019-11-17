@@ -181,12 +181,14 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 	}
 
 	public Klant getKlantIdByPhone(Klant klant) {
+		System.out.println("telefoon zoeken");
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select id from klant where " +
 				    "bedrijf = '"+ klant.getBedrijf().getEmail() + "' " + 
 				    "AND naam = '" + klant.getNaam() + "' " +
-				    "AND telefoon = '"+klant.getTel()+"'");
+				    "AND telefoon = '"+klant.getTel()+"';");
+			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
@@ -194,8 +196,10 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 				return klant;
 			} 
 		} catch (SQLException e) {
+			System.out.println("hier");
 			e.printStackTrace();
 		}
+		System.out.println("sasdadasdas");
 		klant.setId(0);	
 
 		return klant;

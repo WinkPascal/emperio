@@ -10,6 +10,13 @@
 	background-color: gray;
 }
 
+.inventaris .controleDiv #zoekProductenInput{
+	width: 50%;
+	border-radius: 25px;
+	border: 2px solid blue;
+	height: 70%;
+}
+
 .inventaris #inventarisItems .inventarisItem {
 	display: inline-block;
 	border: 1px solid black;
@@ -22,7 +29,9 @@
 
 .inventaris #inventarisItems .inventarisItem .productHoeveelheid {
 	display: inline-block;
-	height: 60px;
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
 	font-size: 30px;
 }
 

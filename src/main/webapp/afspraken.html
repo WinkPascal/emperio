@@ -1,28 +1,29 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Afspraken</title>
+  	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
  
-  <link rel="stylesheet" href="css/inplannenCard.css">
-  <link rel="stylesheet" href="css/afspraken.css">
-   <link rel="stylesheet" href="css/home.css">
-   <link rel="stylesheet" href="css/global.css">
+  	<link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/global.css">
  
-  <link rel="stylesheet" media="screen and (min-width: 1000px)" href="css/afspraken1000px.css">
-  <link rel="stylesheet" media="screen and (min-width: 800px)" href="css/afspraken800px.css">
+  	<link rel="stylesheet" href="css/afspraken.css">
+  	<link rel="stylesheet" media="screen and (min-width: 1000px)" href="css/afspraken1000px.css">
+  	<link rel="stylesheet" media="screen and (min-width: 800px)" href="css/afspraken800px.css">
 </head>
 <body onload="onload()">
 	<span class="topBar">
 		<input type="button" value="Home" class="defaultButton" id="homeButton">
-		<input type="button" value="Settings" class="defaultButton" id="settingButton">
 		<a>Rooster</a>
+		<input type="button" value="Uitloggen" class="defaultButton" id="logoutButton">
 	</span>
 	
 	<div class="navigationAfspraken">
 		<input type="button" class="defaultButton" value="Week Terug" id="weekTerug">
 		<input type="button" class="defaultButton" value="Afspraak inplannen" id="afspraakInplannen">
-		<input type="button" class="defaultButton" value="Maanden" id="maandView">
+		<input type="button" class="defaultButton" value="Instellingen" id="Instellingen">
+		<input type="button" class="defaultButton" value="Vandaag" id="VandaagButton">
 		<input type="button" class="defaultButton" value="Week Verder" id="weekVerder">	
 	</div>
 
@@ -59,119 +60,6 @@
 		</div>
 	</div>	
 
-	<!-- inplannen -->
-	<div id="inplannenModal" class="modal">
-		<div class="inplan-content" id="inplannenModalContent">
-			<div class="topBarInplannen">
-				<input type="button" class="defaultButton"  id="terugInplannen" value="Annuleer"/>
-				<input type="button" class="defaultButton"  id="volgendeInplannen" value="Volgende"/>
-			</div>
-			
-			<!-- overzicht inplannen -->
-			<form class="inplannenForm" id="inplannenForm">
-				<div class="rechtsInplanForm">
-					<div id="inplanBehandelingenForm">
-						
-						<h4><i class="material-icons">&#xe254;</i>Behandelingen</h4><br>
-					</div>
-					<div class="blokkenOverzicht">
-						<div class="inplanBlokOverzicht" id="lengteAfspraakFormDiv">
-							<a>Lengte: </a>
-							<span class="afspraakBlokWaarde" id="lengteAfspraakForm">0:00</span>
-						</div>
-						<div class="inplanBlokOverzicht" id="prijsAfspraakFormDiv">
-							<a>Totaal: €</a>
-							<span class="afspraakBlokWaarde" id="prijsAfspraakForm"></span>
-						</div>
-					</div>
-					<div id="datumInplanFormDiv">
-						<i class="material-icons">&#xe254;</i>
-						<a>Datum:</a><a id="datumInplanForm"></a>
-						<br>
-						<i class="material-icons">&#xe254;</i>
-						<a>Tijd:</a><a id="tijdInplanForm"></a>
-					</div>
-
-				</div>
-				<div id="klantInfo">
-					<h4>klant</h4>
-					<span>Geslacht</span> 
-	
-					<span id="inplanFormGeslacht"></span><br><br>
-					<span>Naam</span> <br>
-					<input type="text" name="klantNaam"><br><br>
-
-					<span>Email</span> <br>
-					<input type="text" name="klantEmail"><br><br>
-
-					<span>Telefoon nummer</span> <br>
-					<input type="text" name="klantTelefoon"><br><br>
-						
-					<input type="button" id="submitInplanFormButton" class="defaultButton" value="Inplannen">
-				</div>
-			</form>
-					
-			<!-- eerste scherm -->
-			<div id="inplannenGeslacht" class="inplannenRechts">
-				<div class="topbarGeslacht">
-					<input type="button" id="geslachtMan" class="geslachtButton" value="Man">
-					<input type="button" id="geslachtVrouw" class="geslachtButton" value="Vrouw">
-					<input type="button" id="geslachtJongen" class="geslachtButton" value="Meisje">
-					<input type="button" id="geslachtMeisje" class="geslachtButton" value="Jongen">
-					<input type="button" id="optiesBehandeling" class="optieButton" value=":" >
-				</div>
-				<div class="behandelingenOpties" id="behandelingenOpties">
-					<input id="inplannenBehnadelingToevoegen" class="optieButtonBehandeling" value="Behandeling toevoegen">
-					<input id="inplannenTijdelijkeBehnadelingToevoegen" class="optieButtonBehandeling" value="Tijdelijke behandeling">
-				</div>
-			
-				<div id="behandelingenKeuzeLijst">
-					<!-- De behandelingen waar uit gekozen kan worden -->
-				</div>
-			</div>
-
-			<!-- tweede scherm -->
-			<div id="inplannenDatum" class="inplannenRechts">
-				<div class="navigatieTijdslotKiezenKiezen">
-					<input type="button" class="defaultButton" id="weekTerugInplannen" value="Week terug">
-				
-					<input type="button" class="defaultButton" id="terugDag" value="< Week">	
-					<input type="button" class="defaultButton" id="terugDag" value="< Dag">	
-				
-					<input type="button" id="weekVerderInplannen" class="defaultButton" value="Week verder">
-				</div>
-				<div id="dagenLijst">
-				
-				</div>
-			</div>
-			
-			<!-- tijd inplannen -->
-			<div id="inplannenTijd" class="inplannenRechts">
-				<div class="stelTijdInTextdiv">
-					<span id="stelTijdInText">
-						<img width="150px" height="150px" src="https://www.stickpng.com/assets/images/580b57fcd9996e24bc43c44f.png"><br>
-						<a>Sleep de afspraak naar de gewenste tijd.</a>
-					</span>						
-
-					<span id="tijdInstellen">
-						<span id="urenInplannen"></span> 
-						:
-						<input type="number" id="minutenInplannen">
-					</span>
-				</div>
-
-				<div id="agendaInplannen">
-					<div id="potentieleAfspraak" class="potentieleAfspraak">
-					</div>
-					<div id="timelineInplanAgenda" class="timelineInplanAgenda">
-					</div> 
-					<div id="roosterInplanAgenda" class="roosterInplanAgenda">
-		    		</div>
-				</div>
-			</div>
-		</div>	
-	</div>
-				
 	<!-- Behandeling toevoegen -->
 	<div id="BehandelingToevoegenModal" class="modal">
 		<form id="BehandelingToevoegenForm" class="modal-content-small">

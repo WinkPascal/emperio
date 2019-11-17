@@ -1,12 +1,13 @@
 .topRow {
-	float: left;
 	height: 40%;
-	width: 75%;
+	width: 100%;
 }
 
 .topRow .timeSelect {
 	height: 300px;
+	position: absolute;
 	width: 200px;
+	left: 40%;
 }
 
 .topRow .timeSelect .defaultButton {
@@ -15,16 +16,13 @@
 
 .topRow #behandelingenChart {
 	width: 600px;
-	position: absolute;
-	left: 200px;
-	top: 0px;
+	float: left;
+	top: 80px;
 }
 
 .topRow .getallenDiv {
-	position: absolute;
 	width: 400px;
-	left: 800px;
-	top: 0px;
+	float: right;
 	height: 100%;
 }
 
@@ -35,27 +33,28 @@
 	font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
 
-.grafiek {
+.grafieken {
 	position: absolute;
-	left: 0px;
-	bottom: 0px;
+	width: 100%;
+	top: 400px;
+	height: 600px;
+}
+
+.grafieken .grafiek {
+	width: 1100px;
 	float: left;
-	height: 60%;
+	margin: -100px;
+	left: -100px;
+	bottom: 0px;
+	margin-top: 40px;
 }
 
-.topLijsten{
-	position: absolute;
-	right: 0px;
-	border: 1px solid black;
-	width: 35%;
-	height: 100%;
+.grafieken .lijnGrafiek {
+	margin: -100px;
+	width: 1100px;
+	right: -100px;
+	float: left;
+	bottom: 0px;
+	margin-top: 40px;
 }
 
-#besteKlanten{
-	border: 1px solid black;
-	height: 50%;
-}
-#besteBehandelingen{
-	border: 1px solid black;
-	height: 50%;
-}

@@ -1,6 +1,6 @@
 //eerste wat er gedaan wordt bij het laden van de pagina
 //hier worden de afspraken van de eerste dag geladen
-function onload(){
+function onload(){ 
 	var date = new Date();
 	var dagDate = date.getFullYear() +'-'+ date.getMonth() +'-'+ date.getDate();
 	//ophalen van afspraken vandaag
@@ -116,28 +116,31 @@ document.getElementById("inkomstenCard").addEventListener("click", function(){
 	location.href = 'statestieken.html';
 })
 
-document.getElementById("inplannenCard").addEventListener("click", function() {
-	inplannenCard();
+//starten rooster proces
+document.getElementById("klantPagina").addEventListener("click", function(){
+	let url = new URL(window.document.location);
+	let params = new URLSearchParams(url.search.slice(1));
+	
+	params.append("bedrijf", "pawiwink@gmail.com");
+	
+	window.document.location = 'planCostumer.html?'+params;
 })
 
-function inplannenCard(){
-	document.getElementById("inplannenModal").style.display = "block";
-	document.getElementById("inplannenGeslacht").style.display = "block";
-	inplannenGeslachtKiezen();
+function deleteParam(key) {
+    let url = new URL(window.document.location);
+    let params = new URLSearchParams(url.search.slice(1));	
+    params.delete(key);
+    history.pushState('afspraak maken', 'Title of the page', 'planCostumer.html?'+params);
 }
+
+document.getElementById("behandelingenCard").addEventListener("click", function() {
+	location.href = 'behandelingen.html';
+})
 
 document.getElementById("klantenPaginaBeheer").addEventListener("click", function() {
 	onloadKlantenBeheer();
 })
 
-document.getElementById("logoutButton").addEventListener("click", function() {
-	logoutButton();
-})
-
-function logoutButton(){ 
-	window.sessionStorage.setItem("sessionToken", "");
-	location.href = 'index.html';
-}
 
 // settings card
 document.getElementById("instellingenButton").addEventListener("click", function() {
@@ -177,65 +180,5 @@ function settingsButton(){
 	voegBehandelingItemToe();
 }
 
-//hier worden behandelingen toegevoegd
-document.getElementById("inplannenBehnadelingToevoegen").addEventListener("click", function(){
-	behandelignToevoegenForm();
-})
 
-function behandelignToevoegenForm(){
-	geslachten = [];
-	
-	document.getElementById("BehandelingToevoegenModal").style.display = "block";
-	document.getElementById("inplannenModal").style.display = "none";
-	
-	document.getElementById("annuleerBehandelingAnnuleren").addEventListener("click", function(){
-		document.getElementById("BehandelingToevoegenModal").style.display = "none";
-		document.getElementById("inplannenModal").style.display = "block";
-	})
-	
-	document.getElementById("geslachtManToevoegen").addEventListener("click", function(){
-		if(behandelingManager("man")){
-			document.getElementById("geslachtManToevoegen").style.background = "blue";
-		} else{
-			document.getElementById("geslachtManToevoegen").style.background = "white";
-		}
-	})
-	document.getElementById("geslachtVrouwToevoegen").addEventListener("click", function(){
-		if(behandelingManager("vrouw")){
-			document.getElementById("geslachtVrouwToevoegen").style.background = "blue";
-		} else{
-			document.getElementById("geslachtVrouwToevoegen").style.background = "white";
-		}
-	})	
-	document.getElementById("geslachtJongenToevoegen").addEventListener("click", function(){
-		if(behandelingManager("jongen")){
-			document.getElementById("geslachtJongenToevoegen").style.background = "blue";
-		} else{
-			document.getElementById("geslachtJongenToevoegen").style.background = "white";
-		}
-	})	
-	document.getElementById("geslachtMeisjeToevoegen").addEventListener("click", function(){
-		if(behandelingManager("meisje")){
-			document.getElementById("geslachtMeisjeToevoegen").style.background = "blue";
-		} else{
-			document.getElementById("geslachtMeisjeToevoegen").style.background = "white";
-		}
-	})
-
-	function behandelingManager(geslacht){
-		if(geslachten.includes(geslacht)){
-			for( var i = 0; i < geslachten.length; i++){ 
-				if (geslachten[i] === geslacht) {
-					geslachten.splice(i, 1); 
-					i--;
-					return false;
-				}
-			}
-			
-		} else{
-			geslachten.push(geslacht);
-			return true;
-		}
-	}
-}
 

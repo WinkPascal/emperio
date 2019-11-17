@@ -10,6 +10,9 @@ public class Behandeling {
 	private Date lengte;
 	private double prijs;
 	private String geslacht;
+	
+	private int afspraken;
+	private Double inkomsten;
 	private int count;
 	
 	public Behandeling(String behandelingsNaam) {
@@ -22,6 +25,26 @@ public class Behandeling {
 		this.beschrijving = beschrijving;
 		this.lengte = lengte;
 		this.prijs = prijs;
+	}
+
+	public int getAfspraken() {
+		return afspraken;
+	}
+
+	public void setAfspraken(int afspraken) {
+		this.afspraken = afspraken;
+	}
+
+	public Double getInkomsten() {
+		return inkomsten;
+	}
+
+	public void setInkomsten(Double inkomsten) {
+		this.inkomsten = inkomsten;
+	}
+
+	public void setGeslacht(String geslacht) {
+		this.geslacht = geslacht;
 	}
 
 	public Behandeling(int afspraakBehandeling) {

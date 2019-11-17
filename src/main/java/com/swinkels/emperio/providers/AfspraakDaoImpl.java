@@ -321,4 +321,33 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		
 		return null;
 	}
+	
+	public int getMinutesOfAfspraak(Afspraak afspraak) {
+		int minuten = 0;
+		try (Connection con = super.getConnection()) {
+			StringBuilder preStmt = new StringBuilder();
+			preStmt.append("select lengte \n" + 
+					"from behandeling \n" + 
+					"where bedrijf = '"+afspraak.getBedrijf().getEmail()+"' \n"
+				  + "AND id = 0 ");
+			
+			for(Behandeling behandeling : afspraak.getBehandelingen()) {
+				preStmt.append("OR id = "+ behandeling.getId() +" \n");
+			}
+			PreparedStatement pstmt = con.prepareStatement(preStmt.toString());
+
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				 String lengte = dbResultSet.getString("lengte");
+				 int uren = Integer.parseInt(lengte.split(":")[0]);
+				 minuten = Integer.parseInt(lengte.split(":")[1]) + uren*60;
+				 System.out.println(uren);
+				 System.out.println(minuten);
+			}
+		} catch (SQLException e) {	
+			e.printStackTrace();
+		}
+		return minuten;
+	}
 }

@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="css/inventaris.css">
-<link rel="stylesheet" type="text/css" href="css/global.css">
+	<title>Inventaris</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="css/inventaris.css">
+	<link rel="stylesheet" type="text/css" href="css/global.css">
 </head>
 <body onload="onload()">
+	
 	<span class="topBar">
 		<input type="button" value="Home" class="defaultButton" id="homeButton">
 		<a>Inventaris</a>
-		<input type="button" value="Settings" class="defaultButton" id="settingButton">
+		<input type="button" value="Uitloggen" class="defaultButton" id="logoutButton">
 	</span>
 
 	<div class="inventaris">
 		<div class="controleDiv">
 			<input type="text" id="zoekProductenInput"/>
-			<span class="navigatieButton" id="zoekProductButton">Zoek</span>
+			<input class="defaultButton" type="button" id="zoekProducten" value="Zoek">
 			<input class="defaultButton" type="button" id="voegProductToe" value="Voeg Product Toe!">
+			<input type="button" class="defaultButton" value="Opslaan">
+			<input type="button" class="defaultButton" value="Reset">
 		</div>
 	
 		<div id="inventarisItems">

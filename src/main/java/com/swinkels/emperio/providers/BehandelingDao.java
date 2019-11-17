@@ -12,4 +12,6 @@ public interface BehandelingDao {
 	public boolean setBehandeling(Behandeling behandeling);
 	
 	public ArrayList<Behandeling> getTop5Behandelingen(Bedrijf bedrijf, Date date);
+	
+	public ArrayList<Behandeling> getBehandelingen(String bedrijf, int pageNummer, String geslacht, String sort) ;
 }

@@ -49,7 +49,7 @@ public class AuthenticationResource {
 
 	private String createToken(String username, String role) {
 		Calendar expiration = Calendar.getInstance();
-		expiration.add(Calendar.MINUTE, 30);
+		expiration.add(Calendar.MINUTE, 60);
 	
 		return Jwts.builder()
 				.setSubject(username)

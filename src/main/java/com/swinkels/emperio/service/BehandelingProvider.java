@@ -1,11 +1,17 @@
 package com.swinkels.emperio.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.annotation.security.RolesAllowed;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -18,15 +24,10 @@ import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.providers.BehandelingDao;
 import com.swinkels.emperio.providers.BehandelingDaoImpl;
 
-@Path("/plan")
+@Path("/behandelingProvider")
 public class BehandelingProvider {
 	BehandelingDao behandelingDao = new BehandelingDaoImpl();
-	// wordt gebruikt bij
-		// behandeling maken
-		//uitvoer
-		// response
-		// ok
-		// error
+
 	@POST
 	@RolesAllowed("user")
 	@Path("/behandeling")
@@ -49,4 +50,68 @@ public class BehandelingProvider {
 
 		return Response.ok().build();
 	}
+
+	@GET
+	@Path("/alleBehandelingen/{data}")
+	@RolesAllowed("user")
+	@Produces("application/json")
+	public String getBehandelingen(@Context SecurityContext sc, 
+			@PathParam("data") String data) {		
+		System.out.println(data);
+		
+		String bedrijfsnaam = sc.getUserPrincipal().getName();
+		int pageNumber = 1;
+		String geslacht = "man";
+		String sort = "afspraken desc";
+		for(String dataPoint : data.split("&")) {
+			String[] dataArray = dataPoint.split("=");
+			if(dataArray[0].equals("geslacht")) {
+				int i = 0;
+				for(String geslachtString : dataArray[1].split(",")) {
+					if(i == 0) {
+						geslacht = "='"+ geslachtString  +"'";
+						i++;
+					} else {
+						geslacht = geslacht + "OR geslacht ='"+ geslachtString  +"'";
+					}
+				}
+				if(geslacht.equals("='alle'")) {
+					geslacht = "IS NOT NULL";
+				}
+			}
+			if(dataArray[0].equals("pageNumber")) {
+				pageNumber = Integer.parseInt(dataArray[1]);
+			}
+			if(dataArray[0].equals("sort")) {
+				String sorting = dataArray[1];
+				if(sorting.equals("meesteAfspraken")) {
+					sort = "afspraken desc";
+				} else if(sorting.equals("meesteInkomen")) {
+					sort = "inkomsten desc";
+				} else if(sorting.equals("minsteAfspraken")) {
+					sort = "afspraken asc";					
+				} else if(sorting.equals("minsteInkomen")) {
+					sort = "inkomsten asc";					
+				}
+			}
+		}
+		System.out.println(geslacht);
+		ArrayList<Behandeling> behandelingen = behandelingDao.getBehandelingen(bedrijfsnaam, pageNumber, geslacht, sort);
+		
+		JsonArrayBuilder jab = Json.createArrayBuilder();
+		for(Behandeling behandeling : behandelingen) {
+			JsonObjectBuilder job = Json.createObjectBuilder();
+			job.add("id", behandeling.getId());
+			job.add("naam", behandeling.getNaam());
+			job.add("beschrijving", behandeling.getBeschrijving());
+			job.add("prijs", behandeling.getPrijs());
+			job.add("geslacht", behandeling.getGeslacht());
+			job.add("lengte", ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm"));
+			job.add("inkomsten", behandeling.getInkomsten());
+			job.add("afspraken", behandeling.getAfspraken());
+			jab.add(job);
+		}
+		return jab.build().toString();
+	}
+
 }

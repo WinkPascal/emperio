@@ -24,7 +24,11 @@ public class Klant {
 	}
 	
 	public Klant(String naam, String email, String tel, String geslacht, Bedrijf bedrijf) {
-		
+		this.naam = naam;
+		this.email = email;
+		this.tel = tel;
+		this.geslacht = geslacht;
+		this.bedrijf = bedrijf;
 	}
 
 	

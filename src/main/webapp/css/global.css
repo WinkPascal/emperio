@@ -1,30 +1,32 @@
-:root { 	
+:root {
 	--afspraakKlasse0: gray;
-	--afspraakKlasse1: #34D77B; 
-	--afspraakKlasse2: #445DFF; 
+	--afspraakKlasse1: #34D77B;
+	--afspraakKlasse2: #445DFF;
 	--afspraakKlasse3: #B23636;
 }
+
 /* Animaties */
-@
-keyframes zoom {
-	from {transform: scale(0)
+@ keyframes zoom {
+	from {
+		transform: scale(0)
+	}
+
+	to {
+		transform: scale(1)
+	}
+
 }
 
-to {
-	transform: scale(1)
-}
+@ keyframes animatetop {
+	from {
+		top: -300px;
+		opacity: 0
+	}
 
-}
-@
-keyframes animatetop {
-	from {top: -300px;
-	opacity: 0
-}
-
-to {
-	top: 0;
-	opacity: 1
-}
+	to {
+		top: 0;
+		opacity: 1
+	}
 
 }
 
@@ -54,17 +56,17 @@ to {
 }
 
 .modal {
-	display: none; /* Hidden by default */
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	padding-top: 100px; /* Location of the box */
+	display: none;
+	position: fixed;
+	z-index: 1;
+	padding-top: 100px;
 	left: 0;
 	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgb(0, 0, 0); /* Fallback color */
-	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
 }
 
 .defaultButton {
@@ -95,4 +97,64 @@ to {
 	font-size: 20px;
 	text-align: center;
 	border-radius: 10px;
+}
+
+#laadscherm {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	top: 0px;
+	left: 0px;
+}
+
+#laadscherm .contentDiv{
+	position: absolute;
+	width: 200px;
+	height: 100px;
+	border: 1px solid blue;
+	left: 40%;
+	top: 40%;
+}
+
+#laadscherm .contentDiv .lds-ring {
+	display: inline-block;
+	position: relative;
+	width: 64px;
+	height: 64px;
+}
+
+#laadscherm .contentDiv .lds-ring div {
+	box-sizing: border-box;
+	display: block;
+	position: absolute;
+	width: 51px;
+	height: 51px;
+	margin: 6px;
+	border: 6px solid black;
+	border-radius: 50%;
+	animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+	border-color: black transparent transparent transparent;
+}
+
+#laadscherm .contentDiv .lds-ring div:nth-child(1) {
+	animation-delay: -0.45s;
+}
+
+#laadscherm .contentDiv .lds-ring div:nth-child(2) {
+	animation-delay: -0.3s;
+}
+
+#laadscherm .contentDiv .lds-ring div:nth-child(3) {
+	animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
 }

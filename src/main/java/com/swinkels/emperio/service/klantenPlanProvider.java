@@ -3,6 +3,7 @@ package com.swinkels.emperio.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.AbstractMap.SimpleEntry;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -30,6 +31,7 @@ import com.swinkels.emperio.providers.BehandelingDao;
 import com.swinkels.emperio.providers.BehandelingDaoImpl;
 import com.swinkels.emperio.providers.KlantDao;
 import com.swinkels.emperio.providers.KlantDaoImpl;
+import com.swinkels.emperio.support.Validator;
 
 @Path("/klantenPlanProvider")
 public class klantenPlanProvider {
@@ -104,7 +106,7 @@ public class klantenPlanProvider {
 	public String getWerkdagen(@PathParam("data") String data) {
 		System.out.println(data);
 		String bedrijfsnaam = "";
-
+		//data ontvangen
 		String[] dataPunten = data.split("&");
 		for (String dataPunt : dataPunten) {
 			String[] dataPuntDetail = dataPunt.split("=");
@@ -112,21 +114,18 @@ public class klantenPlanProvider {
 				bedrijfsnaam = dataPuntDetail[1];
 			}
 		}
-
 		Bedrijf bedrijf = new Bedrijf(bedrijfsnaam);
+		//data ophalen
 		ArrayList<Dag> dagen = bedrijfDao.getWeekRooster(bedrijf);
+		//data versturen
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		for (Dag dag : dagen) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
-
 			job.add("dagNummmer", dag.getDag());
 			job.add("sluitingstijd", ServiceFilter.DateToStringFormatter(dag.getSluitingsTijd(), "HH:mm"));
 			job.add("opeingstijd", ServiceFilter.DateToStringFormatter(dag.getOpeningsTijd(), "HH:mm"));
-
 			jab.add(job);
-
 		}
-
 		return jab.build().toString();
 	}
 
@@ -136,7 +135,7 @@ public class klantenPlanProvider {
 	@Path("/tijdslotenOphalen/{data}")
 	@Produces("application/json")
 	public String tijdslotenOphalen(@PathParam("data") String data) {
-		System.out.println(data);
+		//data ontvangen
 		String bedrijfsnaam = "";
 		String datum = "";
 		String[] dataPunten = data.split("&");
@@ -230,19 +229,13 @@ public class klantenPlanProvider {
 	@Produces("application/json")
 	public Response setAfspraak(@PathParam("data") String data, @FormParam("klantNaam") String afspraakKlantNaam,
 			@FormParam("afspraakTijd") String afspraakTijd,
-
-			@FormParam("klantEmail") String afspraakKlantEmail, @FormParam("klantTelefoon") String afspraakKlantTel) {
-			//response stattussen
-				// validaties
-					// 409
-				// gepland
-					// 201
-
+			@FormParam("klantEmail") String afspraakKlantEmail, 
+			@FormParam("klantTelefoon") String afspraakKlantTel) {
+		//data ophalen
 		ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 		Date timestamp = new Date();
 		Bedrijf bedrijf = new Bedrijf();
 		String geslacht = null;
-
 		String[] dataPunten = data.split("&");
 		for (String dataPunt : dataPunten) {
 			String[] dataPuntDetail = dataPunt.split("=");
@@ -274,50 +267,23 @@ public class klantenPlanProvider {
 				// geslacht wordt opgehaalt
 				geslacht = dataPuntDetail[1];
 			}
-		}
-		// validaties
-		System.out.println("validaties doorgaan");
-		if (timestamp.before(new Date())) {
-			System.out.println(timestamp);
-			return Response.status(409).build();
-		}
-		if (geslacht == null) {
-			System.out.println("geslacht");
-			return Response.status(409).build();
-		}
-		if (bedrijf.getVerplichtContactVeld() == null) {
-			System.out.println("getVerplichtContactVeld");
-			return Response.status(409).build();
-		}
-		if (behandelingen.size() < 1) {
-			System.out.println("behandelingen");
-			return Response.status(409).build();
-		}
-		if (bedrijf.getInvoerveldEmail()) {
-			if (afspraakKlantEmail == null) {
-				System.out.println("afspraakKlantEmail");
-				return Response.status(409).build();
-			}
-			if (!ServiceFilter.emailCheck(afspraakKlantEmail)) {
-				System.out.println("afspraakKlantEmail");
-				return Response.status(409).build();
-			}
-		}
-		if (bedrijf.getInvoerveldTelefoon()) {
-			if (ServiceFilter.phoneCheck(afspraakKlantTel)) {
-				System.out.println("afspraakKlantTel");
-				return Response.status(409).build();
-			}
-		}
-		if (afspraakKlantNaam.length() < 2) {
-			System.out.println("afspraakKlantNaam");
-			return Response.status(409).build();
-		}
-		System.out.println("alle validaties doorgegaan");
+		}	
 
 		// aanmaken klant object
 		Klant klant = new Klant(afspraakKlantNaam, afspraakKlantEmail, afspraakKlantTel, geslacht, bedrijf);
+		Afspraak afspraak = new Afspraak(timestamp, bedrijf, klant);
+		afspraak.setBehandelingen(behandelingen);
 
+		System.out.println("validaties doorgaan");
+		String error = Validator.validateAfspraak(afspraak);
+		if(error != null) {
+			System.out.println("error "+ error);
+			SimpleEntry<String, String> errorMsg = new SimpleEntry<String, String>("errorMsg", error);
+			
+			return Response.status(409).build();
+		}
+		System.out.println("alle validaties doorgegaan");		
+		
 		// een klant zoeken in de database
 		if (bedrijf.getVerplichtContactVeld().equals("email")) {
 			System.out.println("getVerplichtContactVeld email");
@@ -326,16 +292,13 @@ public class klantenPlanProvider {
 			System.out.println("getVerplichtContactVeld telefoon");
 			klantDao.getKlantIdByPhone(klant);
 		}
-		System.out.println("goedgegdaan");
+
 		if (klant.getId() == 0) {
 			// er is geen klant gevonden in de database
 			klantDao.setKlant(klant);
 			klant = klantDao.getKlantId(klant);
 		}
-		System.out.println("die ook");
 
-		Afspraak afspraak = new Afspraak(timestamp, bedrijf, klant);
-		afspraak.setBehandelingen(behandelingen);
 
 		// afspraak word in de database gezet
 		afspraakDao.setAfspraak(afspraak);
@@ -349,5 +312,7 @@ public class klantenPlanProvider {
 			}
 		}
 		return Response.ok().build();
+//		SimpleEntry<String, String> JWT = new SimpleEntry<String, String>("JWT", token);
+	//	return Response.ok(JWT).build();
 	}
 }

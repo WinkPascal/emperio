@@ -28,4 +28,5 @@ public interface AfspraakDao {
 
 	public ArrayList<Afspraak> getLaatste3Afspraken(Bedrijf bedrijf, Klant klant);
 
+	public int getMinutesOfAfspraak(Afspraak afspraak);
 }

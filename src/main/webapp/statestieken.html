@@ -10,18 +10,20 @@
 <body onload="onload()">
 	<span class="topBar">
 		<input type="button" value="Home" class="defaultButton" id="homeButton">
-		<input type="button" value="Settings" class="defaultButton" id="settingButton">
-		<a>Statestieken</a>
+		<a>Inkomsten</a>
+		<input type="button" value="Uitloggen" class="defaultButton" id="logoutButton">
 	</span>
 	<div class="topRow">
+		
+		<div id="behandelingenChart"></div>
+
 		<div class="timeSelect">
 			<input class="defaultButton" type="button" value="Deze week" id="weekButton"> <br>
 			<input class="defaultButton" type="button" value="Deze maand" id="maandButton"><br>
 			<input class="defaultButton" type="button" value="Dit jaar" id="jaarButton"> <br>
 			<input class="defaultButton" type="button" value="Altijd" id="altijdButton"><br>
 		</div>
-		
-		<div id="behandelingenChart"></div>
+
 		<div class="getallenDiv">
 			<div class="infoBlok">
 				Aantal afspraken: <span id="aantalAfspraken"></span>
@@ -29,23 +31,15 @@
 			<div class="infoBlok">
 				Hoeveelheid inkomsten: €<span id="inkomsten"></span>
 			</div>
-		</div>	
+		</div>
+	</div>
 
+	<div class="grafieken">
+		<div class="grafiek" id="columnchart_values"></div>
+		<div class="lijnGrafiek" id="chart_div"></div>
 	</div>
-	
-	<div class="grafiek" id="columnchart_values"></div>
-	
-	<div class="topLijsten">
-		<h3>Beste Klanten</h3>
-		<div id="besteKlanten">
-			
-		</div>
-		<h3>Beste Behandelingen</h3>
-		<div id="besteBehandelingen">
-		
-		</div>
-	</div>
-	
+
+	<canvas id="myChart" width="400" height="400"></canvas>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	 <script src="javascript/global.js"></script>	
 	<script src="javascript/statestieken.js"></script>

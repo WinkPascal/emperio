@@ -46,8 +46,9 @@ function getAlleProducten(paginaNummer){
 			productSpan.setAttribute('id', product.id);
 			productSpan.setAttribute('class', "inventarisItem");
 			
-			var productHoeveelheid = document.createElement('span');
-			productHoeveelheid.innerHTML = product.hoeveelheid;
+			var productHoeveelheid = document.createElement('input');
+			productHoeveelheid.type = "number";
+			productHoeveelheid.value = product.hoeveelheid;
 			productHoeveelheid.setAttribute('class', "productHoeveelheid");
 			productSpan.appendChild(productHoeveelheid);
 			

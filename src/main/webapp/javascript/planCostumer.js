@@ -19,6 +19,7 @@ function onload(){
 			document.getElementById("klantAdres").hidden = !data.invoerveldAdres;
 			document.getElementById("bedrijfsnaam").innerHTML = data.bedrijfEmail;
 		}
+		removeLoadingScreen();
 	})
 	inplannenGeslachtKiezen();
 }
@@ -547,30 +548,6 @@ function inplanVoorbereiding(state, value){
 	}
 }
 
-
-function insertParam(key, value) {
-    let url = new URL(window.document.location);
-    let params = new URLSearchParams(url.search.slice(1));
-
-    if (params.has(key)) {
-    	if(key = 'behandelingen'){
-    		oldValue = params.get(key)
-    		newValue = oldValue +","+ value;
-   	        params.set(key, newValue);   		
-    	} else{
-   	       params.set(key, value);
-    	}
-    }else {
-        params.append(key, value);
-    }
-    history.pushState('afspraak maken', 'Title of the page', 'planCostumer.html?'+params);
-}
-function deleteParam(key) {
-    let url = new URL(window.document.location);
-    let params = new URLSearchParams(url.search.slice(1));	
-    params.delete(key);
-    history.pushState('afspraak maken', 'Title of the page', 'planCostumer.html?'+params);
-}
 
 
 
