@@ -2,6 +2,9 @@ package com.swinkels.emperio.objects;
 
 import java.util.Date;
 
+import com.swinkels.emperio.providers.BehandelingDao;
+import com.swinkels.emperio.providers.BehandelingDaoImpl;
+
 public class Behandeling {
 	private int id;
 	private Bedrijf bedrijf;
@@ -10,21 +13,50 @@ public class Behandeling {
 	private Date lengte;
 	private double prijs;
 	private String geslacht;
-	
+
 	private int afspraken;
 	private Double inkomsten;
 	private int count;
-	
+
 	public Behandeling(String behandelingsNaam) {
 		this.naam = behandelingsNaam;
 	}
-	
-	public Behandeling(int id, String behandelingsNaam, String beschrijving, Date lengte, double prijs) {
-		this.id=id;
+
+	public Behandeling(int id, String behandelingsNaam, String beschrijving, Date lengte, double prijs,
+			String geslacht) {
+		this.id = id;
 		this.naam = behandelingsNaam;
 		this.beschrijving = beschrijving;
 		this.lengte = lengte;
 		this.prijs = prijs;
+		this.geslacht = geslacht;
+	}
+
+	public Behandeling(String naam, Date lengte, double prijs) {
+		this.naam = naam;
+		this.lengte = lengte;
+		this.prijs = prijs;
+	}
+
+	public Behandeling(int id, String naam, Date lengte) {
+		this.naam = naam;
+		this.lengte = lengte;
+		this.id = id;
+	}
+
+	public Behandeling(Bedrijf bedrijf, String naam, String beschrijving, double prijs, Date lengte, String geslacht) {
+		this.bedrijf = bedrijf;
+		this.naam = naam;
+		this.beschrijving = beschrijving;
+		this.prijs = prijs;
+		this.lengte = lengte;
+		this.geslacht = geslacht;
+	}
+
+	public Behandeling(int id, String naam, int count) {
+		this.id = id;
+		this.naam = naam;
+		this.count = count;
 	}
 
 	public int getAfspraken() {
@@ -51,29 +83,6 @@ public class Behandeling {
 		this.id = afspraakBehandeling;
 	}
 
-	public Behandeling(String naam, Date lengte, double prijs) {
-		this.naam = naam;
-		this.lengte = lengte;
-		this.prijs = prijs;
-	}
-	
-	public Behandeling(Bedrijf bedrijf, String naam, String beschrijving, double prijs, Date lengte,
-			String geslacht) {
-		this.bedrijf = bedrijf;
-		this.naam = naam;
-		this.beschrijving=beschrijving;
-		this.prijs = prijs;
-		this.lengte = lengte;
-		this.geslacht = geslacht;
-	}
-
-	
-	public Behandeling(int id, String naam, int count) {
-		this.id = id;
-		this.naam = naam;
-		this.count = count;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -85,6 +94,7 @@ public class Behandeling {
 	public Bedrijf getBedrijf() {
 		return bedrijf;
 	}
+
 	public void setCount(int count) {
 		this.count = count;
 	}
@@ -92,6 +102,7 @@ public class Behandeling {
 	public int getCount() {
 		return count;
 	}
+
 	public void setBedrijf(Bedrijf bedrijf) {
 		this.bedrijf = bedrijf;
 	}
@@ -127,8 +138,17 @@ public class Behandeling {
 	public String getNaam() {
 		return naam;
 	}
-	
+
 	public String getGeslacht() {
 		return geslacht;
+	}
+
+	public boolean save() {
+		BehandelingDao behandelingDao = new BehandelingDaoImpl();
+		if (behandelingDao.save(this)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

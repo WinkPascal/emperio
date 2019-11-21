@@ -32,11 +32,13 @@ public class BehandelingProvider {
 	@RolesAllowed("user")
 	@Path("/behandeling")
 	@Produces("application/json")
-	public Response setBehandeling(@Context SecurityContext sc, @FormParam("naam") String naam,
+	public Response setBehandeling(@Context SecurityContext sc, 
+			@FormParam("naam") String naam,
 			@FormParam("beschrijving") String beschrijving, @FormParam("prijs") double prijs,
 			@FormParam("uur") String uur, @FormParam("minuten") String minuten,
 			@FormParam("geslachten") String geslachten) {
 		String bedrijfsNaam = sc.getUserPrincipal().getName();
+		System.out.println("SSSSS");
 		Bedrijf bedrijf = new Bedrijf(bedrijfsNaam);
 		String lengteString = uur + ":" + minuten;
 		Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
@@ -45,9 +47,8 @@ public class BehandelingProvider {
 		for (int i = 0; i < jsonArray.length(); i++) {
 			Behandeling behandeling = new Behandeling(bedrijf, naam, beschrijving, prijs, lengte,
 					jsonArray.get(i).toString());
-			behandelingDao.setBehandeling(behandeling);
+			behandeling.save();
 		}
-
 		return Response.ok().build();
 	}
 

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Registreren</title>
+  	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+  	<link rel="stylesheet" href="css/registreren.css">
+    <link rel="stylesheet" href="css/global.css">
+</head>
+<body onload="onload()">
+	<span class="topBar">
+		<input type="button" value="Home" class="defaultButton" id="homeButton">
+		<a>Registreren</a>
+	</span>
+	<div class="Producten">
+		<h2>Producten</h2>
+		Eigen website <input type="checkbox"><br>
+		Planning <input type="checkbox"><br>
+		*Per afspraak $0.50
+	</div>
+	<div class="klantenInformatie">
+		<h2>Uw informatie</h2>
+		<form id="klantenInformatie">
+			<span class="inputArea">
+				<a>Bedrijfsnaam</a>  	
+				<input class="inputVeld" type="text" name="Bedrijfsnaam">
+			</span><br>
+			<span class="inputArea">
+				<a>Voornaam</a> 
+				<input class="inputVeld" type="text" name="Voornaam">
+			</span><br>
+			<span class="inputArea">
+				<a>Achternaam</a> 	
+				<input class="inputVeld" type="text" name="Achternaam">
+			</span><br>
+			<span class="inputArea">
+				<a>Email</a> 	
+				<input class="inputVeld" type="email" name="Email">
+			</span><br>
+			<span class="inputArea">
+				<a>Telefoon</a> 
+				<input class="inputVeld" type="tel" name="Telefoon">
+			</span><br>
+			<span class="inputArea">
+				<a>Adres</a> 	
+				<input class="inputVeld" type="text" name="Adres">
+			</span><br>
+			<span class="inputArea">
+				<a>Wachtwoord</a> 
+				<input class="inputVeld" type="password" name="Wachtwoord">
+			</span><br>
+		</form>
+		<input type="button" class="defaultButton" value="Registreer" id="registreer">
+	</div>
+
+ 	 <script src="javascript/registreren.js"></script>	
+ 	 <script src="javascript/global.js"></script>	
+</body>
+</html>

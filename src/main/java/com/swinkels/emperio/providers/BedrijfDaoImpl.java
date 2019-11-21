@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.swinkels.emperio.objects.Bedrijf;
+import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Product;
 import com.swinkels.emperio.service.ServiceFilter;
@@ -35,10 +36,11 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 				String naam = dbResultSet.getString("naam");
 
 				
-				Bedrijf bedrijf = new Bedrijf(email, naam, telefoon, adres);
+				Bedrijf bedrijf = new Bedrijf(null, naam, email, telefoon, adres, null);
 				bedrijven.add(bedrijf);
 			}
 		} catch (SQLException e) {
+			System.out.println(e);
 			return null;
 		}
 		
@@ -150,13 +152,15 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 	public boolean saveBedrijf(Bedrijf bedrijf) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"INSERT INTO bedrijf(adres, email, naam, role, telefoon, wachtwoord) VALUES('"
+					"INSERT INTO bedrijf(bedrijfsnaam, adres, email, naam, role, telefoon, wachtwoord) VALUES('"
+				  + bedrijf.getBedrijfsNaam()+"', '"	
 				  +	bedrijf.getAdres()+"', '"
 				  + bedrijf.getEmail()+"', '"
 				  + bedrijf.getNaam() + "', '"
 				  + "user', '"
 				  + bedrijf.getTel()+"', '"
 				  + bedrijf.getWachtwoord()+"')");
+			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -209,6 +213,28 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 			System.out.println(e);
 		}		
 		return bedrijf;
+	}
+
+	public boolean needsSetup(String username) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					  "SELECT count(dag) as dagen "
+					+ "FROM bedrijf join dag on email = bedrijf "
+					+ "WHERE email = '"+username+"';");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				int dagen = dbResultSet.getInt("dagen");
+				if(dagen < 7) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}			
+		return false;
 	}
 
 

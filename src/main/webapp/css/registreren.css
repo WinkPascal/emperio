@@ -1,0 +1,32 @@
+.Producten {
+	float: left;
+	width: 50%;
+	top: 0px;
+	border-right: 1px solid black;
+	height: 100%;
+}
+
+.klantenInformatie {
+	float: right;
+	width: 49%;
+	top: 0px;
+	height: 100%;
+}
+
+.inputArea {
+	display: inline-block;
+	height: 40px;
+	width: 600px;
+}
+
+.inputArea .inputVeld {
+	float: right;
+	width: 400px;
+	height: 30px;
+	border: 2px solid blue;
+	border-radius: 20px;
+}
+
+.inputArea a {
+	float: left;
+}

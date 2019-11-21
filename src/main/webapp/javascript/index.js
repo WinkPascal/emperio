@@ -1,106 +1,114 @@
-function login(){	
+function login() {
 	document.getElementById("loginModal").style.display = "block";
-	document.getElementById("loginButton").addEventListener("click", function(){
+	document.getElementById("loginButton").addEventListener("click", function () {
 		var formData = new FormData(document.querySelector("#loginForm"));
 		var encData = new URLSearchParams(formData.entries());
-	
-		fetch("restservices/authentication", {method : 'POST', body : encData})
-		.then(function(response){
-			if(response.ok){
-				// het inloggen is geslaagdt
-				return response.json()
-			} else {
-				// het inloggen is niet gelukt
-				alert("er ging iets verkeerd");
-			};
-		})
-		.then(function(myJson){
-			// de JWTKey wordt in de sessionStorage gezet en de actor wordt
-			// doorverbonden naar de afspraken.html pagina
-			window.sessionStorage.setItem("sessionToken", myJson.JWT);
-			var jwtData = sessionStorage.getItem("sessionToken").split('.')[1]
-			var decodedJwtJsonData = window.atob(jwtData)
-					// rol een warde geven
-			// decodedJwtJsonData.role werkte niet
-			var role = "";
-			let array = decodedJwtJsonData.split(",");
-			for(var item of array){
-				let items = item.split('"');
-					if(items[1] == "role"){
-					role = items[3];
+
+		fetch("restservices/authentication", { method: 'POST', body: encData })
+			.then(function (response) {
+				var responseStatus;
+				if (response.ok) {
+					// het inloggen is geslaagdt
+					responseStatus = "ingelogt";
+					return response.json()
+				} if (response.status == 412) {
+					responseStatus = "setup";
+					return response.json()
+				} else {
+					responseStatus = "fout";
+					errorMessage(response.status);
 				}
-			}
-			
-			if(role == "user"){
-				window.location.href = "home.html";
-			} else if(role == "admin"){
-				window.location.href = "adminHome.html";
-			}
-		})
+			}).then(function (myJson) {
+				// de JWTKey wordt in de sessionStorage gezet en de actor wordt
+				// doorverbonden naar de afspraken.html pagina
+				window.sessionStorage.setItem("sessionToken", myJson.JWT);
+				alert(myJson.JWT);
+				var jwtData = sessionStorage.getItem("sessionToken").split('.')[1]
+				var decodedJwtJsonData = window.atob(jwtData)
+				// rol een warde geven
+				// decodedJwtJsonData.role werkte niet
+				var role = "";
+				let array = decodedJwtJsonData.split(",");
+				for (var item of array) {
+					let items = item.split('"');
+					if (items[1] == "role") {
+						role = items[3];
+					}
+				}
+
+				if (role == "user") {
+					window.location.href = "home.html";
+				} else if (role == "admin") {
+					window.location.href = "adminHome.html";
+				} else if (role == "setup") {
+					window.location.href = "setup.html";
+				}
+			})
 	})
 	localStorage.setItem("klasse1", 10);
 	localStorage.setItem("klasse2", 20);
 	localStorage.setItem("klasse3", 30);
 }
 
-document.getElementById("loginNav").addEventListener("click", function() {
+
+document.getElementById("loginNav").addEventListener("click", function () {
 	login();
 })
 
-document.getElementById("anulleer").addEventListener("click", function() {
-	errorMessage("geanulleerd");
+document.getElementById("anulleer").addEventListener("click", function () {
+	document.getElementById("loginModal").style.display = "none";
 })
 
-document.getElementById("registreerNav").addEventListener("click", function() {
-	alert("moet nog gemaakt worden G");
+document.getElementById("registreerNav").addEventListener("click", function () {
+	window.location.href = "registreren.html";
 })
 
-document.getElementById("contactNav").addEventListener("click", function() {
+document.getElementById("contactNav").addEventListener("click", function () {
 	alert("moet nog gemaakt worden G");
 })
 
 document.getElementById("verkoopPuntBeschikbaar").addEventListener("click",
-		function() {
-			smoothScroll(document.getElementById('marketingPuntUitleg'));
-		});
+	function () {
+		smoothScroll(document.getElementById('marketingPuntUitleg'));
+	});
 
 document.getElementById("verkoopPuntVoorraad").addEventListener("click",
-		function() {
-			smoothScroll(document.getElementById('marketingPuntUitleg'));
-		});
+	function () {
+		smoothScroll(document.getElementById('marketingPuntUitleg'));
+	});
 
 document.getElementById("verkoopPuntMarketing").addEventListener("click",
-		function() {
-			smoothScroll(document.getElementById('marketingPuntUitleg'));
-		});
+	function () {
+		smoothScroll(document.getElementById('marketingPuntUitleg'));
+	});
 
 document.getElementById("verkoopPuntAgenda").addEventListener("click",
-		function() {
-			smoothScroll(document.getElementById('agendaPuntUitleg'));
-		});
+	function () {
+		smoothScroll(document.getElementById('agendaPuntUitleg'));
+	});
 
 document.getElementById("verkoopPuntKlantenbeheer").addEventListener("click",
-		function() {
-			smoothScroll(document.getElementById('klantBeheerPuntUitleg'));
-		});
+	function () {
+		smoothScroll(document.getElementById('klantBeheerPuntUitleg'));
+	});
 
 document.getElementById("verkoopPuntStatistieken").addEventListener("click",
-		function() {
-			smoothScroll(document.getElementById('statistiekenPuntUitleg'));
-		});
+	function () {
+		smoothScroll(document.getElementById('statistiekenPuntUitleg'));
+	});
 
 document.getElementById("verkoopPuntTelefoon").addEventListener("click",
-		function() {
-			smoothScroll(document.getElementById('tijdVerkoopPuntDivUitleg'));
-		});
+	function () {
+		smoothScroll(document.getElementById('tijdVerkoopPuntDivUitleg'));
+	});
 
 document.getElementById("verkoopPuntWebsite")
-		.addEventListener(
-				"click",
-				function() {
-					smoothScroll(document
-							.getElementById('websiteVerkoopPuntDivUitleg'));
-				});
+	.addEventListener(
+		"click",
+		function () {
+			smoothScroll(document
+				.getElementById('websiteVerkoopPuntDivUitleg'));
+		});
 
 function smoothScroll(target) {
 	var scrollContainer = target;
@@ -118,12 +126,12 @@ function smoothScroll(target) {
 		targetY += target.offsetTop;
 	} while (target = target.offsetParent);
 
-	scroll = function(c, a, b, i) {
+	scroll = function (c, a, b, i) {
 		i++;
 		if (i > 30)
 			return;
 		c.scrollTop = a + (b - a) / 30 * i;
-		setTimeout(function() {
+		setTimeout(function () {
 			scroll(c, a, b, i);
 		}, 20);
 	}

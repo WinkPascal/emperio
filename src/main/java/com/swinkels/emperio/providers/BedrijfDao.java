@@ -23,4 +23,7 @@ public interface BedrijfDao {
 	public boolean setInvoerKlant(Bedrijf bedrijf, String contact, boolean telefoon, boolean email, boolean adres);
 
 	public Bedrijf getKlantPaginaSettings(Bedrijf bedrijf);
+	
+	public boolean needsSetup(String username);
+		
 }

@@ -8,10 +8,12 @@ import com.swinkels.emperio.objects.Behandeling;
 
 public interface BehandelingDao {
 	public ArrayList<Behandeling> behandelingenByGeslacht(String geslacht, String bedrijf);
-	
-	public boolean setBehandeling(Behandeling behandeling);
-	
+
 	public ArrayList<Behandeling> getTop5Behandelingen(Bedrijf bedrijf, Date date);
-	
-	public ArrayList<Behandeling> getBehandelingen(String bedrijf, int pageNummer, String geslacht, String sort) ;
+
+	public ArrayList<Behandeling> getBehandelingen(String bedrijf, int pageNummer, String geslacht, String sort);
+
+	public boolean save(Behandeling behandeling);
+
+	public ArrayList<Behandeling> getAllBehandelingen(Bedrijf bedrijf);
 }

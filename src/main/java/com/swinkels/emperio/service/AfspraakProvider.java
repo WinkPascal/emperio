@@ -1,6 +1,6 @@
 package com.swinkels.emperio.service;
 
-import java.text.ParseException; 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,11 +9,13 @@ import javax.annotation.security.RolesAllowed;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import com.swinkels.emperio.objects.Afspraak;
@@ -198,63 +200,59 @@ public class AfspraakProvider {
 		return jab.build().toString();
 	};
 
-	// wordt gebruikt bij
-	// home / rooster voor opennen van een afspraak
-//uitvoer
-	// afspraak.beginTijd
 
-	// klant.naam
-	// klant.email
-	// klant.telefoon
-	// klant.geslacht
-	// klant.aantalafspraken
-
-	// aparte json array binnen jab1
-	// behandeling.naam
-	// behandeling.lengte
-	// behandeling.prijs
 	@GET
 	@RolesAllowed("user")
 	@Path("/getAfspraak/{id}")
 	@Produces("application/json")
 	public String getAfspraak(@Context SecurityContext sc, @PathParam("id") int afspraakId) {
-		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		Afspraak afspraak = afspraakDao.getAfspraak(bedrijf, afspraakId);
 		JsonObjectBuilder job = Json.createObjectBuilder();
 		
-		Date timestampDate = afspraak.getTimeStamp();
-		String timestamp = ServiceFilter.DateToStringFormatter(timestampDate, "yyyy-MM-dd HH:mm");
+		Afspraak afspraak = new Afspraak();
+		afspraak.setId(afspraakId);
+		afspraak.retrieveBehandelingen();
+		afspraak.retrieveKlant();
 				
+		job.add("klantId", afspraak.getKlant().getId());
 		job.add("klantNaam", afspraak.getKlant().getNaam());
 		job.add("klantEmail", afspraak.getKlant().getEmail());
+		job.add("klantAdres", afspraak.getKlant().getAdres());
 		job.add("klantGeslacht", afspraak.getKlant().getGeslacht());
 		job.add("klantTelefoon", afspraak.getKlant().getTel());
-		
-		job.add("aantalAfspraken", 12);
-		job.add("hoeveelheidInkomsten", 122.21);
-
 
 		JsonArrayBuilder jab1 = Json.createArrayBuilder();
 		double totaalPrijs = 0;
-		Date totaalLengte;
 		for (Behandeling behandeling : afspraak.getBehandelingen()) {
+			System.out.println(behandeling.getNaam() + "is het id");
 			JsonObjectBuilder job1 = Json.createObjectBuilder();
-
-			String lengteString = ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm");
-
+			
+			job1.add("id", behandeling.getId());
 			job1.add("naam", behandeling.getNaam());
-			job1.add("lengte", lengteString);
+			job1.add("lengte", ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm"));
+			job1.add("prijs", behandeling.getPrijs());
+			
 			totaalPrijs = totaalPrijs + behandeling.getPrijs();
 			jab1.add(job1);
 		}
 
 		job.add("behandelingen", jab1);
-		job.add("datum", timestamp.substring(0, 10));
-		job.add("tijd", timestamp.substring(11, 16));
 		job.add("totaalPrijs", totaalPrijs);
-		String totaalLengteString = "123 min";
-		job.add("totaalLengte", totaalLengteString);
 
 		return job.build().toString();
 	}
+	
+	@DELETE
+	@RolesAllowed("user")
+	@Path("/deleteafspraak/{id}")
+	@Produces("application/json")
+	public Response deleteAfspraak(@PathParam("id") int afspraakId) {
+		System.out.println("delete from "+afspraakId);
+		Afspraak afspraak = new Afspraak();
+		afspraak.setId(afspraakId);
+		if(afspraak.delete()) {
+			return Response.ok().build();			
+		} else {
+			return Response.serverError().build();
+		}
+	}	
 }

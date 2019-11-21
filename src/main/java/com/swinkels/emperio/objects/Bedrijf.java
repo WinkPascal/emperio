@@ -1,29 +1,46 @@
 package com.swinkels.emperio.objects;
 
+import java.util.ArrayList;
+
+import com.swinkels.emperio.providers.BedrijfDao;
+import com.swinkels.emperio.providers.BedrijfDaoImpl;
+import com.swinkels.emperio.providers.BehandelingDao;
+import com.swinkels.emperio.providers.BehandelingDaoImpl;
+
 public class Bedrijf {
+	BedrijfDao bedrijfDao = new BedrijfDaoImpl();
+	BehandelingDao behandelingDao = new BehandelingDaoImpl();
+	private String bedrijfsNaam;
 	private String email;
 	private String naam;
 	private String tel;
 	private String adres;
 	private String wachtwoord;
+
 	private String verplichtContactVeld;
 	private boolean invoerveldEmail;
 	private boolean invoerveldTelefoon;
 	private boolean invoerveldAdres;
-	
-	public Bedrijf(String bedrijfsNaam) {
-		this.email = bedrijfsNaam;
-	}
-	
-	public Bedrijf(String email, String naam, String tel, String adres) {
+
+	public Bedrijf(String email) {
 		this.email = email;
+	}
+
+	public Bedrijf(String bedrijfsNaam, String naam, String email, String tel, String adres, String wachtwoord) {
+		this.bedrijfsNaam = bedrijfsNaam;
 		this.naam = naam;
+		this.email = email;
 		this.tel = tel;
 		this.adres = adres;
+		this.wachtwoord = wachtwoord;
 	}
-	
+
 	public String getVerplichtContactVeld() {
 		return verplichtContactVeld;
+	}
+
+	public String getBedrijfsNaam() {
+		return bedrijfsNaam;
 	}
 
 	public void setVerplichtContactVeld(String verplichtContactVeld) {
@@ -54,14 +71,6 @@ public class Bedrijf {
 		this.invoerveldAdres = invoerveldAdres;
 	}
 
-	public Bedrijf(String email, String naam, String tel, String adres, String wachtwoord) {
-		this.email = email;
-		this.naam = naam;
-		this.tel = tel;
-		this.adres = adres;
-		this.wachtwoord = wachtwoord;
-	}
-	
 	public Bedrijf() {
 	}
 
@@ -103,5 +112,19 @@ public class Bedrijf {
 
 	public String getEmail() {
 		return email;
+	}
+
+	public boolean saveBedrijf() {
+		if (bedrijfDao.saveBedrijf(this)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public ArrayList<Behandeling> getBehandelingen() {
+		System.out.println("sssssss2");
+
+		return behandelingDao.getAllBehandelingen(this);
 	}
 }

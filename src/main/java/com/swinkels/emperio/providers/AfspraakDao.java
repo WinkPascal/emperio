@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
+import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Klant;
 
@@ -29,4 +30,10 @@ public interface AfspraakDao {
 	public ArrayList<Afspraak> getLaatste3Afspraken(Bedrijf bedrijf, Klant klant);
 
 	public int getMinutesOfAfspraak(Afspraak afspraak);
+
+	public Klant getKlant(Afspraak afspraak);
+
+	public ArrayList<Behandeling> getBehandelingen(Afspraak afspraak);
+
+	public boolean deleteAfspraak(Afspraak afspraak);
 }

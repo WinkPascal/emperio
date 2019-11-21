@@ -350,4 +350,91 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		}
 		return minuten;
 	}
+
+	@Override
+	public Klant getKlant(Afspraak afspraak) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					  "select k.id, k.naam, k.email, k.telefoon, k.geslacht, k.adres \n" + 
+					  "from klant k join afspraak a on a.klant = k.id 							\n"  
+					+ "where a.id = "+afspraak.getId());
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				//klant
+				int id = dbResultSet.getInt("id");
+				System.out.println(id);
+				String klantNaam = dbResultSet.getString("naam");
+				String klantEmail = dbResultSet.getString("email");
+				String klantGeslacht = dbResultSet.getString("geslacht");
+
+				if(klantEmail == null) {
+					klantEmail = "-";
+				}
+				String klantTelefoon = dbResultSet.getString("telefoon");
+				if(klantTelefoon == null) {
+					klantTelefoon = "-";
+				} 
+				String klantAdres = dbResultSet.getString("adres");
+				if(klantAdres == null) {
+					klantAdres = "-";
+				} 
+				
+				Klant klant = new Klant(id, klantNaam, klantEmail, klantTelefoon, klantGeslacht, klantAdres);
+				return klant;
+			}
+		} catch (SQLException e) {	
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	
+	public ArrayList<Behandeling> getBehandelingen(Afspraak afspraak) {
+		ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					  "select b.id, b.naam, b.lengte, b.prijs \n" + 
+					  "from behandeling b join afspraakbehandeling n on b.id = n.behandeling				      \n" + 
+					  "where n.afspraak = "+afspraak.getId());
+
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				//klant
+				int id = dbResultSet.getInt("id");
+				String naam = dbResultSet.getString("naam");
+				double prijs = dbResultSet.getDouble("prijs");
+				
+				String lengteString = dbResultSet.getString("lengte");
+				Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
+
+				Behandeling behandeling = new Behandeling(id, naam, null, lengte, prijs, null);
+				behandelingen.add(behandeling);
+			}
+		} catch (SQLException e) {	
+			e.printStackTrace();
+		}
+		return behandelingen;
+	}
+	public boolean deleteAfspraak(Afspraak afspraak) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+				  "delete from afspraakbehandeling \n"
+				 + "where afspraak = "+afspraak.getId());
+			System.out.println(pstmt);
+			
+			pstmt.executeUpdate();
+			PreparedStatement pstmt1 = con.prepareStatement(
+				   "delete from afspraak \n "
+				 + "where id = "+afspraak.getId());
+			System.out.println(pstmt1);
+			pstmt1.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }

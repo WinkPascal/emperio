@@ -1,19 +1,25 @@
 package com.swinkels.emperio.objects;
 
+import javax.json.JsonValue;
+
 public class Klant {
 	private int id;
 	private String naam;
 	private String email;
 	private String tel;
 	private String geslacht;
+	private String adres;
 	private Bedrijf bedrijf;
+	private int hoeveeleheidAfspraken;
+	private double hoeveelheidInkomsten;
 
-	public Klant(int id, String naam, String email, String tel, String geslacht) {
+	public Klant(int id, String naam, String email, String tel, String geslacht, String klantAdres) {
 		this.id = id;
 		this.naam = naam;
 		this.email = email;
 		this.tel = tel;
 		this.geslacht = geslacht;
+		this.adres = klantAdres;
 	}
 
 	public Klant(String naam, String email, String tel, String geslacht) {
@@ -80,5 +86,17 @@ public class Klant {
 
 	public Bedrijf getBedrijf() {
 		return bedrijf;
+	}
+
+	public int getAantalAfspraken() {
+		return hoeveeleheidAfspraken;
+	}
+
+	public String getAdres() {
+		return adres;
+	}
+
+	public double getHoeveelheidInkomsten() {
+		return hoeveelheidInkomsten;
 	}
 }

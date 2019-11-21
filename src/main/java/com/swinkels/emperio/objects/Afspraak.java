@@ -3,6 +3,9 @@ package com.swinkels.emperio.objects;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.swinkels.emperio.providers.AfspraakDao;
+import com.swinkels.emperio.providers.AfspraakDaoImpl;
+
 public class Afspraak {
 
 	private int id;
@@ -83,5 +86,23 @@ public class Afspraak {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+	public void retrieveBehandelingen() {
+		AfspraakDao afspraakDao = new AfspraakDaoImpl();
+		behandelingen = afspraakDao.getBehandelingen(this);
+	}
+	public void retrieveKlant() {
+		AfspraakDao afspraakDao = new AfspraakDaoImpl();
+		klant = afspraakDao.getKlant(this);
+	}
+
+	public boolean delete() {
+		AfspraakDao afspraakDao = new AfspraakDaoImpl();
+		if(afspraakDao.deleteAfspraak(this)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
