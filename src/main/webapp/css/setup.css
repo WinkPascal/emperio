@@ -409,19 +409,29 @@
 
 #dagenForm {
 	display: grid;
-	grid-template-columns: auto auto;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr, 1fr, 1fr, 1fr;
+	width: 100%;
+	height: 100%;
 }
 
 .dagInputArea {
 	border: 1px solid black;
-	height: 20%;
-	width: 50%;
+	text-align: center;
 }
 
 .dagInputArea a {
 	font-size: 20px;
 }
-
+.dagInputArea .dagenInput{
+	display: inline-block;
+	width: 200px;
+	height: 25px;
+	border: 1px solid black;
+}
+.dagInputArea .dagTijden{
+	display: none;
+}
 .switch {
 	position: relative;
 	display: inline-block;
@@ -480,4 +490,86 @@ input:checked+.slider:before {
 
 .slider.round:before {
 	border-radius: 50%;
+}
+
+
+
+
+
+
+
+
+.tijdKiezen{
+	width: 800px;
+	border: 1px solid black;
+	height: 500px;
+	top:100px;
+	margin: auto;
+	position: relative;
+	background-color: white;
+}
+.tijdKiezen .openingsTijdKiezen{
+	float: left;            
+}
+
+.tijdKiezen .sluitingsTijdKiezen{
+	float: right;
+}
+
+.tijdKiezen .timepicker-dial{
+	width: 250px;
+	height: 250px;
+	border: 1px solid black;
+	border-radius: 50%;
+	position: relative;
+	display: none;
+}
+.tijdKiezen .timepicker-dial .selectedTime{
+	left: 25px;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	background-color:#408F90;
+}
+
+.tijdKiezen .timepicker-uur-openingstijd:hover{
+	background-color:aquamarine;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+}
+.tijdKiezen .timepicker-uur-sluitingsTijd:hover{
+	background-color:aquamarine;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+}
+.tijdKiezen .timepicker-minuut-openingstijd:hover{
+	background-color:aquamarine;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+}        
+.tijdKiezen .timepicker-minuut-sluitingsTijd:hover{
+	background-color:aquamarine;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+}
+.tijdKiezen #openingsTijd{
+	width: 300px;
+	display: inline-block;
+	height: 30px;
+	border: 1px solid black;
+}
+.tijdKiezen #sluitingsTijd{
+	width: 300px;
+	display: inline-block;
+	height: 30px;
+	border: 1px solid black;
+}
+
+.tijdKiezen #okButton{
+	position: absolute;
+	bottom: 5px;
 }

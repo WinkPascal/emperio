@@ -14,7 +14,6 @@ public class BedrijfsInstellingen{
 	private boolean adresKlantInvoer;
 	
 	private String kleurKlasse1;
-	private double minimumPrijsVanKlasse1;
 	private double maximumPrijsVanKlasse1;
 	private String kleurKlasse2;
 	private double maximumPrijsVanKlasse2;
@@ -22,7 +21,7 @@ public class BedrijfsInstellingen{
 	
 	public BedrijfsInstellingen(String telefoonBedrijf, String emailBedrijf, String adresBedrijf,
 			boolean emailKlantInvoer, boolean telefoonKlantInvoer, boolean adresKlantInvoer, String kleurKlasse1,
-			double minimumPrijsVanKlasse1, double maximumPrijsVanKlasse1, String kleurKlasse2,
+			double maximumPrijsVanKlasse1, String kleurKlasse2,
 			double maximumPrijsVanKlasse2, String kleurKlasse3) {
 		this.telefoonBedrijf = telefoonBedrijf;
 		this.emailBedrijf = emailBedrijf;
@@ -31,7 +30,6 @@ public class BedrijfsInstellingen{
 		this.telefoonKlantInvoer = telefoonKlantInvoer;
 		this.adresKlantInvoer = adresKlantInvoer;
 		this.kleurKlasse1 = kleurKlasse1;
-		this.minimumPrijsVanKlasse1 = minimumPrijsVanKlasse1;
 		this.maximumPrijsVanKlasse1 = maximumPrijsVanKlasse1;
 		this.kleurKlasse2 = kleurKlasse2;
 		this.maximumPrijsVanKlasse2 = maximumPrijsVanKlasse2;
@@ -94,14 +92,6 @@ public class BedrijfsInstellingen{
 		this.kleurKlasse1 = kleurKlasse1;
 	}
 
-	public double getMinimumPrijsVanKlasse1() {
-		return minimumPrijsVanKlasse1;
-	}
-
-	public void setMinimumPrijsVanKlasse1(double minimumPrijsVanKlasse1) {
-		this.minimumPrijsVanKlasse1 = minimumPrijsVanKlasse1;
-	}
-
 	public double getMaximumPrijsVanKlasse1() {
 		return maximumPrijsVanKlasse1;
 	}
@@ -143,6 +133,7 @@ public class BedrijfsInstellingen{
 	public boolean saveBedrijfInstellingen() {
 		BedrijfsInstellingenDao bedrijfsIntellingenDao = new BedrijfsInstellingenDaoImpl();
 		if(bedrijfsIntellingenDao.save(this)) {
+			System.out.println("true");
 			return true;
 		} else {
 			return false;	

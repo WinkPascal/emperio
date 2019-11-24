@@ -1,5 +1,6 @@
 package com.swinkels.emperio.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.json.JSONArray;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.BedrijfsInstellingen;
 import com.swinkels.emperio.objects.Behandeling;
+import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.support.Validator;
 
 @Path("/setup")
@@ -93,7 +95,6 @@ public class SetupProvider {
 	@Produces("application/json")
 	public Response afspraakSettings(@Context SecurityContext sc, 
 			@FormParam("kleurKlasse1") String kleurKlasse1,
-			@FormParam("van1") double minimumPrijsVanKlasse1, 
 			@FormParam("tot1") double maximumPrijsVanKlasse1,
 			@FormParam("kleurKlasse2") String kleurKlasse2,
 			@FormParam("tot2") double maximumPrijsVanKlasse2, 
@@ -106,12 +107,64 @@ public class SetupProvider {
 			@FormParam("emailBedrijfInput") String emailBedrijfInput,
 			@FormParam("telefoonBedrijfInput") String telefoonBedrijfInput,
 			@FormParam("adresBedrijfInput") String adresBedrijfInput) {
-		BedrijfsInstellingen bedrijfInstellingen = new BedrijfsInstellingen(telefoonBedrijfInput,emailBedrijfInput,adresBedrijfInput,emailKlant,telefoonKlant, adresKlant, kleurKlasse1, minimumPrijsVanKlasse1, maximumPrijsVanKlasse1, kleurKlasse2, maximumPrijsVanKlasse2, kleurKlasse3);
+		BedrijfsInstellingen bedrijfInstellingen = new BedrijfsInstellingen(telefoonBedrijfInput,emailBedrijfInput,adresBedrijfInput,emailKlant,telefoonKlant, adresKlant, kleurKlasse1, maximumPrijsVanKlasse1, kleurKlasse2, maximumPrijsVanKlasse2, kleurKlasse3);
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		bedrijfInstellingen.setBedrijf(bedrijf);
 		bedrijfInstellingen.saveBedrijfInstellingen();
-		
 		return Response.ok().build();
 	}
 	
+	
+	@POST
+	@RolesAllowed("setup")
+	@Path("/dagen")
+	@Produces("application/json")
+	public Response dagen(@Context SecurityContext sc, 
+			@FormParam("openingsTijdMaandag") String openingsTijdMaandag,
+			@FormParam("sluitingsTijdMaandag") String sluitingsTijdMaandag,
+			
+			@FormParam("openingsTijdDinsdag") String openingsTijdDinsdag,
+			@FormParam("sluitingsTijdDinsdag") String sluitingsTijdDinsdag,
+			
+			@FormParam("openingsTijdWoensdag") String openingsTijdWoensdag,
+			@FormParam("sluitingsTijdWoensdag") String sluitingsTijdWoensdag,
+			
+			@FormParam("openingsTijdDonderdag") String openingsTijdDonderdag,
+			@FormParam("sluitingsTijdDonderdag") String sluitingsTijdDonderdag,
+			
+			@FormParam("openingsTijdVrijdag") String openingsTijdVrijdag,
+			@FormParam("sluitingsTijdVrijdag") String sluitingsTijdVrijdag,
+			
+			@FormParam("openingsTijdZaterdag") String openingsTijdZaterdag,
+			@FormParam("sluitingsTijdZaterdag") String sluitingsTijdZaterdag,
+			
+			@FormParam("openingsTijdZondag") String openingsTijdZondag,
+			@FormParam("sluitingsTijdZondag") String sluitingsTijdZondag) {
+		System.out.println("=============dagen===================");
+		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+		ArrayList<Dag> dagen = new ArrayList<Dag>();
+		Dag maandag = new Dag(bedrijf, 0, openingsTijdMaandag, sluitingsTijdMaandag);
+		Dag dinsdag = new Dag(bedrijf, 1, openingsTijdDinsdag, sluitingsTijdDinsdag);
+		Dag woensdag = new Dag(bedrijf, 2, openingsTijdWoensdag, sluitingsTijdWoensdag);
+		Dag donderdag = new Dag(bedrijf, 3, openingsTijdDonderdag, sluitingsTijdDonderdag);
+		Dag vrijdag = new Dag(bedrijf, 4, openingsTijdVrijdag, sluitingsTijdVrijdag);
+		Dag zaterdag = new Dag(bedrijf, 5, openingsTijdZaterdag, sluitingsTijdZaterdag);
+		Dag zondag = new Dag(bedrijf, 6, openingsTijdZondag, sluitingsTijdZondag);
+		dagen.add(maandag);
+		dagen.add(dinsdag);
+		dagen.add(woensdag);
+		dagen.add(donderdag);
+		dagen.add(vrijdag);
+		dagen.add(zaterdag);
+		dagen.add(zondag);
+		for(Dag dag : dagen) {
+			if(dag.validateTijden()) {
+				return Response.status(409).build();
+			}
+		}
+		bedrijf.setDagen(dagen);
+		
+		bedrijf.saveBehandelingen(); 
+		return Response.ok().build();
+	}	
 }

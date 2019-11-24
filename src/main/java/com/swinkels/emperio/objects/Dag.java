@@ -2,6 +2,8 @@ package com.swinkels.emperio.objects;
 
 import java.util.Date;
 
+import com.swinkels.emperio.service.ServiceFilter;
+
 public class Dag {
 	private int id;
 	private Bedrijf bedrijf;
@@ -10,9 +12,26 @@ public class Dag {
 	private int aantalAfspraken;
 	private int dag;
 	
+	
 	public Dag(Date openingsTijd, Date sluitingsTijd) {
 		this.openingsTijd = openingsTijd;
 		this.sluitingsTijd = sluitingsTijd;
+	}
+	
+	public Dag(Bedrijf bedrijf, int dag, String openingsTijdString, String sluitingsTijdString) {
+		this.dag = dag;
+		this.bedrijf = bedrijf;
+		
+		if(openingsTijdString == null || sluitingsTijdString == null) {
+			this.openingsTijd = null;
+			this.sluitingsTijd = null;
+		} else {
+			Date openingsTijd = ServiceFilter.StringToDateFormatter(openingsTijdString, "HH:mm");
+			Date sluitingsTijd = ServiceFilter.StringToDateFormatter(sluitingsTijdString, "HH:mm");
+			
+			this.openingsTijd= openingsTijd;
+			this.sluitingsTijd = sluitingsTijd;
+		}
 	}
 
 	public Dag(int dagNummer, Date openingsTijdDate, Date sluitingsTijdDate) {
@@ -72,5 +91,21 @@ public class Dag {
 
 	public void setDag(int dag) {
 		this.dag = dag;
+	}
+	public boolean validateTijden() {
+		if(openingsTijd == null || sluitingsTijd == null) {
+			return false;
+		} else {
+			if(openingsTijd.after(sluitingsTijd)) {
+				System.out.println(openingsTijd +" fout "+sluitingsTijd);
+				return true;
+			} else if(openingsTijd.before(sluitingsTijd)) {
+				System.out.println(openingsTijd +" goed "+sluitingsTijd);
+				return false;
+			} else {
+				System.out.println(openingsTijd +" tegelijk "+sluitingsTijd);
+				return true;	
+			}
+		}
 	}
 }

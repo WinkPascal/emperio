@@ -6,6 +6,8 @@ import com.swinkels.emperio.providers.BedrijfDao;
 import com.swinkels.emperio.providers.BedrijfDaoImpl;
 import com.swinkels.emperio.providers.BehandelingDao;
 import com.swinkels.emperio.providers.BehandelingDaoImpl;
+import com.swinkels.emperio.providers.DagDao;
+import com.swinkels.emperio.providers.DagDaoImpl;
 import com.swinkels.emperio.providers.KlantDao;
 import com.swinkels.emperio.providers.KlantDaoImpl;
 
@@ -18,14 +20,30 @@ public class Bedrijf {
 	private String tel;
 	private String adres;
 	private String wachtwoord;
+	private ArrayList<Dag> dagen;
 
-
-
+	public ArrayList<Dag> getDagen() {
+		return this.dagen;
+	}
+	
+	public void setDagen(ArrayList<Dag> dagen) {
+		this.dagen = dagen;
+	}
+	
+	public void addDag(Dag dag) {
+		System.out.println(dag.getDag());
+		this.dagen.add(dag);
+	}
+	
 	public Bedrijf(String email) {
 		this.email = email;
 	}
-	
-
+	public void saveBehandelingen() {
+		DagDao dagDao = new DagDaoImpl();
+		for(Dag dag : dagen) {
+			dagDao.saveDag(dag);
+		}
+	}
 
 	public Bedrijf(String bedrijfsNaam, String naam, String email, String tel, String adres, String wachtwoord) {
 		this.bedrijfsNaam = bedrijfsNaam;
