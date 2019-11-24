@@ -1,16 +1,16 @@
 function onload(){
-	getKlanten("load");
+	bladzijdeManager("load");
 }
 
 document.getElementById("vorigeKlantenPagina").addEventListener("click", function(){
-	getKlanten("terug");
+	bladzijdeManager("terug");
 })
 
 document.getElementById("volgendeKlantenPagina").addEventListener("click", function(){
-	getKlanten("volgende");
+	bladzijdeManager("volgende");
 })
 
-function getKlanten(functie){ 
+function bladzijdeManager(functie){
 	if(functie == "load"){
 		blz=1;
 	} else if(functie == "volgende"){
@@ -24,6 +24,10 @@ function getKlanten(functie){
 		}
 	}
 	document.getElementById("paginaNummer").innerHTML = blz;
+	getKlanten(blz);
+}
+
+function getKlanten(blz){ 
 	var klantenLijst = document.getElementById("klantenLijst");
 	klantenLijst.innerHTML="";
 	var fetchoptions = {
@@ -37,10 +41,46 @@ function getKlanten(functie){
 		if(klanten.length == 0){
 			errorMessage("er zijn geen klanten gevonden");
 			return;			
+		} else{
+			klantenLijst.appendChild(createTopRow());
+			for(let klant of klanten){
+                createKlantRow(klant);
+			}
 		}
-		succesMessage("klanten zijn opgehaald");
-		
-		var topRow = document.createElement('tr');
+	})
+}
+function createKlantRow(klant){
+	var row = document.createElement('tr');
+	row.id = klant.id;
+	
+	var klantNaam = document.createElement('td');
+	klantNaam.innerHTML = klant.naam;
+	row.appendChild(klantNaam);
+
+	var klantGeslacht = document.createElement('td');
+	klantGeslacht.innerHTML = klant.geslacht;
+	row.appendChild(klantGeslacht);
+
+	var klantEmail = document.createElement('td');
+	klantEmail.innerHTML = klant.email;
+	row.appendChild(klantEmail);
+
+	var klantTelefoon = document.createElement('td');
+	klantTelefoon.innerHTML = klant.telefoon;
+	row.appendChild(klantTelefoon);
+
+	var klantAdres = document.createElement('td');
+	klantAdres.innerHTML = klant.adres;
+	row.appendChild(klantAdres);
+	
+	document.getElementById("klantenLijst").appendChild(row);
+	document.getElementById(klant.id).addEventListener("click", function(){
+		getKlant(klant.id);
+	})
+}
+
+function createTopRow(){
+	    var topRow = document.createElement('tr');
 
 		var klantNaam = document.createElement('th');
 		klantNaam.innerHTML= "Naam";
@@ -57,34 +97,12 @@ function getKlanten(functie){
 		var klantTelefoon = document.createElement('th');
 		klantTelefoon.innerHTML= "Telefoon nummer";
 		topRow.appendChild(klantTelefoon);
-		
-		klantenLijst.appendChild(topRow);
-		for(let klant of klanten){
-			var row = document.createElement('tr');
-			row.id = klant.id;
-			
-			var klantNaam = document.createElement('td');
-			klantNaam.innerHTML = klant.naam;
-			row.appendChild(klantNaam);
 
-			var klantGeslacht = document.createElement('td');
-			klantGeslacht.innerHTML = klant.geslacht;
-			row.appendChild(klantGeslacht);
+		var klantAdres = document.createElement('th');
+		klantAdres.innerHTML= "Adres";
+		topRow.appendChild(klantAdres);
 
-			var klantEmail = document.createElement('td');
-			klantEmail.innerHTML = klant.email;
-			row.appendChild(klantEmail);
-
-			var klantTelefoon = document.createElement('td');
-			klantTelefoon.innerHTML = klant.telefoon;
-			row.appendChild(klantTelefoon);
-			
-			klantenLijst.appendChild(row);
-			document.getElementById(klant.id).addEventListener("click", function(){
-				getKlant(klant.id);
-			})
-		}
-	})
+		return topRow;
 }
 
 function getKlant(id){

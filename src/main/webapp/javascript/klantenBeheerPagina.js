@@ -24,10 +24,6 @@ function onloadKlantenBeheer(){
 }
 
 document.getElementById("opslaanKlantenBeheer").addEventListener("click", function(){
-	//verplichte contact veld
-	var emailContact = document.getElementById("emailPrimary").checked;
-	var telefoonContact = document.getElementById("phonePrimary").checked;
-	
 	//invoervelden
 	var telefoon = document.getElementById("telefoonInvoerVeld").checked;
 	var email = document.getElementById("emailInvoerVeld").checked;

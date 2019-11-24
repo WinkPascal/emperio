@@ -96,6 +96,10 @@ public class Validator {
 		return null;
 	}
 
+	public static String nullValidator(String string) {
+		return ((string.length() == 0) ? "-" : string);
+	}
+	
 	private static boolean emailValidation(String email) {
 		Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
 		Matcher mat = pattern.matcher(email);
@@ -108,5 +112,14 @@ public class Validator {
 
 	public static boolean telefoonValidation(String phone) {
 		return false;
+	}
+
+	public static boolean validateLengte(Date lengte) {
+		System.out.println(lengte);
+		if(lengte.after(new Date())) {
+			return false;
+		} else {
+			return true;
+		}		
 	}
 }

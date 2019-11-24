@@ -9,7 +9,7 @@ public interface KlantDao {
 
 	public ArrayList<Klant> zoekKlant(String bedrijf, String klantRequest);
 
-	public ArrayList<Klant> getKlanten(String bedrijf, int pageNummer);
+	public ArrayList<Klant> getKlantenWithLimit(Bedrijf bedrijf, int low, int top);
 
 	public boolean setKlant(Klant klant);
 

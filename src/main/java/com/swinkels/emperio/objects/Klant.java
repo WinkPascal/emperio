@@ -10,6 +10,7 @@ public class Klant {
 	private String geslacht;
 	private String adres;
 	private Bedrijf bedrijf;
+	
 	private int hoeveeleheidAfspraken;
 	private double hoeveelheidInkomsten;
 
@@ -22,13 +23,6 @@ public class Klant {
 		this.adres = klantAdres;
 	}
 
-	public Klant(String naam, String email, String tel, String geslacht) {
-		this.naam = naam;
-		this.email = email;
-		this.tel = tel;
-		this.geslacht = geslacht;
-	}
-	
 	public Klant(String naam, String email, String tel, String geslacht, Bedrijf bedrijf) {
 		this.naam = naam;
 		this.email = email;

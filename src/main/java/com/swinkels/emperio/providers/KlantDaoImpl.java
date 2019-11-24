@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Klant;
+import com.swinkels.emperio.support.Validator;
 
 public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 
@@ -22,11 +23,12 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
 				String naam = dbResultSet.getString("naam");
-				String email = dbResultSet.getString("email");
-				String telefoon = dbResultSet.getString("telefoon");
 				String geslacht = dbResultSet.getString("geslacht");
-
-				Klant klant = new Klant(id, naam, email, telefoon, geslacht);
+				String email = Validator.nullValidator(dbResultSet.getString("email"));
+				String telefoon = Validator.nullValidator(dbResultSet.getString("telefoon"));
+				String adres = Validator.nullValidator(dbResultSet.getString("adres"));
+				
+				Klant klant = new Klant(id, naam, email, telefoon, adres, geslacht);
 				klanten.add(klant);
 			}
 		} catch (SQLException e) {
@@ -36,25 +38,23 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 		return klanten;
 	}
 
-	public ArrayList<Klant> getKlanten(String bedrijf, int pageNummer) {
+	public ArrayList<Klant> getKlantenWithLimit(Bedrijf bedrijf, int low, int top) {
 		ArrayList<Klant> klanten = new ArrayList<Klant>();
-		
-		
-		int top = pageNummer * 20;
-		int low = top - 19;
-		
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"select * from klant where bedrijf = '" + bedrijf + "' ORDER BY naam LIMIT "+low+", "+top+"");
+					"select * from klant where bedrijf = '" + bedrijf.getEmail() + 
+					" ' ORDER BY naam LIMIT "+low+", "+top+"");
+			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
 				String naam = dbResultSet.getString("naam");
-				String email = dbResultSet.getString("email");
-				String telefoon = dbResultSet.getString("telefoon");
 				String geslacht = dbResultSet.getString("geslacht");
-
-				Klant klant = new Klant(id, naam, email, telefoon, geslacht);
+				String email = Validator.nullValidator(dbResultSet.getString("email"));
+				String telefoon = Validator.nullValidator(dbResultSet.getString("telefoon"));
+				String adres = Validator.nullValidator(dbResultSet.getString("adres"));
+				
+				Klant klant = new Klant(id, naam, email, telefoon, geslacht, adres);
 				klanten.add(klant);
 			}
 		} catch (SQLException e) {
@@ -138,21 +138,18 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 	public Klant getKlant(Bedrijf bedrijf, int id) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"SELECT naam, geslacht, email, telefoon "
+					"SELECT naam, geslacht, email, telefoon, adres "
 				+ "from klant "
 				+ "where bedrijf = '"+bedrijf.getEmail()+"' "
 				+ "and id = "+id);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				
 				String naam = dbResultSet.getString("naam");
 				String geslacht = dbResultSet.getString("geslacht");
-				String email = dbResultSet.getString("email");
-				String telefoon = dbResultSet.getString("telefoon");
-				
-				Klant klant = new Klant(id, naam, email, telefoon, geslacht);
-
-
+				String email = Validator.nullValidator(dbResultSet.getString("email"));
+				String telefoon = Validator.nullValidator(dbResultSet.getString("telefoon"));
+				String adres = Validator.nullValidator(dbResultSet.getString("adres"));
+				Klant klant = new Klant(id, naam, email, telefoon, adres, geslacht);
 				return klant;
 			} 
 		} catch (SQLException e) {
@@ -171,7 +168,7 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
-				klant.setId(id);	
+				klant.setId(id);
 				return klant;
 			} 
 		} catch (SQLException e) {
@@ -192,7 +189,7 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
-				klant.setId(id);	
+				klant.setId(id);
 				return klant;
 			} 
 		} catch (SQLException e) {

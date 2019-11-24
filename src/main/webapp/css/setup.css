@@ -6,6 +6,102 @@
 
 
 /* behandleingen */
+
+.wizard {
+	position: relative;
+	width: 100%;
+}
+
+.wizard .progressbar {
+	counter-reset: step;
+	left: 200px;
+	width: 80%;
+	position: relative;
+	left: 10%;
+}
+
+.wizard .progressbar li {
+	list-style-type: none;
+	width: 25%;
+	float: left;
+	font-size: 12px;
+	position: relative;
+	text-align: center;
+	text-transform: uppercase;
+	color: #7d7d7d;
+}
+
+.wizard .progressbar li:before {
+	width: 30px;
+	height: 30px;
+	content: counter(step);
+	counter-increment: step;
+	line-height: 30px;
+	border: 2px solid #7d7d7d;
+	display: block;
+	text-align: center;
+	margin: 0 auto 10px auto;
+	border-radius: 50%;
+	background-color: white;
+}
+
+.wizard .progressbar li:after {
+	width: 100%;
+	height: 2px;
+	content: '';
+	position: absolute;
+	background-color: #7d7d7d;
+	top: 15px;
+	left: -50%;
+	z-index: -1;
+}
+
+.wizard .progressbar li:first-child:after {
+	content: none;
+}
+
+.wizard .progressbar li.active {
+	color: green;
+}
+
+.wizard .progressbar li.active:before {
+	border-color: #7d7d7d;
+}
+
+.wizard .progressbar li.active+li:after {
+	background-color: #55b776;
+}
+
+.wizard .progressbar li.done {
+	color: green;
+
+}
+
+.wizard .progressbar li.done:before {
+	border-color: #55b776;
+	background-color: green;
+}
+
+.wizard .progressbar li.done+li:after {
+	background-color: #55b776;
+}
+
+#vorigeStap {
+	float: left;
+	width: 160px;
+	margin: 5px;
+}
+
+#volgendeStap {
+	float: right;
+	margin: 5px;
+	width: 160px;
+}
+
+
+
+
+
 .wizardstep {
 	width: 1100px;
 	height: 600px;
@@ -17,18 +113,21 @@
 	float: left;
 	width: 450px;
 	height: 500px;
-	border: 1px solid black;
+	text-align: center;
 }
 
 #behandelingenLijst {
+	text-align: left;
 	width: 100%;
-	border: 1px solid black;
-	height: 500px;
+	height: 450px;
+	border-right: 1px solid gray;
 	overflow: scroll;
 }
 
 #behandelingenLijst .behandelingDiv {
 	margin: 10%;
+	background-color: orange;
+	position: relative;
 	width: 80%;
 	border: 1px solid black;
 }
@@ -36,16 +135,40 @@
 #behandelingenLijst .behandelingDiv .behandelingNaam {
 	top: 0px;
 	display: inline-block;
+	font-size: 22px;
 	left: 0px;
+	width: 80%;
+}
+
+#behandelingenLijst .behandelingDiv .behandelingPrijs {
+	right: 0px;
+	font-size: 22px;
+	position: absolute;
+	border: 1px solid black;
 }
 
 #behandelingenLijst .behandelingDiv .behandelingBeshrijving {
 	left: 0px;
+	min-height: 50px;
+	display: inline-block;
+	width: 100%;
 }
 
-#behandelingenLijst .behandelingDiv .behandelingLengteEnPrijs {
-	bottom: 0px;
+.geslachtEnBehandeling {
+	display: inline-block;
+	width: 100%;
+	border: 1px solid black;
 }
+
+#behandelingenLijst .behandelingDiv .behandelingGeslacht {
+	left: 0px;
+}
+
+#behandelingenLijst .behandelingDiv .behandelingLengte {
+	position: absolute;
+	right: 0px;
+}
+
 
 
 .BehandelingToevoegenForm {
@@ -80,14 +203,20 @@
 	right: 5px;
 }
 
-.BehandelingToevoegenForm .inputDiv .inputPrijsToevoegen {
+.inputPrijsToevoegen {
 	width: 40px;
-	height: 40px;
+	height: 30px;
+	border: 1px solid gray;
+	border-radius: 2px;
 }
 
 .BehandelingToevoegenForm .inputDiv .inputLengteToevoegen {
 	width: 60px;
 	height: 35px;
+}
+
+.BehandelingToevoegenForm .inputDiv #addBehandeling {
+	margin: auto;
 }
 
 .BehandelingToevoegenForm .geslachtDiv {
@@ -121,27 +250,165 @@
 }
 
 
-/* producten */
-.ProductToevoegenForm {
-	float: right;
-	width: 600px;
-	margin: auto;
-	height: 600px;
-	top: 200px;
-	background-color: white;
+/* afspraak settings */
+.afspraakKleurInstelling {
+	width: 50%;
+	float: left;
+	border-right: 1px solid gray;
+	height: 100%;
 }
 
-.productenLijstDiv {
-	float: left;
-	width: 450px;
+.afspraakKleurInstelling .afspraakColor{
+	border-top: 1px solid gray;
+	position: relative;
+	height: 100px;
+} 
+
+.afspraakColor .color-picker{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 240px;
+	height: 80px;
+	border: 1px solid black;
+	border-radius: 5px;
+	background-color:#424242;
+}
+
+.afspraakColor .color-picker .container {
+  display: block;
+  width: 30px;
+  position: relative;
+  padding-left: 35px;
+  float: left;
+  margin-bottom: 35px;
+  margin-left: 5px;
+  margin-right: 0px;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.afspraakColor .color-picker .container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.afspraakColor .color-picker .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 27px;
+  width: 27px;
+  background-color: #2196F3;
+  border-radius: 50%;
+}
+
+.afspraakColor .color-picker .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.afspraakColor .color-picker .container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.afspraakColor .color-picker .container .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+
+
+.invoervelden {
+	width: 49%;
+	height: 100%;
+	float: right;
+}
+
+/* The container */
+.invoervelden .container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.invoervelden .container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.invoervelden .checkmark {
+  position: absolute;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border: 2px solid #2196F3;
+}
+
+/* On mouse-over, add a grey background color */
+.invoervelden .container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.invoervelden .container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.invoervelden .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.invoervelden .container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.invoervelden .container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.invoervelden .bedrijfInfoInput {
+	display: inline-block;
+	width: 100%;
+	height: 50px;
+	top: 5px;
 	border: 1px solid black;
 }
 
-
 /* dagen */
 
-#dagenForm{
-  display: grid;
+#dagenForm {
+	display: grid;
 	grid-template-columns: auto auto;
 }
 

@@ -19,7 +19,9 @@ import javax.ws.rs.core.SecurityContext;
 import org.json.JSONArray;
 
 import com.swinkels.emperio.objects.Bedrijf;
+import com.swinkels.emperio.objects.BedrijfsInstellingen;
 import com.swinkels.emperio.objects.Behandeling;
+import com.swinkels.emperio.support.Validator;
 
 @Path("/setup")
 public class SetupProvider {
@@ -49,7 +51,9 @@ public class SetupProvider {
 		Bedrijf bedrijf = new Bedrijf(bedrijfsNaam);
 		String lengteString = uur + ":" + minuten;
 		Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
-
+		if(Validator.validateLengte(lengte)) {
+			return Response.status(501).entity("Some message here").build();
+		}
 		JSONArray jsonArray = new JSONArray(geslachten);
 
 		for (int i = 0; i < jsonArray.length(); i++) {
@@ -66,12 +70,9 @@ public class SetupProvider {
 	@Path("/getbehandelingen")
 	@Produces("application/json")
 	public String getBehandelingen(@Context SecurityContext sc) {
-		System.out.println("2");
-
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		List<Behandeling> behandelingen = bedrijf.getBehandelingen();
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-		System.out.println("sssssss2314521");
 
 		for(Behandeling behandeling : behandelingen) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
@@ -85,4 +86,32 @@ public class SetupProvider {
 		}
 		return jab.build().toString();
 	}
+	
+	@POST
+	@RolesAllowed("setup")
+	@Path("/afspraakSettings")
+	@Produces("application/json")
+	public Response afspraakSettings(@Context SecurityContext sc, 
+			@FormParam("kleurKlasse1") String kleurKlasse1,
+			@FormParam("van1") double minimumPrijsVanKlasse1, 
+			@FormParam("tot1") double maximumPrijsVanKlasse1,
+			@FormParam("kleurKlasse2") String kleurKlasse2,
+			@FormParam("tot2") double maximumPrijsVanKlasse2, 
+			@FormParam("kleurKlasse3") String kleurKlasse3,
+			
+			@FormParam("telefoonKlant") boolean telefoonKlant,
+			@FormParam("emailKlant") boolean emailKlant,
+			@FormParam("adresKlant") boolean adresKlant,
+			
+			@FormParam("emailBedrijfInput") String emailBedrijfInput,
+			@FormParam("telefoonBedrijfInput") String telefoonBedrijfInput,
+			@FormParam("adresBedrijfInput") String adresBedrijfInput) {
+		BedrijfsInstellingen bedrijfInstellingen = new BedrijfsInstellingen(telefoonBedrijfInput,emailBedrijfInput,adresBedrijfInput,emailKlant,telefoonKlant, adresKlant, kleurKlasse1, minimumPrijsVanKlasse1, maximumPrijsVanKlasse1, kleurKlasse2, maximumPrijsVanKlasse2, kleurKlasse3);
+		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+		bedrijfInstellingen.setBedrijf(bedrijf);
+		bedrijfInstellingen.saveBedrijfInstellingen();
+		
+		return Response.ok().build();
+	}
+	
 }

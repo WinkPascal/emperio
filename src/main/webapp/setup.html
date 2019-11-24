@@ -12,23 +12,27 @@
 
 <body onload="onload()">
 	<div class="setupDiv">
-		<input type="button" class="defaultButton" value="Terug" id="vorigeStap" style="display: none;"> 
-		<span>
-			1. behandelingen
-			2. producten
-			3. dagen
-		</span>
-		<input type="button" class="defaultButton" value="Verder" id="volgendeStap">
+		<div class="wizard">
+			<input type="button" class="defaultButton" value="Cancel" id="vorigeStap"> 
+			<ul class="progressbar">
+         		<li id="behandelingenWizard" class="active">Behandelingen</li>
+          		<li id="instellingenWizard">instellingen</li>
+          		<li id="tijdenWizard">Openings tijden</li>
+			</ul>
+			<input type="button" class="defaultButton" value="Verder" id="volgendeStap">
+		</div>	
 
-		<div id="behandelingen" class="wizardstep">
+
+		<div id="behandelingen" class="wizardstep"> 
 			<div class="behandelingenLijstDiv"> 
-				<h2>Jouw behandelingen</h2>
+				<h2>Uw behandelingen</h2>
+				<a class="infoText">Klik op een behandeling om deze te verwijderen!</a>
 				<div id="behandelingenLijst">Geen behandelingen toegevoegd</div>
 			</div>
 			<form id="BehandelingToevoegenForm" class="BehandelingToevoegenForm">
 				<h2>Behandeling Toevoegen</h2>
 				<div class="geslachtDiv">
-					<p>Nieuwe behandeling kan gekozen worden door: </p>
+					<p class="infoText">Nieuwe behandeling kan gekozen worden door: </p>
 					<input type="button" id="man" class="geslachtButton" value="Man">
 					<input type="button" id="vrouw" class="geslachtButton" value="Vrouw">
 					<input type="button" id="jongen" class="geslachtButton" value="Jongen">
@@ -37,48 +41,185 @@
 				<div class="inputDiv">
 					<div class="inputField">
 						<a class="inputNaam">Naam</a>
-						<input class="inputBehandelingToevoegen" type="text" name="naam"><br>
+						<input class="inputBehandelingToevoegen" id="naamBehandeling" type="text" name="naam"><br>
 					</div>
 					<div class="inputField">
 						<a class="inputNaam">Beschrijving</a>
-						<textarea class="inputBehandelingToevoegen beschrijvingToevoegen" name="beschrijving"></textarea>
+						<textarea class="inputBehandelingToevoegen beschrijvingToevoegen" id="beschrijvingToevoegen" name="beschrijving"></textarea>
 					</div>
 					<div class="inputField">
 						<a class="inputNaam">Prijs</a>
 						<span class="inputBehandelingToevoegen">
-							<input class="inputPrijsToevoegen" type="number" name="prijs">,
-							<input class="inputPrijsToevoegen" type="number" name="prijs">
+							<input class="inputPrijsToevoegen" id="euro" type="number" name="euro">,
+							<input class="inputPrijsToevoegen" id="cent" type="number" name="cent">
 						</span>
 					</div>
 					<div class="inputField">
 						<a class="inputNaam">Lengte</a>
 						<span class="inputBehandelingToevoegen">
-							<input class="inputLengteToevoegen" type="number" name="uur"> :
-							<input class="inputLengteToevoegen" type="number" name="minuten"><br>
+							<input class="inputLengteToevoegen" id="uur" type="number" name="uur"> :
+							<input class="inputLengteToevoegen" id="minuten" type="number" name="minuten"><br>
 						</span>
 					</div>
+					<input type="button" class="defaultButton" value="Toevoegen!" id="addBehandeling"> 
 				</div>
-				<input type="button" class="defaultButton" value="Toevoegen!" id="addBehandeling"> 
 			</form>
 		</div>
 
-		<div id="productenDiv" class="wizardstep">
-			<div class="productenLijstDiv">
-				<h2>Uw producten</h2>
-				<div id="productenLijst">U heeft nog geen producten</div>
-			</div>
-			<form id="ProductToevoegenForm" class="ProductToevoegenForm">
-				<h2 style="align:center;">Product Toevoegen</h2>
-				naam 		<input id="naamProductToevoegen" type="text" name="naamProductToevoegen"><br>
-				hoeveelheid <input type="number" id="hoeveelheidProductToevoegen" name="hoeveelheidProductToevoegen"><br>
+		<div id="afspraakSettingsDiv" class="wizardstep">
+			<div  class="afspraakKleurInstelling">
+				<h2>Afspraak bekijken</h2>
+				<p class="infoText">Geef aan welke kleur de afspraak in uw calender moet zijn volgens een uw prijs klasse</p>
+				<div class="afspraakColor"> 
+					<div class="price-picker">
+						<a>Prijsklasse 1 </a><br>
+						<span>
+							van €
+							<input class="inputPrijsToevoegen" id="euroVan1" type="number" name="euro">,
+							<input class="inputPrijsToevoegen" id="centVan1" type="number" name="cent"> 
+						</span> <br>
+						<span>
+							Tot € 
+							<input class="inputPrijsToevoegen" id="euroTot1" type="number" name="euro">,
+							<input class="inputPrijsToevoegen" id="centTot1" type="number" name="cent">
+						</span>	
+					</div>
+					
+					<div class="color-picker"> 
+						<label class="container">
+						  <input type="radio" value="#444c5c" checked="checked" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #444c5c;"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" value="#ce5a57" checked="checked" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #ce5a57;"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" value="#78a5a3" checked="checked" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #78a5a3;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#e1b16a" checked="checked" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #e1b16a;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#88d8b0" checked="checked" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #88d8b0;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#ffcc5c" checked="checked" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
+						</label>						
+					</div>
+				</div>
 				<br>
-				<span id="ProductToevoegen" class="defaultButton">
-					<a class="defaultText" id="productToevoegenKnop">Toevoegen!</a>
+				<div class="afspraakColor">
+					<div class="price-picker">
+						<a>Prijsklasse 2 </a><br>
+						<span>
+							Tot € 
+							<input class="inputPrijsToevoegen" id="euroTot2" type="number" name="euro">,
+							<input class="inputPrijsToevoegen" id="centTot2" type="number" name="cent">
+						</span>	
+					</div>
+					
+					<div class="color-picker">
+						<label class="container">
+						  <input type="radio" value="#444c5c" checked="checked" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #444c5c;"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" value="#ce5a57" checked="checked" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #ce5a57;"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" value="#78a5a3" checked="checked" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #78a5a3;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#e1b16a" checked="checked" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #e1b16a;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#88d8b0" checked="checked" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #88d8b0;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#ffcc5c" checked="checked" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
+						</label>	
+					</div>
+				</div>
+				<br>
+				<div class="afspraakColor">
+					<div class="price-picker">
+						<a>Prijsklasse 3 </a><br>
+						<span>
+							Tot € 
+							<input class="inputPrijsToevoegen" id="euroTot3" type="number" name="euro">,
+							<input class="inputPrijsToevoegen" id="centTot3" type="number" name="cent">
+						</span>						
+					</div>
+					
+					<div class="color-picker">
+						<label class="container">
+						  <input type="radio" value="#444c5c" checked="checked" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #444c5c;"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" value="#ce5a57" checked="checked" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #ce5a57;"></span>
+						</label>
+						<label class="container">
+						  <input type="radio" value="#78a5a3" checked="checked" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #78a5a3;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#e1b16a" checked="checked" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #e1b16a;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#88d8b0" checked="checked" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #88d8b0;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#ffcc5c" checked="checked" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
+						</label>	
+					</div>
+				</div>
+			</div>
+			<div class="invoervelden">
+				<h2>Afspraak inplannen</h2>
+				<p class="infoText">Welke informatie moet de klant invullen voor het maken van een afspraak?</p>
+				<label class="container">Telefoon nummer: 
+					<input type="checkbox" name="invoerveld" id="telefoonInvoerVeld">
+				  	<span class="checkmark"></span>
+				</label>
+				<label class="container">Email adres: 
+				  	<input type="checkbox" name="invoerveld" id="emailInvoerVeld">
+				  	<span class="checkmark"></span>
+				</label>
+				<label class="container">Adres: 
+				  	<input type="checkbox" name="invoerveld" id="adresInvoerVeld">
+				 	<span class="checkmark"></span>
+				</label>
+
+				<h2>Uw informatie</h2>
+				<p class="infoText">Welke informatie wilt u aan uw klanten laten zien?</p>
+				<span class="bedrijfInfoInput">
+					Email adres:  
+					<input type="email" id="emailBedrijfInput">
 				</span>
-				<span id="annuleerProductAnnuleren" class="defaultButton">
-					<a class="defaultText" id="annulerenProductToevoegenKnop">Annuleer</a>
+				<span class="bedrijfInfoInput">
+					Telefoon nummer: 
+					<input type="text" id="telefoonBedrijfInput">
 				</span>
-			</form>
+				<span class="bedrijfInfoInput">
+					Adres: 
+					<input type="text" id="adresBedrijfInput">
+				</span>
+			</div>
 		</div>
 
 		<div id="dagenDiv" class="wizardstep">

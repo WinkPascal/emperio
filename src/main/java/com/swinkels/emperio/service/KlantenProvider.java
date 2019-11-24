@@ -33,7 +33,6 @@ public class KlantenProvider {
 	BehandelingDao behandelingDao = new BehandelingDaoImpl();
 	KlantDao klantDao = new KlantDaoImpl();
 	AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
-	BedrijfDao bedrijfDao = new BedrijfDaoImpl();
 	// wordt gebruikt bij
 	// klanten pagina klanten lijst
 	@GET
@@ -41,53 +40,18 @@ public class KlantenProvider {
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String getKlanten(@Context SecurityContext sc, @PathParam("pageNummer") int pageNummer) {
-		System.out.println("tes");
-		// uitvoer
-		// per klant
-		// id, naam, geslacht
-		// opt
+		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+		ArrayList<Klant> klanten = bedrijf.getKlantenWithByPage(pageNummer);
 		
-		// telefoon
-		// email
-		String bedrijf = sc.getUserPrincipal().getName();
-		ArrayList<Klant> klanten = klantDao.getKlanten(bedrijf, pageNummer);
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-
 		for (Klant klant : klanten) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
-
-			String email = klant.getEmail();
-			String telefoon = klant.getTel();
-
-			if (email == null) {
-				if (telefoon == null) {
-					// heeft geen telefoon en email
-					job.add("id", klant.getId());
-					job.add("naam", klant.getNaam());
-					job.add("geslacht", klant.getGeslacht());
-				} else {
-					// geen email wel telefoon
-					job.add("id", klant.getId());
-					job.add("naam", klant.getNaam());
-					job.add("geslacht", klant.getGeslacht());
-					job.add("telefoon", klant.getTel());
-				}
-			} else {
-				if (telefoon == null) {
-					// alleen mail geen telefoon
-					job.add("id", klant.getId());
-					job.add("naam", klant.getNaam());
-					job.add("geslacht", klant.getGeslacht());
-					job.add("email", klant.getEmail());
-				} else {
-					// heeft alles
-					job.add("id", klant.getId());
-					job.add("naam", klant.getNaam());
-					job.add("email", klant.getEmail());
-					job.add("telefoon", klant.getTel());
-					job.add("geslacht", klant.getGeslacht());
-				}
-			}
+			job.add("id", klant.getId());
+			job.add("naam", klant.getNaam());
+			job.add("adres", klant.getAdres());
+			job.add("email", klant.getEmail());
+			job.add("telefoon", klant.getTel());
+			job.add("geslacht", klant.getGeslacht());
 			jab.add(job);
 		}
 		return jab.build().toString();

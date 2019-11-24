@@ -40,9 +40,6 @@
 
 /* Create a custom radio button */
 .klantenPaginaBeheerModal-content .contact .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
   height: 25px;
   width: 25px;
   background-color: #eee;
@@ -102,7 +99,7 @@
 
 
 /* The container */
-.klantenPaginaBeheerModal-content .invoervelden .container {
+.invoervelden .container {
   display: block;
   position: relative;
   padding-left: 35px;
@@ -116,7 +113,7 @@
 }
 
 /* Hide the browser's default checkbox */
-.klantenPaginaBeheerModal-content .invoervelden .container input {
+.invoervelden .container input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -125,10 +122,8 @@
 }
 
 /* Create a custom checkbox */
-.klantenPaginaBeheerModal-content .invoervelden .checkmark {
+.invoervelden .checkmark {
   position: absolute;
-  top: 0;
-  left: 0;
   height: 25px;
   width: 25px;
   background-color: #eee;
@@ -136,29 +131,29 @@
 }
 
 /* On mouse-over, add a grey background color */
-.klantenPaginaBeheerModal-content .invoervelden .container:hover input ~ .checkmark {
+.invoervelden .container:hover input ~ .checkmark {
   background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background */
-.klantenPaginaBeheerModal-content .invoervelden .container input:checked ~ .checkmark {
+.invoervelden .container input:checked ~ .checkmark {
   background-color: #2196F3;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
-.klantenPaginaBeheerModal-content .invoervelden .checkmark:after {
+.invoervelden .checkmark:after {
   content: "";
   position: absolute;
   display: none;
 }
 
 /* Show the checkmark when checked */
-.klantenPaginaBeheerModal-content .invoervelden .container input:checked ~ .checkmark:after {
+.invoervelden .container input:checked ~ .checkmark:after {
   display: block;
 }
 
 /* Style the checkmark/indicator */
-.klantenPaginaBeheerModal-content .invoervelden .container .checkmark:after {
+.invoervelden .container .checkmark:after {
   left: 9px;
   top: 5px;
   width: 5px;
