@@ -20,8 +20,9 @@ import javax.ws.rs.core.SecurityContext;
 import org.json.JSONArray;
 
 import com.swinkels.emperio.objects.Bedrijf;
-import com.swinkels.emperio.objects.BedrijfsInstellingen;
+import com.swinkels.emperio.objects.Instellingen;
 import com.swinkels.emperio.objects.Behandeling;
+import com.swinkels.emperio.objects.ContactPersoon;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.support.Validator;
 
@@ -30,40 +31,32 @@ public class SetupProvider {
 	@POST
 	@Path("/registreer")
 	@Produces("application/json")
-	public Response registreegAccount(@Context SecurityContext sc, @FormParam("Bedrijfsnaam") String Bedrijfsnaam,
-			@FormParam("Voornaam") String Voornaam, @FormParam("Achternaam") String Achternaam,
-			@FormParam("Email") String Email, @FormParam("Telefoon") String Telefoon, @FormParam("Adres") String Adres,
-			@FormParam("Wachtwoord") String Wachtwoord) {
-		System.out.println("setup registreer");
-		Bedrijf bedrijf = new Bedrijf(Bedrijfsnaam, Voornaam + " " + Achternaam, Email, Telefoon, Adres, Wachtwoord);
-		bedrijf.saveBedrijf();
-
-		return Response.ok().build();
-	}
-
-	@POST
-	@RolesAllowed("setup")
-	@Path("/behandeling")
-	@Produces("application/json")
-	public Response setBehandeling(@Context SecurityContext sc, @FormParam("naam") String naam,
-			@FormParam("beschrijving") String beschrijving, @FormParam("prijs") double prijs,
-			@FormParam("uur") String uur, @FormParam("minuten") String minuten,
-			@FormParam("geslachten") String geslachten) {
-		String bedrijfsNaam = sc.getUserPrincipal().getName();
-		Bedrijf bedrijf = new Bedrijf(bedrijfsNaam);
-		String lengteString = uur + ":" + minuten;
-		Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
-		if(Validator.validateLengte(lengte)) {
-			return Response.status(501).entity("Some message here").build();
-		}
-		JSONArray jsonArray = new JSONArray(geslachten);
-
-		for (int i = 0; i < jsonArray.length(); i++) {
-			System.out.println(jsonArray.get(i).toString());
-			Behandeling behandeling = new Behandeling(bedrijf, naam, beschrijving, prijs, lengte,
-					jsonArray.get(i).toString());
-			behandeling.save();
-		}
+	public Response registreegAccount(
+			//persoonlijk
+			@FormParam("Voornaam") String Voornaam, 
+			@FormParam("Achternaam") String Achternaam,
+			@FormParam("Rekeningnummer") String Rekeningnummer, 
+			@FormParam("PersoonlijkEmail") String PersoonlijkEmail, 
+			@FormParam("PersoonlijkTelefoon") String PersoonlijkTelefoon,
+			//bedrijf
+			@FormParam("Bedrijfsnaam") String Bedrijfsnaam, 
+			@FormParam("Wachtwoord") String Wachtwoord, 
+			@FormParam("BedrijfsEmail") String BedrijfsEmail,
+			@FormParam("BedrijfsTelefoon") String BedrijfsTelefoon,
+			@FormParam("Woonplaats") String Woonplaats,
+			@FormParam("Postcode") String Postcode,
+			@FormParam("Adres") String Adres) {
+		//validaties
+		
+		
+		Bedrijf bedrijf = new Bedrijf(Bedrijfsnaam, Wachtwoord, BedrijfsEmail, BedrijfsTelefoon, Adres, Woonplaats, Postcode);
+		bedrijf.save();
+		Instellingen instellingen = new Instellingen(bedrijf, true, true, true, "#52b852", 20.00, "#c78d1e", 30.00, "#d63838", true, true, true);
+		System.out.println(instellingen.getBedrijf().getBedrijfsNaam());
+		instellingen.save();
+		ContactPersoon contactPersoon = new ContactPersoon(bedrijf, Voornaam, Achternaam, Rekeningnummer, PersoonlijkTelefoon, PersoonlijkEmail);
+		contactPersoon.save();
+		
 		return Response.ok().build();
 	}
 
@@ -73,10 +66,10 @@ public class SetupProvider {
 	@Produces("application/json")
 	public String getBehandelingen(@Context SecurityContext sc) {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		List<Behandeling> behandelingen = bedrijf.getBehandelingen();
+		bedrijf.retrieveBehandelingen();
+		
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-
-		for(Behandeling behandeling : behandelingen) {
+		for(Behandeling behandeling : bedrijf.getBehandelingen()) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
 			job.add("id", behandeling.getId());
 			job.add("naam", behandeling.getNaam());
@@ -88,6 +81,59 @@ public class SetupProvider {
 		}
 		return jab.build().toString();
 	}
+	
+	@POST
+	@RolesAllowed("setup")
+	@Path("/behandeling")
+	@Produces("application/json")
+	public Response setBehandeling(@Context SecurityContext sc, @FormParam("naam") String naam,
+			@FormParam("beschrijving") String beschrijving, @FormParam("prijsBehandeling") double prijs,
+			@FormParam("uur") String uur, @FormParam("minuten") String minuten,
+			@FormParam("geslachten") String geslachten) {		
+		String bedrijfsNaam = sc.getUserPrincipal().getName();
+		Bedrijf bedrijf = new Bedrijf(bedrijfsNaam);
+		String lengteString = uur + ":" + minuten;
+		Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
+		
+//		if(Validator.validateLengte(lengte)) {
+//			return Response.status(501).entity("Some message here").build();
+//		}
+		
+		JSONArray jsonArray = new JSONArray(geslachten);
+		for (int i = 0; i < jsonArray.length(); i++) {
+			Behandeling behandeling = new Behandeling(bedrijf, naam, beschrijving, prijs, lengte,
+					jsonArray.get(i).toString());
+			behandeling.save();
+		}
+		return Response.ok().build();
+	}
+
+	@GET
+	@RolesAllowed("setup")
+	@Path("/getInstellingen")
+	@Produces("application/json")
+	public String getInstellingen(@Context SecurityContext sc) {
+		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+		Instellingen instellingen = new Instellingen(bedrijf);
+		instellingen.retrieveInstellingen();
+		
+		JsonObjectBuilder job = Json.createObjectBuilder();
+		job.add("kleurKlasse1", instellingen.getKleurKlasse1());
+		job.add("maximumPrijsVanKlasse1", instellingen.getMaximumPrijsVanKlasse1());
+		job.add("kleurKlasse2", instellingen.getKleurKlasse2());
+		job.add("maximumPrijsVanKlasse2", instellingen.getMaximumPrijsVanKlasse2());
+		job.add("kleurKlasse3", instellingen.getKleurKlasse3());
+		
+		job.add("emailKlantInvoer", instellingen.isEmailKlantInvoer());
+		job.add("telefoonKlantInvoer", instellingen.isTelefoonKlantInvoer());
+		job.add("adresKlantInvoer", instellingen.isAdresKlantInvoer());
+
+		job.add("bedrijfsEmail", instellingen.isBedrijfsEmail());
+		job.add("bedrijfsTelefoon", instellingen.isBedrijfsTelefoon());
+		job.add("bedrijfsAdres", instellingen.isBedrijfsAdres());
+		return job.build().toString();
+	}
+
 	
 	@POST
 	@RolesAllowed("setup")
@@ -104,13 +150,14 @@ public class SetupProvider {
 			@FormParam("emailKlant") boolean emailKlant,
 			@FormParam("adresKlant") boolean adresKlant,
 			
-			@FormParam("emailBedrijfInput") String emailBedrijfInput,
-			@FormParam("telefoonBedrijfInput") String telefoonBedrijfInput,
-			@FormParam("adresBedrijfInput") String adresBedrijfInput) {
-		BedrijfsInstellingen bedrijfInstellingen = new BedrijfsInstellingen(telefoonBedrijfInput,emailBedrijfInput,adresBedrijfInput,emailKlant,telefoonKlant, adresKlant, kleurKlasse1, maximumPrijsVanKlasse1, kleurKlasse2, maximumPrijsVanKlasse2, kleurKlasse3);
+			@FormParam("bedrijfsEmail") boolean bedrijfsEmail,
+			@FormParam("bedrijfsTelefoon") boolean bedrijfsTelefoon,
+			@FormParam("bedrijfsAdres") boolean bedrijfsAdres) {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		bedrijfInstellingen.setBedrijf(bedrijf);
-		bedrijfInstellingen.saveBedrijfInstellingen();
+		System.out.println(maximumPrijsVanKlasse1);
+		System.out.println(maximumPrijsVanKlasse2);
+		Instellingen bedrijfInstellingen = new Instellingen(bedrijf,emailKlant,telefoonKlant, adresKlant, kleurKlasse1, maximumPrijsVanKlasse1, kleurKlasse2, maximumPrijsVanKlasse2, kleurKlasse3, bedrijfsEmail, bedrijfsTelefoon, bedrijfsAdres);
+		bedrijfInstellingen.update();
 		return Response.ok().build();
 	}
 	

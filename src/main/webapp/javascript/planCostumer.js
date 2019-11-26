@@ -1,3 +1,23 @@
+function onload() {
+	var url = window.location.href.split("?")[1];;
+	fetch("restservices/klantenPlanProvider/getBedrijfDataStart/" + url)
+		.then(response => response.json())
+		.then(function (data) {
+			document.getElementById("bedrijfsnaam").innerHTML = data.bedrijfsNaam;
+
+			document.getElementById("emailBedrijf").innerHTML = data.bedrijfEmail;
+			document.getElementById("telefoonBedrijf").innerHTML = data.bedrijfsTelefoon;
+			document.getElementById("adresBedrijf").innerHTML = data.bedrijfsAdres;
+
+			document.getElementById("klantEmail").hidden = !data.invoerveldEmail;
+			document.getElementById("klantTelefoon").hidden = !data.invoerveldTelefoon;
+			document.getElementById("klantAdres").hidden = !data.invoerveldAdres;
+
+			removeLoadingScreen();
+		})
+	inplannenGeslachtKiezen();
+}
+
 function openNav() {
 	document.getElementById("mySidebar").style.width = "250px";
 	document.getElementById("main").style.marginLeft = "250px";
@@ -6,20 +26,6 @@ function openNav() {
 function closeNav() {
 	document.getElementById("mySidebar").style.width = "0";
 	document.getElementById("main").style.marginLeft = "0";
-}
-
-function onload() {
-	var url = window.location.href.split("?")[1];;
-	fetch("restservices/klantenPlanProvider/getBedrijfDataStart/" + url)
-		.then(response => response.json())
-		.then(function (data) {
-			document.getElementById("klantEmail").hidden = !data.invoerveldEmail;
-			document.getElementById("klantTelefoon").hidden = !data.invoerveldTelefoon;
-			document.getElementById("klantAdres").hidden = !data.invoerveldAdres;
-			document.getElementById("bedrijfsnaam").innerHTML = data.bedrijfEmail;
-			removeLoadingScreen();
-		})
-	inplannenGeslachtKiezen();
 }
 
 // de eerste functie die word aangeroepen om eet geslacht te kiezen

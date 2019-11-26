@@ -1,17 +1,10 @@
 package com.swinkels.emperio.objects;
 
-import com.swinkels.emperio.providers.BedrijfsInstellingenDao;
-import com.swinkels.emperio.providers.BedrijfsInstellingenDaoImpl;
+import com.swinkels.emperio.providers.InstellingenDao;
+import com.swinkels.emperio.providers.InstellingenDaoImpl;
 
-public class BedrijfsInstellingen{
+public class Instellingen{
 	Bedrijf bedrijf;
-	private String telefoonBedrijf;
-	private String emailBedrijf;
-	private String adresBedrijf;
-	
-	private boolean emailKlantInvoer;
-	private boolean telefoonKlantInvoer;
-	private boolean adresKlantInvoer;
 	
 	private String kleurKlasse1;
 	private double maximumPrijsVanKlasse1;
@@ -19,13 +12,19 @@ public class BedrijfsInstellingen{
 	private double maximumPrijsVanKlasse2;
 	private String kleurKlasse3;
 	
-	public BedrijfsInstellingen(String telefoonBedrijf, String emailBedrijf, String adresBedrijf,
-			boolean emailKlantInvoer, boolean telefoonKlantInvoer, boolean adresKlantInvoer, String kleurKlasse1,
-			double maximumPrijsVanKlasse1, String kleurKlasse2,
-			double maximumPrijsVanKlasse2, String kleurKlasse3) {
-		this.telefoonBedrijf = telefoonBedrijf;
-		this.emailBedrijf = emailBedrijf;
-		this.adresBedrijf = adresBedrijf;
+	private boolean emailKlantInvoer;
+	private boolean telefoonKlantInvoer;
+	private boolean adresKlantInvoer;
+	
+	private boolean bedrijfsEmail;
+	private boolean bedrijfsTelefoon;
+	private boolean bedrijfsAdres;
+	
+	public Instellingen(Bedrijf bedrijf,boolean emailKlantInvoer, boolean telefoonKlantInvoer, boolean adresKlantInvoer, 
+			String kleurKlasse1, double maximumPrijsVanKlasse1, 
+			String kleurKlasse2, double maximumPrijsVanKlasse2, 
+			String kleurKlasse3, boolean bedrijfsEmail, boolean bedrijfsTelefoon, boolean bedrijfsAdres) {
+		this.bedrijf = bedrijf;
 		this.emailKlantInvoer = emailKlantInvoer;
 		this.telefoonKlantInvoer = telefoonKlantInvoer;
 		this.adresKlantInvoer = adresKlantInvoer;
@@ -34,31 +33,46 @@ public class BedrijfsInstellingen{
 		this.kleurKlasse2 = kleurKlasse2;
 		this.maximumPrijsVanKlasse2 = maximumPrijsVanKlasse2;
 		this.kleurKlasse3 = kleurKlasse3;
-	}
-	
-	public String getTelefoonBedrijf() {
-		return telefoonBedrijf;
-	}
-
-	public void setTelefoonBedrijf(String telefoonBedrijf) {
-		this.telefoonBedrijf = telefoonBedrijf;
+		this.bedrijfsEmail = bedrijfsEmail;
+		this.bedrijfsTelefoon = bedrijfsTelefoon;
+		this.bedrijfsAdres = bedrijfsAdres;
 	}
 
-	public String getEmailBedrijf() {
-		return emailBedrijf;
+
+	public boolean isBedrijfsEmail() {
+		return bedrijfsEmail;
 	}
 
-	public void setEmailBedrijf(String emailBedrijf) {
-		this.emailBedrijf = emailBedrijf;
+
+	public void setBedrijfsEmail(boolean bedrijfsEmail) {
+		this.bedrijfsEmail = bedrijfsEmail;
 	}
 
-	public String getAdresBedrijf() {
-		return adresBedrijf;
+
+	public boolean isBedrijfsTelefoon() {
+		return bedrijfsTelefoon;
 	}
 
-	public void setAdresBedrijf(String adresBedrijf) {
-		this.adresBedrijf = adresBedrijf;
+
+	public void setBedrijfsTelefoon(boolean bedrijfsTelefoon) {
+		this.bedrijfsTelefoon = bedrijfsTelefoon;
 	}
+
+
+	public boolean isBedrijfsAdres() {
+		return bedrijfsAdres;
+	}
+
+
+	public void setBedrijfsAdres(boolean bedrijfsAdres) {
+		this.bedrijfsAdres = bedrijfsAdres;
+	}
+
+
+	public Instellingen(Bedrijf bedrijf) {
+		this.bedrijf = bedrijf;
+	}
+
 
 	public boolean isEmailKlantInvoer() {
 		return emailKlantInvoer;
@@ -130,15 +144,27 @@ public class BedrijfsInstellingen{
 		return this.bedrijf;
 	}
 
-	public boolean saveBedrijfInstellingen() {
-		BedrijfsInstellingenDao bedrijfsIntellingenDao = new BedrijfsInstellingenDaoImpl();
-		if(bedrijfsIntellingenDao.save(this)) {
-			System.out.println("true");
+	public boolean save() {
+		InstellingenDao instellingen = new InstellingenDaoImpl();
+		if(instellingen.save(this)) {
 			return true;
 		} else {
 			return false;	
-		}		
+		}
 	}
+
+
+	public void update() {
+		InstellingenDao instellingen = new InstellingenDaoImpl();
+		instellingen.update(this);
+	}
+	
+	public void retrieveInstellingen() {
+		InstellingenDao instellingenDao = new InstellingenDaoImpl();
+		instellingenDao.getInstellingen(this);
+	}
+
+
 
 
 	

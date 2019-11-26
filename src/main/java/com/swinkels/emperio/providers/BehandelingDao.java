@@ -7,7 +7,7 @@ import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 
 public interface BehandelingDao {
-	public ArrayList<Behandeling> behandelingenByGeslacht(String geslacht, String bedrijf);
+	public void behandelingenByGeslacht(String geslacht, Bedrijf bedrijf);
 
 	public ArrayList<Behandeling> getTop5Behandelingen(Bedrijf bedrijf, Date date);
 

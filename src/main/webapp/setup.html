@@ -51,16 +51,33 @@
 					<div class="inputField">
 						<a class="inputNaam">Prijs</a>
 						<span class="inputBehandelingToevoegen">
-							<input class="inputPrijsToevoegen" id="euro" type="number" name="euro">,
-							<input class="inputPrijsToevoegen" id="cent" type="number" name="cent">
+							<input class="inputPrijsToevoegen" id="prijsBehandeling" type="number" name="prijsBehandeling" min="0" value="0" step="any">
 						</span>
 					</div>
 					<div class="inputField">
 						<a class="inputNaam">Lengte</a>
 						<span class="inputBehandelingToevoegen">
-							<input class="inputLengteToevoegen" id="uur" type="number" name="uur"> :
-							<input class="inputLengteToevoegen" id="minuten" type="number" name="minuten"><br>
-						</span>
+						<select name="uur">
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
+						:
+						<select name="minuten">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="20">20</option>
+							<option value="25">25</option>
+							<option value="30">30</option>
+							<option value="35">35</option>
+							<option value="40">40</option>
+							<option value="45">45</option>
+							<option value="50">50</option>
+							<option value="55">55</option>
+						</select>
+					</span>
 					</div>
 					<input type="button" class="defaultButton" value="Toevoegen!" id="addBehandeling"> 
 				</div>
@@ -80,34 +97,33 @@
 						</span> <br>
 						<span>
 							Tot € 
-							<input class="inputPrijsToevoegen" id="euroTot1" type="number" name="euro">,
-							<input class="inputPrijsToevoegen" id="centTot1" type="number" name="cent">
+							<input class="inputPrijsToevoegen" id="maxPrijs1" type="number" name="maxPrijs1">
 						</span>	
 					</div>
 					
 					<div class="color-picker"> 
 						<label class="container">
-						  <input type="radio" value="#444c5c" checked="checked" name="kleurKlasse1">
+						  <input type="radio" value="#444c5c" name="kleurKlasse1">
 						  <span class="checkmark" style="background-color: #444c5c;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" value="#ce5a57" checked="checked" name="kleurKlasse1">
-						  <span class="checkmark" style="background-color: #ce5a57;"></span>
+						  <input type="radio" value="#d63838" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #d63838;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" value="#78a5a3" checked="checked" name="kleurKlasse1">
+						  <input type="radio" value="#78a5a3" name="kleurKlasse1">
 						  <span class="checkmark" style="background-color: #78a5a3;"></span>
 						</label>						
 						<label class="container">
-						  <input type="radio" value="#e1b16a" checked="checked" name="kleurKlasse1">
-						  <span class="checkmark" style="background-color: #e1b16a;"></span>
+						  <input type="radio" value="#c78d1e" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #c78d1e;"></span>
 						</label>						
 						<label class="container">
-						  <input type="radio" value="#88d8b0" checked="checked" name="kleurKlasse1">
-						  <span class="checkmark" style="background-color: #88d8b0;"></span>
+						  <input type="radio" value="#52b852" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #52b852;"></span>
 						</label>						
 						<label class="container">
-						  <input type="radio" value="#ffcc5c" checked="checked" name="kleurKlasse1">
+						  <input type="radio" value="#ffcc5c" name="kleurKlasse1">
 						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
 						</label>						
 					</div>
@@ -122,34 +138,33 @@
 						</span> <br>
 						<span>
 							Tot € 
-							<input class="inputPrijsToevoegen" id="euroTot2" type="number" name="euro">,
-							<input class="inputPrijsToevoegen" id="centTot2" type="number" name="cent">
+							<input class="inputPrijsToevoegen" id="maxPrijs2" type="number" name="maxPrijs2">,
 						</span>	
 					</div>
 					
 					<div class="color-picker">
 						<label class="container">
-						  <input type="radio" value="#444c5c" checked="checked" name="kleurKlasse2">
+						  <input type="radio" value="#444c5c" name="kleurKlasse2">
 						  <span class="checkmark" style="background-color: #444c5c;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" value="#ce5a57" checked="checked" name="kleurKlasse2">
-						  <span class="checkmark" style="background-color: #ce5a57;"></span>
+						  <input type="radio" value="#d63838" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #d63838;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" value="#78a5a3" checked="checked" name="kleurKlasse2">
+						  <input type="radio" value="#78a5a3" name="kleurKlasse2">
 						  <span class="checkmark" style="background-color: #78a5a3;"></span>
 						</label>						
 						<label class="container">
-						  <input type="radio" value="#e1b16a" checked="checked" name="kleurKlasse2">
-						  <span class="checkmark" style="background-color: #e1b16a;"></span>
+						  <input type="radio" value="#c78d1e" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #c78d1e;"></span>
 						</label>						
 						<label class="container">
-						  <input type="radio" value="#88d8b0" checked="checked" name="kleurKlasse2">
-						  <span class="checkmark" style="background-color: #88d8b0;"></span>
+						  <input type="radio" value="#52b852" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #52b852;"></span>
 						</label>						
 						<label class="container">
-						  <input type="radio" value="#ffcc5c" checked="checked" name="kleurKlasse2">
+						  <input type="radio" value="#ffcc5c" name="kleurKlasse2">
 						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
 						</label>	
 					</div>
@@ -162,36 +177,31 @@
 							van €
 							<span>0.00</span>
 						</span> <br>
-						<span>
-							Tot € 
-							<input class="inputPrijsToevoegen" id="euroTot3" type="number" name="euro">,
-							<input class="inputPrijsToevoegen" id="centTot3" type="number" name="cent">
-						</span>						
 					</div>
 					
 					<div class="color-picker">
 						<label class="container">
-						  <input type="radio" value="#444c5c" checked="checked" name="kleurKlasse3">
+						  <input type="radio" value="#444c5c" name="kleurKlasse3">
 						  <span class="checkmark" style="background-color: #444c5c;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" value="#ce5a57" checked="checked" name="kleurKlasse3">
-						  <span class="checkmark" style="background-color: #ce5a57;"></span>
+						  <input type="radio" value="#d63838" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #d63838;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" value="#78a5a3" checked="checked" name="kleurKlasse3">
+						  <input type="radio" value="#78a5a3" name="kleurKlasse3">
 						  <span class="checkmark" style="background-color: #78a5a3;"></span>
 						</label>						
 						<label class="container">
-						  <input type="radio" value="#e1b16a" checked="checked" name="kleurKlasse3">
-						  <span class="checkmark" style="background-color: #e1b16a;"></span>
+						  <input type="radio" value="#c78d1e" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #c78d1e;"></span>
 						</label>						
 						<label class="container">
-						  <input type="radio" value="#88d8b0" checked="checked" name="kleurKlasse3">
-						  <span class="checkmark" style="background-color: #88d8b0;"></span>
+						  <input type="radio" value="#52b852" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #52b852;"></span>
 						</label>						
 						<label class="container">
-						  <input type="radio" value="#ffcc5c" checked="checked" name="kleurKlasse3">
+						  <input type="radio" value="#ffcc5c" name="kleurKlasse3">
 						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
 						</label>	
 					</div>
@@ -216,15 +226,24 @@
 				<h2>Uw informatie</h2>
 				<p class="infoText">Welke informatie wilt u aan uw klanten laten zien?</p>
 				<span class="bedrijfInfoInput">
-					Email adres:  
+					<label class="container"> Email adres:
+						<input type="checkbox" name="bedrijfsinformatie" id="bedrijfsEmail">
+						<span class="checkmark"></span>
+					</label>
 					<input type="email" id="emailBedrijfInput" value="pawiwink@gmail.com">
 				</span>
 				<span class="bedrijfInfoInput">
-					Telefoon nummer: 
+					<label class="container"> Telefoon nummer: 
+					  	<input type="checkbox" name="bedrijfsinformatie" id="bedrijfsTelefoon">
+					 	<span class="checkmark"></span>
+					</label>
 					<input type="text" id="telefoonBedrijfInput" value="0615574742">
 				</span>
 				<span class="bedrijfInfoInput">
-					Adres: 
+					<label class="container">Adres:  
+					  	<input type="checkbox" name="bedrijfsinformatie" id="bedrijfsAdres">
+					 	<span class="checkmark"></span>
+					</label>
 					<input type="text" id="adresBedrijfInput" value="adresTest">
 				</span>
 			</div>
@@ -375,7 +394,7 @@
 									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 24.0673px; top: 62.5px;">50</div>
 									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 62.5px; top: 24.0673px;">55</div>
 							</div>
-							<span id="openingsTijd"></span>
+							<span id="openingsTijd">00:00</span>
 							<br>
 							<input class="defaultButton" value="Uren" id="showUrenOpeningsTijd">
 							<input class="defaultButton" value="Minuten" id="showMinutenOpeningsTijd">
@@ -408,7 +427,7 @@
 									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 24.0673px; top: 62.5px;">22</div>
 									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 62.5px; top: 24.0673px;">23</div>
 							</div>
-							<div class="timepicker-dial" id="timepicker-minutes-openingstijd">
+							<div class="timepicker-dial" id="timepicker-minutes-sluitingsTijd">
 									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 115px; top: 10px;">00</div>
 									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 167.5px; top: 24.0673px;">05</div>
 									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 205.933px; top: 62.5px;">10</div>
@@ -422,12 +441,12 @@
 									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 24.0673px; top: 62.5px;">50</div>
 									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 62.5px; top: 24.0673px;">55</div>
 							</div>
-							<span id="sluitingsTijd"></span>
+							<span id="sluitingsTijd">00:00</span>
 							<br>
 							<input type="button" class="defaultButton" value="Uren" id="showUrenSluitingsTijd">
 							<input type="button" class="defaultButton" value="Minuten" id="showMinutenSluitingsTijd">
 					</div>
-         <input type="button" class="defaultButton" value="OK" id="okButton">
+        		 	<input type="button" class="defaultButton" value="OK" id="okButton">
 				</div>
 			</div>
 		</div>

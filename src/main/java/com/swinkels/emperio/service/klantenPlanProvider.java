@@ -20,6 +20,7 @@ import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Dag;
+import com.swinkels.emperio.objects.Instellingen;
 import com.swinkels.emperio.objects.Klant;
 import com.swinkels.emperio.providers.AfspraakBehandelingDao;
 import com.swinkels.emperio.providers.AfspraakBehandelingDaoImpl;
@@ -36,57 +37,80 @@ import com.swinkels.emperio.support.Validator;
 @Path("/klantenPlanProvider")
 public class klantenPlanProvider {
 	AfspraakDao afspraakDao = new AfspraakDaoImpl();
-	BehandelingDao behandelingDao = new BehandelingDaoImpl();
 	KlantDao klantDao = new KlantDaoImpl();
 	AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
 	BedrijfDao bedrijfDao = new BedrijfDaoImpl();
 
+	private Bedrijf getBedrijf(String data) {
+		for (String dataPunt : data.split("&")) {
+			String[] dataPuntDetail = dataPunt.split("=");
+			if (dataPuntDetail[0].equals("bedrijf")) {
+				String bedrijfsNaam = dataPuntDetail[1].substring(0, dataPuntDetail[1].length() - 4);
+				return new Bedrijf(bedrijfsNaam);
+			}
+		}
+		return null;
+	}
+	
 	@GET
 	@Path("/getBedrijfDataStart/{data}")
 	@Produces("application/json")
 	public String getBedrijfDataStart(@PathParam("data") String data) {
-		String[] dataPunten = data.split("&");
-
+		Bedrijf bedrijf = getBedrijf(data);
+		System.out.println(bedrijf.getBedrijfsNaam());
+		
+		Instellingen instellingen = new Instellingen(bedrijf);
+		bedrijf.setInstellingen(instellingen);
+		
+		bedrijf.getKlantPaginaSettings();
+		
 		JsonObjectBuilder job = Json.createObjectBuilder();
-		for (String dataPunt : dataPunten) {
-			String[] dataPuntDetail = dataPunt.split("=");
-			if (dataPuntDetail[0].equals("bedrijf")) {
-				String bedrijfEmail = dataPuntDetail[1];
-				Bedrijf bedrijf = new Bedrijf(bedrijfEmail);
-				bedrijf = bedrijfDao.getKlantPaginaSettings(bedrijf);
-				job.add("verplichtContactVeld", bedrijf.getVerplichtContactVeld());
-				job.add("invoerveldEmail", bedrijf.getInvoerveldEmail());
-				job.add("invoerveldTelefoon", bedrijf.getInvoerveldTelefoon());
-				job.add("invoerveldAdres", bedrijf.getInvoerveldAdres());
-				job.add("bedrijfEmail", bedrijfEmail);
-			}
+		job.add("bedrijfsNaam", bedrijf.getBedrijfsNaam());
+		
+		job.add("invoerveldEmail", instellingen.isEmailKlantInvoer());
+		job.add("invoerveldTelefoon", instellingen.isTelefoonKlantInvoer());
+		job.add("invoerveldAdres", instellingen.isAdresKlantInvoer());
+		
+		if(instellingen.isBedrijfsEmail()) {
+			System.out.println("email");
+			job.add("bedrijfEmail", bedrijf.getEmail());
 		}
+		if(instellingen.isBedrijfsTelefoon()) {
+			System.out.println("isBedrijfsTelefoon");
+			job.add("bedrijfsTelefoon", bedrijf.getTelefoon());
+		}
+		if(instellingen.isBedrijfsAdres()) {
+			System.out.println("isBedrijfsAdres");
+			String adres = bedrijf.getWoonplaats() +" "+ bedrijf.getPostcode() +" "+ bedrijf.getAdres();
+			job.add("bedrijfsAdres", adres);
+		}
+
 		return job.build().toString();
 	}
 
+	private String getGeslacht(String data) {
+		String[] dataPunten = data.split("&");
+		for (String dataPunt : dataPunten) {
+			String[] dataPuntDetail = dataPunt.split("=");
+			if (dataPuntDetail[0].equals("geslacht")) {
+				return dataPuntDetail[1];
+			}
+		}
+		return null;
+	}
 	// wordt gebruikt bij
 	// inplannen behnadelingen kiezen
 	@GET
 	@Path("/getBehandelingenByGeslacht/{data}")
 	@Produces("application/json")
 	public String getBehandelingenByGeslacht(@PathParam("data") String data) {
-		String geslacht = "";
-		String bedrijf = "";
-
-		System.out.println(data);
-		String[] dataPunten = data.split("&");
-		for (String dataPunt : dataPunten) {
-			String[] dataPuntDetail = dataPunt.split("=");
-			if (dataPuntDetail[0].equals("bedrijf")) {
-				bedrijf = dataPuntDetail[1];
-			}
-			if (dataPuntDetail[0].equals("geslacht")) {
-				geslacht = dataPuntDetail[1];
-			}
-		}
-		ArrayList<Behandeling> behandelingen = behandelingDao.behandelingenByGeslacht(geslacht, bedrijf);
+		String geslacht = getGeslacht(data);
+		Bedrijf bedrijf = getBedrijf(data);
+	
+		bedrijf.retrieveBehandelingenByGeslacht(geslacht);
+		
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-		for (Behandeling behandeling : behandelingen) {
+		for (Behandeling behandeling : bedrijf.getBehandelingen()) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
 			job.add("id", behandeling.getId());
 			job.add("naam", behandeling.getNaam());

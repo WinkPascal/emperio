@@ -13,8 +13,8 @@ public class UserMariadbDaoImpl extends MariadbBaseDao implements UserDao {
 	public String findRoleForUser(String name, String pass) {
 		String result = null;
 		try (Connection con = super.getConnection()) {
-			PreparedStatement pstmt = con.prepareStatement("select * from bedrijf " + "where email= '"
-					+ name + "' and wachtwoord= '" + pass + "'");
+			PreparedStatement pstmt = con.prepareStatement("select * from bedrijf " + "where Bedrijfsnaam = '"
+					+ name + "' and wachtwoord = '" + pass + "'");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
@@ -22,7 +22,6 @@ public class UserMariadbDaoImpl extends MariadbBaseDao implements UserDao {
 				result = dbResultSet.getString("role");
 			}
 		} catch (SQLException e) {
-			System.out.println(" sadasds");
 			e.printStackTrace();
 		}
 		return result;

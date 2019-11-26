@@ -16,6 +16,26 @@ import com.swinkels.emperio.service.ServiceFilter;
 
 public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 	
+	public boolean save(Bedrijf bedrijf) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"INSERT INTO bedrijf VALUES('"
+				  + bedrijf.getBedrijfsNaam()+"', now(), "	
+				  + "'user', '"
+				  +	bedrijf.getWachtwoord()+"', '"
+				  + bedrijf.getEmail()+"', '"
+				  + bedrijf.getTelefoon() + "', '"
+				  + bedrijf.getAdres()+"', '"
+				  + bedrijf.getWoonplaats()+"', '"
+				  +bedrijf.getPostcode()+"')");
+			System.out.println(pstmt);
+			pstmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return false;
+	}
 	
 	public ArrayList<Bedrijf> getBedrijven(int page){
 		ArrayList<Bedrijf> bedrijven = new ArrayList<Bedrijf>();
@@ -82,8 +102,8 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"SELECT dag, openingstijd, sluitingstijd"
-				 + " FROM `dag` "
-				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"' "
+				 + " FROM dag "
+				 + "WHERE BedrijfBedrijfsnaam ='"+bedrijf.getBedrijfsNaam()+"' "
 				 + "ORDER BY dag");
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
@@ -149,25 +169,7 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		return false;
 	}
 
-	public boolean saveBedrijf(Bedrijf bedrijf) {
-		try (Connection con = super.getConnection()) {
-			PreparedStatement pstmt = con.prepareStatement(
-					"INSERT INTO bedrijf(bedrijfsnaam, adres, email, naam, role, telefoon, wachtwoord) VALUES('"
-				  + bedrijf.getBedrijfsNaam()+"', '"	
-				  +	bedrijf.getAdres()+"', '"
-				  + bedrijf.getEmail()+"', '"
-				  + bedrijf.getNaam() + "', '"
-				  + "user', '"
-				  + bedrijf.getTel()+"', '"
-				  + bedrijf.getWachtwoord()+"')");
-			System.out.println(pstmt);
-			pstmt.executeUpdate();
-			return true;
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-		return false;
-	}
+
 	
 	public boolean setInvoerKlant(Bedrijf bedrijf, String contact, boolean telefoon, boolean email, boolean adres) {
 		try (Connection con = super.getConnection()) {
@@ -187,40 +189,46 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		return false;
 	}	
 	
-	public Bedrijf getKlantPaginaSettings(Bedrijf bedrijf) {
+	public void getKlantPaginaSettings(Bedrijf bedrijf) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"SELECT verplichtContactVeld, "
-					+ "invoerveldEmail, "
-					+ "invoerveldTelefoon, "
-					+ "invoerveldAdres "
-					+ "FROM bedrijf "
-					+ "WHERE email = '"+bedrijf.getEmail()+"';");
+					"SELECT b.email, b.telefoon, b.adres, b.woonplaats, b.postcode, i.* "
+				  + "from bedrijf b join instellingen i on b.Bedrijfsnaam = i.BedrijfBedrijfsnaam "
+				  + "WHERE b.Bedrijfsnaam = '"+bedrijf.getBedrijfsNaam()+"';");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				String verplichtContactVeld = dbResultSet.getString("verplichtContactVeld");
-				boolean invoerveldEmail = dbResultSet.getBoolean("invoerveldEmail");
-				boolean invoerveldTelefoon = dbResultSet.getBoolean("invoerveldTelefoon");
-				boolean invoerveldAdres = dbResultSet.getBoolean("invoerveldAdres");
-				bedrijf.setVerplichtContactVeld(verplichtContactVeld);
-				bedrijf.setInvoerveldEmail(invoerveldEmail);
-				bedrijf.setInvoerveldTelefoon(invoerveldTelefoon);
-				bedrijf.setInvoerveldAdres(invoerveldAdres);
-				return bedrijf;
+				bedrijf.getInstellingen().setKleurKlasse1(dbResultSet.getString("kleurKlasse"));
+				bedrijf.getInstellingen().setMaximumPrijsVanKlasse1(dbResultSet.getDouble("maximumprijs1"));
+				bedrijf.getInstellingen().setKleurKlasse2(dbResultSet.getString("kleurKlasse2"));
+				bedrijf.getInstellingen().setMaximumPrijsVanKlasse2(dbResultSet.getDouble("maximumprijs2"));
+				bedrijf.getInstellingen().setKleurKlasse3(dbResultSet.getString("kleurKlasse3"));
+				
+				bedrijf.getInstellingen().setEmailKlantInvoer(dbResultSet.getBoolean("emailKlantInvoer"));
+				bedrijf.getInstellingen().setTelefoonKlantInvoer(dbResultSet.getBoolean("telefoonKlantInover"));
+				bedrijf.getInstellingen().setAdresKlantInvoer(dbResultSet.getBoolean("AdresKlantInvoer"));
+
+				bedrijf.getInstellingen().setBedrijfsEmail(dbResultSet.getBoolean("bedrijfsEmail"));
+				bedrijf.getInstellingen().setBedrijfsTelefoon(dbResultSet.getBoolean("bedrijfsTelefoon"));
+				bedrijf.getInstellingen().setBedrijfsAdres(dbResultSet.getBoolean("bedrijfsAdres"));
+				
+				bedrijf.setTelefoon(dbResultSet.getString("telefoon"));
+				bedrijf.setEmail(dbResultSet.getString("email"));
+				bedrijf.setAdres(dbResultSet.getString("adres"));
+				bedrijf.setWoonplaats(dbResultSet.getString("woonplaats"));
+				bedrijf.setPostcode(dbResultSet.getString("postcode"));
 			}
 		} catch (SQLException e) {
 			System.out.println(e);
 		}		
-		return bedrijf;
 	}
 
 	public boolean needsSetup(String username) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					  "SELECT count(dag) as dagen "
-					+ "FROM bedrijf join dag on email = bedrijf "
-					+ "WHERE email = '"+username+"';");
+					  "SELECT count(dagnummer) as dagen "
+					+ "FROM dag "
+					+ "WHERE BedrijfBedrijfsnaam = '"+username+"';");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {

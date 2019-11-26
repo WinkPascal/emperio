@@ -38,8 +38,9 @@ public class AuthenticationResource {
 			if (role == null) {
 				throw new IllegalArgumentException("No user found!");
 			}
+			
 			BedrijfDao bedrijfDao = new BedrijfDaoImpl();
-
+			
 			if (bedrijfDao.needsSetup(username)) {
 				role = "setup";
 			}

@@ -9,8 +9,6 @@ import com.swinkels.emperio.objects.Product;
 
 public interface BedrijfDao {
 	public ArrayList<Date> getDagTijden(Bedrijf bedrijf, Date date);
-
-	public ArrayList<Dag> getWeekRooster(Bedrijf bedrijf);
 	
 	public ArrayList<Product> getProductenByPage(Bedrijf bedrijf, int page);
 
@@ -18,12 +16,11 @@ public interface BedrijfDao {
 	
 	public ArrayList<Bedrijf> getBedrijven(int page);
 
-	public boolean saveBedrijf(Bedrijf bedrijf);
+	public boolean save(Bedrijf bedrijf);
 
 	public boolean setInvoerKlant(Bedrijf bedrijf, String contact, boolean telefoon, boolean email, boolean adres);
 
-	public Bedrijf getKlantPaginaSettings(Bedrijf bedrijf);
+	public void getKlantPaginaSettings(Bedrijf bedrijf);
 	
 	public boolean needsSetup(String username);
-		
 }

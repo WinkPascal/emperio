@@ -48,10 +48,6 @@ public class AfspraakProvider {
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String afsprakenByDate(@Context SecurityContext sc, @PathParam("date") String datum) throws ParseException {
-		// uitvoer
-		// Per afspraak
-		// id, timestamp, klantnaam, lengte, prijs
-		// format de datum
 		Date beginDate = ServiceFilter.StringToDateFormatter(datum, "yyyy-MM-dd");
 		Calendar calendarBeginDate = Calendar.getInstance();
 		calendarBeginDate.setTime(beginDate);
@@ -102,15 +98,16 @@ public class AfspraakProvider {
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String getWeekRooster(@Context SecurityContext sc) {
+		System.out.println("getWeekrooster");
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		// dagen worden opgehaalt
-		ArrayList<Dag> dagen = bedrijfDao.getWeekRooster(bedrijf);
+		bedrijf.retrieveDagen();
 
 		Date vroegsteOpeningsTijd = ServiceFilter.StringToDateFormatter("23:59", "HH:mm");
 		Date laatsteSluitingsTijd = ServiceFilter.StringToDateFormatter("00:00", "HH:mm");
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 
-		for (Dag dag : dagen) {
+		for (Dag dag : bedrijf.getDagen()) {
 			if (vroegsteOpeningsTijd.compareTo(dag.getOpeningsTijd()) > 0) {
 				vroegsteOpeningsTijd = dag.getOpeningsTijd();
 			}
@@ -124,7 +121,7 @@ public class AfspraakProvider {
 		job.add("laatsteSluitingsTijd", ServiceFilter.DateToStringFormatter(laatsteSluitingsTijd, "HH:mm"));
 		jab.add(job);
 
-		for (Dag dag : dagen) {
+		for (Dag dag : bedrijf.getDagen()) {
 			JsonObjectBuilder job1 = Json.createObjectBuilder();
 			job1.add("weekNummer", dag.getDag());
 

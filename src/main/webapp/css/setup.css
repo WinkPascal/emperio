@@ -204,15 +204,10 @@
 }
 
 .inputPrijsToevoegen {
-	width: 40px;
+	width: 80px;
 	height: 30px;
 	border: 1px solid gray;
 	border-radius: 2px;
-}
-
-.BehandelingToevoegenForm .inputDiv .inputLengteToevoegen {
-	width: 60px;
-	height: 35px;
 }
 
 .BehandelingToevoegenForm .inputDiv #addBehandeling {

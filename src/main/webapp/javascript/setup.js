@@ -16,6 +16,7 @@ function onload() {
 			document.getElementById("behandelingen").style.display = "none"
 			document.getElementById("afspraakSettingsDiv").style.display = "block"
 			document.getElementById("vorigeStap").value = "Vorige";
+			getInstellingen();
 
 			pagina = "afspraakSettingsDiv";
 		} else if (pagina == "afspraakSettingsDiv") {
@@ -86,6 +87,40 @@ function createTimePicker(id){
 	});
 }
 
+
+function getInstellingen(){
+		var fetchoptions = {
+		headers: {
+			'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+		}
+	}
+	fetch("restservices/setup/getInstellingen", fetchoptions)
+		.then(response => response.json())
+		.then(function (instellingen) {
+						checkByName("kleurKlasse1",instellingen.kleurKlasse1);
+			document.getElementById("maxPrijs1").value= instellingen.maximumPrijsVanKlasse1;
+			checkByName("kleurKlasse2",instellingen.kleurKlasse2);
+			document.getElementById("maxPrijs2").value= instellingen.maximumPrijsVanKlasse2;
+			checkByName("kleurKlasse3",instellingen.kleurKlasse3);
+			
+			document.getElementById("telefoonInvoerVeld").checked = instellingen.telefoonKlantInvoer;
+			document.getElementById("emailInvoerVeld").checked = instellingen.emailKlantInvoer;
+			document.getElementById("adresInvoerVeld").checked = instellingen.adresKlantInvoer;
+
+			document.getElementById("bedrijfsEmail").checked = instellingen.bedrijfsEmail;
+			document.getElementById("bedrijfsTelefoon").checked = instellingen.bedrijfsTelefoon;
+			document.getElementById("bedrijfsAdres").checked = instellingen.bedrijfsAdres;
+		})
+	function checkByName(name, color){
+	 var klasse =document.getElementsByName(name);
+	for (i = 0; i < klasse.length; i++) {
+		if (klasse[i].value == color) {
+			klasse[i].checked = true;   
+		}
+	}
+}
+
+}
 
 function loadBehandelingen() {
 	var fetchoptions = {
@@ -209,13 +244,11 @@ function saveAfspraakSettings(){
 
 	var kleurKlasse1 = findCheckedByName("kleurKlasse1");
 	formData.append("kleurKlasse1", kleurKlasse1);
-	var tot1 = document.getElementById("euroTot1").value +"." + document.getElementById("centTot1").value;
-	formData.append("tot1", tot1);
+	formData.append("tot1", document.getElementById("maxPrijs1").value);
 
 	var kleurKlasse2 = findCheckedByName("kleurKlasse2");
 	formData.append("kleurKlasse2", kleurKlasse2);
-	var tot2 = document.getElementById("euroTot2").value +"." + document.getElementById("centTot1").value;
-	formData.append("tot2", tot2);
+	formData.append("tot2", document.getElementById("maxPrijs2").value);
 
 	var kleurKlasse3 = findCheckedByName("kleurKlasse3");
 	formData.append("kleurKlasse3", kleurKlasse3);
@@ -227,12 +260,12 @@ function saveAfspraakSettings(){
 	var adresKlant = document.getElementById("adresInvoerVeld").checked;
 	formData.append("adresKlant", adresKlant);
 	
-	var emailBedrijfInput = document.getElementById("emailBedrijfInput").value;
-	formData.append("emailBedrijfInput", emailBedrijfInput);
-	var telefoonBedrijfInput = document.getElementById("telefoonBedrijfInput").value;
-	formData.append("telefoonBedrijfInput", telefoonBedrijfInput);
-	var adresBedrijfInput = document.getElementById("adresBedrijfInput").value;
-	formData.append("adresBedrijfInput", adresBedrijfInput);
+	var emailBedrijfInput = document.getElementById("bedrijfsEmail").checked;
+	formData.append("bedrijfsEmail", emailBedrijfInput);
+	var telefoonBedrijfInput = document.getElementById("bedrijfsTelefoon").checked;
+	formData.append("bedrijfsTelefoon", telefoonBedrijfInput);
+	var adresBedrijfInput = document.getElementById("bedrijfsAdres").checked;
+	formData.append("bedrijfsAdres", adresBedrijfInput);
 
 	var encData = new URLSearchParams(formData.entries());
 	var fetchoptions = {
@@ -299,40 +332,60 @@ function aanpassenTijdenHandlers(){
 }
 	
 function veranderTijdDag(){
-		okButton.addEventListener("click", function () {
-		var dag = okButton.getAttribute("data-dag");
-		if(dag == "maandag"){
-			document.getElementById("openingsTijdMaandag").innerHTML = document.getElementById("openingsTijd").innerHTML;
-			document.getElementById("sluitingsTijdMaandag").innerHTML = document.getElementById("sluitingsTijd").innerHTML;
-		} else if(dag == "dinsdag"){
-			document.getElementById("openingsTijdDinsdag").innerHTML = document.getElementById("openingsTijd").innerHTML;
-			document.getElementById("sluitingsTijdDinsdag").innerHTML = document.getElementById("sluitingsTijd").innerHTML;
-		} else if(dag == "woensdag"){
-			document.getElementById("openingsTijdWoensdag").innerHTML = document.getElementById("openingsTijd").innerHTML;
-			document.getElementById("sluitingsTijdWoensdag").innerHTML = document.getElementById("sluitingsTijd").innerHTML;
-		} else if(dag == "donderdag"){
-			document.getElementById("openingsTijdDonderdag").innerHTML = document.getElementById("openingsTijd").innerHTML;
-			document.getElementById("sluitingsTijdDonderdag").innerHTML = document.getElementById("sluitingsTijd").innerHTML;
-		} else if(dag == "vrijdag"){
-			document.getElementById("openingsTijdVrijdag").innerHTML = document.getElementById("openingsTijd").innerHTML;
-			document.getElementById("sluitingsTijdVrijdag").innerHTML = document.getElementById("sluitingsTijd").innerHTML;
-		} else if(dag == "zaterdag"){
-			document.getElementById("openingsTijdZaterdag").innerHTML = document.getElementById("openingsTijd").innerHTML;
-			document.getElementById("sluitingsTijdZaterdag").innerHTML = document.getElementById("sluitingsTijd").innerHTML;
-		} else if(dag == "zondag"){
-			document.getElementById("openingsTijdZondag").innerHTML = document.getElementById("openingsTijd").innerHTML;
-			document.getElementById("sluitingsTijdZondag").innerHTML = document.getElementById("sluitingsTijd").innerHTML;
+	okButton.addEventListener("click", function () {
+		var openingsTijd = document.getElementById("openingsTijd").innerHTML;
+		var sluitingsTijd =	document.getElementById("sluitingsTijd").innerHTML;
+
+		var openingsTijdUur = parseInt(openingsTijd.substring(0, 2));
+		var openingsTijdMinuut = parseInt(openingsTijd.substring(3, 5));
+
+		var sluitingsTijdUur = parseInt(sluitingsTijd.substring(0, 2));
+		var sluitingsTijdMinuut = parseInt(sluitingsTijd.substring(3, 5));
+
+		if(openingsTijdUur > sluitingsTijdUur){
+			errorMessage("De openings tijd moet voor de sluitings tijd zijn");
+		} else if(openingsTijdUur == sluitingsTijdUur && openingsTijdMinuut >= sluitingsTijdMinuut){
+			errorMessage("De openings tijd moet voor de sluitings tijd zijn");
+		} else{
+			var dag = okButton.getAttribute("data-dag");
+			if(dag == "maandag"){
+				document.getElementById("openingsTijdMaandag").innerHTML = openingsTijd;
+				document.getElementById("sluitingsTijdMaandag").innerHTML = sluitingsTijd;
+			} else if(dag == "dinsdag"){
+				document.getElementById("openingsTijdDinsdag").innerHTML = openingsTijd;
+				document.getElementById("sluitingsTijdDinsdag").innerHTML = sluitingsTijd;
+			} else if(dag == "woensdag"){
+				document.getElementById("openingsTijdWoensdag").innerHTML = openingsTijd;
+				document.getElementById("sluitingsTijdWoensdag").innerHTML = sluitingsTijd;
+			} else if(dag == "donderdag"){
+				document.getElementById("openingsTijdDonderdag").innerHTML = openingsTijd;
+				document.getElementById("sluitingsTijdDonderdag").innerHTML = sluitingsTijd;
+			} else if(dag == "vrijdag"){
+				document.getElementById("openingsTijdVrijdag").innerHTML = openingsTijd;
+				document.getElementById("sluitingsTijdVrijdag").innerHTML = sluitingsTijd;
+			} else if(dag == "zaterdag"){
+				document.getElementById("openingsTijdZaterdag").innerHTML = openingsTijd;
+				document.getElementById("sluitingsTijdZaterdag").innerHTML = sluitingsTijd;
+			} else if(dag == "zondag"){
+				document.getElementById("openingsTijdZondag").innerHTML = openingsTijd;
+				document.getElementById("sluitingsTijdZondag").innerHTML = sluitingsTijd;
+			}
+			document.getElementById("openingsTijd").innerHTML = "00:00";
+			document.getElementById("sluitingsTijd").innerHTML = "00:00";
+
+			document.getElementById("timepicker-hours-openingstijd").style.display = "block";
+			document.getElementById("timepicker-minutes-openingstijd").style.display = "none";
+			document.getElementById("tijdKiezen").style.display= "none";
 		}
-		document.getElementById("timepicker-hours-openingstijd").style.display = "block";
-		document.getElementById("timepicker-minutes-openingstijd").style.display = "none";
-		document.getElementById("tijdKiezen").style.display= "none";
 	});
 }
 
 function determineOpeningsTijd(){ 
 	var openingsTijd = "00:00";
-	document.getElementById("timepicker-hours-openingstijd").style.display = "block"; 
+	var selectedUur = "";
+	var selectedMinuut = "";
 
+	document.getElementById("timepicker-hours-openingstijd").style.display = "block"; 
 
 	document.getElementById("showUrenOpeningsTijd").addEventListener("click", function () {
 		document.getElementById("timepicker-hours-openingstijd").style.display = "block";
@@ -353,8 +406,11 @@ function determineOpeningsTijd(){
 	};
 
 	function handleUurKeuzeOpeningsTijd(uur){
-		uur.addEventListener("click", function () {        
-			uur.setAttribute("class", "selectedTime"); 
+		uur.addEventListener("click", function () { 
+			selectedUur.className = "timepicker-uur-openingstijd";
+			selectedUur = uur;
+			selectedUur.className = "selectedTime";
+
 			openingsTijd =  parseInt(uur.innerHTML) +":"+parseInt(openingsTijd.substring(3, 5));
 			document.getElementById("openingsTijd").innerHTML = openingsTijd;
 		})
@@ -362,23 +418,30 @@ function determineOpeningsTijd(){
 
 	function handleMinuutKeuzeOpeningsTijd(minuut){
 		minuut.addEventListener("click", function () {
+			selectedMinuut.className = "timepicker-minuut-openingstijd";
+			selectedMinuut = minuut;
+			selectedMinuut.className = "selectedTime";
+
 			openingsTijd =  parseInt(openingsTijd.substring(0, 2)) +":"+parseInt(minuut.innerHTML);
-			minuut.setAttribute("class", "selectedTime");
 			document.getElementById("openingsTijd").innerHTML = openingsTijd;
 		})
 	}
-
 }
+
+
 
 function determineSluitingsTijd(){
 	var sluitingsTijd = "00:00";
+	var selectedUur = "";
+	var selectedMinuut = "";
+
 	document.getElementById("timepicker-hours-sluitingsTijd").style.display = "block"; 
 
-	document.getElementById("showUrenOpeningsTijd").addEventListener("click", function () {
+	document.getElementById("showUrenSluitingsTijd").addEventListener("click", function () {
 		document.getElementById("timepicker-hours-sluitingsTijd").style.display = "block";
 		document.getElementById("timepicker-minutes-sluitingsTijd").style.display = "none";	
 	})
-	document.getElementById("showMinutenOpeningsTijd").addEventListener("click", function () {
+	document.getElementById("showMinutenSluitingsTijd").addEventListener("click", function () {
 		document.getElementById("timepicker-minutes-sluitingsTijd").style.display = "block";	
 		document.getElementById("timepicker-hours-sluitingsTijd").style.display = "none";
 	})
@@ -394,16 +457,22 @@ function determineSluitingsTijd(){
 
 	function handleUurKeuzeOpeningsTijd(uur){
 		uur.addEventListener("click", function () {        
-			uur.setAttribute("class", "selectedTime"); 
-			openingsTijd =  parseInt(uur.innerHTML) +":"+parseInt(sluitingsTijd.substring(3, 5));
+			selectedUur.className = "timepicker-uur-openingstijd";
+			selectedUur = uur;
+			selectedUur.className = "selectedTime";
+
+			sluitingsTijd =  parseInt(uur.innerHTML) +":"+parseInt(sluitingsTijd.substring(3, 5));
 			document.getElementById("sluitingsTijd").innerHTML = sluitingsTijd;
 		})
 	}
 
 	function handleMinuutKeuzeOpeningsTijd(minuut){
 		minuut.addEventListener("click", function () {
-			openingsTijd =  parseInt(sluitingsTijd.substring(0, 2)) +":"+parseInt(minuut.innerHTML);
-			minuut.setAttribute("class", "selectedTime");
+			selectedMinuut.className = "timepicker-minuut-openingstijd";
+			selectedMinuut = minuut;
+			selectedMinuut.className = "selectedTime";
+
+			sluitingsTijd =  parseInt(sluitingsTijd.substring(0, 2)) +":"+parseInt(minuut.innerHTML);
 			document.getElementById("sluitingsTijd").innerHTML = sluitingsTijd;
 		})
 	}

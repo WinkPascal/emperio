@@ -13,12 +13,41 @@ import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.service.ServiceFilter;
 
 public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao {
-	public ArrayList<Behandeling> behandelingenByGeslacht(String geslacht, String bedrijf) {
-		ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 
+	public ArrayList<Behandeling> getAllBehandelingen(Bedrijf bedrijf) {
+		ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"select * from behandeling where geslacht = '" + geslacht + "' and bedrijf = '" + bedrijf + "'");
+					"SELECT * " + 
+					"FROM behandeling " + 
+					"WHERE BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam() + "';");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				int id = dbResultSet.getInt("id");
+				String naam = dbResultSet.getString("naam");
+				String prijsString = dbResultSet.getString("prijs");
+				double prijs = Double.valueOf(prijsString);
+				String beschrijving = dbResultSet.getString("beschrijving");
+				String lengteString = dbResultSet.getString("lengte");
+				Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
+				String geslacht = dbResultSet.getString("geslacht");
+
+				Behandeling behandeling = new Behandeling(id, naam, beschrijving, lengte, prijs, geslacht);
+				behandelingen.add(behandeling);
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return behandelingen;
+	}
+	
+	public void behandelingenByGeslacht(String geslacht, Bedrijf bedrijf) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"select * from behandeling "
+					+ "where geslacht = '" + geslacht + "' "
+					+ "and BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam() + "'");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
@@ -29,13 +58,11 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 				double prijs = dbResultSet.getDouble("prijs");
 
 				Behandeling behandeling = new Behandeling(id, behandelingsNaam, beschrijving, lengte, prijs, geslacht);
-				behandelingen.add(behandeling);
+				bedrijf.addBehandeling(behandeling);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return behandelingen;
 	}
 
 	public ArrayList<Behandeling> getTop5Behandelingen(Bedrijf bedrijf, Date date) {
@@ -107,11 +134,13 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 			PreparedStatement pstmt;
 			// heeft een email en telefoon
 			pstmt = con.prepareStatement(
-					"insert into behandeling(bedrijf, naam, prijs, beschrijving, lengte, geslacht) values( " + "'"
-							+ behandeling.getBedrijf().getEmail() + "', " + "'" + behandeling.getNaam() + "', " + ""
-							+ behandeling.getPrijs() + ", " + "'" + behandeling.getBeschrijving() + "', " + "'"
-							+ ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm") + "', " + "'"
-							+ behandeling.getGeslacht() + "')");
+					"insert into behandeling (BedrijfBedrijfsnaam, lengte, geslacht, naam, prijs, beschrijving) "
+					+ "values('" + behandeling.getBedrijf().getBedrijfsNaam() + "', '"
+					+ ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm") + "', '"
+					+ behandeling.getGeslacht() + "', '"
+					+ behandeling.getNaam() + "', " + ""
+					+ behandeling.getPrijs() + ", '" 
+					+ behandeling.getBeschrijving() + "')");
 			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
@@ -121,33 +150,6 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 		return false;
 	}
 
-	public ArrayList<Behandeling> getAllBehandelingen(Bedrijf bedrijf) {
-		System.out.println("sssssss");
-		ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
-		try (Connection con = super.getConnection()) {
-			PreparedStatement pstmt = con.prepareStatement(
-					"SELECT * " + 
-					"FROM behandeling " + 
-					"WHERE bedrijf = '" + bedrijf.getEmail() + "';");
-			System.out.println(pstmt);
-			ResultSet dbResultSet = pstmt.executeQuery();
-			while (dbResultSet.next()) {
-				int id = dbResultSet.getInt("id");
-				String naam = dbResultSet.getString("naam");
-				String prijsString = dbResultSet.getString("prijs");
-				double prijs = Double.valueOf(prijsString);
-				String beschrijving = dbResultSet.getString("beschrijving");
-				String lengteString = dbResultSet.getString("lengte");
-				Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
-				String geslacht = dbResultSet.getString("geslacht");
 
-				Behandeling behandeling = new Behandeling(id, naam, beschrijving, lengte, prijs, geslacht);
-				behandelingen.add(behandeling);
-			}
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-		return behandelingen;
-	}
 
 }
