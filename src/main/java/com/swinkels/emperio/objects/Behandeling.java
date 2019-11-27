@@ -1,23 +1,33 @@
 package com.swinkels.emperio.objects;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import com.swinkels.emperio.providers.AfspraakBehandelingDao;
+import com.swinkels.emperio.providers.AfspraakBehandelingDaoImpl;
 import com.swinkels.emperio.providers.BehandelingDao;
 import com.swinkels.emperio.providers.BehandelingDaoImpl;
 
 public class Behandeling {
-	private int id;
 	private Bedrijf bedrijf;
+
+	private int id;
 	private String naam;
+	private double prijs;
 	private String beschrijving;
 	private Date lengte;
-	private double prijs;
 	private String geslacht;
 
 	private int afspraken;
 	private Double inkomsten;
 	private int count;
 
+	public ArrayList<String> validate(){
+		ArrayList<String> errors = new ArrayList<String>();
+		return errors;
+	}
+	
+		
 	public Behandeling(String behandelingsNaam) {
 		this.naam = behandelingsNaam;
 	}
@@ -150,5 +160,10 @@ public class Behandeling {
 		} else {
 			return false;
 		}
+	}
+
+	public void saveAfspraakBehandeling(Afspraak afspraak) {
+		AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
+		afspraakBehandelingDao.saveAfspraakBehandeling(this, afspraak);
 	}
 }

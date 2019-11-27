@@ -1,16 +1,18 @@
 package com.swinkels.emperio.objects;
 
-import javax.json.JsonValue;
+import com.swinkels.emperio.providers.KlantDao;
+import com.swinkels.emperio.providers.KlantDaoImpl;
 
 public class Klant {
 	private int id;
+
 	private String naam;
 	private String email;
 	private String tel;
 	private String geslacht;
 	private String adres;
 	private Bedrijf bedrijf;
-	
+
 	private int hoeveeleheidAfspraken;
 	private double hoeveelheidInkomsten;
 
@@ -23,6 +25,15 @@ public class Klant {
 		this.adres = klantAdres;
 	}
 
+	public Klant(String naam, String email, String tel, String geslacht, String klantAdres, Bedrijf bedrijf) {
+		this.naam = naam;
+		this.email = email;
+		this.tel = tel;
+		this.geslacht = geslacht;
+		this.adres = klantAdres;
+		this.bedrijf = bedrijf;
+	}
+
 	public Klant(String naam, String email, String tel, String geslacht, Bedrijf bedrijf) {
 		this.naam = naam;
 		this.email = email;
@@ -31,7 +42,16 @@ public class Klant {
 		this.bedrijf = bedrijf;
 	}
 
-	
+	public void saveOrFindAndGetId() {
+		KlantDao klantDao = new KlantDaoImpl();
+		if (!klantDao.getKlantIdByEmail(this)) {
+			if (!klantDao.getKlantIdByPhone(this)) {
+				klantDao.setKlant(this);
+				klantDao.getKlantId(this);
+			}
+		}
+	}
+
 	public Klant(String klantNaam) {
 		this.naam = klantNaam;
 	}
@@ -93,4 +113,6 @@ public class Klant {
 	public double getHoeveelheidInkomsten() {
 		return hoeveelheidInkomsten;
 	}
+
+
 }

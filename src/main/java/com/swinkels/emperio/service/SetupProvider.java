@@ -24,6 +24,7 @@ import com.swinkels.emperio.objects.Instellingen;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.ContactPersoon;
 import com.swinkels.emperio.objects.Dag;
+import com.swinkels.emperio.support.Adapter;
 import com.swinkels.emperio.support.Validator;
 
 @Path("/setup")
@@ -45,14 +46,10 @@ public class SetupProvider {
 			@FormParam("BedrijfsTelefoon") String BedrijfsTelefoon,
 			@FormParam("Woonplaats") String Woonplaats,
 			@FormParam("Postcode") String Postcode,
-			@FormParam("Adres") String Adres) {
-		//validaties
-		
-		
+			@FormParam("Adres") String Adres) {		
 		Bedrijf bedrijf = new Bedrijf(Bedrijfsnaam, Wachtwoord, BedrijfsEmail, BedrijfsTelefoon, Adres, Woonplaats, Postcode);
 		bedrijf.save();
 		Instellingen instellingen = new Instellingen(bedrijf, true, true, true, "#52b852", 20.00, "#c78d1e", 30.00, "#d63838", true, true, true);
-		System.out.println(instellingen.getBedrijf().getBedrijfsNaam());
 		instellingen.save();
 		ContactPersoon contactPersoon = new ContactPersoon(bedrijf, Voornaam, Achternaam, Rekeningnummer, PersoonlijkTelefoon, PersoonlijkEmail);
 		contactPersoon.save();
@@ -66,8 +63,8 @@ public class SetupProvider {
 	@Produces("application/json")
 	public String getBehandelingen(@Context SecurityContext sc) {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+
 		bedrijf.retrieveBehandelingen();
-		
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		for(Behandeling behandeling : bedrijf.getBehandelingen()) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
@@ -76,7 +73,7 @@ public class SetupProvider {
 			job.add("beschrijving", behandeling.getBeschrijving());
 			job.add("prijs", behandeling.getPrijs());
 			job.add("geslacht", behandeling.getGeslacht());
-			job.add("lengte", ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm"));
+			job.add("lengte", Adapter.DateToString(behandeling.getLengte(), "HH:mm"));
 			jab.add(job);
 		}
 		return jab.build().toString();
@@ -92,12 +89,7 @@ public class SetupProvider {
 			@FormParam("geslachten") String geslachten) {		
 		String bedrijfsNaam = sc.getUserPrincipal().getName();
 		Bedrijf bedrijf = new Bedrijf(bedrijfsNaam);
-		String lengteString = uur + ":" + minuten;
-		Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
-		
-//		if(Validator.validateLengte(lengte)) {
-//			return Response.status(501).entity("Some message here").build();
-//		}
+		Date lengte = Adapter.StringToDate(uur + ":" + minuten, "HH:mm");
 		
 		JSONArray jsonArray = new JSONArray(geslachten);
 		for (int i = 0; i < jsonArray.length(); i++) {
@@ -154,10 +146,10 @@ public class SetupProvider {
 			@FormParam("bedrijfsTelefoon") boolean bedrijfsTelefoon,
 			@FormParam("bedrijfsAdres") boolean bedrijfsAdres) {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		System.out.println(maximumPrijsVanKlasse1);
-		System.out.println(maximumPrijsVanKlasse2);
+		
 		Instellingen bedrijfInstellingen = new Instellingen(bedrijf,emailKlant,telefoonKlant, adresKlant, kleurKlasse1, maximumPrijsVanKlasse1, kleurKlasse2, maximumPrijsVanKlasse2, kleurKlasse3, bedrijfsEmail, bedrijfsTelefoon, bedrijfsAdres);
 		bedrijfInstellingen.update();
+		
 		return Response.ok().build();
 	}
 	
@@ -186,8 +178,7 @@ public class SetupProvider {
 			@FormParam("sluitingsTijdZaterdag") String sluitingsTijdZaterdag,
 			
 			@FormParam("openingsTijdZondag") String openingsTijdZondag,
-			@FormParam("sluitingsTijdZondag") String sluitingsTijdZondag) {
-		System.out.println("=============dagen===================");
+			@FormParam("sluitingsTijdZondag") String sluitingsTijdZondag) {	
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		ArrayList<Dag> dagen = new ArrayList<Dag>();
 		Dag maandag = new Dag(bedrijf, 0, openingsTijdMaandag, sluitingsTijdMaandag);
@@ -210,8 +201,8 @@ public class SetupProvider {
 			}
 		}
 		bedrijf.setDagen(dagen);
+		bedrijf.saveDagen();
 		
-		bedrijf.saveBehandelingen(); 
 		return Response.ok().build();
 	}	
 }

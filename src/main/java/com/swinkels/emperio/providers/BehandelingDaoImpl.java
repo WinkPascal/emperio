@@ -11,6 +11,7 @@ import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.service.ServiceFilter;
+import com.swinkels.emperio.support.Adapter;
 
 public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao {
 
@@ -30,7 +31,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 				double prijs = Double.valueOf(prijsString);
 				String beschrijving = dbResultSet.getString("beschrijving");
 				String lengteString = dbResultSet.getString("lengte");
-				Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
+				Date lengte = Adapter.StringToDate(lengteString, "HH:mm");
 				String geslacht = dbResultSet.getString("geslacht");
 
 				Behandeling behandeling = new Behandeling(id, naam, beschrijving, lengte, prijs, geslacht);
@@ -43,6 +44,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 	}
 	
 	public void behandelingenByGeslacht(String geslacht, Bedrijf bedrijf) {
+		ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select * from behandeling "
@@ -54,15 +56,16 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 				int id = dbResultSet.getInt("id");
 				String behandelingsNaam = dbResultSet.getString("naam");
 				String beschrijving = dbResultSet.getString("beschrijving");
-				Date lengte = ServiceFilter.StringToDateFormatter(dbResultSet.getString("lengte"), "HH:mm");
+				Date lengte = Adapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm");
 				double prijs = dbResultSet.getDouble("prijs");
 
 				Behandeling behandeling = new Behandeling(id, behandelingsNaam, beschrijving, lengte, prijs, geslacht);
-				bedrijf.addBehandeling(behandeling);
+				behandelingen.add(behandeling);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		bedrijf.setBehandelingen(behandelingen);
 	}
 
 	public ArrayList<Behandeling> getTop5Behandelingen(Bedrijf bedrijf, Date date) {
@@ -73,7 +76,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 					+ "from behandeling b join afspraakbehandeling ab on b.id = ab.behandeling \n"
 					+ "				   join afspraak a on a.id = ab.afspraak\n" + "where b.bedrijf = '"
 					+ bedrijf.getEmail() + "' \n" + "      and a.timestamp < SYSDATE()\n" + "      and a.timestamp > '"
-					+ ServiceFilter.DateToStringFormatter(date, "YYYY-MM-dd") + "'\n" + "GROUP by b.id\n"
+					+ Adapter.DateToString(date, "YYYY-MM-dd") + "'\n" + "GROUP by b.id\n"
 					+ "ORDER by COUNT(b.id) desc\n" + "LIMIT 5;");
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
@@ -115,7 +118,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 				Double inkomsten = dbResultSet.getDouble("inkomsten");
 				int afspraken = dbResultSet.getInt("afspraken");
 
-				Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
+				Date lengte = Adapter.StringToDate(lengteString, "HH:mm");
 
 				Behandeling behandeling = new Behandeling(id, naam, beschrijving, lengte, prijs, geslacht);
 				behandeling.setAfspraken(afspraken);
@@ -136,7 +139,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 			pstmt = con.prepareStatement(
 					"insert into behandeling (BedrijfBedrijfsnaam, lengte, geslacht, naam, prijs, beschrijving) "
 					+ "values('" + behandeling.getBedrijf().getBedrijfsNaam() + "', '"
-					+ ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm") + "', '"
+					+ Adapter.DateToString(behandeling.getLengte(), "HH:mm") + "', '"
 					+ behandeling.getGeslacht() + "', '"
 					+ behandeling.getNaam() + "', " + ""
 					+ behandeling.getPrijs() + ", '" 

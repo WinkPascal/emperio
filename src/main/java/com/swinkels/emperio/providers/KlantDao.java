@@ -17,7 +17,7 @@ public interface KlantDao {
 
 	public Klant getKlant(Bedrijf bedrijf, int id);
 
-	public Klant getKlantIdByEmail(Klant klant);
+	public boolean getKlantIdByEmail(Klant klant);
 
-	public Klant getKlantIdByPhone(Klant klant);
+	public boolean getKlantIdByPhone(Klant klant);
 }

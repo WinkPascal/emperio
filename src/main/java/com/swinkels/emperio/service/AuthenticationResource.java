@@ -13,10 +13,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.swinkels.emperio.objects.UserDao;
 import com.swinkels.emperio.objects.UserMariadbDaoImpl;
 import com.swinkels.emperio.providers.BedrijfDao;
 import com.swinkels.emperio.providers.BedrijfDaoImpl;
+import com.swinkels.emperio.security.UserDao;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

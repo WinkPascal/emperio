@@ -4,5 +4,5 @@ import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Behandeling;
 
 public interface AfspraakBehandelingDao {
-	public boolean saveAfspraakBehandeling(Behandeling behandeling, Afspraak afspraak);
+	public void saveAfspraakBehandeling(Behandeling behandeling, Afspraak afspraak);
 }

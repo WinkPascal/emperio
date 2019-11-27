@@ -1,19 +1,26 @@
 package com.swinkels.emperio.objects;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import com.swinkels.emperio.providers.AfspraakDao;
+import com.swinkels.emperio.providers.AfspraakDaoImpl;
 import com.swinkels.emperio.service.ServiceFilter;
+import com.swinkels.emperio.support.Adapter;
 
 public class Dag {
-	private int id;
 	private Bedrijf bedrijf;
+	private ArrayList<Afspraak> afspraken;
+	
+	private int id;
 	private Date openingsTijd;
 	private Date sluitingsTijd;
 	private int aantalAfspraken;
 	private int dag;
+	private Date datum;
 	
-	
-	public Dag(Date openingsTijd, Date sluitingsTijd) {
+	public Dag(Date openingsTijd, Date sluitingsTijd, Bedrijf bedrijf) {
+		this.bedrijf = bedrijf;
 		this.openingsTijd = openingsTijd;
 		this.sluitingsTijd = sluitingsTijd;
 	}
@@ -26,14 +33,35 @@ public class Dag {
 			this.openingsTijd = null;
 			this.sluitingsTijd = null;
 		} else {
-			Date openingsTijd = ServiceFilter.StringToDateFormatter(openingsTijdString, "HH:mm");
-			Date sluitingsTijd = ServiceFilter.StringToDateFormatter(sluitingsTijdString, "HH:mm");
+			Date openingsTijd = Adapter.StringToDate(openingsTijdString, "HH:mm");
+			Date sluitingsTijd = Adapter.StringToDate(sluitingsTijdString, "HH:mm");
 			
 			this.openingsTijd= openingsTijd;
 			this.sluitingsTijd = sluitingsTijd;
 		}
 	}
 
+	public Date getDatum() {
+		return datum;
+	}
+
+	public void setDatum(Date datum) {
+		this.datum = datum;
+	}
+
+	public ArrayList<Afspraak> getAfspraken() {
+		return afspraken;
+	}
+
+	public void setAfspraken(ArrayList<Afspraak> afspraken) {
+		this.afspraken = afspraken;
+	}
+	
+	public void getAfsprakenBetweenDates(Date vandaag, Date morgen) {
+		AfspraakDao afspraakDao = new AfspraakDaoImpl();
+		afspraakDao.getAfsprakenBetweenDates(this, vandaag, morgen, bedrijf);
+	}
+	
 	public Dag(int dagNummer, Date openingsTijdDate, Date sluitingsTijdDate) {
 		this.openingsTijd = openingsTijdDate;
 		this.sluitingsTijd = sluitingsTijdDate;
@@ -108,4 +136,6 @@ public class Dag {
 			}
 		}
 	}
+
+
 }

@@ -1,4 +1,4 @@
-package com.swinkels.emperio.service;
+package com.swinkels.emperio.security;
 
 import java.security.Principal; 
 

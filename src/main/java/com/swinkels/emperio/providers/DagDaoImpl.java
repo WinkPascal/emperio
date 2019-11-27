@@ -5,11 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.service.ServiceFilter;
+import com.swinkels.emperio.support.Adapter;
 
 public class DagDaoImpl extends MariadbBaseDao implements DagDao {
 	public boolean saveDag(Dag dag) {
@@ -57,8 +59,8 @@ public class DagDaoImpl extends MariadbBaseDao implements DagDao {
 					int dagNummer = dbResultSet.getInt("dagnummer");
 				
 					//format de tijden
-					Date openingsTijdDate = ServiceFilter.StringToDateFormatter(openingsTijd, "HH:mm");
-					Date sluitingsTijdDate = ServiceFilter.StringToDateFormatter(sluitingsTijd, "HH:mm");
+					Date openingsTijdDate = Adapter.StringToDate(openingsTijd, "HH:mm");
+					Date sluitingsTijdDate = Adapter.StringToDate(sluitingsTijd, "HH:mm");
 					
 					System.out.println(dagNummer);
 					System.out.println(openingsTijdDate);
@@ -72,5 +74,31 @@ public class DagDaoImpl extends MariadbBaseDao implements DagDao {
 		} catch (SQLException e) {
 			System.out.println(e);
 		}		
+	}
+	
+	public void getOpeningsTijden(Bedrijf bedrijf, Date date){
+		int dayOfWeek = Adapter.getDagNummerFromDate(date);
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"SELECT openingstijd, sluitingstijd"
+				 + " FROM `dag` "
+				 + "WHERE  	BedrijfBedrijfsnaam ='"+bedrijf.getBedrijfsNaam()+"' "
+				 + "and dagnummer = "+dayOfWeek+" "
+				 + "ORDER BY dagnummer;");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				String openingsTijd = dbResultSet.getString("openingstijd");
+				String sluitingsTijd = dbResultSet.getString("sluitingstijd");
+				
+				Date openingsTijdDate = Adapter.StringToDate(openingsTijd, "HH:mm");
+				Date sluitingsTijdDate = Adapter.StringToDate(sluitingsTijd, "HH:mm");
+				
+				Dag dag = new Dag(openingsTijdDate, sluitingsTijdDate, bedrijf);
+				bedrijf.addDag(dag);
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
 	}
 }

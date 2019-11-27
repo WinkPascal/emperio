@@ -32,6 +32,7 @@ import com.swinkels.emperio.providers.BehandelingDao;
 import com.swinkels.emperio.providers.BehandelingDaoImpl;
 import com.swinkels.emperio.providers.KlantDao;
 import com.swinkels.emperio.providers.KlantDaoImpl;
+import com.swinkels.emperio.support.Adapter;
 
 @Path("/afspraak")
 public class AfspraakProvider {
@@ -48,7 +49,7 @@ public class AfspraakProvider {
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String afsprakenByDate(@Context SecurityContext sc, @PathParam("date") String datum) throws ParseException {
-		Date beginDate = ServiceFilter.StringToDateFormatter(datum, "yyyy-MM-dd");
+		Date beginDate = Adapter.StringToDate(datum, "yyyy-MM-dd");
 		Calendar calendarBeginDate = Calendar.getInstance();
 		calendarBeginDate.setTime(beginDate);
 		calendarBeginDate.add(Calendar.MONTH, 1);
@@ -59,16 +60,17 @@ public class AfspraakProvider {
 		Date eindDate = calendarBeginDate.getTime();
 
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		// vraag de afspraken op van het bedrijf en de datum van vandaag
-		ArrayList<Afspraak> afsprakenVandaagList = afspraakDao.getAfsprakenBetweenDates(beginDate, eindDate, bedrijf);
+		Dag dag = new Dag(bedrijf);
+		bedrijf.getAfsprakenBetweenDates(beginDate, eindDate, bedrijf);
+		
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-		for (Afspraak afspraak : afsprakenVandaagList) {
+		for (Afspraak afspraak : bedrijf.get) {
 			double prijs = 0;
 			int uren = 0;
 			int minuten = 0;
 			// lengte wordt berekent
 			for (Behandeling behandeling : afspraak.getBehandelingen()) {
-				String lengteString = ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm");
+				String lengteString = Adapter.DateToString(behandeling.getLengte(), "HH:mm");
 				String[] lengteArray = lengteString.split(":");
 
 				uren = uren + Integer.parseInt(lengteArray[0]);

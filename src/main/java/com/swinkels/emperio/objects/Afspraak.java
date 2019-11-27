@@ -7,14 +7,22 @@ import com.swinkels.emperio.providers.AfspraakDao;
 import com.swinkels.emperio.providers.AfspraakDaoImpl;
 
 public class Afspraak {
-
-	private int id;
 	private Klant klant;
 	private Bedrijf bedrijf;
-	private Date timestamp;
-	private Double prijs;
 	private ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 
+	private int id;
+	private Date timestamp;
+	private Double prijs;
+	
+	public ArrayList<String> validate(){
+		ArrayList<String> errors = new ArrayList<String>();
+		if(timestamp.before(new Date())) {
+			errors.add("Een afspraak kan niet in het verleden worden gepland.");
+		}
+		return errors;
+	}
+	
 	public Afspraak() {
 
 	}
@@ -23,6 +31,10 @@ public class Afspraak {
 		this.id = id;
 		this.timestamp = timestamp;
 		this.klant = klant;
+	}
+	public void save() {
+		AfspraakDao afspraakDao = new AfspraakDaoImpl();
+		afspraakDao.setAfspraak(this);
 	}
 
 	public Afspraak(Date afspraakTimestamp, Bedrijf bedrijf, Klant klant) {
@@ -105,4 +117,11 @@ public class Afspraak {
 			return false;
 		}
 	}
+
+	public void retrieveId() {
+		AfspraakDao afspraakDao = new AfspraakDaoImpl();
+		afspraakDao.getAfspraakId(this);
+	}
+	
+
 }

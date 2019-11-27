@@ -55,7 +55,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 				String adres = dbResultSet.getString("adres");
 				String naam = dbResultSet.getString("naam");
 
-				
 				Bedrijf bedrijf = new Bedrijf(null, naam, email, telefoon, adres, null);
 				bedrijven.add(bedrijf);
 			}
@@ -65,35 +64,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		}
 		
 		return bedrijven;
-	}
-	
-	public ArrayList<Date> getDagTijden(Bedrijf bedrijf, Date date){
-		ArrayList<Date> dagTijden = new ArrayList<Date>();
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK)-1;
-		try (Connection con = super.getConnection()) {
-			PreparedStatement pstmt = con.prepareStatement(
-					"SELECT openingstijd, sluitingstijd"
-				 + " FROM `dag` "
-				 + "WHERE bedrijf ='"+bedrijf.getEmail()+"' "
-				 + "and dag = "+dayOfWeek+" "
-				 + "ORDER BY dag;");
-			ResultSet dbResultSet = pstmt.executeQuery();
-			while (dbResultSet.next()) {
-				String openingsTijd = dbResultSet.getString("openingstijd");
-				String sluitingsTijd = dbResultSet.getString("sluitingstijd");
-				
-				Date openingsTijdDate = ServiceFilter.StringToDateFormatter(openingsTijd, "HH:mm");
-				Date sluitingsTijdDate = ServiceFilter.StringToDateFormatter(sluitingsTijd, "HH:mm");
-				
-				dagTijden.add(openingsTijdDate);
-				dagTijden.add(sluitingsTijdDate);
-			}
-		} catch (SQLException e) {
-			return null;
-		}
-		return dagTijden;
 	}
 	
 	//wordt gebruikt bij: getWerkdagen
@@ -244,6 +214,5 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		}			
 		return false;
 	}
-
 
 }

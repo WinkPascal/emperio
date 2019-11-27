@@ -11,11 +11,11 @@ import com.swinkels.emperio.objects.Klant;
 
 public interface AfspraakDao {
 
-	public ArrayList<Afspraak> getAfsprakenBetweenDates(Date beginDate, Date eindDate, Bedrijf bedrijf);
+	public void getAfsprakenBetweenDates(Dag dag, Date beginDate, Date eindDate, Bedrijf bedrijf);
 
 	public boolean setAfspraak(Afspraak afspraak);
 
-	public Afspraak getAfspraakId(Afspraak afspraak);
+	public void getAfspraakId(Afspraak afspraak);
 
 	public Afspraak getAfspraak(Bedrijf bedrijf, int id);
 

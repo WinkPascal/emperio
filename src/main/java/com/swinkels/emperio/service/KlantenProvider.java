@@ -20,12 +20,11 @@ import com.swinkels.emperio.providers.AfspraakBehandelingDao;
 import com.swinkels.emperio.providers.AfspraakBehandelingDaoImpl;
 import com.swinkels.emperio.providers.AfspraakDao;
 import com.swinkels.emperio.providers.AfspraakDaoImpl;
-import com.swinkels.emperio.providers.BedrijfDao;
-import com.swinkels.emperio.providers.BedrijfDaoImpl;
 import com.swinkels.emperio.providers.BehandelingDao;
 import com.swinkels.emperio.providers.BehandelingDaoImpl;
 import com.swinkels.emperio.providers.KlantDao;
 import com.swinkels.emperio.providers.KlantDaoImpl;
+import com.swinkels.emperio.support.Adapter;
 
 @Path("/klanten")
 public class KlantenProvider {
@@ -33,8 +32,7 @@ public class KlantenProvider {
 	BehandelingDao behandelingDao = new BehandelingDaoImpl();
 	KlantDao klantDao = new KlantDaoImpl();
 	AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
-	// wordt gebruikt bij
-	// klanten pagina klanten lijst
+
 	@GET
 	@Path("/alleKlanten/{pageNummer}")
 	@RolesAllowed("user")
@@ -154,7 +152,7 @@ public class KlantenProvider {
 			JsonObjectBuilder job1 = Json.createObjectBuilder();
 			job1.add("prijs", afspraak.getPrijs());
 
-			String timestampString = ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "YYYY-MM-dd HH:mm");
+			String timestampString = Adapter.DateToString(afspraak.getTimeStamp(), "YYYY-MM-dd HH:mm");
 			job1.add("datum", timestampString.substring(0, 10));
 			System.out.println(timestampString.substring(0, 10));
 			job1.add("tijd", timestampString.substring(11));

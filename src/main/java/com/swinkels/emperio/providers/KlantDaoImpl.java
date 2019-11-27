@@ -15,7 +15,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 	// klaten wordenopgehaalt door de zoekbalk
 	public ArrayList<Klant> zoekKlant(String bedrijf, String klantRequest) {
 		ArrayList<Klant> klanten = new ArrayList<Klant>();
-
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select * from klant where naam LIKE '%" + klantRequest + "%' and bedrijf = '" + bedrijf + "'");
@@ -66,31 +65,12 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 	public boolean setKlant(Klant klant) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt;
-			if (klant.getEmail() != null) {
-				if (klant.getTel() != null) {
-					// heeft een email en telefoon
-					pstmt = con.prepareStatement("insert into klant(bedrijf, naam, email, geslacht, telefoon) values( "
-							+ "'" + klant.getBedrijf().getEmail() + "', " + "'" + klant.getNaam() + "', " + "'"
-							+ klant.getEmail() + "', " + "'" + klant.getGeslacht() + "', " + "'" + klant.getTel()
-							+ "')");
-				} else {
-					// heeft alleen een email
-					pstmt = con.prepareStatement("insert into klant(bedrijf, naam, email, geslacht) values( " + "'"
-							+ klant.getBedrijf().getEmail() + "', " + "'" + klant.getNaam() + "', " + "'"
-							+ klant.getEmail() + "', " + "'" + klant.getGeslacht() + "')");
-				}
-			} else {
-				if (klant.getTel() != null) {
-					// klant heeft alleen een telefoon
-					pstmt = con.prepareStatement("insert into klant(bedrijf, naam, geslacht, telefoon) values( " + "'"
-							+ klant.getBedrijf().getEmail() + "', " + "'" + klant.getNaam() + "', " + "'"
-							+ klant.getGeslacht() + "', " + "'" + klant.getTel() + "')");
-				} else {
-					pstmt = con.prepareStatement("insert into klant(bedrijf, naam, geslacht) values( " + "'"
-							+ klant.getBedrijf().getEmail() + "', " + "'" + klant.getNaam() + "', " + "'"
-							+ klant.getGeslacht() + "')");
-				}
-			}
+			// heeft een email en telefoon
+			pstmt = con.prepareStatement("insert into klant(BedrijfBedrijfsnaam, naam,  emailadres  , geslacht, telefoonnummer, adres ) values( "
+					+ "'" + klant.getBedrijf().getBedrijfsNaam() + "', " + "'" + klant.getNaam() + "', " + "'"
+					+ klant.getEmail() + "', " + "'" + klant.getGeslacht() + "', " + "'" + klant.getTel()
+					+ "', '"+klant.getAdres()+"')");
+			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -105,24 +85,24 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 			if (klant.getEmail() != null) {
 				if (klant.getTel() != null) {
 					// heeft een email en telefoon
-					pstmt = con.prepareStatement("select id from klant where " + "bedrijf = '"
-							+ klant.getBedrijf().getEmail() + "' " + "AND naam = '" + klant.getNaam() + "' "
-							+ "AND telefoon = '" + klant.getTel() + "' " + "AND email = '" + klant.getEmail() + "'");
+					pstmt = con.prepareStatement("select id from klant where " + 
+							"BedrijfBedrijfsnaam = '"+ klant.getBedrijf().getBedrijfsNaam() + "' " + 
+							"AND naam = '" + klant.getNaam() + "' " +
+							"AND telefoonnummer  = '" + klant.getTel() + "' " + 
+							"AND emailadres = '" + klant.getEmail() + "'");
 				} else {
 					// heeft alleen een email
-					pstmt = con.prepareStatement("select id from klant where " + "bedrijf = '"
-							+ klant.getBedrijf().getEmail() + "' " + "AND naam = '" + klant.getNaam() + "' "
-							+ "AND email = '" + klant.getEmail() + "'");
+					pstmt = con.prepareStatement("select id from klant where " + 
+							"BedrijfBedrijfsnaam = '"+ klant.getBedrijf().getBedrijfsNaam() + "' " + 	
+							"AND naam = '" + klant.getNaam() + "' " +
+							"AND emailadres  = '" + klant.getEmail() + "'");
 				}
 			} else {
-				if (klant.getTel() != null) {
-					pstmt = con.prepareStatement("select id from klant where " + "bedrijf = '"
-							+ klant.getBedrijf().getEmail() + "' " + "AND naam = '" + klant.getNaam() + "' "
-							+ "AND telefoon = '" + klant.getTel() + "'");
-				} else {
-					pstmt = con.prepareStatement("select id from klant where " + "bedrijf = '"
-							+ klant.getBedrijf().getEmail() + "' " + "AND naam = '" + klant.getNaam() + "'");
-				}
+				//alleen telefoon
+				pstmt = con.prepareStatement("select id from klant where " + 
+						"BedrijfBedrijfsnaam = '"+ klant.getBedrijf().getBedrijfsNaam() + "' " + 							
+						"AND naam = '" + klant.getNaam() + "' " +
+						"AND telefoonnummer = '" + klant.getTel() + "'");				
 			}
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
@@ -158,47 +138,43 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 		return null;
 	}
 
-	public Klant getKlantIdByEmail(Klant klant) {
+	public boolean getKlantIdByEmail(Klant klant) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select id from klant where " +
-				    "bedrijf = '"+ klant.getBedrijf().getEmail() + "' " + 
+				    "BedrijfBedrijfsnaam = '"+ klant.getBedrijf().getEmail() + "' " + 
 				    "AND naam = '" + klant.getNaam() + "' " +
-				    "AND email = '"+klant.getEmail()+"'");
+				    "AND emailadres = '"+klant.getEmail()+"'");
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
 				klant.setId(id);
-				return klant;
+				return true;
 			} 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return klant;
+		return false;
 	}
 
-	public Klant getKlantIdByPhone(Klant klant) {
+	public boolean getKlantIdByPhone(Klant klant) {
 		System.out.println("telefoon zoeken");
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select id from klant where " +
-				    "bedrijf = '"+ klant.getBedrijf().getEmail() + "' " + 
+				    "BedrijfBedrijfsnaam = '"+ klant.getBedrijf().getBedrijfsNaam() + "' " + 
 				    "AND naam = '" + klant.getNaam() + "' " +
-				    "AND telefoon = '"+klant.getTel()+"';");
+				    "AND telefoonnummer = '"+klant.getTel()+"';");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
 				klant.setId(id);
-				return klant;
+				return true;
 			} 
 		} catch (SQLException e) {
-			System.out.println("hier");
 			e.printStackTrace();
 		}
-		System.out.println("sasdadasdas");
-		klant.setId(0);	
-
-		return klant;
+		return false;
 	}
 }

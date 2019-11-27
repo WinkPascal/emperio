@@ -111,7 +111,7 @@ document.getElementById("afsprakenCard").addEventListener("click", function(){
 	location.href = 'afspraken.html';
 })
 
-//starten rooster proces
+//starten rooster process
 document.getElementById("inkomstenCard").addEventListener("click", function(){
 	location.href = 'statestieken.html';
 })
@@ -121,17 +121,10 @@ document.getElementById("klantPagina").addEventListener("click", function(){
 	let url = new URL(window.document.location);
 	let params = new URLSearchParams(url.search.slice(1));
 	
-	params.append("bedrijf", "pawiwink@gmail.com");
+	params.append("bedrijf", "asd.com");
 	
 	window.document.location = 'planCostumer.html?'+params;
 })
-
-function deleteParam(key) {
-    let url = new URL(window.document.location);
-    let params = new URLSearchParams(url.search.slice(1));	
-    params.delete(key);
-    history.pushState('afspraak maken', 'Title of the page', 'planCostumer.html?'+params);
-}
 
 document.getElementById("behandelingenCard").addEventListener("click", function() {
 	location.href = 'behandelingen.html';
@@ -140,7 +133,6 @@ document.getElementById("behandelingenCard").addEventListener("click", function(
 document.getElementById("klantenPaginaBeheer").addEventListener("click", function() {
 	onloadKlantenBeheer();
 })
-
 
 // settings card
 document.getElementById("instellingenButton").addEventListener("click", function() {

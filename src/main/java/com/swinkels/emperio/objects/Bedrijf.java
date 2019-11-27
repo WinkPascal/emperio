@@ -2,6 +2,8 @@ package com.swinkels.emperio.objects;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.swinkels.emperio.providers.BedrijfDao;
 import com.swinkels.emperio.providers.BedrijfDaoImpl;
@@ -28,6 +30,42 @@ public class Bedrijf {
 	private String adres;
 	private String wachtwoord;
 
+	public ArrayList<String> validate(){
+		ArrayList<String> errors = new ArrayList<String>();
+		if(this.email != null) {
+			Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+			Matcher mat = pattern.matcher(email);
+			if (!mat.matches()) {
+				errors.add("Voer een geldig email adres in.");
+			}
+		}
+		if(this.telefoon != null) {
+			String regex = "^(((\\\\+31|0|0031)6){1}[1-9]{1}[0-9]{7})$";
+			Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+			Matcher mat = pattern.matcher(this.telefoon);
+			if (!mat.matches()) {
+				errors.add("Voer een geldig mobiel nummer in.");
+			}
+		}
+		if(this.postcode != null) {
+			String regex = "^[1-9][0-9]{3}[ ]?([A-RT-Za-rt-z][A-Za-z]|[sS][BCbcE-Re-rT-Zt-z])$";
+			Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+			Matcher mat = pattern.matcher(this.postcode);
+			if (!mat.matches()) {
+				errors.add("Voer een geldig postcode in");
+			}
+		}
+		if(this.wachtwoord != null) {
+			String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+			Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+			Matcher mat = pattern.matcher(this.wachtwoord);
+			if (!mat.matches()) {
+				errors.add("Uw wachtword moet minimaal 8 karakters, 1 nummer, een kleine en grote letter en een speciaal teken bevatten.");
+			}
+		}
+		return errors;
+	}
+	
 	public boolean save() {
 		BedrijfDao bedrijfDao = new BedrijfDaoImpl();
 		if (bedrijfDao.save(this)) {
@@ -69,6 +107,11 @@ public class Bedrijf {
 	public void retrieveBehandelingenByGeslacht(String geslacht) {
 		BehandelingDao behandelingDao = new BehandelingDaoImpl();
 		behandelingDao.behandelingenByGeslacht(geslacht, this);
+	}
+	
+	public void getOpeningsTijden(Date vandaag) {
+		DagDao dagDao = new DagDaoImpl();
+		dagDao.getOpeningsTijden(this, vandaag);
 	}
 	
 	public Bedrijf(String bedrijfsNaam) {
@@ -185,6 +228,9 @@ public class Bedrijf {
 	public String getEmail() {
 		return email;
 	}
+
+
+
 
 
 }
