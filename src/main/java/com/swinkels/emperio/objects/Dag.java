@@ -1,11 +1,10 @@
 package com.swinkels.emperio.objects;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Date;
 
 import com.swinkels.emperio.providers.AfspraakDao;
 import com.swinkels.emperio.providers.AfspraakDaoImpl;
-import com.swinkels.emperio.service.ServiceFilter;
 import com.swinkels.emperio.support.Adapter;
 
 public class Dag {
@@ -18,6 +17,19 @@ public class Dag {
 	private int aantalAfspraken;
 	private int dag;
 	private Date datum;
+	
+	
+	public Dag(Bedrijf bedrijf, ArrayList<Afspraak> afspraken, int id, int dagNummer, Date openingsTijd,
+			Date sluitingsTijd) {
+		super();
+		this.bedrijf = bedrijf;
+		this.afspraken = afspraken;
+		this.id = id;
+		this.dag = dagNummer;
+		this.openingsTijd = openingsTijd;
+		this.sluitingsTijd = sluitingsTijd;
+	}
+
 	
 	public Dag(Date openingsTijd, Date sluitingsTijd, Bedrijf bedrijf) {
 		this.bedrijf = bedrijf;

@@ -13,10 +13,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.swinkels.emperio.objects.UserMariadbDaoImpl;
 import com.swinkels.emperio.providers.BedrijfDao;
 import com.swinkels.emperio.providers.BedrijfDaoImpl;
 import com.swinkels.emperio.security.UserDao;
+import com.swinkels.emperio.security.UserMariadbDaoImpl;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -45,7 +45,7 @@ public class AuthenticationResource {
 				role = "setup";
 			}
 			String token = createToken(username, role);
-
+			System.out.println("role "+ role);
 			SimpleEntry<String, String> JWT = new SimpleEntry<String, String>("JWT", token);
 
 			return Response.ok(JWT).build();

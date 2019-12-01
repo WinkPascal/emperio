@@ -3,7 +3,7 @@ package com.swinkels.emperio.objects;
 import com.swinkels.emperio.providers.InstellingenDao;
 import com.swinkels.emperio.providers.InstellingenDaoImpl;
 
-public class Instellingen{
+public class Instellingen extends Bedrijf{
 	Bedrijf bedrijf;
 	
 	private String kleurKlasse1;
@@ -153,7 +153,6 @@ public class Instellingen{
 		}
 	}
 
-
 	public void update() {
 		InstellingenDao instellingen = new InstellingenDaoImpl();
 		instellingen.update(this);
@@ -163,9 +162,4 @@ public class Instellingen{
 		InstellingenDao instellingenDao = new InstellingenDaoImpl();
 		instellingenDao.getInstellingen(this);
 	}
-
-
-
-
-	
 }

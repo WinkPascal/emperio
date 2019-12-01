@@ -22,12 +22,29 @@ public class Behandeling {
 	private Double inkomsten;
 	private int count;
 
-	public ArrayList<String> validate(){
+	public ArrayList<String> validate() {
 		ArrayList<String> errors = new ArrayList<String>();
 		return errors;
 	}
-	
-		
+
+	//
+	// builder
+	//
+	public Behandeling(Bedrijf bedrijf, int id, String naam, double prijs, String beschrijving, Date lengte,
+			String geslacht) {
+		super();
+		this.bedrijf = bedrijf;
+		this.id = id;
+		this.naam = naam;
+		this.prijs = prijs;
+		this.beschrijving = beschrijving;
+		this.lengte = lengte;
+		this.geslacht = geslacht;
+	}
+	//
+	//
+	//
+
 	public Behandeling(String behandelingsNaam) {
 		this.naam = behandelingsNaam;
 	}
@@ -162,8 +179,23 @@ public class Behandeling {
 		}
 	}
 
+	public void getInfo() {
+		BehandelingDao behandelingDao = new BehandelingDaoImpl();
+		behandelingDao.getBehandeling(this);
+	}
+
 	public void saveAfspraakBehandeling(Afspraak afspraak) {
 		AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
 		afspraakBehandelingDao.saveAfspraakBehandeling(this, afspraak);
 	}
+
+	public boolean delete() {
+		BehandelingDao behandelingDao = new BehandelingDaoImpl();
+		if (behandelingDao.delete(this)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

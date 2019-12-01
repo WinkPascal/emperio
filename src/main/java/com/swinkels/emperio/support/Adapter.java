@@ -13,6 +13,13 @@ public class Adapter {
 		return calendarEindDate.getTime();
 	}
 	
+	public static Date getNextWeek(Date date) {
+		Calendar calendarEindDate = Calendar.getInstance();
+		calendarEindDate.setTime(date);
+		calendarEindDate.add(Calendar.DAY_OF_YEAR, 7);
+		return calendarEindDate.getTime();
+	}
+	
 	public static Date StringToDate(String date, String parse) {
 		SimpleDateFormat timestampFormat = new SimpleDateFormat(parse);
 		try {

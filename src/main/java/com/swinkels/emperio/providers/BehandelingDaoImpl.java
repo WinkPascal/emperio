@@ -7,10 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
-import com.swinkels.emperio.service.ServiceFilter;
+import com.swinkels.emperio.objects.BehandelingBuilder;
 import com.swinkels.emperio.support.Adapter;
 
 public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao {
@@ -68,16 +67,16 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 		bedrijf.setBehandelingen(behandelingen);
 	}
 
-	public ArrayList<Behandeling> getTop5Behandelingen(Bedrijf bedrijf, Date date) {
+	public void getTop5Behandelingen(Bedrijf bedrijf, Date date) {
 		ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
-
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement("SELECT count(b.id) as hoeveelheid, b.id, b.naam \n"
-					+ "from behandeling b join afspraakbehandeling ab on b.id = ab.behandeling \n"
-					+ "				   join afspraak a on a.id = ab.afspraak\n" + "where b.bedrijf = '"
-					+ bedrijf.getEmail() + "' \n" + "      and a.timestamp < SYSDATE()\n" + "      and a.timestamp > '"
+					+ "from behandeling b join afspraakBehandeling ab on b.id = ab.behandelingId \n"
+					+ "				   join afspraak a on a.id = ab.afspraakId\n" + "where b.BedrijfBedrijfsnaam = '"
+					+ bedrijf.getBedrijfsNaam() + "' \n" + "      and a.timestamp < SYSDATE()\n" + "      and a.timestamp > '"
 					+ Adapter.DateToString(date, "YYYY-MM-dd") + "'\n" + "GROUP by b.id\n"
 					+ "ORDER by COUNT(b.id) desc\n" + "LIMIT 5;");
+			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 
@@ -91,11 +90,10 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return behandelingen;
+		bedrijf.setBehandelingen(behandelingen);
 	}
 
-	public ArrayList<Behandeling> getBehandelingen(String bedrijf, int pageNummer, String geslacht, String sort) {
+	public ArrayList<Behandeling> getBehandelingen(Bedrijf bedrijf, int pageNummer, String geslacht, String sort) {
 		ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 		int top = pageNummer * 20;
 		int low = top - 20;
@@ -103,28 +101,26 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select b.id, b.naam, b.beschrijving, b.geslacht, b.prijs, b.lengte, count(a.id) as afspraken, sum(b.prijs) as inkomsten \n"
-							+ "from behandeling b join afspraakbehandeling a on b.id = a.behandeling \n"
-							+ "where b.bedrijf = '" + bedrijf + "'\n" + "AND b.geslacht " + geslacht + " \n"
+							+ "from behandeling b left join afspraakBehandeling a on b.id = a.behandelingId \n"
+							+ "where b.BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam() + "'\n" + "AND b.geslacht " + geslacht + " \n"
 							+ "group by b.id \n" + "order by " + sort + "\n LIMIT " + low + ", " + top + ";");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				int id = dbResultSet.getInt("id");
-				String naam = dbResultSet.getString("naam");
-				String beschrijving = dbResultSet.getString("beschrijving");
-				Double prijs = dbResultSet.getDouble("prijs");
 				String lengteString = dbResultSet.getString("lengte");
 
-				Double inkomsten = dbResultSet.getDouble("inkomsten");
-				int afspraken = dbResultSet.getInt("afspraken");
+				Behandeling behandeling = new BehandelingBuilder()
+											.setId(dbResultSet.getInt("id"))
+											.setBeschrijving(dbResultSet.getString("beschrijving"))
+											.setGeslacht(dbResultSet.getString("geslacht"))
+											.setLengte(Adapter.StringToDate(lengteString, "HH:mm"))
+											.setPrijs(dbResultSet.getDouble("prijs"))
+											.setNaam(dbResultSet.getString("naam"))
+											.make();
+				behandeling.setAfspraken(dbResultSet.getInt("afspraken"));
+				behandeling.setInkomsten(dbResultSet.getDouble("inkomsten"));
 
-				Date lengte = Adapter.StringToDate(lengteString, "HH:mm");
-
-				Behandeling behandeling = new Behandeling(id, naam, beschrijving, lengte, prijs, geslacht);
-				behandeling.setAfspraken(afspraken);
-				behandeling.setInkomsten(inkomsten);
-
-				behandelingen.add(behandeling);
+				bedrijf.addBehandeling(behandeling);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -153,6 +149,45 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 		return false;
 	}
 
-
-
+	public boolean delete(Behandeling behandeling) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt;
+			pstmt = con.prepareStatement(
+					"UPDATE behandeling \n" + 
+					"SET status = 'verwijdert' \n" + 
+					"WHERE id = "+behandeling.getId()+
+					" AND BedrijfBedrijfsnaam='"+behandeling.getBedrijf().getBedrijfsNaam()+"'");
+			System.out.println(pstmt);
+			pstmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public void getBehandeling(Behandeling behandeling) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"select b.id, b.naam, b.beschrijving, b.geslacht, b.prijs, b.lengte, count(a.id) as afspraken, sum(b.prijs) as inkomsten \n"
+							+ "from behandeling b left join afspraakBehandeling a on b.id = a.behandelingId \n"
+							+ "where b.BedrijfBedrijfsnaam = '" + behandeling.getBedrijf().getBedrijfsNaam() + "'\n" 
+							+ "AND b.id = " + behandeling.getId() +" \n"
+							+ "group by b.id");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				behandeling.setId(dbResultSet.getInt("id"));
+				behandeling.setBeschrijving(dbResultSet.getString("beschrijving"));
+				behandeling.setGeslacht(dbResultSet.getString("geslacht"));
+				behandeling.setLengte(Adapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm"));
+				behandeling.setPrijs(dbResultSet.getDouble("prijs"));
+				behandeling.setNaam(dbResultSet.getString("naam"));
+				behandeling.setAfspraken(dbResultSet.getInt("afspraken"));
+				behandeling.setInkomsten(dbResultSet.getDouble("inkomsten"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -16,6 +16,7 @@ import javax.ws.rs.core.SecurityContext;
 import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Klant;
+import com.swinkels.emperio.objects.KlantBuilder;
 import com.swinkels.emperio.providers.AfspraakBehandelingDao;
 import com.swinkels.emperio.providers.AfspraakBehandelingDaoImpl;
 import com.swinkels.emperio.providers.AfspraakDao;
@@ -62,99 +63,46 @@ public class KlantenProvider {
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String getKlantenZoekRequest(@Context SecurityContext sc, @PathParam("request") String request) {
-		// uitvoer
-		// per klant
-		// id, naam, geslacht
-		// opt
-		// telefoon
-		// email
-		String bedrijf = sc.getUserPrincipal().getName();
-		ArrayList<Klant> klanten = klantDao.zoekKlant(bedrijf, request);
+		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+		bedrijf.zoekKlant(request);
+		
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-
-		for (Klant klant : klanten) {
+		for (Klant klant : bedrijf.getKlanten()) {
+			System.out.println(klant.getId());
 			JsonObjectBuilder job = Json.createObjectBuilder();
-			String email = klant.getEmail();
-			String telefoon = klant.getTel();
-			if (email == null) {
-				if (telefoon == null) {
-					// heeft geen telefoon en email
-					job.add("id", klant.getId());
-					job.add("naam", klant.getNaam());
-					job.add("geslacht", klant.getGeslacht());
-				} else {
-					// geen email wel telefoon
-					job.add("id", klant.getId());
-					job.add("naam", klant.getNaam());
-					job.add("geslacht", klant.getGeslacht());
-					job.add("telefoon", klant.getTel());
-				}
-			} else {
-				if (telefoon == null) {
-					// alleen mail geen telefoon
-					job.add("id", klant.getId());
-					job.add("naam", klant.getNaam());
-					job.add("geslacht", klant.getGeslacht());
-					job.add("email", klant.getEmail());
-				} else {
-					// heeft alles
-					job.add("id", klant.getId());
-					job.add("naam", klant.getNaam());
-					job.add("email", klant.getEmail());
-					job.add("telefoon", klant.getTel());
-					job.add("geslacht", klant.getGeslacht());
-				}
-			}
-
+			job.add("id", klant.getId());
+			job.add("naam", klant.getNaam());
+			job.add("email", klant.getEmail());
+			job.add("telefoon", klant.getTel());
+			job.add("geslacht", klant.getGeslacht());
 			jab.add(job);
-
 		}
 		return jab.build().toString();
 	}
 
-	// wordt gebruikt bij
-	// klanten pagina klanten lijst
 	@GET
 	@Path("/klant/{id}")
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String getKlant(@Context SecurityContext sc, @PathParam("id") int id) {
-		// uitvoer
-		// naam, geslacht, email, telefoon,
-		// aantal afspraken, hoeveelheid inkomsten
-		// laatste 3 afspraken
-
-		String bedrijfsNaam = sc.getUserPrincipal().getName();
-		Bedrijf bedrijf = new Bedrijf(bedrijfsNaam);
-		Klant klant = klantDao.getKlant(bedrijf, id);
+		Klant klant = new KlantBuilder().setId(id).make();
+		klant.setBedrijf(new Bedrijf(sc.getUserPrincipal().getName()));
+		klant.getInfo();
 
 		JsonObjectBuilder job = Json.createObjectBuilder();
 		job.add("naam", klant.getNaam());
 		job.add("geslacht", klant.getGeslacht());
+		job.add("email", klant.getEmail());		
+		job.add("telefoon", klant.getTel());
+		job.add("afspraken", klant.getAantalAfspraken());
+		job.add("inkomsten", klant.getHoeveelheidInkomsten());
 
-		String email = klant.getEmail();
-		if (email != null) {
-			job.add("email", email);
-		}
-		String tel = klant.getTel();
-		if (tel != null) {
-			job.add("telefoon", tel);
-		}
-		// de aantal afspraken en hoeveel heid inkomsten van de klant
-		ArrayList<Double> data = afspraakDao.getAantalAfsprakenEnInkomstenByklant(bedrijf, klant);
-		job.add("afspraken", data.get(0));
-		job.add("inkomsten", data.get(1));
-
-		// laatste 5 afspraken ophalen
 		JsonArrayBuilder jab1 = Json.createArrayBuilder();
-		ArrayList<Afspraak> afspraken = afspraakDao.getLaatste3Afspraken(bedrijf, klant);
-		for (Afspraak afspraak : afspraken) {
+		for (Afspraak afspraak : klant.getAfspraken()) {
 			JsonObjectBuilder job1 = Json.createObjectBuilder();
 			job1.add("prijs", afspraak.getPrijs());
-
 			String timestampString = Adapter.DateToString(afspraak.getTimeStamp(), "YYYY-MM-dd HH:mm");
 			job1.add("datum", timestampString.substring(0, 10));
-			System.out.println(timestampString.substring(0, 10));
 			job1.add("tijd", timestampString.substring(11));
 			jab1.add(job1);
 		}

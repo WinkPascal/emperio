@@ -82,6 +82,19 @@
 	float: left;
 }
 
+.BehandelingForm {
+	width: 80%;
+	height: 500px;
+	background-color: white;
+	margin: auto;
+}
+
+.BehandelingForm .bottom {
+	bottom: 0px;
+	height: 30px;
+	width: 100%;
+}
+
 .BehandelingToevoegenForm {
 	width: 600px;
 	margin: auto;
@@ -137,12 +150,13 @@
 	border-radius: 4px;
 	color: blue;
 }
+
 .geslachtButton:hover {
 	color: white;
 	background-color: #3D5FC4;
 }
 
-.selectedGeslachtButtton{
+.selectedGeslachtButtton {
 	width: 20%;
 	margin-left: 3%;
 	height: 50px;

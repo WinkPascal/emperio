@@ -1,4 +1,4 @@
-package com.swinkels.emperio.security;
+package com.swinkels.emperio.service;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.ext.Provider;
 
-import com.swinkels.emperio.service.AuthenticationResource;
+import com.swinkels.emperio.security.MySecurityContext;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

@@ -26,6 +26,18 @@ public class Afspraak {
 	public Afspraak() {
 
 	}
+	//
+	//builder
+	//
+	public Afspraak(Bedrijf bedrijf, Klant klant, ArrayList<Behandeling> behandelingen, int id, Date timestamp,
+			Double prijs) {
+		this.bedrijf = bedrijf;
+		this.klant = klant;
+		this.behandelingen = behandelingen;
+		this.id = id;
+		this.timestamp = timestamp;
+		this.prijs = prijs;
+	}
 
 	public Afspraak(int id, Date timestamp, Klant klant) {
 		this.id = id;

@@ -1,9 +1,16 @@
 package com.swinkels.emperio.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.swinkels.emperio.providers.AfspraakDao;
+import com.swinkels.emperio.providers.AfspraakDaoImpl;
 import com.swinkels.emperio.providers.KlantDao;
 import com.swinkels.emperio.providers.KlantDaoImpl;
 
 public class Klant {
+	private List<Afspraak> afspraken = new ArrayList<Afspraak>();
+
 	private int id;
 
 	private String naam;
@@ -15,6 +22,16 @@ public class Klant {
 
 	private int hoeveeleheidAfspraken;
 	private double hoeveelheidInkomsten;
+
+	public Klant(int id, String naam, String email, String tel, String geslacht, String adres, Bedrijf bedrijf) {
+		this.id = id;
+		this.naam = naam;
+		this.email = email;
+		this.tel = tel;
+		this.geslacht = geslacht;
+		this.adres = adres;
+		this.bedrijf = bedrijf;
+	}
 
 	public Klant(int id, String naam, String email, String tel, String geslacht, String klantAdres) {
 		this.id = id;
@@ -40,6 +57,14 @@ public class Klant {
 		this.tel = tel;
 		this.geslacht = geslacht;
 		this.bedrijf = bedrijf;
+	}
+
+	public void getInfo() {
+		KlantDao klantDao = new KlantDaoImpl();
+		klantDao.getKlant(bedrijf, this);
+		AfspraakDao afspraakDao = new AfspraakDaoImpl();
+		afspraakDao.getAantalAfsprakenEnInkomstenByklant(bedrijf, this);
+		afspraakDao.getLaatste3Afspraken(bedrijf, this);
 	}
 
 	public void saveOrFindAndGetId() {
@@ -93,13 +118,40 @@ public class Klant {
 	public void setNaam(String naam) {
 		this.naam = naam;
 	}
+	public List<Afspraak> getAfspraken() {
+		return afspraken;
+	}
 
+	public void setAfspraken(List<Afspraak> afspraken) {
+		this.afspraken = afspraken;
+	}
+	
+	public void addAfspraak(Afspraak afspraak) {
+		afspraken.add(afspraak);
+	}
+	
 	public String getNaam() {
 		return naam;
 	}
 
 	public Bedrijf getBedrijf() {
 		return bedrijf;
+	}
+
+	public int getHoeveeleheidAfspraken() {
+		return hoeveeleheidAfspraken;
+	}
+
+	public void setHoeveeleheidAfspraken(int hoeveeleheidAfspraken) {
+		this.hoeveeleheidAfspraken = hoeveeleheidAfspraken;
+	}
+
+	public void setHoeveelheidInkomsten(double hoeveelheidInkomsten) {
+		this.hoeveelheidInkomsten = hoeveelheidInkomsten;
+	}
+
+	public void setBedrijf(Bedrijf bedrijf) {
+		this.bedrijf = bedrijf;
 	}
 
 	public int getAantalAfspraken() {
@@ -110,9 +162,12 @@ public class Klant {
 		return adres;
 	}
 
+	public void setAdres(String adres) {
+		this.adres = adres;
+	}
+
 	public double getHoeveelheidInkomsten() {
 		return hoeveelheidInkomsten;
 	}
-
 
 }

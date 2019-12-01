@@ -1,4 +1,4 @@
-package com.swinkels.emperio.service;
+package com.swinkels.emperio.support;
 
 import java.util.ArrayList;
 

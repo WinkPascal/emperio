@@ -139,8 +139,6 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		return false;
 	}
 
-
-	
 	public boolean setInvoerKlant(Bedrijf bedrijf, String contact, boolean telefoon, boolean email, boolean adres) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(

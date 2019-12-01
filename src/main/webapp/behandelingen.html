@@ -42,6 +42,57 @@
 		  	<input type="button" value="Volgende" class="defaultButton" id="volgendeButton">
 	  	</span>
 	 </div>
+
+	 	 <div id="BehandelingModal" class="modal">
+			<form id="BehandelingForm" class="BehandelingForm">
+				<div class="inputField">
+					<a class="inputNaam">Naam</a>
+					<input class="inputBehandelingToevoegen" type="text" name="naam" id="naam"><br>
+				</div>
+				<div class="inputField">
+					<a class="inputNaam">Beschrijving</a>
+					<textarea class="inputBehandelingToevoegen beschrijvingToevoegen" name="beschrijving" id="beschrijving"></textarea>				
+				</div>
+				<div class="inputField">
+					<a class="inputNaam">Prijs</a>
+					<span class="inputBehandelingToevoegen">
+						<input class="inputPrijsToevoegen" id="prijsBehandeling" type="number" name="prijsBehandeling" min="0" value="0" step="any">
+					</span>		
+				</div>
+				<div class="inputField">
+					<a class="inputNaam">Lengte</a>
+					<span class="inputBehandelingToevoegen">
+						<select name="uur" id="uur">
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
+						:
+						<select name="minuten" id="minuten">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="20">20</option>
+							<option value="25">25</option>
+							<option value="30">30</option>
+							<option value="35">35</option>
+							<option value="40">40</option>
+							<option value="45">45</option>
+							<option value="50">50</option>
+							<option value="55">55</option>
+						</select>
+					</span>
+				</div>
+				<div class="bottom">
+					<input type="button" value="Annuleren" id="Annuleren" class="defaultButton">	
+					<input type="button" value="Wijzigen" id="Wijzigen" class="defaultButton">	
+					<input type="button" value="Verwijderen" id="Verwijderen" class="defaultButton">
+					<input type="button" value="Statestieken" id="Annuleren" class="defaultButton">
+				</div>
+			</form>
+		</div>
+
 	 <div id="BehandelingToevoegenModal" class="modal">
 		<form id="BehandelingToevoegenForm" class="BehandelingToevoegenForm">
 			<h2>Behandeling Toevoegen</h2>
@@ -64,17 +115,36 @@
 				<div class="inputField">
 					<a class="inputNaam">Prijs</a>
 					<span class="inputBehandelingToevoegen">
-						<input class="inputPrijsToevoegen" type="number" name="prijs">,
-						<input class="inputPrijsToevoegen" type="number" name="prijs">	
-					</span>			
+						<input class="inputPrijsToevoegen" id="prijsBehandeling" type="number" name="prijsBehandeling" min="0" value="0" step="any">
+					</span>		
 				</div>
 				 <div class="inputField">
-					<a class="inputNaam">Lengte</a>
-					<span class="inputBehandelingToevoegen">
-						<input class="inputLengteToevoegen" type="number" name="uur"> : 
-						<input class="inputLengteToevoegen" type="number" name="minuten"><br>
-					</span>
-				 </div>		
+					<div class="inputField">
+						<a class="inputNaam">Lengte</a>
+						<span class="inputBehandelingToevoegen">
+							<select name="uur">
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+							</select>
+							:
+							<select name="minuten">
+								<option value="5">5</option>
+								<option value="10">10</option>
+								<option value="15">15</option>
+								<option value="20">20</option>
+								<option value="25">25</option>
+								<option value="30">30</option>
+								<option value="35">35</option>
+								<option value="40">40</option>
+								<option value="45">45</option>
+								<option value="50">50</option>
+								<option value="55">55</option>
+							</select>
+						</span>
+					</div>
+				 </div>
 			</div>
 			<div class="submitController">
 				<input type="button" class="defaultButton" id="inplannenBehandelingToevoegen" value="Toevoegen">

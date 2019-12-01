@@ -207,112 +207,91 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		return null;
 	}
 	
-	public ArrayList<Double> getInkomsten(Bedrijf bedrijf, Date date){
+	public void getInkomsten(Bedrijf bedrijf, Date date){
 		try (Connection con = super.getConnection()) {
-			ArrayList<Double> data = new ArrayList<Double>();
 			PreparedStatement pstmt = con.prepareStatement(
 					"select count(a.id) as afspraken, sum(b.prijs) as inkomsten \n" + 
-					"from afspraak a join afspraakbehandeling ab on a.id =ab.afspraak\n" + 
-					"				join behandeling b on b.id = ab.behandeling\n" + 
-					"WHERE b.bedrijf = '"+ bedrijf.getEmail() +"' \n" + 
+					"from afspraak a join afspraakBehandeling ab on a.id =ab.afspraakId\n" + 
+					"				join behandeling b on b.id = ab.behandelingId\n" + 
+					"WHERE b.BedrijfBedrijfsnaam = '"+ bedrijf.getBedrijfsNaam() +"' \n" + 
 					"AND a.timestamp < SYSDATE() \n" + 
-					"AND a.timestamp > '"+ServiceFilter.DateToStringFormatter(date, "YYYY-MM-dd")+"';");
+					"AND a.timestamp > '"+Adapter.DateToString(date, "YYYY-MM-dd")+"';");
+			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				double afspraken = dbResultSet.getDouble("afspraken");
-				double inkomsten = dbResultSet.getDouble("inkomsten");
-				data.add(afspraken);
-				data.add(inkomsten);
-				return data;
+				bedrijf.setHoeveelheidAfspraken(dbResultSet.getInt("afspraken"));
+				bedrijf.setHoeveelheidInkomsten(dbResultSet.getDouble("inkomsten"));
 			} 
 		}catch (SQLException e) {
 			e.printStackTrace();
 		} 
-		return null;
 	}
 
-	public ArrayList<Dag> getAantalAfsprakenPerDag(Bedrijf bedrijf, Date date) {
+	public void getAantalAfsprakenPerDag(Bedrijf bedrijf, Date date) {
+		ArrayList<Dag> dagen = new ArrayList<Dag>();
 		try (Connection con = super.getConnection()) {
-			ArrayList<Dag> dagen = new ArrayList<Dag>();
 			PreparedStatement pstmt = con.prepareStatement(
-					"select a.dag_nr, count(a.id) as aantalAfspraken \n" + 
-					"FROM afspraak a join afspraakbehandeling h on a.id = h.afspraak\n" + 
-					"				join behandeling b on b.id = h.behandeling\n" + 
-					"WHERE b.bedrijf = '"+ bedrijf.getEmail() +"' \n" + 
+					"select a.dagnummer, count(a.id) as aantalAfspraken \n" + 
+					"FROM afspraak a join afspraakBehandeling h on a.id = h.afspraakId \n" + 
+					"				join behandeling b on b.id = h.behandelingId \n" + 
+					"WHERE b.BedrijfBedrijfsnaam = '"+ bedrijf.getBedrijfsNaam() +"' \n" + 
 					"AND timestamp < SYSDATE() \n" + 
-					"AND timestamp > "+ServiceFilter.DateToStringFormatter(date, "YYYY-MM-dd")+" "+ 
-					"group by a.dag_nr \n" + 
-					"ORDER BY a.dag_nr"); 
+					"AND timestamp > "+Adapter.DateToString(date, "YYYY-MM-dd")+" "+ 
+					"group by a.dagnummer \n" + 
+					"ORDER BY a.dagnummer"); 
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				int dag_nr = dbResultSet.getInt("dag_nr");
+				int dag_nr = dbResultSet.getInt("dagnummer");
 				int aantalAfspraken = dbResultSet.getInt("aantalAfspraken");
-
 				Dag dag = new Dag(dag_nr, aantalAfspraken);
-				
 				dagen.add(dag);
-			} 
-			return dagen;
+			}
 		}catch (SQLException e) {
 			e.printStackTrace();
 		} 
-		return null;
+		bedrijf.setDagen(dagen);
 	}
 	
-	public ArrayList<Double> getAantalAfsprakenEnInkomstenByklant(Bedrijf bedrijf, Klant klant) {
+	public void getAantalAfsprakenEnInkomstenByklant(Bedrijf bedrijf, Klant klant) {
 		try (Connection con = super.getConnection()) {
-			ArrayList<Double> data = new ArrayList<Double>();
 			PreparedStatement pstmt = con.prepareStatement(
 					"select count(a.id) as afspraken, sum(b.prijs) as prijs \n" + 
-					"from afspraak a join klant k on a.klant = k.id \n" + 
-					"                join afspraakbehandeling l on l.afspraak = a.id\n" + 
-					"                join behandeling b on b.id = l.behandeling\n" + 
+					"from afspraak a join klant k on a.klantId = k.id \n" + 
+					"                join afspraakBehandeling l on l.afspraakId = a.id \n" + 
+					"                join behandeling b on b.id = l.behandelingId \n" + 
 					"WHERE k.id= "+klant.getId()+" \n" + 
-					"AND k.bedrijf = '"+bedrijf.getEmail()+"'"); 
+					"AND k.BedrijfBedrijfsnaam  = '"+bedrijf.getEmail()+"'"); 
 			ResultSet dbResultSet = pstmt.executeQuery();
-			while (dbResultSet.next()) {
-				double afspraken = dbResultSet.getInt("afspraken");
-				double prijs = dbResultSet.getInt("prijs");
-
-				data.add(afspraken);
-				data.add(prijs);
+			while (dbResultSet.next()) {				
+				klant.setHoeveeleheidAfspraken(dbResultSet.getInt("afspraken"));
+				klant.setHoeveelheidInkomsten(dbResultSet.getInt("prijs"));
 			} 
-			return data;
 		}catch (SQLException e) {
 			e.printStackTrace();
-		} 
-		
-		return null;
+		} 		
 	}
 	
-	public ArrayList<Afspraak> getLaatste3Afspraken(Bedrijf bedrijf, Klant klant) {
+	public void getLaatste3Afspraken(Bedrijf bedrijf, Klant klant) {
 		try (Connection con = super.getConnection()) {
-			ArrayList<Afspraak> afspraken = new ArrayList<Afspraak>();
 			PreparedStatement pstmt = con.prepareStatement(
 					"SELECT a.timestamp as timestamp, sum(b.prijs) as prijs \n" + 
-					"from afspraak a join afspraakbehandeling f on a.id = f.afspraak \n" + 
-					"				join behandeling b on f.behandeling = b.id \n" + 
-					"				join klant k on k.id = a.klant \n" + 
-					"where b.bedrijf = '"+bedrijf.getEmail()+"' \n" + 
+					"from afspraak a join afspraakBehandeling f on a.id = f.afspraakId \n" + 
+					"				join behandeling b on f.behandelingId = b.id \n" + 
+					"				join klant k on k.id = a.klantId \n" + 
+					"where b.BedrijfBedrijfsnaam  = '"+bedrijf.getBedrijfsNaam()+"' \n" + 
 					"AND k.id="+klant.getId()+" \n" + 
 					"GROUP by a.timestamp \n" + 
 					"limit 5;"); 
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				String timestamp = dbResultSet.getString("timestamp");
-				
-				double prijs = dbResultSet.getDouble("prijs");
-				Afspraak afspraak = new Afspraak(ServiceFilter.StringToDateFormatter(timestamp, "YYYY-MM-dd HH:mm"));
-				afspraak.setPrijs(prijs);
-				
-				afspraken.add(afspraak);
+				Afspraak afspraak = new Afspraak(Adapter.StringToDate(timestamp, "YYYY-MM-dd HH:mm"));
+				afspraak.setPrijs(dbResultSet.getDouble("prijs"));
+				klant.addAfspraak(afspraak);
 			} 
-			return afspraken;
 		}catch (SQLException e) {
 			e.printStackTrace();
 		} 
-		
-		return null;
 	}
 	
 	public int getMinutesOfAfspraak(Afspraak afspraak) {
@@ -335,8 +314,6 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 				 String lengte = dbResultSet.getString("lengte");
 				 int uren = Integer.parseInt(lengte.split(":")[0]);
 				 minuten = Integer.parseInt(lengte.split(":")[1]) + uren*60;
-				 System.out.println(uren);
-				 System.out.println(minuten);
 			}
 		} catch (SQLException e) {	
 			e.printStackTrace();

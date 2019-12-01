@@ -3,7 +3,7 @@ package com.swinkels.emperio.objects;
 import com.swinkels.emperio.providers.ContactPersoonDao;
 import com.swinkels.emperio.providers.ContactPersoonDaoImpl;
 
-public class ContactPersoon {
+public class ContactPersoon extends Bedrijf{
 	private Bedrijf bedrijf;
 	private String voornaam;
 	private String achternaam;
@@ -13,6 +13,7 @@ public class ContactPersoon {
 	
 	public ContactPersoon(Bedrijf bedrijf, String voornaam, String achternaam, String rekeningnummer, String telefoonnummer,
 			String emailadres) {
+		super();
 		this.bedrijf = bedrijf;
 		this.voornaam = voornaam;
 		this.achternaam = achternaam;

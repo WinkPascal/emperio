@@ -9,11 +9,16 @@ import com.swinkels.emperio.objects.Behandeling;
 public interface BehandelingDao {
 	public void behandelingenByGeslacht(String geslacht, Bedrijf bedrijf);
 
-	public ArrayList<Behandeling> getTop5Behandelingen(Bedrijf bedrijf, Date date);
+	public void getTop5Behandelingen(Bedrijf bedrijf, Date date);
 
-	public ArrayList<Behandeling> getBehandelingen(String bedrijf, int pageNummer, String geslacht, String sort);
+	public ArrayList<Behandeling> getBehandelingen(Bedrijf bedrijf, int pageNummer, String geslacht, String sort);
 
 	public boolean save(Behandeling behandeling);
 
 	public ArrayList<Behandeling> getAllBehandelingen(Bedrijf bedrijf);
+
+	public boolean delete(Behandeling behandeling);
+
+	public void getBehandeling(Behandeling behandeling);
+
 }

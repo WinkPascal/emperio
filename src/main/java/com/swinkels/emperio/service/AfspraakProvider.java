@@ -22,6 +22,7 @@ import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Dag;
+import com.swinkels.emperio.objects.DagBuilder;
 import com.swinkels.emperio.providers.AfspraakBehandelingDao;
 import com.swinkels.emperio.providers.AfspraakBehandelingDaoImpl;
 import com.swinkels.emperio.providers.AfspraakDao;
@@ -42,29 +43,23 @@ public class AfspraakProvider {
 	AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
 	BedrijfDao bedrijfDao = new BedrijfDaoImpl();
 
-	// wordt gebruikt bij
-	// startscherm afspraken vandaag
 	@GET
 	@Path("/afsprakenByDate/{date}")
-	@RolesAllowed("user")
 	@Produces("application/json")
 	public String afsprakenByDate(@Context SecurityContext sc, @PathParam("date") String datum) throws ParseException {
+		System.out.println("adspraken by date");
+		System.out.println(sc.getUserPrincipal());
 		Date beginDate = Adapter.StringToDate(datum, "yyyy-MM-dd");
-		Calendar calendarBeginDate = Calendar.getInstance();
-		calendarBeginDate.setTime(beginDate);
-		calendarBeginDate.add(Calendar.MONTH, 1);
-		beginDate = calendarBeginDate.getTime();
-
-		// de datum van de volgende dag
-		calendarBeginDate.add(Calendar.DAY_OF_YEAR, 1);
-		Date eindDate = calendarBeginDate.getTime();
-
+		Date eindDate = Adapter.getNextDay(beginDate);
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		Dag dag = new Dag(bedrijf);
-		bedrijf.getAfsprakenBetweenDates(beginDate, eindDate, bedrijf);
 		
+		Dag dag = new DagBuilder().setBedrijf(bedrijf).make();
+		System.out.println("sssssss");
+		System.out.println(dag.getBedrijf().getBedrijfsNaam());
+		dag.getAfsprakenBetweenDates(beginDate, eindDate);
+
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-		for (Afspraak afspraak : bedrijf.get) {
+		for (Afspraak afspraak : dag.getAfspraken()) {
 			double prijs = 0;
 			int uren = 0;
 			int minuten = 0;
@@ -79,7 +74,7 @@ public class AfspraakProvider {
 			}
 			JsonObjectBuilder job = Json.createObjectBuilder();
 			job.add("id", afspraak.getId());
-			job.add("timestamp", ServiceFilter.DateToStringFormatter(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm"));
+			job.add("timestamp", Adapter.DateToString(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm"));
 			job.add("klantNaam", afspraak.getKlant().getNaam());
 			job.add("lengte", uren + ":" + minuten);
 			job.add("prijs", prijs);
@@ -90,112 +85,59 @@ public class AfspraakProvider {
 
 	// wordt gebruikt bij
 	// rooster vullen bij afspraken pagina
-	// uitvoer
-	// per dag
-	// weeknummer
-	// openingstijd
-	// sluitingstijd
 	@GET
 	@Path("/getWeekRooster")
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String getWeekRooster(@Context SecurityContext sc) {
-		System.out.println("getWeekrooster");
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		// dagen worden opgehaalt
 		bedrijf.retrieveDagen();
-
-		Date vroegsteOpeningsTijd = ServiceFilter.StringToDateFormatter("23:59", "HH:mm");
-		Date laatsteSluitingsTijd = ServiceFilter.StringToDateFormatter("00:00", "HH:mm");
+	
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-
-		for (Dag dag : bedrijf.getDagen()) {
-			if (vroegsteOpeningsTijd.compareTo(dag.getOpeningsTijd()) > 0) {
-				vroegsteOpeningsTijd = dag.getOpeningsTijd();
-			}
-			if (laatsteSluitingsTijd.compareTo(dag.getSluitingsTijd()) < 0) {
-				laatsteSluitingsTijd = dag.getSluitingsTijd();
-			}
-		}
-
 		JsonObjectBuilder job = Json.createObjectBuilder();
-		job.add("vroegsteOpeningsTijd", ServiceFilter.DateToStringFormatter(vroegsteOpeningsTijd, "HH:mm"));
-		job.add("laatsteSluitingsTijd", ServiceFilter.DateToStringFormatter(laatsteSluitingsTijd, "HH:mm"));
+		job.add("vroegsteOpeningsTijd", Adapter.DateToString(bedrijf.getVroegsteOpeningsTijd(), "HH:mm"));
+		job.add("laatsteSluitingsTijd", Adapter.DateToString(bedrijf.getLaatsteSluitingsTijd(), "HH:mm"));
 		jab.add(job);
-
 		for (Dag dag : bedrijf.getDagen()) {
 			JsonObjectBuilder job1 = Json.createObjectBuilder();
 			job1.add("weekNummer", dag.getDag());
-
-			String openingsTijd = ServiceFilter.DateToStringFormatter(dag.getOpeningsTijd(), "HH:mm");
-			job1.add("openingsTijd", openingsTijd);
-
-			String sluitingsTijd = ServiceFilter.DateToStringFormatter(dag.getSluitingsTijd(), "HH:mm");
-			job1.add("sluitingsTijd", sluitingsTijd);
-
+			job1.add("openingsTijd", Adapter.DateToString(dag.getOpeningsTijd(), "HH:mm"));
+			job1.add("sluitingsTijd", Adapter.DateToString(dag.getSluitingsTijd(), "HH:mm"));
 			jab.add(job1);
 		}
 		return jab.build().toString();
 	}
 
-	// wordt gebruikt bij
-	// week rooster vullen
 	@GET
 	@Path("/getWeekAfspraken/{date}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getWeekAfspraken(@Context SecurityContext sc, @PathParam("date") String datum) {
-		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		// format de date naar de java format
-		String[] beginDateString = datum.split("-");
-		int maand = Integer.parseInt(beginDateString[1]) + 1;
-		String dateFormatted = beginDateString[0] + "-" + maand + "-" + beginDateString[2];
-		Date beginDate = ServiceFilter.StringToDateFormatter(dateFormatted, "yyyy-MM-dd");
-
-		Calendar calendarEindDate = Calendar.getInstance();
-		calendarEindDate.setTime(beginDate);
-		calendarEindDate.add(Calendar.DAY_OF_YEAR, 7);
-		Date eindDate = calendarEindDate.getTime();
-
-		ArrayList<Afspraak> afspraken = afspraakDao.getAfsprakenBetweenDates(beginDate, eindDate, bedrijf);
+	public String getWeekAfspraken(@Context SecurityContext sc, @PathParam("date") String datum) {		
+		Date maandag = Adapter.StringToDate(datum, "yyyy-MM-dd");
+		Date zondag = Adapter.getNextWeek(maandag);
+		
+		Dag dag = new DagBuilder()
+				.setBedrijf(new Bedrijf(sc.getUserPrincipal().getName()))
+				.make();
+		dag.getAfsprakenBetweenDates(maandag, zondag);
 
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-		// hieraan wordt toegevoegd:
-		// afspraak.id
-		// afspraak.beginTijd
-		// klant.naam
-		// aparte json array binnen jab1
-		// behandeling.naam
-		// behandeling.lengte
-		// behandeling.prijs
-		for (Afspraak afspraak : afspraken) {
+		for (Afspraak afspraak : dag.getAfspraken()) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
-
 			job.add("id", afspraak.getId());
-			Date timestampDate = afspraak.getTimeStamp();
-			String timestamp = ServiceFilter.DateToStringFormatter(timestampDate, "yyyy-MM-dd HH:mm");
-
-			job.add("timestamp", timestamp);
+			job.add("timestamp", Adapter.DateToString(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm"));
 			job.add("klant", afspraak.getKlant().getNaam());
-
 			JsonArrayBuilder jab1 = Json.createArrayBuilder();
 			for (Behandeling behandeling : afspraak.getBehandelingen()) {
 				JsonObjectBuilder job1 = Json.createObjectBuilder();
-
-				String lengteString = ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm");
-
 				job1.add("naam", behandeling.getNaam());
-				job1.add("lengte", lengteString);
+				job1.add("lengte", Adapter.DateToString(behandeling.getLengte(), "HH:mm"));
 				job1.add("prijs", behandeling.getPrijs());
-
 				jab1.add(job1);
 			}
-
 			job.add("behandelingen", jab1);
 			jab.add(job);
 		}
-		System.out.println("s");
-
 		return jab.build().toString();
 	};
 
@@ -222,18 +164,14 @@ public class AfspraakProvider {
 		JsonArrayBuilder jab1 = Json.createArrayBuilder();
 		double totaalPrijs = 0;
 		for (Behandeling behandeling : afspraak.getBehandelingen()) {
-			System.out.println(behandeling.getNaam() + "is het id");
 			JsonObjectBuilder job1 = Json.createObjectBuilder();
-			
 			job1.add("id", behandeling.getId());
 			job1.add("naam", behandeling.getNaam());
-			job1.add("lengte", ServiceFilter.DateToStringFormatter(behandeling.getLengte(), "HH:mm"));
-			job1.add("prijs", behandeling.getPrijs());
-			
+			job1.add("lengte", Adapter.DateToString(behandeling.getLengte(), "HH:mm"));
+			job1.add("prijs", behandeling.getPrijs());			
 			totaalPrijs = totaalPrijs + behandeling.getPrijs();
 			jab1.add(job1);
 		}
-
 		job.add("behandelingen", jab1);
 		job.add("totaalPrijs", totaalPrijs);
 

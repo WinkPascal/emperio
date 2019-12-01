@@ -1,4 +1,4 @@
-package com.swinkels.emperio.objects;
+package com.swinkels.emperio.security;
 
 import java.sql.Connection;
 
@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.swinkels.emperio.providers.MariadbBaseDao;
-import com.swinkels.emperio.security.UserDao;
 
 public class UserMariadbDaoImpl extends MariadbBaseDao implements UserDao {
 

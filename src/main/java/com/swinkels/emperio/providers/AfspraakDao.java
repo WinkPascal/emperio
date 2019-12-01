@@ -21,13 +21,13 @@ public interface AfspraakDao {
 
 	public ArrayList<Afspraak> getAfsprakenWeek(Bedrijf bedrijf, Date date);
 
-	public ArrayList<Double> getInkomsten(Bedrijf bedrijf, Date vanDate);
+	public void getInkomsten(Bedrijf bedrijf, Date vanDate);
 
-	public ArrayList<Dag> getAantalAfsprakenPerDag(Bedrijf bedrijf, Date endDate);
+	public void getAantalAfsprakenPerDag(Bedrijf bedrijf, Date endDate);
 
-	public ArrayList<Double> getAantalAfsprakenEnInkomstenByklant(Bedrijf bedrijf, Klant klant);
+	public void getAantalAfsprakenEnInkomstenByklant(Bedrijf bedrijf, Klant klant);
 
-	public ArrayList<Afspraak> getLaatste3Afspraken(Bedrijf bedrijf, Klant klant);
+	public void getLaatste3Afspraken(Bedrijf bedrijf, Klant klant);
 
 	public int getMinutesOfAfspraak(Afspraak afspraak);
 

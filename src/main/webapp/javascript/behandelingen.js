@@ -1,5 +1,7 @@
 function onload() {
 	getBehandelingen("load", "alle");
+	wijzigBehandeling();
+	verwijderBehandeling()
 	var geslacht = [];
 	document.getElementById("geslachtMan").addEventListener("click", function () {
 		geslacht.push("man");
@@ -17,7 +19,6 @@ function onload() {
 		geslacht.push("meisje");
 		getBehandelingen("load", geslacht);
 	})
-
 
 	document.getElementById("vorigeButton").addEventListener("click", function () {
 		getBehandelingen("terug", geslacht);
@@ -46,7 +47,6 @@ function getBehandelingen(functie, geslacht) {
 	var behandelingenLijst = document.getElementById("behandelingenLijst");
 	behandelingenLijst.innerHTML = "";
 	var selectList = document.getElementById("selectList").value;
-
 	var data = "geslacht=" + geslacht + "&pageNumber=" + blz + "&sort=" + selectList;
 	var fetchoptions = {
 		headers: {
@@ -119,9 +119,83 @@ function getBehandelingen(functie, geslacht) {
 				row.appendChild(behandelingAfspraken);
 
 				behandelingenLijst.appendChild(row);
+				getBehandeling(behandeling.id, behandeling.prijs, behandeling.lengte, behandeling.afspraken, behandeling.inkomsten);
 			}
 		})
 }
+
+function getBehandeling(id, naam, prijs, lengte, afspraken, inkomsten) {
+	document.getElementById(id).addEventListener("click", function () {
+		document.getElementById("naam").setAttribute("data-id", id);
+		var fetchoptions = {
+			headers: {
+				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+			}
+		}
+		fetch("restservices/behandelingProvider/getBehandeling/" + id, fetchoptions)
+			.then(response => response.json())
+			.then(function (behandeling) {
+				document.getElementById("BehandelingModal").style.display = "block";
+				document.getElementById("naam").value = naam;
+				document.getElementById("beschrijving").value = "dsaudgasdasdsaduhabsdbhjasds";
+				document.getElementById("prijsBehandeling").value = prijs;
+				document.getElementById("uur").value = lengte;
+				document.getElementById("minuten").value = lengte;
+			})
+	})
+}
+document.getElementById("Annuleren").addEventListener("click", function () {
+	document.getElementById("BehandelingModal").style.display = "none";
+
+})
+
+function wijzigBehandeling() {
+	document.getElementById("Wijzigen").addEventListener("click", function () {
+		var id = document.getElementById("naam").getAttribute("data-id");
+
+		var formData = new FormData(document.querySelector("#BehandelingToevoegenForm"));
+		var encData = new URLSearchParams(formData.entries());
+		alert(encData);
+		var fetchoptions = {
+			method: 'PUT',
+			body: encData,
+			headers: {
+				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+			}
+		}
+		// De wijziging wordt verstuurt naar de backend
+		fetch("restservices/behandelingProvider/behandeling", fetchoptions)
+			.then(function (response) {
+				if (response.ok) {
+					alert("toegevoegd");
+				} else {
+					alert("kapot fout");
+				}
+			})
+	})
+}
+
+function verwijderBehandeling() {
+	document.getElementById("Verwijderen").addEventListener("click", function () {
+		var id = document.getElementById("naam").getAttribute("data-id");
+		var fetchoptions = {
+			method: 'DELETE',
+			headers: {
+				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+			}
+		}
+		// De wijziging wordt verstuurt naar de backend
+		fetch("restservices/behandelingProvider/behandeling/"+id, fetchoptions)
+			.then(function (response) {
+				if (response.ok) {
+					alert("toegevoegd");
+				} else {
+					alert("kapot fout");
+				}
+			})
+	})
+}
+
 
 
 document.getElementById("aanmaken").addEventListener("click", function () {
@@ -130,36 +204,53 @@ document.getElementById("aanmaken").addEventListener("click", function () {
 })
 
 function behandelingToevoegenForm() {
-	document.getElementById("geslachtManToevoegen").addEventListener("click", function () {
-		behandelingManager("geslachtManToevoegen");
+	var manKnop = document.getElementById("geslachtManToevoegen");
+	manKnop.addEventListener("click", function () {
+		if (behandelingManager("man")) {
+			manKnop.className = "selectedGeslachtButtton";
+		} else {
+			manKnop.className = "geslachtButton";
+		}
 	})
-	document.getElementById("geslachtVrouwToevoegen").addEventListener("click", function () {
-		behandelingManager("geslachtVrouwToevoegen");
+	var vrouwKnop = document.getElementById("geslachtVrouwToevoegen");
+	vrouwKnop.addEventListener("click", function () {
+		if (behandelingManager("vrouw")) {
+			vrouwKnop.className = "selectedGeslachtButtton";
+		} else {
+			vrouwKnop.className = "geslachtButton";
+		}
 	})
-	document.getElementById("geslachtJongenToevoegen").addEventListener("click", function () {
-		behandelingManager("geslachtJongenToevoegen");
+	var jongenKnop = document.getElementById("geslachtJongenToevoegen");
+	jongenKnop.addEventListener("click", function () {
+		if (behandelingManager("jongen")) {
+			jongenKnop.className = "selectedGeslachtButtton";
+		} else {
+			jongenKnop.className = "geslachtButton";
+		}
 	})
-	document.getElementById("geslachtMeisjeToevoegen").addEventListener("click", function () {
-		behandelingManager("geslachtMeisjeToevoegen");
+	var meisjeKnop = document.getElementById("geslachtMeisjeToevoegen");
+	meisjeKnop.addEventListener("click", function () {
+		if (behandelingManager("meisje")) {
+			meisjeKnop.className = "selectedGeslachtButtton";
+		} else {
+			meisjeKnop.className = "geslachtButton";
+		}
 	})
 }
 
 function behandelingManager(geslacht) {
 	geslachten = [];
-	console.log(geslachten);
 	if (geslachten.includes(geslacht)) {
 		for (var i = 0; i < geslachten.length; i++) {
-			console.log(geslachten[i]);
-			console.log(geslacht);
 			if (geslachten[i] === geslacht) {
-				document.getElementById(geslacht).className = "geslachtButton";
 				geslachten.splice(i, 1);
 				i--;
+				return false;
 			}
 		}
 	} else {
 		geslachten.push(geslacht);
-		document.getElementById(geslacht).className = "selectedGeslachtButtton";
+		return true;
 	}
 }
 

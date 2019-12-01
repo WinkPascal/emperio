@@ -8,52 +8,61 @@ import java.util.ArrayList;
 
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Klant;
+import com.swinkels.emperio.objects.KlantBuilder;
 import com.swinkels.emperio.support.Validator;
 
 public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 
 	// klaten wordenopgehaalt door de zoekbalk
-	public ArrayList<Klant> zoekKlant(String bedrijf, String klantRequest) {
+	public void zoekKlant(Bedrijf bedrijf, String klantRequest) {
 		ArrayList<Klant> klanten = new ArrayList<Klant>();
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"select * from klant where naam LIKE '%" + klantRequest + "%' and bedrijf = '" + bedrijf + "'");
+					"select * "
+					+ "from klant "
+					+ "where naam LIKE '%" + klantRequest + "%' "
+					+ "and BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam() + "'");
+			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				int id = dbResultSet.getInt("id");
-				String naam = dbResultSet.getString("naam");
-				String geslacht = dbResultSet.getString("geslacht");
-				String email = Validator.nullValidator(dbResultSet.getString("email"));
-				String telefoon = Validator.nullValidator(dbResultSet.getString("telefoon"));
-				String adres = Validator.nullValidator(dbResultSet.getString("adres"));
 				
-				Klant klant = new Klant(id, naam, email, telefoon, adres, geslacht);
+				Klant klant = new KlantBuilder()
+						.setId(dbResultSet.getInt("id"))
+						.setNaam(dbResultSet.getString("naam"))
+						.setEmail(Validator.nullValidator(dbResultSet.getString("emailadres")))
+						.setTel(Validator.nullValidator(dbResultSet.getString("telefoonnummer")))
+						.setGeslacht(dbResultSet.getString("geslacht"))
+						.setAdres(Validator.nullValidator(dbResultSet.getString("adres")))
+						.make();
 				klanten.add(klant);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return klanten;
+		bedrijf.setKlanten(klanten);
 	}
 
 	public ArrayList<Klant> getKlantenWithLimit(Bedrijf bedrijf, int low, int top) {
 		ArrayList<Klant> klanten = new ArrayList<Klant>();
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"select * from klant where bedrijf = '" + bedrijf.getEmail() + 
-					" ' ORDER BY naam LIMIT "+low+", "+top+"");
+					  "select * "
+					+ "from klant "
+					+ "where BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam()+"' " 
+					+ "ORDER BY naam "
+					+ "LIMIT "+low+", "+top);
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				int id = dbResultSet.getInt("id");
-				String naam = dbResultSet.getString("naam");
-				String geslacht = dbResultSet.getString("geslacht");
-				String email = Validator.nullValidator(dbResultSet.getString("email"));
-				String telefoon = Validator.nullValidator(dbResultSet.getString("telefoon"));
-				String adres = Validator.nullValidator(dbResultSet.getString("adres"));
-				
-				Klant klant = new Klant(id, naam, email, telefoon, geslacht, adres);
+
+				Klant klant =  new KlantBuilder()
+									.setId(dbResultSet.getInt("id"))
+									.setNaam(dbResultSet.getString("naam"))
+									.setEmail(Validator.nullValidator(dbResultSet.getString("emailadres")))
+									.setTel(Validator.nullValidator(dbResultSet.getString("telefoonnummer")))
+									.setGeslacht(dbResultSet.getString("geslacht"))
+									.setAdres(Validator.nullValidator(dbResultSet.getString("adres")))
+									.make();
 				klanten.add(klant);
 			}
 		} catch (SQLException e) {
@@ -66,10 +75,14 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt;
 			// heeft een email en telefoon
-			pstmt = con.prepareStatement("insert into klant(BedrijfBedrijfsnaam, naam,  emailadres  , geslacht, telefoonnummer, adres ) values( "
-					+ "'" + klant.getBedrijf().getBedrijfsNaam() + "', " + "'" + klant.getNaam() + "', " + "'"
-					+ klant.getEmail() + "', " + "'" + klant.getGeslacht() + "', " + "'" + klant.getTel()
-					+ "', '"+klant.getAdres()+"')");
+			pstmt = con.prepareStatement("insert into klant("
+					+ "BedrijfBedrijfsnaam, naam,  emailadres, geslacht, telefoonnummer, adres) "
+					+ "values('" + klant.getBedrijf().getBedrijfsNaam() + 
+					 "', '" + klant.getNaam() + 
+					 "', '"+ klant.getEmail() + "', " +
+					 "'" + klant.getGeslacht() + "', " + 
+					 "'" + klant.getTel() + 
+					 "', '"+klant.getAdres()+"')");
 			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
@@ -115,27 +128,24 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 		return klant;
 	}
 
-	public Klant getKlant(Bedrijf bedrijf, int id) {
+	public void getKlant(Bedrijf bedrijf, Klant klant) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"SELECT naam, geslacht, email, telefoon, adres "
+					"SELECT naam, geslacht, emailadres, telefoonnummer, adres "
 				+ "from klant "
-				+ "where bedrijf = '"+bedrijf.getEmail()+"' "
-				+ "and id = "+id);
+				+ "where BedrijfBedrijfsnaam = '"+bedrijf.getBedrijfsNaam()+"' "
+				+ "and id = "+klant.getId());
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				String naam = dbResultSet.getString("naam");
-				String geslacht = dbResultSet.getString("geslacht");
-				String email = Validator.nullValidator(dbResultSet.getString("email"));
-				String telefoon = Validator.nullValidator(dbResultSet.getString("telefoon"));
-				String adres = Validator.nullValidator(dbResultSet.getString("adres"));
-				Klant klant = new Klant(id, naam, email, telefoon, adres, geslacht);
-				return klant;
+				klant.setNaam(dbResultSet.getString("naam"));
+				klant.setGeslacht(dbResultSet.getString("geslacht"));
+				klant.setEmail(Validator.nullValidator(dbResultSet.getString("emailadres")));
+				klant.setTel(Validator.nullValidator(dbResultSet.getString("telefoonnummer")));
+				klant.setAdres(Validator.nullValidator(dbResultSet.getString("adres")));
 			} 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
 
 	public boolean getKlantIdByEmail(Klant klant) {

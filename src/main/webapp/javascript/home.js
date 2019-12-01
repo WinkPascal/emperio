@@ -10,7 +10,13 @@ function onload(){
 			}
 		}
 	fetch("restservices/afspraak/afsprakenByDate/"+dagDate, fetchoptions)
-	.then(response => response.json())
+	.then(function(response) {
+		if(response.status != 200){
+			alert(response.status);
+		} else{
+			return response.json();
+		}
+	})
 	.then(function(afspraken){
 		var afsprakenLijst = document.getElementById("afsprakenVandaagLijst");
 		for(let afspraak of afspraken){
@@ -92,7 +98,7 @@ function onload(){
 			})
 		}
 	}).catch(function() {
-		alert("fout G");
+
 	});
 }
 
