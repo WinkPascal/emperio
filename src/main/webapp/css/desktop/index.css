@@ -1,0 +1,193 @@
+.loginModal-content {
+	width: 500px;
+	height: 400px;
+	margin: 0 auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
+	border: 1px solid blue;
+	border-radius: 5px;
+	position: relative;
+	color: white;
+	text-align: center;
+}
+
+.loginModal-content .inputInlog {
+	top: 50px;
+}
+
+.loginModal-content .controlInlog {
+	bottom: 0px;
+	position: absolute;
+}
+
+.topBar {
+	height: 40px;
+	position: sticky;
+}
+
+.topBar h2 {
+	margin: 20px;
+	position: absolute;
+	width: 300px;
+}
+
+#topImg {
+	width: 100%;
+	text-align: center;
+	background-color: #78A8FC;
+	height: 600px;
+}
+
+#topImg #image {
+	height: 600px;
+	float: right;
+	width: 900px;
+	background-image:
+		url("https://techcrunch.com/wp-content/uploads/2019/06/GettyImages-1031924616.jpg?w=730&crop=1");
+	background-size: cover;
+}
+
+#topImg #text {
+	display: inline-block;
+	color: white;
+	font-size: 40px;
+	top: 300px;
+	margin: auto;
+}
+
+.verkoopPuntHolder {
+	width: 100%;
+	background-image: linear-gradient(0deg, white, #78A8FC);
+}
+
+.verkoopPuntHolder #verkoopPunten {
+	text-align: center;
+	width: 80%;
+	max-width: 1400px;
+	margin: 0 auto;
+
+}
+
+.verkoopPuntHolder #verkoopPunten .verkoopPunt {
+	display: inline-block;
+	width: 200px;
+	height: 200px;
+	margin: 40px;
+	font-size: 20px;
+}
+
+.verkoopPuntHolder #verkoopPunten .verkoopPunt:hover {
+	background: gray;
+}
+
+#verkoopPuntenUitleg {
+	margin-top: 30px;
+}
+
+#verkoopPuntenUitleg .verkoopPuntDiv {
+	height: 700px;
+	width: 100%;
+	margin-top: 30px;
+	margin: auto;
+	text-align: center;
+}
+
+#verkoopPuntenUitleg .verkoopPuntDivLarge {
+	height: 1000px;
+	width: 100%;
+	margin-top: 30px;
+	margin: auto;
+	text-align: center;
+}
+
+#verkoopPuntenUitleg .verkoopPuntDivLarge .verkooppuntText {
+	width: 600px;
+	margin: auto;
+}
+
+#verkoopPuntenUitleg #marketingPuntUitleg {
+	background-color: #41848C;
+}
+
+#verkoopPuntenUitleg #agendaPuntUitleg {
+	background-image: linear-gradient(#443355, #443355, #443355, #78A8FC);
+	color: white;
+}
+
+#verkoopPuntenUitleg #statistiekenPuntUitleg {
+	background-color: #78A8FC;
+}
+
+#verkoopPuntenUitleg #websiteVerkoopPuntDivUitleg {
+	background-color: #80D4EE;
+}
+
+#verkoopPuntenUitleg .verkoopPuntDiv .verkooppuntText {
+	display: inline-block;
+	width: 600px;
+	height: 500px;
+	border: 1px solid black;
+}
+
+#verkoopPuntenUitleg .verkoopPuntDivLeft {
+	float: left;
+}
+
+#verkoopPuntenUitleg .verkoopPuntDivRechts {
+	float: right;
+}
+
+#verkoopPuntenUitleg .verkoopPuntImage {
+	height: 600px;
+	max-width: 50%;
+}
+
+.prijzen {
+	text-align: center;
+}
+
+.prijzen .columns {
+	width: 30%;
+	padding: 1.5%;
+	float:left;
+}
+
+.prijzen .columns .price {
+	list-style-type: none;
+	border: 1px solid #eee;
+	margin: 0;
+	padding: 0;
+	-webkit-transition: 0.3s;
+	transition: 0.3s;
+}
+
+.prijzen .columns .price:hover {
+	box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2)
+}
+
+.prijzen .columns .price .header {
+	background-color: #111;
+	color: white;
+	font-size: 25px;
+}
+
+.prijzen .columns .price li {
+	border-bottom: 1px solid #eee;
+	padding: 20px;
+	text-align: center;
+}
+
+.prijzen .columns .price .grey {
+	background-color: #eee;
+	font-size: 20px;
+}
+
+.prijzen .columns .button {
+	background-color: #4CAF50;
+	border: none;
+	color: white;
+	padding: 10px 25px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 18px;
+}

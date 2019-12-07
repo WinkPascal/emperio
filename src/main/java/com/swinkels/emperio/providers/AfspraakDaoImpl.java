@@ -14,6 +14,7 @@ import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Klant;
 import com.swinkels.emperio.support.Adapter;
+import com.swinkels.emperio.support.DatabaseDateAdapter;
 
 public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 	//wordt gebruikt bij: afsprakenByDate
@@ -28,15 +29,15 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"               join afspraakBehandeling ab on ab.afspraakId = a.id \n" + 
 					"               join behandeling b on ab.behandelingId = b.id \n" + 
 					"where m.Bedrijfsnaam = '"+bedrijf.getBedrijfsNaam()+"' AND \n" + 
-					"a.timestamp BETWEEN '"+Adapter.DateToString(beginDate, "yyyy-MM-dd")+"' AND "
-							        + "'"+Adapter.DateToString(eindDate, "yyyy-MM-dd")+"' "+
+					"a.timestamp BETWEEN '"+DatabaseDateAdapter.DateToString(beginDate, "yyyy-MM-dd")+"' AND "
+							        + "'"+DatabaseDateAdapter.DateToString(eindDate, "yyyy-MM-dd")+"' "+
 					"ORDER BY a.timestamp");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				//Behandeling
 				String behandelingnaam = dbResultSet.getString("behandelingnaam");
-				Date lengte = Adapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm");
+				Date lengte = DatabaseDateAdapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm");
 				double prijs = dbResultSet.getDouble("prijs");
 				
 				Behandeling behandeling = new Behandeling(behandelingnaam, lengte, prijs);
@@ -47,7 +48,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					//Dit is de eerste afspraak die wordt aangemaakt
 					String timestampString = dbResultSet.getString("timestamp");
 					timestampString = timestampString.substring(0, timestampString.length()-5);
-					Date timestampDate =  Adapter.StringToDate(timestampString, "yyyy-MM-dd HH:mm");
+					Date timestampDate =  DatabaseDateAdapter.StringToDate(timestampString, "yyyy-MM-dd HH:mm");
 					
 					//klant
 					String klantNaam = dbResultSet.getString("klantNaam");
@@ -70,7 +71,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					if(nietAlleenBehandeling) {
 						String timestampString = dbResultSet.getString("timestamp");
 						timestampString = timestampString.substring(0, timestampString.length()-5);
-						Date timestamp = Adapter.StringToDate(timestampString,"yyyy-MM-dd HH:mm");
+						Date timestamp = DatabaseDateAdapter.StringToDate(timestampString,"yyyy-MM-dd HH:mm");
 						//klant
 						String klantNaam = dbResultSet.getString("klantNaam");
 						Klant klant = new Klant(klantNaam);
@@ -94,7 +95,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			  "insert into afspraak(dagnummer, klantId, timestamp) values("
 			+ Adapter.getDagNummerFromDate(afspraak.getTimeStamp())+" ,"		
 			+ "'"+afspraak.getKlant().getId()+"', "
-			+ "'"+Adapter.DateToString(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"')");
+			+ "'"+DatabaseDateAdapter.DateToString(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"')");
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -108,7 +109,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select id from afspraak "
 					+ "where klantId = '"+afspraak.getKlant().getId()+"' "
-					+ "and timestamp = '"+Adapter.DateToString(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"'");
+					+ "and timestamp = '"+DatabaseDateAdapter.DateToString(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm")+"'");
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				afspraak.setId(dbResultSet.getInt("id"));
@@ -120,14 +121,10 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 
 	public ArrayList<Afspraak> getAfsprakenWeek(Bedrijf bedrijf, Date beginDate){
 		ArrayList<Afspraak> afspraken = new ArrayList<Afspraak>();
+		Date eindDate = Adapter.getNextWeek(beginDate);
 		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(beginDate);            
-		calendar.add(Calendar.DAY_OF_YEAR, 7);
-		Date eindDate = calendar.getTime();
-		
-		String beginDateString = Adapter.DateToString(beginDate, "yyyy-MM-dd");
-		String eindDateString = Adapter.DateToString(eindDate, "yyyy-MM-dd");
+		String beginDateString = DatabaseDateAdapter.DateToString(beginDate, "yyyy-MM-dd");
+		String eindDateString = DatabaseDateAdapter.DateToString(eindDate, "yyyy-MM-dd");
 		
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement("SELECT * " + 
@@ -215,7 +212,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"				join behandeling b on b.id = ab.behandelingId\n" + 
 					"WHERE b.BedrijfBedrijfsnaam = '"+ bedrijf.getBedrijfsNaam() +"' \n" + 
 					"AND a.timestamp < SYSDATE() \n" + 
-					"AND a.timestamp > '"+Adapter.DateToString(date, "YYYY-MM-dd")+"';");
+					"AND a.timestamp > '"+DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd")+"';");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
@@ -236,7 +233,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"				join behandeling b on b.id = h.behandelingId \n" + 
 					"WHERE b.BedrijfBedrijfsnaam = '"+ bedrijf.getBedrijfsNaam() +"' \n" + 
 					"AND timestamp < SYSDATE() \n" + 
-					"AND timestamp > "+Adapter.DateToString(date, "YYYY-MM-dd")+" "+ 
+					"AND timestamp > "+DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd")+" "+ 
 					"group by a.dagnummer \n" + 
 					"ORDER BY a.dagnummer"); 
 			ResultSet dbResultSet = pstmt.executeQuery();
@@ -285,7 +282,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				String timestamp = dbResultSet.getString("timestamp");
-				Afspraak afspraak = new Afspraak(Adapter.StringToDate(timestamp, "YYYY-MM-dd HH:mm"));
+				Afspraak afspraak = new Afspraak(DatabaseDateAdapter.StringToDate(timestamp, "YYYY-MM-dd HH:mm"));
 				afspraak.setPrijs(dbResultSet.getDouble("prijs"));
 				klant.addAfspraak(afspraak);
 			} 
@@ -387,6 +384,8 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		}
 		return behandelingen;
 	}
+	
+	
 	public boolean deleteAfspraak(Afspraak afspraak) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(

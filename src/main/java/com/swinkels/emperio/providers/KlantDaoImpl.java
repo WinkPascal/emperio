@@ -157,8 +157,7 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 				    "AND emailadres = '"+klant.getEmail()+"'");
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				int id = dbResultSet.getInt("id");
-				klant.setId(id);
+				klant.setId(dbResultSet.getInt("id"));
 				return true;
 			} 
 		} catch (SQLException e) {
@@ -178,8 +177,7 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				int id = dbResultSet.getInt("id");
-				klant.setId(id);
+				klant.setId(dbResultSet.getInt("id"));
 				return true;
 			} 
 		} catch (SQLException e) {

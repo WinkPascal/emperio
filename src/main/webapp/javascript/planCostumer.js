@@ -30,6 +30,7 @@ function closeNav() {
 
 // de eerste functie die word aangeroepen om eet geslacht te kiezen
 function inplannenGeslachtKiezen() {
+	document.getElementById("inplannenGeslacht").style.display="block";
 	document.getElementById("geslachtMan").addEventListener("click", function () {
 		geslachtKnopKleurManager("man");
 	})
@@ -243,10 +244,10 @@ function datumOphalen(geslacht, behandelingenLijstFinal, tijd, datum) {
 
 }
 function createDag(dagNummer, datum){  
-	if(datum < new Date){
-		console.log(dagNummer ="== "+datum +" < "+ new Date);
-		return null;
-	} else{
+	// if(datum <= new Date){
+	// 	console.log(dagNummer ="== "+datum +" < "+ new Date);
+	// 	return null;
+	// } else{
 		var dagSpan = document.createElement('span');
 		dagSpan.setAttribute('class', 'dagKiezen');
 		dagSpan.setAttribute('id', "dagKeuze" + dagNummer);
@@ -266,7 +267,7 @@ function createDag(dagNummer, datum){
 			dagSpan.appendChild(dagDatum);
 		}
 		return dagSpan;
-	}
+//	}
 }
 function getDagNaam(dagNummer){
 	var dagNamen = [
@@ -490,6 +491,11 @@ function createDraggable(tijd) {
 			}
 		})
 }
+
+document.getElementById("volgendeKlantInfo").addEventListener("click", function () {
+	document.getElementById("inplannenForm").style.display="block";
+	document.getElementById("inplannenTijd").style.display="none";
+})
 
 function inplannen(geslacht, behandelingenLijstFinal, datum) {
 	var formData = new FormData(document.getElementById("inplannenForm"));

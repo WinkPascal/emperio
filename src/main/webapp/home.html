@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>Home</title>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/home.css">
+	<link rel="stylesheet" media="screen and (max-width: 480px)" href="css/smartphone/home.css">
+	<link rel="stylesheet" media="screen and (min-width: 480px) and (max-width: 1024px)" href="css/tablet/home.css">
+	<link rel="stylesheet" media="screen and (min-width: 1024px)" href="css/desktop/home.css">
+
 	<link rel="stylesheet" type="text/css" href="css/klantenPaginaBeheer.css">
 	<link rel="stylesheet" type="text/css" href="css/global.css">
+	<link rel="stylesheet" type="text/css" href="css/instellingen.css">
+	<link rel="stylesheet" type="text/css" href="css/setup.css">
 	<link rel="stylesheet" type="text/css" href="css/instellingenCard.css">
 </head>
 <body onload="onload()">
@@ -137,119 +143,331 @@
 		<div class="setting-content">
 			<h3>Instellingen</h3>
 			<span class="collapsible">Afspraken</span>
-			<div class="content">
-				<p class="subclassSetting">Afspraak kleur</p>
-				<div class="afspraakColor">
+			<div  class="afspraakKleurInstelling content">
+				<h2>Afspraak bekijken</h2>
+				<p class="infoText">Geef aan welke kleur de afspraak in uw calender moet zijn volgens een uw prijs klasse</p>
+				<div class="afspraakColor"> 
 					<div class="price-picker">
-						<a>Prijsklasse 1 <br>
-						van € <input type="number" class="prijsVeld"> <br>
-						Tot € <input type="number" class="prijsVeld"></a>
+						<a>Prijsklasse 1 </a><br>
+						<span>
+							van €
+							<span>0.00</span>
+						</span> <br>
+						<span>
+							Tot € 
+							<input class="inputPrijsToevoegen" id="maxPrijs1" type="number" name="maxPrijs1">
+						</span>	
 					</div>
 					
-					<div class="color-picker">
+					<div class="color-picker"> 
 						<label class="container">
-						  <input type="radio" checked="checked" name="radio">
-						  <span class="checkmark"></span>
+						  <input type="radio" value="#444c5c" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #444c5c;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
+						  <input type="radio" value="#d63838" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #d63838;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-						</label>
-						
+						  <input type="radio" value="#78a5a3" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #78a5a3;"></span>
+						</label>						
 						<label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-					  </label>
-					  <label class="container">
-					  	  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-					  </label>
-					  <label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-					  </label>
+						  <input type="radio" value="#c78d1e" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #c78d1e;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#52b852" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #52b852;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#ffcc5c" name="kleurKlasse1">
+						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
+						</label>						
 					</div>
 				</div>
 				<br>
 				<div class="afspraakColor">
 					<div class="price-picker">
-						<a>Prijsklasse 2 <br>
-						van € <input type="number" class="prijsVeld"> <br>
-						Tot € <input type="number" class="prijsVeld"></a>
+						<a>Prijsklasse 2 </a><br>
+						<span>
+							van €
+							<span>0.00</span>
+						</span> <br>
+						<span>
+							Tot € 
+							<input class="inputPrijsToevoegen" id="maxPrijs2" type="number" name="maxPrijs2">,
+						</span>	
 					</div>
 					
 					<div class="color-picker">
 						<label class="container">
-						  <input type="radio" checked="checked" name="radio">
-						  <span class="checkmark"></span>
+						  <input type="radio" value="#444c5c" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #444c5c;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
+						  <input type="radio" value="#d63838" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #d63838;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-						</label>
-						
+						  <input type="radio" value="#78a5a3" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #78a5a3;"></span>
+						</label>						
 						<label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-					  </label>
-					  <label class="container">
-					  	  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-					  </label>
-					  <label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-					  </label>
+						  <input type="radio" value="#c78d1e" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #c78d1e;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#52b852" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #52b852;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#ffcc5c" name="kleurKlasse2">
+						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
+						</label>	
 					</div>
 				</div>
 				<br>
 				<div class="afspraakColor">
 					<div class="price-picker">
-						<a>Prijsklasse 3 <br>
-						van € <input type="number" class="prijsVeld"> <br>
-						Tot € <input type="number" class="prijsVeld"></a>
+						<a>Prijsklasse 3 </a><br>
+						<span>
+							van €
+							<span>0.00</span>
+						</span> <br>
 					</div>
 					
 					<div class="color-picker">
 						<label class="container">
-						  <input type="radio" checked="checked" name="radio">
-						  <span class="checkmark"></span>
+						  <input type="radio" value="#444c5c" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #444c5c;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
+						  <input type="radio" value="#d63838" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #d63838;"></span>
 						</label>
 						<label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-						</label>
-						
+						  <input type="radio" value="#78a5a3" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #78a5a3;"></span>
+						</label>						
 						<label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-					  </label>
-					  <label class="container">
-					  	  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-					  </label>
-					  <label class="container">
-						  <input type="radio" name="radio">
-						  <span class="checkmark"></span>
-					  </label>
+						  <input type="radio" value="#c78d1e" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #c78d1e;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#52b852" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #52b852;"></span>
+						</label>						
+						<label class="container">
+						  <input type="radio" value="#ffcc5c" name="kleurKlasse3">
+						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
+						</label>	
 					</div>
 				</div>
 			</div>
 			
 			<span class="collapsible">Afspraken</span>
-			<div class="content"></div>
+			<div class="content">
+				<form id="dagenForm">
+					<div class="dagInputArea">
+						<h2>Rooster</h2>
+						<a class="infoText">
+							Voer hier uw openingetijden in. <br>
+							Met de slider kunt u aangeven of u gesloten bent deze dag.
+						</a>
+					</div>
+
+					<div class="dagInputArea">
+						<a>Maandag</a>
+						<label class="switch">
+							<input type="checkbox" id="geslotenMaandag">
+							<span class="slider round"></span>
+						</label>
+						<div id="tijdenMaandag" class="dagTijden">
+							Openings tijd: <span class="dagenInput" id="openingsTijdMaandag" name="openingsTijdMaandag">00:00</span><br>
+							Sluitings tijd: <span class="dagenInput" id="sluitingsTijdMaandag" name="sluitingsTijdMaandag">00:00</span><br>	
+							<input type="button" value="Aanpassen" class="defaultButton" id="TijdMaandagAanpassen">
+						</div>
+					</div>
+					
+					<div class="dagInputArea">
+						<a>Dinsdag</a>
+						<label class="switch">
+							<input type="checkbox" id="geslotenDinsdag">
+							<span class="slider round"></span>
+						</label> 
+						<div id="tijdenDinsdag" class="dagTijden">
+							<span class="dagenInput" id="openingsTijdDinsdag">00:00</span>
+							<span class="dagenInput" id="sluitingsTijdDinsdag">00:00</span>
+							<input type="button" value="Aanpassen" class="defaultButton" id="TijdDinsdagAanpassen">
+					</div>
+					</div>
+					
+					<div class="dagInputArea">
+						<a>Woensdag</a>
+						<label class="switch">
+							<input type="checkbox" id="geslotenWoensdag">
+							<span class="slider round"></span>
+						</label> 
+						<div id="tijdenWoensdag" class="dagTijden">
+							<span class="dagenInput" id="openingsTijdWoensdag">00:00</span>
+							<span class="dagenInput" id="sluitingsTijdWoensdag">00:00</span>
+							<input type="button" value="Aanpassen" class="defaultButton" id="TijdWoensdagAanpassen">
+						</div>
+					</div>
+
+					<div class="dagInputArea">
+						<a>Donderdag</a>
+						<label class="switch">
+							<input type="checkbox" id="geslotenDonderdag">
+							<span class="slider round"></span>
+						</label> 
+						<div id="tijdenDonderdag" class="dagTijden">
+							<span class="dagenInput" id="openingsTijdDonderdag">00:00</span>
+							<span class="dagenInput" id="sluitingsTijdDonderdag">00:00</span>
+							<input type="button" value="Aanpassen" class="defaultButton" id="TijdDonderdagAanpassen">
+					</div>
+					</div>
+					
+					<div class="dagInputArea">
+						<a>Vrijdag</a>
+						<label class="switch">
+							<input type="checkbox" id="geslotenVrijdag">
+							<span class="slider round"></span>
+						</label>
+						<div id="tijdenVrijdag" class="dagTijden">
+							<span class="dagenInput" id="openingsTijdVrijdag">00:00</span>
+							<span class="dagenInput" id="sluitingsTijdVrijdag">00:00</span>
+							<input type="button" value="Aanpassen" class="defaultButton" id="TijdVrijdagAanpassen">
+						</div>
+					</div>
+
+					<div class="dagInputArea">
+						<a>Zaterdag</a>
+						<label class="switch">
+							<input type="checkbox" id="geslotenZaterdag">
+							<span class="slider round"></span>
+						</label> 
+						<div id="tijdenZaterdag" class="dagTijden">
+							<span class="dagenInput" id="openingsTijdZaterdag">00:00</span>
+							<span class="dagenInput" id="sluitingsTijdZaterdag">00:00</span>
+							<input type="button" value="Aanpassen" class="defaultButton" id="TijdZaterdagAanpassen">
+					</div>
+					</div>
+
+					<div class="dagInputArea">
+						<a>Zondag</a>
+						<label class="switch">
+							<input type="checkbox" id="geslotenZondag">
+							<span class="slider round"></span>
+						</label>
+						<div id="tijdenZondag" class="dagTijden">
+							<span class="dagenInput" id="openingsTijdZondag">00:00</span>
+							<span class="dagenInput" id="sluitingsTijdZondag">00:00</span>
+							<input type="button" value="Aanpassen" class="defaultButton" id="TijdZondagAanpassen">
+					</div>
+					</div>
+				</form>
+				<div id="tijdKiezen" class="modal">
+					<div class="tijdKiezen">  
+						<div class="openingsTijdKiezen">
+							<h2>Openings tijd</h2>
+							<div class="timepicker-dial" id="timepicker-hours-openingstijd">
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 115px; top: 10px;">00</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 150px; top: 54.3782px;">1</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 175.622px; top: 80px;">2</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 185px; top: 115px;">3</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 175.622px; top: 150px;">4</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 150px; top: 175.622px;">5</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 115px; top: 185px;">6</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 80px; top: 175.622px;">7</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 54.3782px; top: 150px;">8</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 45px; top: 115px;">9</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 54.3782px; top: 80px;">10</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 80px; top: 54.3782px;">11</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 115px; top: 45px;">12</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 167.5px; top: 24.0673px;">13</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 205.933px; top: 62.5px;">14</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 220px; top: 115px;">15</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 205.933px; top: 167.5px;">16</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 167.5px; top: 205.933px;">17</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 115px; top: 220px;">18</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 62.5px; top: 205.933px;">19</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 24.0673px; top: 167.5px;">20</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 10px; top: 115px;">21</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 24.0673px; top: 62.5px;">22</div>
+									<div class="timepicker-uur-openingstijd" style="position: absolute; left: 62.5px; top: 24.0673px;">23</div>
+							</div>
+							<div class="timepicker-dial" id="timepicker-minutes-openingstijd">
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 115px; top: 10px;">00</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 167.5px; top: 24.0673px;">05</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 205.933px; top: 62.5px;">10</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 220px; top: 115px;">15</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 205.933px; top: 167.5px;">20</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 167.5px; top: 205.933px;">25</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 115px; top: 220px;">30</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 62.5px; top: 205.933px;">35</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 24.0673px; top: 167.5px;">40</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 10px; top: 115px;">45</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 24.0673px; top: 62.5px;">50</div>
+									<div class="timepicker-minuut-openingstijd" style="position: absolute; left: 62.5px; top: 24.0673px;">55</div>
+							</div>
+							<span id="openingsTijd">00:00</span>
+							<br>
+							<input class="defaultButton" value="Uren" id="showUrenOpeningsTijd">
+							<input class="defaultButton" value="Minuten" id="showMinutenOpeningsTijd">
+						</div>
+						<div class="sluitingsTijdKiezen">
+							<h2>Sluitings tijd</h2>
+							<div class="timepicker-dial" id="timepicker-hours-sluitingsTijd">
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 115px; top: 10px;">00</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 150px; top: 54.3782px;">1</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 175.622px; top: 80px;">2</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 185px; top: 115px;">3</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 175.622px; top: 150px;">4</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 150px; top: 175.622px;">5</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 115px; top: 185px;">6</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 80px; top: 175.622px;">7</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 54.3782px; top: 150px;">8</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 45px; top: 115px;">9</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 54.3782px; top: 80px;">10</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 80px; top: 54.3782px;">11</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 115px; top: 45px;">12</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 167.5px; top: 24.0673px;">13</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 205.933px; top: 62.5px;">14</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 220px; top: 115px;">15</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 205.933px; top: 167.5px;">16</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 167.5px; top: 205.933px;">17</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 115px; top: 220px;">18</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 62.5px; top: 205.933px;">19</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 24.0673px; top: 167.5px;">20</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 10px; top: 115px;">21</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 24.0673px; top: 62.5px;">22</div>
+									<div class="timepicker-uur-sluitingsTijd" style="position: absolute; left: 62.5px; top: 24.0673px;">23</div>
+							</div>
+							<div class="timepicker-dial" id="timepicker-minutes-sluitingsTijd">
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 115px; top: 10px;">00</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 167.5px; top: 24.0673px;">05</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 205.933px; top: 62.5px;">10</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 220px; top: 115px;">15</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 205.933px; top: 167.5px;">20</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 167.5px; top: 205.933px;">25</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 115px; top: 220px;">30</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 62.5px; top: 205.933px;">35</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 24.0673px; top: 167.5px;">40</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 10px; top: 115px;">45</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 24.0673px; top: 62.5px;">50</div>
+									<div class="timepicker-minuut-sluitingsTijd" style="position: absolute; left: 62.5px; top: 24.0673px;">55</div>
+							</div>
+							<span id="sluitingsTijd">00:00</span>
+							<br>
+							<input type="button" class="defaultButton" value="Uren" id="showUrenSluitingsTijd">
+							<input type="button" class="defaultButton" value="Minuten" id="showMinutenSluitingsTijd">
+					</div>
+        		 	<input type="button" class="defaultButton" value="OK" id="okButton">
+				</div>
+				</div>
+			</div>
 			
 			<span class="collapsible">Afspraken</span>
 			<div class="content"></div>
@@ -309,6 +527,7 @@
 	<!-- Scripts -->
 	<script src="javascript/klantenBeheerPagina.js"></script>
 	<script src="javascript/home.js"></script>
+	<script src="javascript/setup.js"></script>
 	<script src="javascript/global.js"></script>
 	<!-- Voor de drag and drop -->
 </body>

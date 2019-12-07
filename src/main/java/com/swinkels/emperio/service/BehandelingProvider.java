@@ -26,11 +26,11 @@ import com.swinkels.emperio.objects.BehandelingBuilder;
 import com.swinkels.emperio.providers.BehandelingDao;
 import com.swinkels.emperio.providers.BehandelingDaoImpl;
 import com.swinkels.emperio.support.Adapter;
+import com.swinkels.emperio.support.DatabaseDateAdapter;
+import com.swinkels.emperio.support.JavascriptDateAdapter;
 
 @Path("/behandelingProvider")
 public class BehandelingProvider {
-	BehandelingDao behandelingDao = new BehandelingDaoImpl();
-
 	@POST
 	@RolesAllowed("user")
 	@Path("/behandeling")
@@ -39,9 +39,8 @@ public class BehandelingProvider {
 			@FormParam("beschrijving") String beschrijving, @FormParam("prijsBehandeling") double prijs,
 			@FormParam("uur") String uur, @FormParam("minuten") String minuten,
 			@FormParam("geslachten") String geslachten) {
-		System.out.println("post");
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		Date lengte = Adapter.StringToDate(uur + ":" + minuten, "HH:mm");
+		Date lengte = JavascriptDateAdapter.StringToDate(uur + ":" + minuten, "HH:mm");
 		JSONArray jsonArray = new JSONArray(geslachten);
 		for (int i = 0; i < jsonArray.length(); i++) {
 			Behandeling behandeling = new Behandeling(bedrijf, naam, beschrijving, prijs, lengte,
@@ -68,7 +67,7 @@ public class BehandelingProvider {
 			job.add("beschrijving", behandeling.getBeschrijving());
 			job.add("prijs", behandeling.getPrijs());
 			job.add("geslacht", behandeling.getGeslacht());
-			job.add("lengte", Adapter.DateToString(behandeling.getLengte(), "HH:mm"));
+			job.add("lengte", JavascriptDateAdapter.DateToString(behandeling.getLengte(), "HH:mm"));
 			job.add("inkomsten", behandeling.getInkomsten());
 			job.add("afspraken", behandeling.getAfspraken());
 			jab.add(job);
@@ -76,7 +75,41 @@ public class BehandelingProvider {
 		return jab.build().toString();
 	}
 
-	private HashMap<String, String> getData(String data) { 
+	@GET
+	@Path("/getBehandeling/{id}")
+	@RolesAllowed("user")
+	@Produces("application/json")
+	public String getBehandeling(@Context SecurityContext sc, @PathParam("id") int id) {
+		Behandeling behandeling = new BehandelingBuilder().setBedrijf(new Bedrijf(sc.getUserPrincipal().getName()))
+				.setId(id).make();
+		behandeling.getInfo();
+		JsonObjectBuilder job = Json.createObjectBuilder();
+		job.add("id", behandeling.getId());
+		job.add("naam", behandeling.getNaam());
+		job.add("beschrijving", behandeling.getBeschrijving());
+		job.add("prijs", behandeling.getPrijs());
+		job.add("geslacht", behandeling.getGeslacht());
+		job.add("lengte", JavascriptDateAdapter.DateToString(behandeling.getLengte(), "HH:mm"));
+		job.add("inkomsten", behandeling.getInkomsten());
+		job.add("afspraken", behandeling.getAfspraken());
+		return job.build().toString();
+	}
+
+	@DELETE
+	@Path("/behandeling/{id}")
+	@RolesAllowed("user")
+	@Produces("application/json")
+	public Response deleteBehandeling(@Context SecurityContext sc, @PathParam("id") int id) {
+		Behandeling behandeling = new BehandelingBuilder().setBedrijf(new Bedrijf(sc.getUserPrincipal().getName()))
+				.setId(id).make();
+		if (behandeling.delete()) {
+			return Response.ok().build();
+		} else {
+			return Response.status(500).build();
+		}
+	}
+
+	private HashMap<String, String> getData(String data) {
 		HashMap<String, String> hmap = new HashMap<String, String>();
 		String geslacht = "IS NOT NULL";
 		String pageNumber = "1";
@@ -119,47 +152,4 @@ public class BehandelingProvider {
 		return hmap;
 	}
 
-
-	@GET
-	@Path("/getBehandeling/{id}")
-	@RolesAllowed("user")
-	@Produces("application/json")
-	public String getBehandeling(@Context SecurityContext sc, 
-			@PathParam("id") int id) {
-		System.out.println(id);
-
-		Behandeling behandeling = new BehandelingBuilder()
-				.setBedrijf(new Bedrijf(sc.getUserPrincipal().getName()))
-				.setId(id)
-				.make();
-		behandeling.getInfo();
-		JsonObjectBuilder job = Json.createObjectBuilder();
-		job.add("id", behandeling.getId());
-		job.add("naam", behandeling.getNaam());
-		job.add("beschrijving", behandeling.getBeschrijving());
-		job.add("prijs", behandeling.getPrijs());
-		job.add("geslacht", behandeling.getGeslacht());
-		job.add("lengte", Adapter.DateToString(behandeling.getLengte(), "HH:mm"));
-		job.add("inkomsten", behandeling.getInkomsten());
-		job.add("afspraken", behandeling.getAfspraken());
-		return job.build().toString();
-	}
-
-	
-	@DELETE
-	@Path("/behandeling/{id}")
-	@RolesAllowed("user")
-	@Produces("application/json")
-	public Response deleteBehandeling(@Context SecurityContext sc, @PathParam("id") int id) {
-		Behandeling behandeling = new BehandelingBuilder()
-				.setBedrijf(new Bedrijf(sc.getUserPrincipal().getName()))
-				.setId(id)
-				.make();
-		if(behandeling.delete()) {
-			return Response.ok().build();			
-		} else {
-			return Response.status(500).build();
-		}	
-	}
- 
 }

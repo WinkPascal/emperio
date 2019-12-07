@@ -18,7 +18,6 @@ import com.swinkels.emperio.providers.BedrijfDaoImpl;
 
 @Path("/klantenBeheer")
 public class klantenBeheerProvider {
-	BedrijfDao bedrijfDao = new BedrijfDaoImpl();
 
 	@GET
 	@Path("/getKlantPaginaSettings")

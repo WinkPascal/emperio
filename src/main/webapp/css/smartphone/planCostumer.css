@@ -1,0 +1,347 @@
+.sidebar {
+	height: 100%;
+	width: 0px;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: #111;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 60px;
+}
+
+.sidebar a {
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	font-size: 25px;
+	color: #818181;
+	display: block;
+	transition: 0.3s;
+}
+
+.sidebar a:hover {
+	color: #f1f1f1;
+}
+
+.sidebar .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+}
+
+.openbtn {
+	font-size: 20px;
+	cursor: pointer;
+	background-color: #111;
+	color: white;
+	padding: 10px 15px;
+	border: none;
+}
+
+.openbtn:hover {
+	background-color: #444;
+}
+
+.inplannenForm {
+	display: none;
+}
+
+.inplannenRechts {
+	display: none;
+}
+
+.navigatieInplannen {
+	width: 100%;
+	height: 40px;
+	overflow: hidden;
+}
+
+.navigatieInplannen .left {
+	float: left;
+}
+
+.navigatieInplannen .right {
+	float: right;
+}
+
+#inplannenGeslacht .topbarGeslacht .geslachtKeuzeDiv {
+	width: 100%;
+}
+
+#inplannenGeslacht .geslachtKeuzeDiv .geslachtButton {
+	width: 40%;
+	height: 40px;
+	border: 1px solid blue;
+	border-radius: 5%;
+	color: blue;
+	background-color: white;
+	margin-left: 5%;
+	margin-top: 5px;
+}
+
+#inplannenGeslacht #behandelingenKeuzeLijst {
+	width: 100%;
+}
+
+#inplannenGeslacht .behandelingKeuze {
+	height: 80px;
+	border: 1px solid blue;
+	border-radius: 5px;
+	margin: 20px;
+	background-color: white;
+	animation-name: animatetop;
+	animation-duration: 0.6s;
+}
+
+#inplannenGeslacht .behandelingKeuze:hover {
+	background-color: blue;
+	color: white;
+}
+
+#inplannenGeslacht .behandelingKeuze .naamBehandelingKeuze {
+	float: left;
+	width: 80%;
+}
+
+#inplannenGeslacht .behandelingKeuze .beschrijvingBehandelingKeuze {
+	float: left;
+	width: 80%;
+}
+
+#inplannenGeslacht .behandelingKeuze .prijsBehandelingKeuze {
+	float: right;
+	height: 50%;
+	border: 1px solid black;
+}
+
+#inplannenGeslacht .behandelingKeuze .lengteBehandelingKeuze {
+	top: 0px;
+	float: right;
+	border: 1px solid black;
+	height: 50%;
+	float: right;
+}
+
+/*================================================================*/
+/*================================================================*/
+/*================================================================*/
+/*=======================Datum Kiezen=============================*/
+/*================================================================*/
+/*================================================================*/
+/*================================================================*/
+
+#inplannenDatum .navigatieTijdslotKiezenKiezen {
+	width: 100%;
+}
+
+#inplannenDatum .navigatieTijdslotKiezenKiezen div {
+	margin: 5px;
+	width: 100%;
+}
+
+#inplannenDatum .navigatieTijdslotKiezenKiezen div .links {
+	float: left;
+}
+
+#inplannenDatum .navigatieTijdslotKiezenKiezen div .rechts {
+	float: right;
+}
+
+#inplannenDatum #dagenLijst {
+	width: 100%;
+}
+
+#inplannenDatum .dagKiezen {
+	display: inline-block;
+	width: 80%;
+	margin-left: 10%;
+	margin-top: 10px;
+	height: 50px;
+	border: 2px solid blue;
+	border-radius: 5px;
+	text-align: center;
+}
+
+#inplannenDatum .dagKiezen:hover {
+	background-color: blue;
+	color: white;
+}
+
+#inplannenDatum .afspraakTijdslot {
+	display: inline-block;
+	width: 60%;
+	margin-left: 20%;
+	margin-top: 10px;
+	height: 50px;
+	border: 2px solid blue;
+	border-radius: 5px;
+	text-align: center;
+}
+
+#inplannenDatum .geplandeAfspraak {
+	display: inline-block;
+	width: 60%;
+	margin-left: 20%;
+	margin-top: 10px;
+	height: 30px;
+	border: 2px solid red;
+	border-radius: 5px;
+	text-align: center;
+	border-radius: 5px;
+}
+
+/*================================================================*/
+/*================================================================*/
+/*================================================================*/
+/*=======================tijd Kiezen=============================*/
+/*================================================================*/
+/*================================================================*/
+/*================================================================*/
+
+#inplannenTijd .nivagatieTijden {
+	width: 100%;
+}
+
+#inplannenTijd .nivagatieTijden .links {
+	float: left;
+}
+
+#inplannenTijd .nivagatieTijden .rechts {
+	float: right;
+}
+
+#inplannenTijd .stelTijdInTextdiv {
+	width: 100%;
+}
+
+#inplannenTijd #tijdAfbeelding{
+	display: none;
+	border: 1px solid black;
+}
+
+
+#inplannenTijd #tijdInstellen{
+	margin-top: 5px;
+	margin: auto;
+	height: 60px;
+}
+
+
+#inplannenTijd #agendaInplannen {
+	width: 100%;
+	float: right;
+	height: 100%;
+	overflow: scroll;
+	position: absolute;
+}
+
+#inplannenTijd #agendaInplannen ul {
+	list-style-type: none;
+}
+
+#inplannenTijd #agendaInplannen .potentieleAfspraak {
+	z-index: 2;
+	display: inline-block;
+	margin-left: 100px;
+	width: 320px;
+	color: #fff;
+	background-color: #29e;
+	touch-action: none;
+	-webkit-transform: translate(0px, 0px);
+	transform: translate(0px, 0px);
+	transition: background-color 0.3s;
+}
+
+#inplannenTijd #agendaInplannen .timelineInplanAgenda {
+	display: block;
+	z-index: 1;
+	top: 0px;
+	height: 100%;
+	position: absolute;
+	width: 100%;
+}
+
+#inplannenTijd #agendaInplannen .timelineInplanAgenda ul {
+	margin: 0px;
+}
+
+/* elke streep */
+#inplannenTijd #agendaInplannen .timelineInplanAgenda .dropzone {
+	position: relative;
+	height: 20px;
+}
+
+/* Hier worden de horizontale strepen van het rooster gemaakt*/
+#inplannenTijd #agendaInplannen .timelineInplanAgenda .line::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	background: black;
+}
+
+#inplannenTijd #agendaInplannen .roosterInplanAgenda {
+	display: block;
+	top: 0px;
+	height: 100%;
+	width: 100%;
+}
+
+#inplannenTijd #agendaInplannen .roosterInplanAgenda .nietBeschikbaarAfspraak {
+	background-color: #34D77B;
+	z-index: 1;
+	width: 320px;
+	position: absolute;
+	margin-left: 100px;
+}
+
+/*================================================================*/
+/*================================================================*/
+/*================================================================*/
+/*=======================Klanten info=============================*/
+/*================================================================*/
+/*================================================================*/
+/*================================================================*/
+
+.inplannenForm .behandelingenOverzicht{
+	width: 100%;
+}
+.inplannenForm .inplannenBehandelingOverzicht {
+	display: inline-block;
+	border-bottom: 1px solid gray;
+	margin: 5%;
+	height: 50px;
+	width: 90%;
+}
+.inplannenForm .blokkenOverzicht {
+	width: 100%;
+	height: 50px;
+}
+
+.inplannenForm .blokkenOverzicht .totaalLengte {
+	float: left;
+	margin-left: 25px;
+}
+
+.inplannenForm .blokkenOverzicht .totaalPrijs {
+	float: right;
+	margin-right: 25px;
+}
+
+.inplannenForm #datumInplanFormDiv {
+	width: 100%;
+	height: 50px;
+	border: 2px solid gray;
+	text-align: center;
+
+}
+
+
+
+
+

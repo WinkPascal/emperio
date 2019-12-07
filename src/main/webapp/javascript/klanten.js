@@ -55,23 +55,38 @@ function createKlantRow(klant){
 	
 	var klantNaam = document.createElement('td');
 	klantNaam.innerHTML = klant.naam;
+	klantNaam.className="telefoon";
 	row.appendChild(klantNaam);
 
 	var klantGeslacht = document.createElement('td');
 	klantGeslacht.innerHTML = klant.geslacht;
+	klantGeslacht.className="desktop";
 	row.appendChild(klantGeslacht);
 
 	var klantEmail = document.createElement('td');
 	klantEmail.innerHTML = klant.email;
+	klantEmail.className="tablet";
 	row.appendChild(klantEmail);
 
 	var klantTelefoon = document.createElement('td');
 	klantTelefoon.innerHTML = klant.telefoon;
+	klantTelefoon.className="tablet";
 	row.appendChild(klantTelefoon);
 
 	var klantAdres = document.createElement('td');
+	klantAdres.className="desktop";
 	klantAdres.innerHTML = klant.adres;
 	row.appendChild(klantAdres);
+
+	var klantAfspraken = document.createElement('td');
+	klantAfspraken.className="telefoon";
+	klantAfspraken.innerHTML = "11";
+	row.appendChild(klantAfspraken);
+
+	var klantInkomsten = document.createElement('td');
+	klantInkomsten.className="telefoon";
+	klantInkomsten.innerHTML = "$12.22";
+	row.appendChild(klantInkomsten);
 	
 	document.getElementById("klantenLijst").appendChild(row);
 	document.getElementById(klant.id).addEventListener("click", function(){
@@ -80,29 +95,45 @@ function createKlantRow(klant){
 }
 
 function createTopRow(){
-	    var topRow = document.createElement('tr');
+	var topRow = document.createElement('tr');
+	topRow.className = "topRow";
 
-		var klantNaam = document.createElement('th');
-		klantNaam.innerHTML= "Naam";
-		topRow.appendChild(klantNaam);
+	var klantNaam = document.createElement('th');
+	klantNaam.innerHTML= "Naam";
+	klantNaam.className="telefoon";
+	topRow.appendChild(klantNaam);
 
-		var klantGeslacht = document.createElement('th');
-		klantGeslacht.innerHTML= "Geslacht";
-		topRow.appendChild(klantGeslacht);
+	var klantGeslacht = document.createElement('th');
+	klantGeslacht.innerHTML= "Geslacht";
+	klantGeslacht.className="desktop";
+	topRow.appendChild(klantGeslacht);
 		
-		var klantEmail = document.createElement('th');
-		klantEmail.innerHTML= "Email";
-		topRow.appendChild(klantEmail);
+	var klantEmail = document.createElement('th');
+	klantEmail.innerHTML= "Email";
+	klantEmail.className="tablet";
+	topRow.appendChild(klantEmail);
 		
-		var klantTelefoon = document.createElement('th');
-		klantTelefoon.innerHTML= "Telefoon nummer";
-		topRow.appendChild(klantTelefoon);
+	var klantTelefoon = document.createElement('th');
+	klantTelefoon.innerHTML= "Telefoon nummer";
+	klantTelefoon.className="tablet";
+	topRow.appendChild(klantTelefoon);
 
-		var klantAdres = document.createElement('th');
-		klantAdres.innerHTML= "Adres";
-		topRow.appendChild(klantAdres);
+	var klantAdres = document.createElement('th');
+	klantAdres.innerHTML= "Adres";
+	klantAdres.className="desktop";
+	topRow.appendChild(klantAdres);
 
-		return topRow;
+	var klantAantalAfspraken = document.createElement('th');
+	klantAantalAfspraken.innerHTML= "Afspraken";
+	klantAantalAfspraken.className="telefoon";
+	topRow.appendChild(klantAantalAfspraken);
+
+	var klantInkomsten = document.createElement('th');
+	klantInkomsten.innerHTML= "Inkomsten";
+	klantInkomsten.className="telefoon";
+	topRow.appendChild(klantInkomsten);
+
+	return topRow;
 }
 
 function getKlant(id){

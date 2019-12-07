@@ -33,6 +33,20 @@ document.getElementById("homeButton").addEventListener("click", function () {
 	location.href = 'home.html';
 })
 
+function formatDate(date){
+	var date = new Date(date);
+	var monthNames = [
+		"Januari", "Februari", "Maart",
+		"April", "Mei", "Juni", "Juli",
+		"Augustus", "September", "Oktober",
+		"November", "December"
+	];
+	var day = date.getDate();
+	var monthIndex = date.getMonth();
+	var year = date.getFullYear();
+	return day + ' ' + monthNames[monthIndex] + ' ' + year;
+}
+
 function showLoadingScreen(){
 	var laadscherm = document.createElement('div');
 	laadscherm.setAttribute('id', 'laadscherm');

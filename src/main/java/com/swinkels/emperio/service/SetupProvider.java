@@ -25,6 +25,7 @@ import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.ContactPersoon;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.support.Adapter;
+import com.swinkels.emperio.support.JavascriptDateAdapter;
 import com.swinkels.emperio.support.Validator;
 
 @Path("/setup")
@@ -63,8 +64,8 @@ public class SetupProvider {
 	@Produces("application/json")
 	public String getBehandelingen(@Context SecurityContext sc) {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-
 		bedrijf.retrieveBehandelingen();
+		
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		for(Behandeling behandeling : bedrijf.getBehandelingen()) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
@@ -73,7 +74,7 @@ public class SetupProvider {
 			job.add("beschrijving", behandeling.getBeschrijving());
 			job.add("prijs", behandeling.getPrijs());
 			job.add("geslacht", behandeling.getGeslacht());
-			job.add("lengte", Adapter.DateToString(behandeling.getLengte(), "HH:mm"));
+			job.add("lengte", JavascriptDateAdapter.DateToString(behandeling.getLengte(), "HH:mm"));
 			jab.add(job);
 		}
 		return jab.build().toString();
@@ -89,7 +90,7 @@ public class SetupProvider {
 			@FormParam("geslachten") String geslachten) {		
 		String bedrijfsNaam = sc.getUserPrincipal().getName();
 		Bedrijf bedrijf = new Bedrijf(bedrijfsNaam);
-		Date lengte = Adapter.StringToDate(uur + ":" + minuten, "HH:mm");
+		Date lengte = JavascriptDateAdapter.StringToDate(uur + ":" + minuten, "HH:mm");
 		
 		JSONArray jsonArray = new JSONArray(geslachten);
 		for (int i = 0; i < jsonArray.length(); i++) {
@@ -181,13 +182,13 @@ public class SetupProvider {
 			@FormParam("sluitingsTijdZondag") String sluitingsTijdZondag) {	
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		ArrayList<Dag> dagen = new ArrayList<Dag>();
-		Dag maandag = new Dag(bedrijf, 0, openingsTijdMaandag, sluitingsTijdMaandag);
-		Dag dinsdag = new Dag(bedrijf, 1, openingsTijdDinsdag, sluitingsTijdDinsdag);
-		Dag woensdag = new Dag(bedrijf, 2, openingsTijdWoensdag, sluitingsTijdWoensdag);
-		Dag donderdag = new Dag(bedrijf, 3, openingsTijdDonderdag, sluitingsTijdDonderdag);
-		Dag vrijdag = new Dag(bedrijf, 4, openingsTijdVrijdag, sluitingsTijdVrijdag);
-		Dag zaterdag = new Dag(bedrijf, 5, openingsTijdZaterdag, sluitingsTijdZaterdag);
-		Dag zondag = new Dag(bedrijf, 6, openingsTijdZondag, sluitingsTijdZondag);
+		Dag zondag = new Dag(bedrijf, 1, openingsTijdZondag, sluitingsTijdZondag);
+		Dag maandag = new Dag(bedrijf, 2, openingsTijdMaandag, sluitingsTijdMaandag);
+		Dag dinsdag = new Dag(bedrijf, 3, openingsTijdDinsdag, sluitingsTijdDinsdag);
+		Dag woensdag = new Dag(bedrijf, 4, openingsTijdWoensdag, sluitingsTijdWoensdag);
+		Dag donderdag = new Dag(bedrijf, 5, openingsTijdDonderdag, sluitingsTijdDonderdag);
+		Dag vrijdag = new Dag(bedrijf, 6, openingsTijdVrijdag, sluitingsTijdVrijdag);
+		Dag zaterdag = new Dag(bedrijf, 7, openingsTijdZaterdag, sluitingsTijdZaterdag);
 		dagen.add(maandag);
 		dagen.add(dinsdag);
 		dagen.add(woensdag);

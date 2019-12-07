@@ -1,95 +1,21 @@
-.klanten {
-	width: 100%;
-	max-width: 1400px;
-	margin: 2em auto;
-}
-
-.klanten .controleDiv {
-	height: 50px;
-	background-color: gray;
-}
-
-.klanten .controleDiv #zoekKlantInput {
-	width: 40%;
-	height: 35px ;
-	margin: 8px;
-	left: 0px;
-	border: 2px solid blue;
-	border-radius: 20px;
-	font-size: 20px;
-}
-
-.klanten .controleDiv #zoekKlant {
-	width: 130px;
-	height: 40px;
-	border: 2px solid blue;
-	border-radius: 9px; 
-	background-color: white;
-	color: blue;
-	background-color: white;
-}
-
-.klanten .controleDiv #selectList{
-	border: 3px solid blue;
-	border-radius: 5px;
-	color: blue;
-	width: 200px;
-	height: 40px;
-	background-color: white;
-	float: right;
-	margin-top: 5px; 
-	margin-right: 10%;
-}
-
-.klanten #klantenLijst {
-	width: 100%;
-}
-
-.klanten #klantenLijst th {
-	background-color: #4CAF50;
-	color: white;
-}
-
-.klanten #klantenLijst tr{
-	height: 30px;
-}
-
-.klanten #klantenLijst tr:hover {
-	background-color: #4CAF50;
-	color: white;
-}
-
-.klanten #volgendeKlantenPagina {
-	float: right;
-}
-
-.klanten #paginaNummer {
-	left: 50%;
-	position: absolute;
-	font-size: 20px;
-}
-
-.klanten #vorigeKlantenPagina {
-	float: left;
-}
 
 
-.klant-content{
+.klant-content {
 	width: 900px;
 	margin: auto;
 	height: 400px;
-	background-color:orange;
+	background-color: orange;
 }
 
-.klant-content .klantInfo{
-	border:1px solid black;
+.klant-content .klantInfo {
+	border: 1px solid black;
 	float: left;
 	width: 50%;
 	top: 0px;
 	height: 100%;
 }
 
-.klant-content .klantInfo span{
+.klant-content .klantInfo span {
 	margin: 5px;
 	width: 100%;
 	height: 30px;
@@ -97,7 +23,7 @@
 }
 
 
-.klant-content #afsprakenLijst{
+.klant-content #afsprakenLijst {
 	top: 0px;
 	width: 49%;
 	height: 100%;
@@ -106,8 +32,8 @@
 	float: right;
 }
 
-.klant-content #afsprakenLijst .afspraakKlant{
- 	display: inline-block;
+.klant-content #afsprakenLijst .afspraakKlant {
+	display: inline-block;
 	width: 80%;
 	position: relative;
 	border-bottom: 1px solid black;
@@ -116,17 +42,10 @@
 	margin: 10px;
 }
 
-.klant-content #afsprakenLijst .afspraakKlant .afspraakDatum{
+.klant-content #afsprakenLijst .afspraakKlant .afspraakDatum {
 	float: left;
 }
 
-.klant-content #afsprakenLijst .afspraakKlant .afspraakTijd{
-	
-}
-
-.klant-content #afsprakenLijst .afspraakKlant .afspraakPrijs{
+.klant-content #afsprakenLijst .afspraakKlant .afspraakPrijs {
 	float: right;
 }
-
-
-

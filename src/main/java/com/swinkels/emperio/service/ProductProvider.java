@@ -25,17 +25,13 @@ import com.swinkels.emperio.providers.BedrijfDaoImpl;
 
 @Path("/product")
 public class ProductProvider {
-	BedrijfDao bedrijfDao = new BedrijfDaoImpl();
 
 	@GET
 	@Path("/producten/{page}")
 	@RolesAllowed("user")
 	@Produces("application/json")
 	public String getProductenByPage(@Context SecurityContext sc, @PathParam("page") int page) throws ParseException {
-		// uitvoer
-		// 10 producten (id, hoeveelheid, naam)
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-
 		ArrayList<Product> producten = bedrijfDao.getProductenByPage(bedrijf, page);
 
 		JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -49,12 +45,6 @@ public class ProductProvider {
 		return jab.build().toString();
 	}
 
-	// wordt gebruikt bij
-	// product toevoegen
-//uitvoer
-	// response
-	// ok
-	// error
 	@POST
 	@RolesAllowed("user")
 	@Path("/product")
@@ -63,7 +53,6 @@ public class ProductProvider {
 			@FormParam("hoeveelheidProductToevoegen") int hoeveelheidProductToevoegen,
 			@FormParam("naamProductToevoegen") String naamProductToevoegen) {
 
-		// hier moeten validaties gedaan worden
 		try {
 			Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 			Product product = new Product(bedrijf, hoeveelheidProductToevoegen, naamProductToevoegen);

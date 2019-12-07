@@ -1,0 +1,72 @@
+.table {
+	width: 100%;
+	max-width: 1400px;
+	margin: 2em auto;
+	position: relative;
+}
+
+.table .controleDiv {
+	background-color: #4169E1;
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
+}
+
+.table .controleDiv #zoekInput {
+	width: 40%;
+	height: 35px;
+	margin: 8px;
+	left: 0px;
+	border: 2px solid blue;
+	border-radius: 20px;
+	font-size: 20px;
+}
+
+.table .controleDiv #selectList {
+	background-color: #191970;
+	color: white;
+	border: 1px solid black;
+	border-radius: 5px;
+	width: 200px;
+	height: 40px;
+	margin-top: 5px;
+}
+
+.table .tableContentHolder {
+	border: 1px solid blue;
+	height: 700px;
+}
+
+.table .tableContent {
+	width: 100%;
+	overflow: hidden;
+}
+
+.table .tableContent .topRow {
+	background-color: #4169E1;
+	color: white;
+	height: 40px;
+}
+
+.table .tableContent tr {
+	height: 30px;
+	position: relative;
+}
+
+.table .tableContent tr:hover {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.table .volgendeButton {
+	float: right;
+}
+
+.table #paginaNummer {
+	left: 50%;
+	position: absolute;
+	font-size: 20px;
+}
+
+.table .terugButton {
+	float: left;
+}

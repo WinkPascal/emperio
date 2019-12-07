@@ -1,0 +1,15 @@
+.table .tableContent .desktop{
+	display: none;
+}
+.table .tableContent .tablet{
+	display: none;
+}
+.controleDiv .zoekInput{
+	width: 80%;
+}
+.controleDiv #selectList{
+	margin: auto;
+}
+.controleDiv .defaultButton{
+	margin: auto;
+}

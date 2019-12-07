@@ -6,6 +6,7 @@ import java.util.Date;
 import com.swinkels.emperio.providers.AfspraakDao;
 import com.swinkels.emperio.providers.AfspraakDaoImpl;
 import com.swinkels.emperio.support.Adapter;
+import com.swinkels.emperio.support.JavascriptDateAdapter;
 
 public class Dag {
 	private Bedrijf bedrijf;
@@ -45,8 +46,8 @@ public class Dag {
 			this.openingsTijd = null;
 			this.sluitingsTijd = null;
 		} else {
-			Date openingsTijd = Adapter.StringToDate(openingsTijdString, "HH:mm");
-			Date sluitingsTijd = Adapter.StringToDate(sluitingsTijdString, "HH:mm");
+			Date openingsTijd = JavascriptDateAdapter.StringToDate(openingsTijdString, "HH:mm");
+			Date sluitingsTijd = JavascriptDateAdapter.StringToDate(sluitingsTijdString, "HH:mm");
 			
 			this.openingsTijd= openingsTijd;
 			this.sluitingsTijd = sluitingsTijd;

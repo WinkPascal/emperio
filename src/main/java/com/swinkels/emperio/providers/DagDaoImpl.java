@@ -1,17 +1,16 @@
 package com.swinkels.emperio.providers;
 
-import java.sql.Connection;
+import java.sql.Connection; 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Dag;
-import com.swinkels.emperio.service.ServiceFilter;
 import com.swinkels.emperio.support.Adapter;
+import com.swinkels.emperio.support.DatabaseDateAdapter;
 
 public class DagDaoImpl extends MariadbBaseDao implements DagDao {
 	public boolean saveDag(Dag dag) {
@@ -41,7 +40,6 @@ public class DagDaoImpl extends MariadbBaseDao implements DagDao {
 	
 	//wordt gebruikt bij: getWerkdagen
 	public void getWeekRooster(Bedrijf bedrijf){
-		ArrayList<Dag> dagen = new ArrayList<Dag>();
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"SELECT dagnummer, openingstijd, sluitingstijd"
@@ -52,22 +50,15 @@ public class DagDaoImpl extends MariadbBaseDao implements DagDao {
 			while (dbResultSet.next()) {
 				String openingsTijd = dbResultSet.getString("openingstijd");
 				if(openingsTijd == null) {
-					System.out.println(openingsTijd);
-					continue;
+					int dagNummer = dbResultSet.getInt("dagnummer");
+					Dag  dag = new Dag(dagNummer, null, null);
+					bedrijf.addDag(dag);
 				} else {
 					String sluitingsTijd = dbResultSet.getString("sluitingstijd");
-					int dagNummer = dbResultSet.getInt("dagnummer");
-				
-					//format de tijden
-					Date openingsTijdDate = Adapter.StringToDate(openingsTijd, "HH:mm");
-					Date sluitingsTijdDate = Adapter.StringToDate(sluitingsTijd, "HH:mm");
-					
-					System.out.println(dagNummer);
-					System.out.println(openingsTijdDate);
-					System.out.println(sluitingsTijdDate);
-	
+					int dagNummer = dbResultSet.getInt("dagnummer");				
+					Date openingsTijdDate = DatabaseDateAdapter.StringToDate(openingsTijd, "HH:mm");
+					Date sluitingsTijdDate = DatabaseDateAdapter.StringToDate(sluitingsTijd, "HH:mm");
 					Dag  dag = new Dag(dagNummer, openingsTijdDate, sluitingsTijdDate);
-					System.out.println(dag);
 					bedrijf.addDag(dag);
 				}
 			}
@@ -90,12 +81,12 @@ public class DagDaoImpl extends MariadbBaseDao implements DagDao {
 			while (dbResultSet.next()) {
 				String openingsTijd = dbResultSet.getString("openingstijd");
 				String sluitingsTijd = dbResultSet.getString("sluitingstijd");
-				
-				Date openingsTijdDate = Adapter.StringToDate(openingsTijd, "HH:mm");
-				Date sluitingsTijdDate = Adapter.StringToDate(sluitingsTijd, "HH:mm");
-				
-				Dag dag = new Dag(openingsTijdDate, sluitingsTijdDate, bedrijf);
-				bedrijf.addDag(dag);
+				if(openingsTijd != null) {
+					Date openingsTijdDate = DatabaseDateAdapter.StringToDate(openingsTijd, "HH:mm");
+					Date sluitingsTijdDate = DatabaseDateAdapter.StringToDate(sluitingsTijd, "HH:mm");
+					Dag dag = new Dag(openingsTijdDate, sluitingsTijdDate, bedrijf);
+					bedrijf.addDag(dag);
+				}
 			}
 		} catch (SQLException e) {
 			System.out.println(e);

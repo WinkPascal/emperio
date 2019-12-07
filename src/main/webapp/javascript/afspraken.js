@@ -1,7 +1,8 @@
 function onload() {
 	datum = new Date();
-	getRooster();
+	console.log("onload "+datum)
 
+	getRooster();
 }
 
 function createAfspraakRooster(beginTijd, lengte, klant, prijs) {
@@ -80,13 +81,13 @@ function getRooster() {
 		.then(function (dagen) {
 			var i = 1;
 			var weekdagen = new Array(7);
-			weekdagen[0] = "Zondag";
-			weekdagen[1] = "Maandag";
-			weekdagen[2] = "Dinsdag";
-			weekdagen[3] = "Woensdag";
-			weekdagen[4] = "Donderdag";
-			weekdagen[5] = "Vrijdag";
-			weekdagen[6] = "Zaterdag";
+			weekdagen[0] = "Maandag";
+			weekdagen[1] = "Dinsdag";
+			weekdagen[2] = "Woensdag";
+			weekdagen[3] = "Donderdag";
+			weekdagen[4] = "Vrijdag";
+			weekdagen[5] = "Zaterdag";
+			weekdagen[6] = "Zondag";
 			this.aantalDagen = 0;
 
 			var eindUurRooster = 0;
@@ -152,6 +153,7 @@ function getRooster() {
 						diff = maandag.getDate() - day + (day == 0 ? -6 : 1);
 					maandag.setDate(diff);
 					maandag.setDate(maandag.getDate() + dag.weekNummer);
+					maandag.getDay(), diff = maandag.getDate() - day + (day == 0 ? -6 : 1);
 
 					var dagDate = formatDate(maandag);
 
@@ -168,40 +170,57 @@ function getRooster() {
 					events.setAttribute('id', 'dag' + dag.weekNummer);
 
 					// ochtend gesloten wordt aangemaakt
-					var openingsTijdDag = dag.openingsTijd.split(":");
-					var beginUurDag = parseInt(openingsTijdDag[0]);
-					var beginMinuutDag = parseInt(openingsTijdDag[1]);
+					var beginTijd = dag.openingsTijd;
+					if(beginTijd != "gesloten"){
+						var eventOchtend = berekenOpeningstijd(beginTijd);
+						if(eventOchtend != null){
+							events.appendChild(eventOchtend);
+						}
+						avond = berekenSluitingstijd(dag.sluitingsTijd);
+						if (avond != null) {
+							events.appendChild(avond);
+						}
+					} else{
+						console.log("gessloten");
+						console.log(dag.openingsTijd);
+					}
+					console.log(dag.openingsTijd);
 
-					var uurVerschilLengte = beginUurDag - beginUurRooster;
-					var minuutVerschilLengte = beginMinuutDag - beginMinuutRooster;
-					if (minuutVerschilLengte < 0) {
-						uurVerschilLengte = uurVerschilLengte - 1;
-						minuutVerschilLengte = minuutVerschilLengte + 60;
-					}
-					var lengteOchtend = uurVerschilLengte + ":" + minuutVerschilLengte;
-					var topOchtend = beginUurRooster + ":" + beginMinuutRooster;
-					var ochtend = createAfspraakRooster(topOchtend, lengteOchtend, "ochtend", 0);
-					if (ochtend != null) {
-						events.appendChild(ochtend);
+
+					function berekenSluitingstijd(sluitingsTijdAvond){
+						var sluitingsTijdDag = sluitingsTijdAvond.split(":");
+						var eindUurDag = parseInt(sluitingsTijdDag[0]);
+						var eindMinuutDag = parseInt(sluitingsTijdDag[1]);
+						var eindTijdDag = eindUurDag + ":" + eindMinuutDag;
+
+						var uurEindLengte = eindUurRooster - eindUurDag;
+						var minuutEindLengte = eindMinuutRooster - eindMinuutDag;
+						if (minuutEindLengte < 0) {
+							minuutEindLengte + 60;
+							uurEindLengte = uurEindLengte - 1;
+						}
+						var lengteAvond = uurEindLengte + ":" + minuutEindLengte;
+						var avond = createAfspraakRooster(eindTijdDag, lengteAvond, "avond", 0);
+						return avond;
 					}
 
-					// avond wordt aangemaakt
-					var sluitingsTijdDag = dag.sluitingsTijd.split(":");
-					var eindUurDag = parseInt(sluitingsTijdDag[0]);
-					var eindMinuutDag = parseInt(sluitingsTijdDag[1]);
-					var eindTijdDag = eindUurDag + ":" + eindMinuutDag;
+					function berekenOpeningstijd(openingsTijdOchtend){
+						var openingsTijdDag = openingsTijdOchtend.split(":");
+						var beginUurDag = parseInt(openingsTijdDag[0]);
+						var beginMinuutDag = parseInt(openingsTijdDag[1]);
 
-					var uurEindLengte = eindUurRooster - eindUurDag;
-					var minuutEindLengte = eindMinuutRooster - eindMinuutDag;
-					if (minuutEindLengte < 0) {
-						minuutEindLengte + 60;
-						uurEindLengte = uurEindLengte - 1;
-					}
-					var lengteAvond = uurEindLengte + ":" + minuutEindLengte;
-					var avond = createAfspraakRooster(eindTijdDag, lengteAvond, "avond", 0);
-					if (avond != null) {
-						events.appendChild(avond);
-					}
+						var uurVerschilLengte = beginUurDag - beginUurRooster;
+						var minuutVerschilLengte = beginMinuutDag - beginMinuutRooster;
+						if (minuutVerschilLengte < 0) {
+							uurVerschilLengte = uurVerschilLengte - 1;
+							minuutVerschilLengte = minuutVerschilLengte + 60;
+						}
+						var lengteOchtend = uurVerschilLengte + ":" + minuutVerschilLengte;
+						var topOchtend = beginUurRooster + ":" + beginMinuutRooster;
+						var ochtend = createAfspraakRooster(topOchtend, lengteOchtend, "ochtend", 0);
+						return ochtend;
+					}					
+
 					dagVanRooster.appendChild(events);
 					document.getElementById("rooster").appendChild(dagVanRooster);
 				}
@@ -228,7 +247,6 @@ function getRooster() {
 }
 
 
-
 function getAfspraken(datum, onload) {
 	// alle afspraken worden uit het rooster gehaalt
 	for (let afspraak of afsprakenLijst) {
@@ -238,11 +256,14 @@ function getAfspraken(datum, onload) {
 	var i = 0;
 
 	// als het niet voor de eerste keer geladen wordt
+	console.log("onload "+datum)
 	var maandag = new Date(datum);
-	var day = maandag.getDay(),
-		diff = maandag.getDate() - day + (day == 0 ? -6 : 1);
+	console.log("afspraken1 "+datum)
+	var day = maandag.getDay(), diff = maandag.getDate() - day + (day == 0 ? -6 : 1);
 	maandag.setDate(diff);
 	var date = maandag.getFullYear() + '-' + maandag.getMonth() + '-' + maandag.getDate();
+	console.log("afspraken2 "+datum)
+	console.log("foramatted "+date)
 
 	if (!onload) {
 		// datums onder de dag zetten
@@ -296,9 +317,9 @@ function getAfspraken(datum, onload) {
 
 				// bepalen waar de afspraak wordt toegvoegdt
 				var afspraakDate = new Date(afspraak.timestamp.substring(0, 10));
-				var dagNummer = afspraakDate.getDay();
-				var dagId = "dag" + dagNummer;
-
+				var dagnummer = afspraakDate.getDay()-1;
+				var dagId = "dag" + dagnummer;
+				console.log(dagId)
 				document.getElementById(dagId).appendChild(event);
 
 				createOnClickListener(afspraak.id, top, afspraakDate, afspraakLengte);

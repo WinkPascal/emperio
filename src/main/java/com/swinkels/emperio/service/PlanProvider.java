@@ -40,12 +40,6 @@ import com.swinkels.emperio.providers.KlantDaoImpl;
 
 @Path("/plan")
 public class PlanProvider {
-	AfspraakDao afspraakDao = new AfspraakDaoImpl();
-	BehandelingDao behandelingDao = new BehandelingDaoImpl();
-	KlantDao klantDao = new KlantDaoImpl();
-	AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
-	BedrijfDao bedrijfDao = new BedrijfDaoImpl();
-
 	// wordt gebruikt bij
 	// inplannen behnadelingen kiezen
 	@GET
@@ -263,5 +257,5 @@ public class PlanProvider {
 		}
 		return Response.ok().build();
 	}
-
+}
 

@@ -200,8 +200,7 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				int dagen = dbResultSet.getInt("dagen");
-				if(dagen < 7) {
+				if(dbResultSet.getInt("dagen") < 7) {
 					return true;
 				} else {
 					return false;

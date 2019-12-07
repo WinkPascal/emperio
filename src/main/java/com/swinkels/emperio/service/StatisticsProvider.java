@@ -29,7 +29,7 @@ public class StatisticsProvider {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		JsonArrayBuilder jab = Json.createArrayBuilder();		
 		JsonObjectBuilder job = Json.createObjectBuilder();
-		Date date =getLengte(lengte);
+		Date date = getLengte(lengte);
 		bedrijf.getHoeveelheden(date);
 		job.add("afspraken", bedrijf.getHoeveelheidAfspraken());
 		job.add("inkomsten", bedrijf.getHoeveelheidInkomsten());

@@ -26,12 +26,12 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/pascalwink/jars/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="/home/pascalwink/jars/jackson-annotations-2.9.0.jar"/>
-	<classpathentry kind="lib" path="/home/pascalwink/jars/jackson-core-2.9.6.jar"/>
 	<classpathentry kind="lib" path="/home/pascalwink/jars/jackson-databind-2.9.6.jar"/>
 	<classpathentry kind="lib" path="/home/pascalwink/jars/javax.annotation.jar"/>
 	<classpathentry kind="lib" path="/home/pascalwink/jars/javax.ws.rs-api-2.1.1.jar"/>
 	<classpathentry kind="lib" path="/home/pascalwink/jars/jjwt-0.9.1.jar"/>
 	<classpathentry kind="lib" path="/home/pascalwink/jars/mariadb-java-client-2.4.2.jar"/>
 	<classpathentry kind="lib" path="/home/pascalwink/Desktop/sqljdbc_4.2"/>
+	<classpathentry kind="lib" path="/home/pascalwink/jars/jackson-core-2.10.0.pr3.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

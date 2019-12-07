@@ -3,10 +3,14 @@
 <head>
 <meta charset="UTF-8">
 	<title>Klanten</title>
-	<link rel="stylesheet" type="text/css" href="css/home.css">
-	
-	<link rel="stylesheet" type="text/css" href="css/global.css">
+	<link rel="stylesheet" media="screen and (max-width: 500px)" href="css/smartphone/table.css">
+	<link rel="stylesheet" media="screen and (max-width: 700px)" href="css/tablet/table.css">
+	<link rel="stylesheet" href="css/desktop/table.css">
+
 	<link rel="stylesheet" type="text/css" href="css/klanten.css">
+
+	<link rel="stylesheet" type="text/css" href="css/global.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body onload="onload()">
 	<span class="topBar">
@@ -15,24 +19,25 @@
 		<input type="button" value="Uitloggen" class="defaultButton" id="logoutButton">
 	</span>
 
-	<div class="klanten">
+	<div class="table">
 		<div class="controleDiv">
-			<input type="text" id="zoekKlantInput"/>
-			<input type="button" value="Zoek" id="zoekKlant">
+			<input type="text" id="zoekInput"/>
 			<select id="selectList">
-	  			<option value="vAfspraken">Meeste afspraken</option>
-				<option value="mAfspraken">Minste afspraken</option>
-				<option value="opel">optie3</option>
-				<option value="audi">optie4</option>
+	  			<option value="meesteAfspraken">Meeste afspraken</option>
+				<option value="meesteInkomen">Meeste inkomsten</option>
+				<option value="minsteAfspraken">Minste afspraken</option>
+				<option value="minsteInkomen">Minste inkomsten</option>
 			</select>
+			<input type="button" class="defaultButton" value="Zoek" id="zoekKlant">
 		</div>
-				
-		<table id="klantenLijst">
-	  	</table>
+		<div class="tableContentHolder">
+			<table id="klantenLijst" class="tableContent">
+			</table>
+		</div>
 	  	<div>
-  		  	<input type="button" value="Terug" class="defaultButton" id="vorigeKlantenPagina">
+  		  	<input type="button" value="Terug" class="defaultButton terugButton" id="vorigeKlantenPagina">
   		  	<span id="paginaNummer"></span>	  	
-		  	<input type="button" value="Volgende" class="defaultButton" id="volgendeKlantenPagina">
+		  	<input type="button" value="Volgende" class="defaultButton volgendeButton" id="volgendeKlantenPagina">
 	  	</div>
 	 </div> 
 	 

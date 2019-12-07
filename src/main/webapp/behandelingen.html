@@ -4,6 +4,11 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Behandelingen</title>
+
+	<link rel="stylesheet" media="screen and (max-width: 500px)" href="css/smartphone/table.css">
+	<link rel="stylesheet" media="screen and (max-width: 700px)" href="css/tablet/table.css">
+	<link rel="stylesheet" href="css/desktop/table.css">
+
 	<link rel="stylesheet" type="text/css" href="css/behandelingen.css">
 	<link rel="stylesheet" type="text/css" href="css/global.css">
 </head>
@@ -15,80 +20,98 @@
 		<input type="button" value="Uitloggen" class="defaultButton" id="logoutButton">
 	</span>
 
-	<div class="behandelingen">
+	<input type="button" id="aanmaken" class="defaultButton" value="Behandeling aanmaken">
+
+	<div class="table">
 		<div class="controleDiv">
-			<input type="text" id="zoekBehandelingInput"/>
-			<input type="button" value="Zoek" id="zoekBehandelingButton">
+			<input type="text" id="zoekInput"/>
 			<select id="selectList">
 	  			<option value="meesteAfspraken">Meeste afspraken</option>
 				<option value="meesteInkomen">Meeste inkomsten</option>
 				<option value="minsteAfspraken">Minste afspraken</option>
 				<option value="minsteInkomen">Minste inkomsten</option>
 			</select>
-			<input type="button" id="aanmaken" class="defaultButton" value="Behandeling aanmaken">
+			<input type="button" class="defaultButton" value="Zoek" id="zoekKlant">
 		</div>
-		<div class="controleDiv">
+				<div class="controleDiv">
 			<input type="button" id="geslachtMan" class="geslachtButton" value="Man">
 			<input type="button" id="geslachtVrouw" class="geslachtButton" value="Vrouw">
 			<input type="button" id="geslachtMeisje" class="geslachtButton" value="Meisje">
 			<input type="button" id="geslachtJongen" class="geslachtButton" value="Jongen">
 		</div>	
-		<table id="behandelingenLijst">
-		</table>
-		  
-	  	<span class="navigatieSpan">
-  		  	<input type="button" value="Terug" class="defaultButton" id="vorigeButton">
+		<div class="tableContentHolder">
+			<table id="behandelingenLijst" class="tableContent">
+			</table>
+		</div>
+	  	<div>
+  		  	<input type="button" value="Terug" class="defaultButton terugButton" id="vorigeKlantenPagina">
   		  	<span id="paginaNummer"></span>	  	
-		  	<input type="button" value="Volgende" class="defaultButton" id="volgendeButton">
-	  	</span>
-	 </div>
+		  	<input type="button" value="Volgende" class="defaultButton volgendeButton" id="volgendeKlantenPagina">
+	  	</div>
+	 </div> 
+
+
 
 	 	 <div id="BehandelingModal" class="modal">
-			<form id="BehandelingForm" class="BehandelingForm">
-				<div class="inputField">
-					<a class="inputNaam">Naam</a>
-					<input class="inputBehandelingToevoegen" type="text" name="naam" id="naam"><br>
+			<form id="BehandelingForm" class="BehandelingToevoegenForm">
+				<h2>Behandeling</h2>
+				<div class="inputDiv">
+					<div class="inputField">
+						<a class="inputNaam">Naam</a>
+						<input class="inputBehandelingToevoegen" type="text" name="naam" id="naam"><br>
+					</div>
+					<div class="inputField">
+						<a class="inputNaam">Beschrijving</a>
+						<textarea class="inputBehandelingToevoegen beschrijvingToevoegen" name="beschrijving" id="beschrijving"></textarea>				
+					</div>
+					<div class="inputField">
+						<a class="inputNaam">Prijs</a>
+						<span class="inputBehandelingToevoegen">
+							<input class="inputPrijsToevoegen" id="prijsBehandeling" type="number" name="prijsBehandeling" min="0" value="0" step="any">
+						</span>		
+					</div>
+					<div class="inputField">
+						<a class="inputNaam">Lengte</a>
+						<span class="inputBehandelingToevoegen">
+							<select name="uur" id="uur">
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+							</select>
+							:
+							<select name="minuten" id="minuten">
+								<option value="5">5</option>
+								<option value="10">10</option>
+								<option value="15">15</option>
+								<option value="20">20</option>
+								<option value="25">25</option>
+								<option value="30">30</option>
+								<option value="35">35</option>
+								<option value="40">40</option>
+								<option value="45">45</option>
+								<option value="50">50</option>
+								<option value="55">55</option>
+							</select>
+						</span>
+					</div>
+					<div class="inputField">
+						<a id="geslachtBehandeling" class="inputNaam">Doelgroep</a>
+					</div>
+					<div class="inputField">
+						<a id="afprakenBehandeling" class="inputNaam">Afspraken</a>
+					</div>
+					<div class="inputField">
+						<a id="inkomstenBehandeling" class="inputNaam">Inkosmten</a>
+					</div>
+
 				</div>
-				<div class="inputField">
-					<a class="inputNaam">Beschrijving</a>
-					<textarea class="inputBehandelingToevoegen beschrijvingToevoegen" name="beschrijving" id="beschrijving"></textarea>				
-				</div>
-				<div class="inputField">
-					<a class="inputNaam">Prijs</a>
-					<span class="inputBehandelingToevoegen">
-						<input class="inputPrijsToevoegen" id="prijsBehandeling" type="number" name="prijsBehandeling" min="0" value="0" step="any">
-					</span>		
-				</div>
-				<div class="inputField">
-					<a class="inputNaam">Lengte</a>
-					<span class="inputBehandelingToevoegen">
-						<select name="uur" id="uur">
-							<option value="0">0</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-						</select>
-						:
-						<select name="minuten" id="minuten">
-							<option value="5">5</option>
-							<option value="10">10</option>
-							<option value="15">15</option>
-							<option value="20">20</option>
-							<option value="25">25</option>
-							<option value="30">30</option>
-							<option value="35">35</option>
-							<option value="40">40</option>
-							<option value="45">45</option>
-							<option value="50">50</option>
-							<option value="55">55</option>
-						</select>
-					</span>
-				</div>
-				<div class="bottom">
+				<div class="submitController">
 					<input type="button" value="Annuleren" id="Annuleren" class="defaultButton">	
 					<input type="button" value="Wijzigen" id="Wijzigen" class="defaultButton">	
+					<input type="button" value="Reset" id="Reset" class="defaultButton">	
 					<input type="button" value="Verwijderen" id="Verwijderen" class="defaultButton">
-					<input type="button" value="Statestieken" id="Annuleren" class="defaultButton">
+					<input type="button" value="Statestieken" id="Statestieken" class="defaultButton">
 				</div>
 			</form>
 		</div>

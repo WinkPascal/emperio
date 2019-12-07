@@ -29,11 +29,6 @@ import com.swinkels.emperio.support.Adapter;
 
 @Path("/klanten")
 public class KlantenProvider {
-	AfspraakDao afspraakDao = new AfspraakDaoImpl();
-	BehandelingDao behandelingDao = new BehandelingDaoImpl();
-	KlantDao klantDao = new KlantDaoImpl();
-	AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
-
 	@GET
 	@Path("/alleKlanten/{pageNummer}")
 	@RolesAllowed("user")

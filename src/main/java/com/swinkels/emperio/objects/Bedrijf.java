@@ -13,14 +13,19 @@ import com.swinkels.emperio.providers.BehandelingDao;
 import com.swinkels.emperio.providers.BehandelingDaoImpl;
 import com.swinkels.emperio.providers.DagDao;
 import com.swinkels.emperio.providers.DagDaoImpl;
+import com.swinkels.emperio.providers.EmailDao;
+import com.swinkels.emperio.providers.EmailDaoImpl;
 import com.swinkels.emperio.providers.KlantDao;
 import com.swinkels.emperio.providers.KlantDaoImpl;
 import com.swinkels.emperio.support.Adapter;
+import com.swinkels.emperio.support.JavascriptDateAdapter;
 
 public class Bedrijf {
 	private ArrayList<Dag> dagen = new ArrayList<Dag>();
 	private ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 	private ArrayList<Klant> klanten = new ArrayList<Klant>();
+	private ArrayList<Email> emails = new ArrayList<Email>();
+
 	private Instellingen instellingen;
 	
 	private String bedrijfsNaam;
@@ -34,6 +39,14 @@ public class Bedrijf {
 	
 	private Double hoeveelheidInkomsten;
 	private int hoeveelheidAfspraken;
+
+	public ArrayList<Email> getEmails() {
+		return emails;
+	}
+
+	public void setEmails(ArrayList<Email> emails) {
+		this.emails = emails;
+	}
 
 	public ArrayList<String> validate(){
 		ArrayList<String> errors = new ArrayList<String>();
@@ -71,6 +84,11 @@ public class Bedrijf {
 		return errors;
 	}
 	
+	public void getEmailsByRequest(String request, int page) {
+		EmailDao dao = new EmailDaoImpl();
+		dao.getEmailsByRequest(request, page);
+	}
+	
 	public void getHoeveelheden(Date date) {
 		AfspraakDao afspraakDao = new AfspraakDaoImpl();
 		afspraakDao.getInkomsten(this, date);
@@ -103,9 +121,9 @@ public class Bedrijf {
 	}
 
 	public Date getVroegsteOpeningsTijd() {
-		Date vroegsteOpeningsTijd = Adapter.StringToDate("23:59", "HH:mm");
+		Date vroegsteOpeningsTijd = JavascriptDateAdapter.StringToDate("23:59", "HH:mm");
 		for (Dag dag : dagen) {
-			if (vroegsteOpeningsTijd.compareTo(dag.getOpeningsTijd()) > 0) {
+			if(dag.getOpeningsTijd() != null && vroegsteOpeningsTijd.compareTo(dag.getOpeningsTijd()) > 0) {
 				vroegsteOpeningsTijd = dag.getOpeningsTijd();
 			}
 		}
@@ -121,9 +139,9 @@ public class Bedrijf {
 	}
 
 	public Date getLaatsteSluitingsTijd() {
-		Date laatsteSluitingsTijd = Adapter.StringToDate("00:00", "HH:mm");
+		Date laatsteSluitingsTijd = JavascriptDateAdapter.StringToDate("00:00", "HH:mm");
 		for (Dag dag : dagen) {
-			if (laatsteSluitingsTijd.compareTo(dag.getSluitingsTijd()) < 0) {
+			if (dag.getSluitingsTijd() != null && laatsteSluitingsTijd.compareTo(dag.getSluitingsTijd()) < 0) {
 				laatsteSluitingsTijd = dag.getSluitingsTijd();
 			}
 		}
@@ -301,5 +319,7 @@ public class Bedrijf {
 	public String getEmail() {
 		return email;
 	}
+
+
 
 }

@@ -11,6 +11,7 @@ import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.BehandelingBuilder;
 import com.swinkels.emperio.support.Adapter;
+import com.swinkels.emperio.support.DatabaseDateAdapter;
 
 public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao {
 
@@ -30,7 +31,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 				double prijs = Double.valueOf(prijsString);
 				String beschrijving = dbResultSet.getString("beschrijving");
 				String lengteString = dbResultSet.getString("lengte");
-				Date lengte = Adapter.StringToDate(lengteString, "HH:mm");
+				Date lengte = DatabaseDateAdapter.StringToDate(lengteString, "HH:mm");
 				String geslacht = dbResultSet.getString("geslacht");
 
 				Behandeling behandeling = new Behandeling(id, naam, beschrijving, lengte, prijs, geslacht);
@@ -55,7 +56,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 				int id = dbResultSet.getInt("id");
 				String behandelingsNaam = dbResultSet.getString("naam");
 				String beschrijving = dbResultSet.getString("beschrijving");
-				Date lengte = Adapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm");
+				Date lengte = DatabaseDateAdapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm");
 				double prijs = dbResultSet.getDouble("prijs");
 
 				Behandeling behandeling = new Behandeling(id, behandelingsNaam, beschrijving, lengte, prijs, geslacht);
@@ -74,7 +75,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 					+ "from behandeling b join afspraakBehandeling ab on b.id = ab.behandelingId \n"
 					+ "				   join afspraak a on a.id = ab.afspraakId\n" + "where b.BedrijfBedrijfsnaam = '"
 					+ bedrijf.getBedrijfsNaam() + "' \n" + "      and a.timestamp < SYSDATE()\n" + "      and a.timestamp > '"
-					+ Adapter.DateToString(date, "YYYY-MM-dd") + "'\n" + "GROUP by b.id\n"
+					+ DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd") + "'\n" + "GROUP by b.id\n"
 					+ "ORDER by COUNT(b.id) desc\n" + "LIMIT 5;");
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
@@ -113,7 +114,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 											.setId(dbResultSet.getInt("id"))
 											.setBeschrijving(dbResultSet.getString("beschrijving"))
 											.setGeslacht(dbResultSet.getString("geslacht"))
-											.setLengte(Adapter.StringToDate(lengteString, "HH:mm"))
+											.setLengte(DatabaseDateAdapter.StringToDate(lengteString, "HH:mm"))
 											.setPrijs(dbResultSet.getDouble("prijs"))
 											.setNaam(dbResultSet.getString("naam"))
 											.make();
@@ -135,7 +136,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 			pstmt = con.prepareStatement(
 					"insert into behandeling (BedrijfBedrijfsnaam, lengte, geslacht, naam, prijs, beschrijving) "
 					+ "values('" + behandeling.getBedrijf().getBedrijfsNaam() + "', '"
-					+ Adapter.DateToString(behandeling.getLengte(), "HH:mm") + "', '"
+					+ DatabaseDateAdapter.DateToString(behandeling.getLengte(), "HH:mm") + "', '"
 					+ behandeling.getGeslacht() + "', '"
 					+ behandeling.getNaam() + "', " + ""
 					+ behandeling.getPrijs() + ", '" 
@@ -180,7 +181,7 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 				behandeling.setId(dbResultSet.getInt("id"));
 				behandeling.setBeschrijving(dbResultSet.getString("beschrijving"));
 				behandeling.setGeslacht(dbResultSet.getString("geslacht"));
-				behandeling.setLengte(Adapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm"));
+				behandeling.setLengte(DatabaseDateAdapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm"));
 				behandeling.setPrijs(dbResultSet.getDouble("prijs"));
 				behandeling.setNaam(dbResultSet.getString("naam"));
 				behandeling.setAfspraken(dbResultSet.getInt("afspraken"));

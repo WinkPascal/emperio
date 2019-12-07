@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Klanten</title>
+	<link rel="stylesheet" type="text/css" href="css/home.css">
+
+	<link rel="stylesheet" type="text/css" href="css/global.css">
+	<link rel="stylesheet" type="text/css" href="css/marketing.css">
+</head>
+
+<body onload="onload()">
+</body>
+	<span class="topBar">
+		<input type="button" value="Home" class="defaultButton" id="homeButton">
+		<a>Marketing</a>
+		<input type="button" value="Uitloggen" class="defaultButton" id="logoutButton">
+	</span>
+	<div class="verzonden">
+		Verzonden
+		<div>
+			<span>Onderwero</span>
+			<span>2019-04-12</span>
+			<p>Dear pascal,
+				You're receiving this email because someone (presumably you) attempts to activate Visual Paradigm with your email address.
+				To activate Visual Paradigm, copy the following verification code and paste to Visual Paradigm.
+			</p>
+		</div>
+	</div>
+	<div class="email">
+		<span>
+	 		<input type="button" id="versturen" class="defaultButton" value="Versturen"><br>
+			<input type="button" id="klantenKiezen" class="defaultButton" value="kies klanten">
+			<span>klanten</span>			
+		</span>
+		<br>
+		<span>
+			Onderwerp
+			<input type="text" id="onderwerp">
+		</span>
+		<br>
+		<textarea ></textarea>
+	</div>
+	<div id="klantenModal" class="modal">
+		<div class="klantenModalContent">
+			<table id="klantenLijst">
+			</table>
+			<div>
+				<input type="button" value="Terug" class="defaultButton" id="vorigeKlantenPagina">
+				<span id="paginaNummer"></span>	  	
+				<input type="button" value="Volgende" class="defaultButton" id="volgendeKlantenPagina">
+			</div>
+		</div>
+	</div>
+ 	 <script src="javascript/global.js"></script>
+ 	 <script src="javascript/marketing.js"></script>
+
+</html>

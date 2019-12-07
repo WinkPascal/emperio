@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 	<title>Afsrpaak inplannen</title>
 	<link rel="stylesheet" type="text/css" href="css/global.css">
+	 <link rel="stylesheet" media="screen and (max-width: 480px)" href="css/smartphone/planCostumer.css">
+	 <link rel="stylesheet" media="screen and (min-width: 480px) and (max-width: 1024px)" href="css/tablet/planCostumer.css">
+	 <link rel="stylesheet" media="screen and (min-width: 1024px)" href="css/desktop/planCostumer.css">
 	<link rel="stylesheet" type="text/css" href="css/planCostumer.css">
 </head>
 	<body onload=" showLoadingScreen(); onload()">
@@ -15,14 +18,14 @@
 		  <a id="telefoonBedrijf"></a>
 		  <a id="adresBedrijf"></a>
 		</div>
-		<span id="openContactBar" onclick="openNav()">☰ Contact</span>
 		<div class="topBar">
+			<span id="openContactBar" onclick="openNav()">☰</span>
 			<span id="bedrijfsnaam">Bedrijf</span>
 		</div>
 			
 		<div class="inplanDiv">				
-			<!-- overzicht inplannen -->
 			<form class="inplannenForm" id="inplannenForm">
+				<h2 class="topBar">Afspraak inplannen</h2>
 				<div class="behandelingenOverzicht">
 					<h4>Behandelingen</h4>
 					<div id="inplanBehandelingenForm"></div>
@@ -37,10 +40,8 @@
 						</div>
 					</div>
 				</div>
-				
 				<div id="datumInplanFormDiv">
 				</div>
-				
 				<div id="klantInfo">
 					<h3>klant</h3>
 					<div id="klantGeslacht">
@@ -82,9 +83,6 @@
 							<input type="text" name="klantAdres">	
 						</div>
 					</div>
-
-
-
 					<input type="button" id="submitInplanFormButton" class="defaultButton" value="Inplannen">
 				</div>
 			</form>
@@ -92,14 +90,30 @@
 			<!-- eerste scherm -->
 			<div id="inplannenGeslacht" class="inplannenRechts">
 				<div class="topbarGeslacht">
-					<input type="button" id="geslachtMan" class="geslachtButton" value="Man">
-					<input type="button" id="geslachtVrouw" class="geslachtButton" value="Vrouw">
-					<input type="button" id="geslachtJongen" class="geslachtButton" value="Meisje">
-					<input type="button" id="geslachtMeisje" class="geslachtButton" value="Jongen">
-					<input type="button" class="defaultButton"  id="volgendeInplannen" value="Volgende"/>
+					<div class="navigatieInplannen">
+						<span class="behandelingInfo left">
+							<span>Lengte:
+								<span class="afspraakBlokWaarde" id="lengteAfspraakForm">
+									0:00
+								</span>
+							</span><br>
+							<span>Prijs: 
+								<span id="prijsAfspraakForm">
+									0.00
+								</span>
+							</span>
+						</span>
+						<input type="button" class="navigatieButton right"  id="volgendeInplannen" value="Volgende"/>
+					</div>
+					<div class="geslachtKeuzeDiv">
+						<input type="button" id="geslachtMan" class="geslachtButton" value="Man">
+						<input type="button" id="geslachtVrouw" class="geslachtButton" value="Vrouw">
+						<input type="button" id="geslachtJongen" class="geslachtButton" value="Meisje">
+						<input type="button" id="geslachtMeisje" class="geslachtButton" value="Jongen">
+					</div>
 				</div>
-
 				<div id="behandelingenKeuzeLijst">
+					<a>Kies voor wie u een afspraak wilt maken.</a>
 					<!-- De behandelingen waar uit gekozen kan worden -->
 				</div>
 			</div>
@@ -107,11 +121,13 @@
 			<!-- tweede scherm -->
 			<div id="inplannenDatum" class="inplannenRechts">
 				<div class="navigatieTijdslotKiezenKiezen">
-					<input type="button" class="defaultButton"  id="terugInplannen" value="Terug"/>
-					
-					<input type="button" class="defaultButton" id="weekTerugInplannen" value="Week terug">
-								
-					<input type="button" id="weekVerderInplannen" class="defaultButton" value="Week verder">
+					<div class="navigatieInplannen">
+						<input type="button" class="navigatieButton links"  id="terugInplannen" value="Terug"/>
+					</div>
+					<div class="navigatieInplannen">
+						<input type="button" class="defaultButton links" id="weekTerugInplannen" value="Week terug">			
+						<input type="button" class="defaultButton right" id="weekVerderInplannen" value="Week verder">			
+					</div>
 				</div>
 				<div id="dagenLijst">
 				
@@ -120,11 +136,13 @@
 			
 			<!-- tijd inplannen -->
 			<div id="inplannenTijd" class="inplannenRechts">
+				<div class="navigatieInplannen">
+					<input type="button" class="navigatieButton links" id="terugDag" value="< Terug">	
+					<input type="button" class="navigatieButton rechts"  id="volgendeKlantInfo" value="Volgende"/>
+				</div>
 				<div class="stelTijdInTextdiv">
-					<input type="button" class="defaultButton" id="terugDag" value="< Terug">	
-				
 					<span id="stelTijdInText">
-						<img width="150px" height="150px" src="https://www.stickpng.com/assets/images/580b57fcd9996e24bc43c44f.png"><br>
+						<img id="tijdAfbeelding" width="150px" height="150px" src="https://www.stickpng.com/assets/images/580b57fcd9996e24bc43c44f.png"><br>
 						<a>Sleep de afspraak naar de gewenste tijd.</a>
 					</span>						
 	
