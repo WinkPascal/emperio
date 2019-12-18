@@ -1,6 +1,6 @@
 package com.swinkels.emperio.objects;
 
-import java.util.ArrayList;
+import java.util.ArrayList;  
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,10 +17,16 @@ import com.swinkels.emperio.providers.EmailDao;
 import com.swinkels.emperio.providers.EmailDaoImpl;
 import com.swinkels.emperio.providers.KlantDao;
 import com.swinkels.emperio.providers.KlantDaoImpl;
-import com.swinkels.emperio.support.Adapter;
 import com.swinkels.emperio.support.JavascriptDateAdapter;
 
 public class Bedrijf {
+	EmailDao emailDao = new EmailDaoImpl();
+	AfspraakDao afspraakDao = new AfspraakDaoImpl();
+	BehandelingDao behandelingDao = new BehandelingDaoImpl();
+	BedrijfDao bedrijfDao = new BedrijfDaoImpl();
+	KlantDao klantDao = new KlantDaoImpl();
+	DagDao dagDao = new DagDaoImpl();
+	
 	private ArrayList<Dag> dagen = new ArrayList<Dag>();
 	private ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 	private ArrayList<Klant> klanten = new ArrayList<Klant>();
@@ -36,14 +42,16 @@ public class Bedrijf {
 	private String postcode;
 	private String adres;
 	private String wachtwoord;
-	
-	private Double hoeveelheidInkomsten;
-	private int hoeveelheidAfspraken;
 
 	public ArrayList<Email> getEmails() {
 		return emails;
 	}
 
+	public ArrayList<Klant> getKlantenByRequest(int page, String sort, String search) {
+		klantDao.getKlanten(this, page, sort, search);
+		return null;
+	}
+	
 	public void setEmails(ArrayList<Email> emails) {
 		this.emails = emails;
 	}
@@ -84,41 +92,10 @@ public class Bedrijf {
 		return errors;
 	}
 	
-	public void getEmailsByRequest(String request, int page) {
-		EmailDao dao = new EmailDaoImpl();
-		dao.getEmailsByRequest(request, page);
-	}
-	
-	public void getHoeveelheden(Date date) {
-		AfspraakDao afspraakDao = new AfspraakDaoImpl();
-		afspraakDao.getInkomsten(this, date);
-	}
-	
-	public Double getHoeveelheidInkomsten() {
-		return hoeveelheidInkomsten;
+	public ArrayList<Email> getEmailsByRequest(int hoeveelheid) {
+		return emailDao.getEmails(this, hoeveelheid);
 	}
 
-	public void getAantalAfsprakenPerDag(Date date) {
-		AfspraakDao afspraakDao = new AfspraakDaoImpl();
-		afspraakDao.getAantalAfsprakenPerDag(this, date);
-	}
-	
-	public void getTop5Behandelingen(Date date) {
-		BehandelingDao behandelingDao = new BehandelingDaoImpl();
-		behandelingDao.getTop5Behandelingen(this, date);
-	}
-	
-	public void setHoeveelheidInkomsten(Double hoeveelheidInkomsten) {
-		this.hoeveelheidInkomsten = hoeveelheidInkomsten;
-	}
-
-	public int getHoeveelheidAfspraken() {
-		return hoeveelheidAfspraken;
-	}
-
-	public void setHoeveelheidAfspraken(int hoeveelheidAfspraken) {
-		this.hoeveelheidAfspraken = hoeveelheidAfspraken;
-	}
 
 	public Date getVroegsteOpeningsTijd() {
 		Date vroegsteOpeningsTijd = JavascriptDateAdapter.StringToDate("23:59", "HH:mm");
@@ -149,7 +126,6 @@ public class Bedrijf {
 	}
 	
 	public boolean save() {
-		BedrijfDao bedrijfDao = new BedrijfDaoImpl();
 		if (bedrijfDao.save(this)) {
 			return true;
 		} else {
@@ -157,51 +133,42 @@ public class Bedrijf {
 		}
 	}
 	public void zoekKlant(String request) {
-		KlantDao klantDao = new KlantDaoImpl();
 		klantDao.zoekKlant(this, request);
 	}
 
 	public void zoekBehandelingen(int pageNumber, String geslacht, String sort) {
-		BehandelingDao behandelingDao = new BehandelingDaoImpl();
 		behandelingDao.getBehandelingen(this, pageNumber, geslacht, sort);
 	}
 	
 	public ArrayList<Klant> getKlantenWithByPage(int pageNumber) {
-		KlantDao klantDao = new KlantDaoImpl();
 		int top = pageNumber * 20;
 		int low = top - 20;
 		return klantDao.getKlantenWithLimit(this, low, top);
 	}
 
 	public void retrieveBehandelingen() {
-		BehandelingDao behandelingDao = new BehandelingDaoImpl();
 		this.behandelingen =  behandelingDao.getAllBehandelingen(this);
 	}
 
 	public void saveDagen() {
-		DagDao dagDao = new DagDaoImpl();
 		for (Dag dag : dagen) {
 			dagDao.saveDag(dag);
 		}
 	}
 	
 	public void retrieveDagen() {
-		DagDao dagDao = new DagDaoImpl();
 		dagDao.getWeekRooster(this);		
 	}
 	
 	public void getKlantPaginaSettings(){
-		BedrijfDao bedrijfDao = new BedrijfDaoImpl();
 		bedrijfDao.getKlantPaginaSettings(this);
 	}
 
 	public void retrieveBehandelingenByGeslacht(String geslacht) {
-		BehandelingDao behandelingDao = new BehandelingDaoImpl();
 		behandelingDao.behandelingenByGeslacht(geslacht, this);
 	}
 	
 	public void getOpeningsTijden(Date vandaag) {
-		DagDao dagDao = new DagDaoImpl();
 		dagDao.getOpeningsTijden(this, vandaag);
 	}
 	
@@ -232,7 +199,6 @@ public class Bedrijf {
 	}
 
 	public void addDag(Dag dag) {
-		System.out.println(dag);
 		this.dagen.add(dag);
 	}
 
@@ -253,7 +219,6 @@ public class Bedrijf {
 	}
 	
 	public void addBehandeling(Behandeling behandeling) {
-		System.out.println(behandeling.getId());
 		this.behandelingen.add(behandeling);
 	}
 
@@ -319,7 +284,4 @@ public class Bedrijf {
 	public String getEmail() {
 		return email;
 	}
-
-
-
 }

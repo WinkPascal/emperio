@@ -53,6 +53,16 @@ public class Dag {
 			this.sluitingsTijd = sluitingsTijd;
 		}
 	}
+	public Dag(int dagNummer, Date openingsTijdDate, Date sluitingsTijdDate) {
+		this.openingsTijd = openingsTijdDate;
+		this.sluitingsTijd = sluitingsTijdDate;
+		this.dag = dagNummer; 
+	}
+	
+	public Dag(int dagNummer, int aantalAfspraken) {
+		this.dag = dagNummer;
+		this.aantalAfspraken = aantalAfspraken;
+	}
 
 	public Date getDatum() {
 		return datum;
@@ -73,17 +83,6 @@ public class Dag {
 	public void getAfsprakenBetweenDates(Date vandaag, Date morgen) {
 		AfspraakDao afspraakDao = new AfspraakDaoImpl();
 		afspraakDao.getAfsprakenBetweenDates(this, vandaag, morgen, bedrijf);
-	}
-	
-	public Dag(int dagNummer, Date openingsTijdDate, Date sluitingsTijdDate) {
-		this.openingsTijd = openingsTijdDate;
-		this.sluitingsTijd = sluitingsTijdDate;
-		this.dag = dagNummer; 
-	}
-	
-	public Dag(int dagNummer, int aantalAfspraken) {
-		this.dag = dagNummer;
-		this.aantalAfspraken = aantalAfspraken;
 	}
 
 	public int getAantalAfspraken() {

@@ -33,9 +33,11 @@
 
 #topImg {
 	width: 100%;
+	margin-top: 40px;
 	text-align: center;
-	background-color: #78A8FC;
-	height: 600px;
+	background-color: #20123a;
+	height: 500px;
+	font-family:Metropolis,Inter,X-LocaleSpecific,sans-serif;
 }
 
 #topImg #image {
@@ -65,7 +67,6 @@
 	width: 80%;
 	max-width: 1400px;
 	margin: 0 auto;
-
 }
 
 .verkoopPuntHolder #verkoopPunten .verkoopPunt {
@@ -149,7 +150,7 @@
 .prijzen .columns {
 	width: 30%;
 	padding: 1.5%;
-	float:left;
+	float: left;
 }
 
 .prijzen .columns .price {
@@ -190,4 +191,26 @@
 	text-align: center;
 	text-decoration: none;
 	font-size: 18px;
+}
+
+.contactForm-content {
+	width: 500px;
+	height: 600px;
+	margin: auto;
+	border-radius: 10px;
+	text-align: center;
+	background-color: white;
+}
+
+.contactForm-content .invoer {
+	width: 80%;
+	margin-left: 10%;
+}
+
+.contactForm-content textarea {
+	height: 200px;
+	width: 80%;
+	margin-left: 10%;
+	resize: none;
+	border: 1px solid blue;
 }

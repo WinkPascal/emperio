@@ -2,12 +2,15 @@ package com.swinkels.emperio.providers;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Klant;
+import com.swinkels.emperio.objects.Statestieken;
 
 public interface AfspraakDao {
 
@@ -21,7 +24,7 @@ public interface AfspraakDao {
 
 	public ArrayList<Afspraak> getAfsprakenWeek(Bedrijf bedrijf, Date date);
 
-	public void getInkomsten(Bedrijf bedrijf, Date vanDate);
+	public void getInkomsten(Statestieken bedrijf, Date vanDate);
 
 	public void getAantalAfsprakenPerDag(Bedrijf bedrijf, Date endDate);
 
@@ -36,4 +39,12 @@ public interface AfspraakDao {
 	public ArrayList<Behandeling> getBehandelingen(Afspraak afspraak);
 
 	public boolean deleteAfspraak(Afspraak afspraak);
-}
+
+	public HashMap<String, String> getGeslachtenVanAfspraken(Statestieken bedrijf,Date date);
+
+	public List<Double> getPrijzenVanAfspraak(Statestieken statestieken, Date date);
+
+	public List<Date> getLengtesVanAfspraak(Statestieken statestieken, Date date);
+
+	public HashMap<Date, Double> getInkomstenForStatistics(Statestieken statestieken, Date date);
+	}

@@ -1,14 +1,24 @@
-
-
 .klant-content {
 	width: 900px;
 	margin: auto;
 	height: 400px;
-	background-color: orange;
+	border: 1px solid blue;
+	background-color: white;
+	position: relative;
+}
+
+.klant-content .defaultButton {
+	bottom: 5px;
+	left: 20px;
+	position: absolute;
+	margin: 10px;
+}
+
+#emailKlant{
+	left: 200px;
 }
 
 .klant-content .klantInfo {
-	border: 1px solid black;
 	float: left;
 	width: 50%;
 	top: 0px;
@@ -22,12 +32,10 @@
 	font-size: 20px;
 }
 
-
 .klant-content #afsprakenLijst {
 	top: 0px;
 	width: 49%;
 	height: 100%;
-	border: 1px solid black;
 	overflow: scroll;
 	float: right;
 }

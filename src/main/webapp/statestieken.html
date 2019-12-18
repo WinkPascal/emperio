@@ -2,8 +2,16 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
 	<title>Inkomsten overzicht</title>
-	<link rel="stylesheet" type="text/css" href="css/statestieken.css">
+	
+	<link href="https://fonts.googleapis.com/css?family=Lora:400,700|Montserrat:300" rel="stylesheet">
+	
+	<link rel="stylesheet" media="screen and (max-width: 800px)" href="css/smartphone/statestieken.css">
+	<link rel="stylesheet" media="screen and (min-width: 800px) and (max-width: 1400px)" href="css/tablet/statestieken.css">
+	<link rel="stylesheet" media="screen and (min-width: 1400px)" href="css/desktop/statestieken.css">
+
 	<link rel="stylesheet" type="text/css" href="css/home.css">
 	<link rel="stylesheet" type="text/css" href="css/global.css">
 </head>
@@ -13,17 +21,14 @@
 		<a>Inkomsten</a>
 		<input type="button" value="Uitloggen" class="defaultButton" id="logoutButton">
 	</span>
-	<div class="topRow">
-		
-		<div id="behandelingenChart"></div>
 
-		<div class="timeSelect">
-			<input class="defaultButton" type="button" value="Deze week" id="weekButton"> <br>
-			<input class="defaultButton" type="button" value="Deze maand" id="maandButton"><br>
-			<input class="defaultButton" type="button" value="Dit jaar" id="jaarButton"> <br>
-			<input class="defaultButton" type="button" value="Altijd" id="altijdButton"><br>
-		</div>
-
+	<div class="timeSelect">
+		<input class="defaultButton" type="button" value="Deze week" id="weekButton"> 
+		<input class="defaultButton" type="button" value="Deze maand" id="maandButton">
+		<input class="defaultButton" type="button" value="Dit jaar" id="jaarButton"> 
+		<input class="defaultButton" type="button" value="Altijd" id="altijdButton">
+	</div>
+	<div class="links">
 		<div class="getallenDiv">
 			<div class="infoBlok">
 				Aantal afspraken: <span id="aantalAfspraken"></span>
@@ -32,11 +37,17 @@
 				Hoeveelheid inkomsten: €<span id="inkomsten"></span>
 			</div>
 		</div>
+		<div class="pieCharts">
+			<div class="chart" id="behandelingenChart"></div>
+			<div class="chart" id="geslachtenChart"></div>
+			<div class="chart" id="LengteChart"></div>
+			<div class="chart" id="uitgaveChart"></div>
+		</div>
 	</div>
 
 	<div class="grafieken">
-		<div class="grafiek" id="columnchart_values"></div>
-		<div class="lijnGrafiek" id="chart_div"></div>
+		<div class="inkomstenGrafiek" id="chart_div"></div>
+		<div class="afsprakenGrafiek" id="columnchart_values"></div>
 	</div>
 
 	<canvas id="myChart" width="400" height="400"></canvas>

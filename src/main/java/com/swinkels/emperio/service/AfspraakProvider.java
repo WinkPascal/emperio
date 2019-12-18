@@ -1,8 +1,6 @@
 package com.swinkels.emperio.service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.annotation.security.RolesAllowed;
@@ -19,20 +17,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import com.swinkels.emperio.objects.Afspraak;
+import com.swinkels.emperio.objects.AfspraakBuilder;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.DagBuilder;
-import com.swinkels.emperio.providers.AfspraakBehandelingDao;
-import com.swinkels.emperio.providers.AfspraakBehandelingDaoImpl;
-import com.swinkels.emperio.providers.AfspraakDao;
-import com.swinkels.emperio.providers.AfspraakDaoImpl;
-import com.swinkels.emperio.providers.BedrijfDao;
-import com.swinkels.emperio.providers.BedrijfDaoImpl;
-import com.swinkels.emperio.providers.BehandelingDao;
-import com.swinkels.emperio.providers.BehandelingDaoImpl;
-import com.swinkels.emperio.providers.KlantDao;
-import com.swinkels.emperio.providers.KlantDaoImpl;
 import com.swinkels.emperio.support.Adapter;
 import com.swinkels.emperio.support.JavascriptDateAdapter;
 
@@ -81,8 +70,6 @@ public class AfspraakProvider {
 	public String getWeekRooster(@Context SecurityContext sc) {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
 		bedrijf.retrieveDagen();
-		System.out.println("dagem");
-		System.out.println(bedrijf.getDagen().size());
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		JsonObjectBuilder job = Json.createObjectBuilder();
 		job.add("vroegsteOpeningsTijd", JavascriptDateAdapter.DateToString(bedrijf.getVroegsteOpeningsTijd(), "HH:mm"));
@@ -147,7 +134,7 @@ public class AfspraakProvider {
 	public String getAfspraak(@Context SecurityContext sc, @PathParam("id") int afspraakId) {
 		JsonObjectBuilder job = Json.createObjectBuilder();
 		
-		Afspraak afspraak = new Afspraak();
+		Afspraak afspraak = new AfspraakBuilder().make();
 		afspraak.setId(afspraakId);
 		afspraak.retrieveBehandelingen();
 		afspraak.retrieveKlant();
@@ -181,9 +168,9 @@ public class AfspraakProvider {
 	@Path("/deleteafspraak/{id}")
 	@Produces("application/json")
 	public Response deleteAfspraak(@PathParam("id") int afspraakId) {
-		System.out.println("delete from "+afspraakId);
-		Afspraak afspraak = new Afspraak();
-		afspraak.setId(afspraakId);
+		Afspraak afspraak = new AfspraakBuilder()
+				.setId(afspraakId)
+				.make();
 		if(afspraak.delete()) {
 			return Response.ok().build();			
 		} else {

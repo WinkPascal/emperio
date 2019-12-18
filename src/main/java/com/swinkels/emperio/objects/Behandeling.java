@@ -22,68 +22,23 @@ public class Behandeling {
 	private Double inkomsten;
 	private int count;
 
+	public Behandeling(Bedrijf bedrijf, int id, String naam, double prijs, String beschrijving, Date lengte,
+			String geslacht, int afspraken, Double inkomsten, int count) {
+		this.bedrijf = bedrijf;
+		this.id = id;
+		this.naam = naam;
+		this.prijs = prijs;
+		this.beschrijving = beschrijving;
+		this.lengte = lengte;
+		this.geslacht = geslacht;
+		this.afspraken = afspraken;
+		this.inkomsten = inkomsten;
+		this.count = count;
+	}
+
 	public ArrayList<String> validate() {
 		ArrayList<String> errors = new ArrayList<String>();
 		return errors;
-	}
-
-	//
-	// builder
-	//
-	public Behandeling(Bedrijf bedrijf, int id, String naam, double prijs, String beschrijving, Date lengte,
-			String geslacht) {
-		super();
-		this.bedrijf = bedrijf;
-		this.id = id;
-		this.naam = naam;
-		this.prijs = prijs;
-		this.beschrijving = beschrijving;
-		this.lengte = lengte;
-		this.geslacht = geslacht;
-	}
-	//
-	//
-	//
-
-	public Behandeling(String behandelingsNaam) {
-		this.naam = behandelingsNaam;
-	}
-
-	public Behandeling(int id, String behandelingsNaam, String beschrijving, Date lengte, double prijs,
-			String geslacht) {
-		this.id = id;
-		this.naam = behandelingsNaam;
-		this.beschrijving = beschrijving;
-		this.lengte = lengte;
-		this.prijs = prijs;
-		this.geslacht = geslacht;
-	}
-
-	public Behandeling(String naam, Date lengte, double prijs) {
-		this.naam = naam;
-		this.lengte = lengte;
-		this.prijs = prijs;
-	}
-
-	public Behandeling(int id, String naam, Date lengte) {
-		this.naam = naam;
-		this.lengte = lengte;
-		this.id = id;
-	}
-
-	public Behandeling(Bedrijf bedrijf, String naam, String beschrijving, double prijs, Date lengte, String geslacht) {
-		this.bedrijf = bedrijf;
-		this.naam = naam;
-		this.beschrijving = beschrijving;
-		this.prijs = prijs;
-		this.lengte = lengte;
-		this.geslacht = geslacht;
-	}
-
-	public Behandeling(int id, String naam, int count) {
-		this.id = id;
-		this.naam = naam;
-		this.count = count;
 	}
 
 	public int getAfspraken() {

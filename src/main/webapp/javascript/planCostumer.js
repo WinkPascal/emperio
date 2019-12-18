@@ -1,4 +1,10 @@
-function onload() {
+var geslacht;
+let behandelingenLijstFinal = [];
+var prijs = 0;
+var tijd = "00:00";
+
+function onload() {	
+	navigatie();
 	var url = window.location.href.split("?")[1];;
 	fetch("restservices/klantenPlanProvider/getBedrijfDataStart/" + url)
 		.then(response => response.json())
@@ -28,6 +34,57 @@ function closeNav() {
 	document.getElementById("main").style.marginLeft = "0";
 }
 
+function navigatie(){
+	var pagina = "behandelingen";
+	
+	document.getElementById("volgendeInplannen").addEventListener("click", function () {
+		switch(pagina){
+		case "behandelingen":
+			if(behandelingenLijstFinal < 1){
+				errorMessage("kies eerste een behandeling om verder te gaan!");
+			} else{
+				datumNaviagtie();
+				document.getElementById("inplannenDatum").style.display = "block";
+				document.getElementById("inplannenGeslacht").style.display = "none";
+				document.getElementById("behandelingenKeuzeLijst").style.display = "none";
+				pagina = "datum";
+			}
+			break;
+		case "datum":
+			errorMessage("kies een datum om verder te gaan!");
+			break;
+		case "tijd":
+			
+			break;
+		}
+	})
+
+	document.getElementById("terugInplannen").addEventListener("click", function () {
+		switch(pagina){
+		case "behandelingen":
+			errorMessage("U kan niet verder terug gaan!");
+			break;
+		case "datum":
+			document.getElementById("inplannenDatum").style.display = "none";
+			document.getElementById("inplannenGeslacht").style.display = "block";
+			document.getElementById("behandelingenKeuzeLijst").style.display = "block";
+			pagina = "behandelingen";
+			break;
+		case "tijd":
+			document.getElementById("inplannenDatum").style.display = "block";
+			document.getElementById("inplannenGeslacht").style.display = "none";
+			document.getElementById("behandelingenKeuzeLijst").style.display = "none";
+			pagina = "datum";
+			break;
+
+		}
+		document.getElementById("inplannenDatum").style.display = "none";
+		document.getElementById("inplannenGeslacht").style.display = "block";
+		document.getElementById("behandelingenKeuzeLijst").style.display = "block";
+	})
+}
+
+
 // de eerste functie die word aangeroepen om eet geslacht te kiezen
 function inplannenGeslachtKiezen() {
 	document.getElementById("inplannenGeslacht").style.display="block";
@@ -42,10 +99,6 @@ function inplannenGeslachtKiezen() {
 	})
 	document.getElementById("geslachtMeisje").addEventListener("click", function () {
 		geslachtKnopKleurManager("meisje");
-	})
-
-	document.getElementById("volgendeInplannen").addEventListener("click", function () {
-		errorMessage("selecteer eerst een geslacht en daarna een behandeling.");
 	})
 }
 function geslachtKnopKleurManager(geslacht) {
@@ -69,16 +122,11 @@ function geslachtKnopKleurManager(geslacht) {
 	document.getElementById("inplanBehandelingenForm").innerHTML = "";
 	document.getElementById("lengteAfspraakForm").innerHTML = "0:00";
 	document.getElementById("prijsAfspraakForm").innerHTML = "0.00";
-	document.getElementById("inplanFormGeslacht").innerHTML = geslacht;
 	document.getElementById("behandelingenKeuzeLijst").innerHTML = "";
 }
 
 //de behandelingen voor het gekozen geslacht worden opgehaalt
 function behandelingenOphalen(geslacht) {
-	var prijs = 0;
-	var tijd = "00:00";
-	let behandelingenLijstFinal = [];
-
 	var url = window.location.href.split("?")[1];;
 	url = url + "&geslacht=" + geslacht;
 	fetch("restservices/klantenPlanProvider/getBehandelingenByGeslacht/" + url)
@@ -114,33 +162,23 @@ function behandelingenOphalen(geslacht) {
 			})
 		}
 	})
-	var i = 0;
-	document.getElementById("volgendeInplannen").addEventListener("click", function () {
-		if (behandelingenLijstFinal.length > 0) {
-			// het geslacht en behandeling is ingevuld
-			document.getElementById("inplannenDatum").style.display = "block";
-			document.getElementById("inplannenGeslacht").style.display = "none";
-			document.getElementById("behandelingenKeuzeLijst").style.display = "none";
-			if(i == 0){
-				i ++;
-				var datum =new Date();
-				datumOphalen(geslacht, behandelingenLijstFinal, tijd, datum);
 
-				var weekMiliSeconden = 7 * 24 * 60 * 60 * 1000;
-				document.getElementById("weekVerderInplannen").addEventListener("click", function(){
-					datum.setTime(datum.getTime() + weekMiliSeconden);
-					datumOphalen(geslacht, behandelingenLijstFinal, tijd, datum);			
-				});
-				
-				document.getElementById("weekTerugInplannen").addEventListener("click", function(){
-					datum.setTime(datum.getTime() - weekMiliSeconden);
-					datumOphalen(geslacht, behandelingenLijstFinal, tijd, datum);			
-				});
-			}
-		} else {
-			errorMessage("selecteer eerst een behandeling");
-		}
-	})
+}
+
+function datumNaviagtie(){
+	var datum = new Date();
+	datumOphalen(geslacht, behandelingenLijstFinal, tijd, datum);
+
+	var weekMiliSeconden = 7 * 24 * 60 * 60 * 1000;
+	document.getElementById("weekVerderInplannen").addEventListener("click", function(){
+		datum.setTime(datum.getTime() + weekMiliSeconden);
+		datumOphalen(geslacht, behandelingenLijstFinal, tijd, datum);			
+	});
+	
+	document.getElementById("weekTerugInplannen").addEventListener("click", function(){
+		datum.setTime(datum.getTime() - weekMiliSeconden);
+		datumOphalen(geslacht, behandelingenLijstFinal, tijd, datum);			
+	});		
 }
 
 function pasTijdAan(tijd, lengte, functie){
@@ -182,8 +220,8 @@ function createBehandelingDiv(behandeling){
 
 	behandelingsNaam.innerHTML = behandeling.naam;
 	behandelingsBeschrijving.innerHTML = behandeling.beschrijving;
-	behandelingsLengte.innerHTML = behandeling.lengte;
-	behandelingsPrijs.innerHTML = behandeling.prijs;
+	behandelingsLengte.innerHTML = "geschatte lengte: "+behandeling.lengte;
+	behandelingsPrijs.innerHTML = "€"+behandeling.prijs;
 
 	behandelingsNaam.setAttribute('class', 'naamBehandelingKeuze');
 	behandelingsBeschrijving.setAttribute('class', 'beschrijvingBehandelingKeuze');
@@ -191,8 +229,8 @@ function createBehandelingDiv(behandeling){
 	behandelingsPrijs.setAttribute('class', 'prijsBehandelingKeuze');
 
 	behandelingsDiv.appendChild(behandelingsNaam);
-	behandelingsDiv.appendChild(behandelingsBeschrijving);
 	behandelingsDiv.appendChild(behandelingsLengte);
+	behandelingsDiv.appendChild(behandelingsBeschrijving);
 	behandelingsDiv.appendChild(behandelingsPrijs);
 	return behandelingsDiv;
 }
@@ -234,20 +272,9 @@ function datumOphalen(geslacht, behandelingenLijstFinal, tijd, datum) {
 				}
 			}
 		})
-
-	document.getElementById("terugInplannen").addEventListener("click", function () {
-		// het geslacht en behandeling is ingevuld
-		document.getElementById("inplannenDatum").style.display = "none";
-		document.getElementById("inplannenGeslacht").style.display = "block";
-		document.getElementById("behandelingenKeuzeLijst").style.display = "block";
-	})
-
 }
+
 function createDag(dagNummer, datum){  
-	// if(datum <= new Date){
-	// 	console.log(dagNummer ="== "+datum +" < "+ new Date);
-	// 	return null;
-	// } else{
 		var dagSpan = document.createElement('span');
 		dagSpan.setAttribute('class', 'dagKiezen');
 		dagSpan.setAttribute('id', "dagKeuze" + dagNummer);
@@ -267,8 +294,8 @@ function createDag(dagNummer, datum){
 			dagSpan.appendChild(dagDatum);
 		}
 		return dagSpan;
-//	}
 }
+
 function getDagNaam(dagNummer){
 	var dagNamen = [
 		"Maandag", "Dinsdag",
@@ -301,13 +328,7 @@ function formatDate(date) {
 
 function dagOphalen(geslacht, behandelingenLijstFinal, dagNummer, datum, tijd) {
 	document.getElementById("dagKeuze" + dagNummer).addEventListener("click", function () {
-		document.getElementById("terugDag").addEventListener("click", function () {
-			document.getElementById("inplannenDatum").style.display = "block";
-			document.getElementById("inplannenTijd").style.display = "none";
 
-			document.getElementById("datumInplanFormDiv").innerHTML = "";
-			datumOphalen(geslacht, behandelingenLijstFinal, tijd, datum);
-		})
 		document.getElementById("inplannenDatum").style.display = "none";
 		document.getElementById("inplannenTijd").style.display = "block";
  		var dagMiliSeconden = 24 * 60 * 60 * 1000;
@@ -491,11 +512,6 @@ function createDraggable(tijd) {
 			}
 		})
 }
-
-document.getElementById("volgendeKlantInfo").addEventListener("click", function () {
-	document.getElementById("inplannenForm").style.display="block";
-	document.getElementById("inplannenTijd").style.display="none";
-})
 
 function inplannen(geslacht, behandelingenLijstFinal, datum) {
 	var formData = new FormData(document.getElementById("inplannenForm"));

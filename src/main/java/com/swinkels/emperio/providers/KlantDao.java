@@ -7,6 +7,8 @@ import com.swinkels.emperio.objects.Klant;
 
 public interface KlantDao {
 
+	public void getKlanten(Bedrijf bedrijf, int page, String sort, String klantRequest);
+
 	public ArrayList<Klant> getKlantenWithLimit(Bedrijf bedrijf, int low, int top);
 
 	public boolean setKlant(Klant klant);

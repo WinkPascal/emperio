@@ -2,7 +2,6 @@ package com.swinkels.emperio.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.json.Json;
@@ -20,13 +19,12 @@ import javax.ws.rs.core.SecurityContext;
 import org.json.JSONArray;
 
 import com.swinkels.emperio.objects.Bedrijf;
-import com.swinkels.emperio.objects.Instellingen;
 import com.swinkels.emperio.objects.Behandeling;
+import com.swinkels.emperio.objects.BehandelingBuilder;
 import com.swinkels.emperio.objects.ContactPersoon;
 import com.swinkels.emperio.objects.Dag;
-import com.swinkels.emperio.support.Adapter;
+import com.swinkels.emperio.objects.Instellingen;
 import com.swinkels.emperio.support.JavascriptDateAdapter;
-import com.swinkels.emperio.support.Validator;
 
 @Path("/setup")
 public class SetupProvider {
@@ -94,8 +92,14 @@ public class SetupProvider {
 		
 		JSONArray jsonArray = new JSONArray(geslachten);
 		for (int i = 0; i < jsonArray.length(); i++) {
-			Behandeling behandeling = new Behandeling(bedrijf, naam, beschrijving, prijs, lengte,
-					jsonArray.get(i).toString());
+			Behandeling behandeling = new BehandelingBuilder()
+					.setBedrijf(bedrijf)
+					.setNaam(naam)
+					.setBeschrijving(beschrijving)
+					.setPrijs(prijs)
+					.setLengte(lengte)
+					.setGeslacht(jsonArray.get(i).toString())
+					.make();
 			behandeling.save();
 		}
 		return Response.ok().build();

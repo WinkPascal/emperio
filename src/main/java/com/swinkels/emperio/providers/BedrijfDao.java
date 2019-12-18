@@ -12,8 +12,6 @@ public interface BedrijfDao {
 
 	public boolean setProduct(Product product);
 	
-	public ArrayList<Bedrijf> getBedrijven(int page);
-
 	public boolean save(Bedrijf bedrijf);
 
 	public boolean setInvoerKlant(Bedrijf bedrijf, String contact, boolean telefoon, boolean email, boolean adres);

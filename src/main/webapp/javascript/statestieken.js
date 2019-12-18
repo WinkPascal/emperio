@@ -2,7 +2,6 @@
 google.charts.load('current', {'packages':['corechart']});
 function onload(){
 	getData("week");
-	createAfsprakLineGraph();
 }
 
 document.getElementById("weekButton").addEventListener("click", function(){
@@ -18,7 +17,30 @@ document.getElementById("altijdButton").addEventListener("click", function(){
 	getData("altijd");
 });
 
+function buttonColorManager(lengte){
+	document.getElementById("weekButton").className="defaultButton";
+	document.getElementById("maandButton").className="defaultButton";
+	document.getElementById("jaarButton").className="defaultButton";
+	document.getElementById("altijdButton").className="defaultButton";
+	console.log(lengte);
+	switch(lengte){
+	case "week":
+		document.getElementById("weekButton").className ="defaultButtonSelected";
+		break;
+	case "maand":
+		document.getElementById("maandButton").className = "defaultButtonSelected";
+		break;
+	case "jaar":
+		document.getElementById("jaarButton").className="defaultButtonSelected";
+		break;
+	case "altijd":
+		document.getElementById("altijdButton").className="defaultButtonSelected";
+		break;
+	}	
+}
+
 function getData(lengte){
+	buttonColorManager(lengte);
 	var fetchoptions = {
 			headers: {
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
@@ -26,33 +48,27 @@ function getData(lengte){
 		}
 	fetch("restservices/statistics/getData/"+lengte, fetchoptions)
 	.then(response => response.json())
-	.then(function(dataArrays){
+	.then(function(data){
 		var i= 1;
-		for(let dataArray of dataArrays){
-			if(i == 1){
-				// aantal afspraken en inkomsten
-				inkomstenAndAfspraken(dataArray.afspraken, dataArray.inkomsten);
-				i++;
-			} else if(i ==2){
-				maakBehandelingenOverzicht(dataArray);	
-			 	i++;
-			}
-			else if(i == 3){
-				maakAfsprakenGrafiek(dataArray);
-				i++;
-			} else if(i == 4){
-				createAfsprakLineGraph();
-				i++;
-			}
-		}
+		getallenHandler(data.getallen);
+	
+		maakBehandelingenOverzicht(data.behandelingen);
+		maakGeslachtenOverzicht(data.geslachten);
+		maakLengteOverzicht(data.lengtes);
+		maakUitgaveOverzicht(data.uitgave);
+
+		maakAfsprakenGrafiek(data.afsprakenPerDag);
 		createAfsprakLineGraph();
 	})
 }
 
-function inkomstenAndAfspraken(afspraken, inkomsten){
-	document.getElementById("aantalAfspraken").innerHTML = afspraken;
-	document.getElementById("inkomsten").innerHTML = inkomsten;
+function getallenHandler(data){
+	document.getElementById("aantalAfspraken").innerHTML = data.afspraken;
+	document.getElementById("inkomsten").innerHTML = data.inkomsten;
 }
+//==========================================================================
+//==========================================================================
+//==========================================================================
 
 function maakBehandelingenOverzicht(dataArray){ 
 	var behandelingen = [];
@@ -69,18 +85,126 @@ function maakBehandelingenOverzicht(dataArray){
 		behandelingen.push(behandelingInfo);
 	}
 	
-	google.charts.setOnLoadCallback(drawPieChart(behandelingen));
+	google.charts.setOnLoadCallback(drawPieChartBehandelingen(behandelingen));
 }
-
-function drawPieChart(behandelingen) {
+function drawPieChartBehandelingen(behandelingen) {
 	var data = google.visualization.arrayToDataTable(behandelingen);
-
-	// Optional; add a title and set the width and height of the chart
 	var options = { 'title': 'Behandelingen', 'width': 550, 'height': 400 };
-	// Display the chart inside the <div> element with id="piechart"
 	var chart = new google.visualization.PieChart(document.getElementById("behandelingenChart"));
 	chart.draw(data, options);
 }
+
+//==========================================================================
+//==========================================================================
+//==========================================================================
+//==========================================================================
+
+function maakGeslachtenOverzicht(dataArray){
+	var behandelingen = [];
+	var b = ['Behandeling', 'keuzes'];
+	behandelingen.push(b);
+	
+	for(let behandeling of dataArray){
+		console.log(behandeling.naam);
+		var behandelingInfo = [];
+		
+		behandelingInfo.push(behandeling.naam);
+		behandelingInfo.push(behandeling.count);
+		
+		behandelingen.push(behandelingInfo);
+	}
+	
+	google.charts.setOnLoadCallback(drawPieChartGeslachten(behandelingen));
+}
+function drawPieChartGeslachten(geslachten) {
+	var data = google.visualization.arrayToDataTable(geslachten);
+	var chart = new google.visualization.PieChart(document.getElementById("geslachtenChart"));
+	var options = { 'title': 'Behandelingen', 'width': 550, 'height': 400 };
+	chart.draw(data, options);
+}
+
+//==========================================================================
+//==========================================================================
+//==========================================================================
+//==========================================================================
+
+function maakLengteOverzicht(data){
+	var behandelingen = [];
+	var b = ['afspraak', 'keuzes'];
+	behandelingen.push(b);
+	console.log(data);
+	var behandelingInfo = [];	
+	behandelingInfo.push("10 minuten");
+	behandelingInfo.push(data.min10);
+	behandelingen.push(behandelingInfo);
+
+	var behandelingInfo = [];	
+	behandelingInfo.push("20 minuten");
+	behandelingInfo.push(data.min20);
+	behandelingen.push(behandelingInfo);
+
+	var behandelingInfo = [];	
+	behandelingInfo.push("30 minuten");
+	behandelingInfo.push(data.min30);
+	behandelingen.push(behandelingInfo);
+
+	var behandelingInfo = [];	
+	behandelingInfo.push("1 uur");
+	behandelingInfo.push(data.min60);
+	behandelingen.push(behandelingInfo);
+	
+	
+	google.charts.setOnLoadCallback(drawPieChartLengte(behandelingen));
+}
+function drawPieChartLengte(lengtes) {
+	var data = google.visualization.arrayToDataTable(lengtes);
+	var chart = new google.visualization.PieChart(document.getElementById("LengteChart"));
+	var options = { 'title': 'Behandelingen', 'width': 550, 'height': 400 };
+	chart.draw(data, options);
+}
+//==========================================================================
+//==========================================================================
+//==========================================================================
+//==========================================================================
+
+function maakUitgaveOverzicht(dataArray){
+	var behandelingen = [];
+	var b = ['Behandeling', 'keuzes'];
+	behandelingen.push(b);
+	
+	var behandelingInfo = [];
+	behandelingInfo.push("minder dan €10");
+	behandelingInfo.push(dataArray.d10);		
+	behandelingen.push(behandelingInfo);
+	
+	var behandelingInfo = [];
+	behandelingInfo.push("meer dan €10");
+	behandelingInfo.push(dataArray.d10);		
+	behandelingen.push(behandelingInfo);
+	
+	var behandelingInfo = [];
+	behandelingInfo.push("meer dan €20");
+	behandelingInfo.push(dataArray.d10);		
+	behandelingen.push(behandelingInfo);
+	
+	var behandelingInfo = [];
+	behandelingInfo.push("meer dan €30");
+	behandelingInfo.push(dataArray.d40);		
+	behandelingen.push(behandelingInfo);
+	console.log(behandelingen);
+	google.charts.setOnLoadCallback(drawPieChartUitgave(behandelingen));
+}
+
+function drawPieChartUitgave(uitgave) {
+	var data = google.visualization.arrayToDataTable(uitgave);
+	var chart = new google.visualization.PieChart(document.getElementById("uitgaveChart"));
+	var options = { 'title': 'Uitgave per afspraak', 'width': 550, 'height': 400 };
+	chart.draw(data, options);
+}
+//==========================================================================
+//==========================================================================
+//==========================================================================
+//==========================================================================
 
 function maakAfsprakenGrafiek(dataArray){
 	var weekdagen = new Array(7);
@@ -106,27 +230,26 @@ function maakAfsprakenGrafiek(dataArray){
 	}
 	google.charts.load("current", {packages:['corechart']});
 	google.charts.setOnLoadCallback(drawAfsprakenStats(dagen));
-
 }
 
 function drawAfsprakenStats(dagen) {
 	var data = google.visualization.arrayToDataTable(dagen);
 
 	var view = new google.visualization.DataView(data);
-	view.setColumns([0, 1,
+	view.setColumns(
+		[0,
+		1,
 		{
 			calc: "stringify",
 			sourceColumn: 1,
 			type: "string",
 			role: "annotation"
 		},
-		2]);
+		2]
+	);
 
 	var options = {
-		title: "",
-		width: "70%",
-		height: 600,
-   	   float: "left",
+		title: "Aantal afspraken per dag",
 		bar: { groupWidth: "95%" },
 		legend: { position: "none" },
 	};
@@ -135,29 +258,25 @@ function drawAfsprakenStats(dagen) {
 }
 
 function createAfsprakLineGraph(){
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Year', 'Sales'],
-          ['2013',  1000],
-          ['2014',  1170],
-          ['2015',  660],
-          ['2016',  1030]
-        ]);
+	function drawChart() {
+		var data = google.visualization.arrayToDataTable([
+		['Year', 'Sales'],
+		['2013',  1000],
+		['2014',  1170],
+		['2015',  660],
+		['2016',  1030]
+	]);
 
-        var options = {
-			title: 'Company Performance',
-			width: "70%",
-			height: 600,
-			float: "right",
-			hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
-			vAxis: {minValue: 0},
-        };
+    var options = {
+		title: 'inkomsten',
+		hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
+		vAxis: {minValue: 0},
+    };
 
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-
+    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+  }
 }

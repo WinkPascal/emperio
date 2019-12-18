@@ -41,13 +41,51 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 		}
 		bedrijf.setKlanten(klanten);
 	}
+	
+	public void getKlanten(Bedrijf bedrijf, int page, String sort, String klantRequest) {
+		int top = page * 20;
+		int low = top - 20;
+		ArrayList<Klant> klanten = new ArrayList<Klant>();
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					  "select k.*, sum(b.prijs) as inkomsten, sum(a.id) as afspraken \n"
+					+ "from klant k join afspraak a on k.id = a.klantId \n"
+					+ "				join afspraakBehandeling f on a.id = f.afspraakId \n"
+					+ "				join behandeling b on f.behandelingId = b.id \n"
+					+ "where k.naam LIKE '%" + klantRequest + "%' \n"
+					+ "and k.BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam() + "' \n"
+					+ "group by k.id \n" 
+					+ "ORDER BY "+sort+" \n"
+					+ "LIMIT "+low+", "+top);
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				Klant klant = new KlantBuilder()
+						.setId(dbResultSet.getInt("id"))
+						.setNaam(dbResultSet.getString("naam"))
+						.setEmail(Validator.nullValidator(dbResultSet.getString("emailadres")))
+						.setTel(Validator.nullValidator(dbResultSet.getString("telefoonnummer")))
+						.setGeslacht(dbResultSet.getString("geslacht"))
+						.setAdres(Validator.nullValidator(dbResultSet.getString("adres")))
+						.make();
+				klant.setHoeveeleheidAfspraken(dbResultSet.getInt("afspraken"));
+				klant.setHoeveelheidInkomsten(dbResultSet.getDouble("inkomsten"));
+				klanten.add(klant);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		bedrijf.setKlanten(klanten);
+	}
 
 	public ArrayList<Klant> getKlantenWithLimit(Bedrijf bedrijf, int low, int top) {
 		ArrayList<Klant> klanten = new ArrayList<Klant>();
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					  "select * "
-					+ "from klant "
+					  "select k.*, sum(b.prijs) as inkomsten, sum(a.id) "
+					+ "from klant k join afspraak a on k.id = a.klantId"
+					+ "				join afspraakBehandeling f on a.id = f.afspraakId "
+					+ "				join behandeling b on f.behandelingId = b.id "
 					+ "where BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam()+"' " 
 					+ "ORDER BY naam "
 					+ "LIMIT "+low+", "+top);
@@ -62,7 +100,9 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 									.setTel(Validator.nullValidator(dbResultSet.getString("telefoonnummer")))
 									.setGeslacht(dbResultSet.getString("geslacht"))
 									.setAdres(Validator.nullValidator(dbResultSet.getString("adres")))
+
 									.make();
+				
 				klanten.add(klant);
 			}
 		} catch (SQLException e) {
@@ -131,10 +171,13 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 	public void getKlant(Bedrijf bedrijf, Klant klant) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"SELECT naam, geslacht, emailadres, telefoonnummer, adres "
-				+ "from klant "
-				+ "where BedrijfBedrijfsnaam = '"+bedrijf.getBedrijfsNaam()+"' "
-				+ "and id = "+klant.getId());
+				"SELECT k.naam, k.geslacht, k.emailadres, k.telefoonnummer, k.adres, count(a.id) as afspraken, sum(b.prijs) as prijs"
+				+ " from afspraak a join klant k on a.klantId = k.id \n" 
+				+ "		    join afspraakBehandeling l on l.afspraakId = a.id \n"  
+				+ "			join behandeling b on b.id = l.behandelingId \n"
+				+ "where k.BedrijfBedrijfsnaam = '"+bedrijf.getBedrijfsNaam()+"' "
+				+ "and k.id = "+klant.getId());
+			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				klant.setNaam(dbResultSet.getString("naam"));
@@ -142,6 +185,8 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 				klant.setEmail(Validator.nullValidator(dbResultSet.getString("emailadres")));
 				klant.setTel(Validator.nullValidator(dbResultSet.getString("telefoonnummer")));
 				klant.setAdres(Validator.nullValidator(dbResultSet.getString("adres")));
+				klant.setHoeveeleheidAfspraken(dbResultSet.getInt("afspraken"));
+				klant.setHoeveelheidInkomsten(dbResultSet.getInt("prijs"));
 			} 
 		} catch (SQLException e) {
 			e.printStackTrace();

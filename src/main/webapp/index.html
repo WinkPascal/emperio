@@ -23,8 +23,8 @@
 	  	<input type="button" id="registreerNav" class="defaultButton" value="Registreren">
 	  	<input type="button" id="loginNav" class="defaultButton" value="Inloggen">
 	</div>
+	<!--<span id="image"></span> -->
 	<div id="topImg">
-		<span id="image"></span>
 		<span id="text">Vooruitgang enzo <br> Gemaakt voor kleine eenmanszaken</span><br>
 		<input class="defaultButton" type="button" value="Prijzen">
 	</div>
@@ -96,10 +96,6 @@
 			<img data-aos="fade-left" class="verkoopPuntDivRight verkoopPuntImage" src="https://www.publicdomainpictures.net/pictures/270000/nahled/email-marketing-business-sms-mo.jpg">	
 		</div>
 
-
-
-
-
 		<div class="verkoopPuntDivLarge" id="agendaPuntUitleg">
 			<img class="verkoopPuntImage" src="https://codyhouse.co/assets/img/gems/hero-sharing/schedule-template-featured.png">
 			<div class="verkooppuntText">
@@ -149,24 +145,7 @@
 		</div>
 	</div>
 
-	<div class="modal" id="loginModal">
-		<form id="loginForm" class="loginModal-content">
-			<h2>login</h2>
-			<p>Nog geen account? <br>
-			Maak er hier een aan!</p>
-			<div class="inputInlog">
-				<em>email adres</em><br> 
-				<input type="text" value="asd" name="username" id="emailLogin" class="loginInput" placeholder="email adres"><br>
-				<em>wachtwoord</em><br> 
-				<input type="password" value="PascalWink1" name="password" id="passwordLogin" class="loginInput" placeholder="wachtwoord"><br>
-			</div>
-			<div class="controlInlog">
-				<input type="button" id="loginButton" class="defaultButton" value="Log in"> 
-				<input type="button" id="Anulleren" class="cancelButton" value="anulleer" /> 
-				<p>wachtwoord vergeten</p>
-			</div>
-		</form>
-	</div>
+
 	<div class="prijzen">
 		<div class="columns">
 			<ul class="price">
@@ -204,6 +183,39 @@
 			</ul>
 		</div>
 	</div>
+	
+	<div class="modal" id="loginModal">
+		<form id="loginForm" class="loginModal-content">
+			<h2>login</h2>
+			<p>Nog geen account? <br>
+			Maak er hier een aan!</p>
+			<div class="inputInlog">
+				<em>email adres</em><br> 
+				<input type="text" value="asd" name="username" id="emailLogin" class="loginInput" placeholder="email adres"><br>
+				<em>wachtwoord</em><br> 
+				<input type="password" value="PascalWink1" name="password" id="passwordLogin" class="loginInput" placeholder="wachtwoord"><br>
+			</div>
+			<div class="controlInlog">
+				<input type="button" id="loginButton" class="defaultButton" value="Log in"> 
+				<input type="button" id="annuleerLogin" class="cancelButton" value="anulleer" /> 
+				<p>wachtwoord vergeten</p>
+			</div>
+		</form>
+	</div>
+	
+	<div class="modal" id="contactForm">
+	  <form class="contactForm-content">
+	  	<h2>Contact</h2>
+	    <input placeholder="Naam" class="invoer" type="text" required />
+	    <input placeholder="Email" class="invoer" type="email" required />
+	    <input placeholder="Onderwerp" class="invoer" type="text" required />
+	    <textarea placeholder="Uw vraag"></textarea>
+	    
+	    <input class="defaultButton" type="button" id="verstuurContact" value="Verstuur"/>
+	    <input class="cancelButton" type="button" id="closeContact" value="Anulleer"/>
+	  </form>
+	</div>
+	
 	<script src="javascript/index.js"></script>
 	<script src="javascript/global.js"></script>
 </body>

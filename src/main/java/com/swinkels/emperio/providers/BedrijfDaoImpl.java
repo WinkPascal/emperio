@@ -1,6 +1,6 @@
 package com.swinkels.emperio.providers;
 
-import java.sql.Connection;
+import java.sql.Connection; 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +12,6 @@ import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Product;
-import com.swinkels.emperio.service.ServiceFilter;
 
 public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 	
@@ -36,66 +35,65 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		}
 		return false;
 	}
+//	
+//	public ArrayList<Bedrijf> getBedrijven(int page){
+//		ArrayList<Bedrijf> bedrijven = new ArrayList<Bedrijf>();
+//		int top = page * 10;
+//		int low = top - 10;
+//		try (Connection con = super.getConnection()) {
+//			PreparedStatement pstmt = con.prepareStatement(
+//					"SELECT email, telefoon, adres, naam \n" + 
+//					"FROM bedrijf \n" + 
+//					"WHERE role = \"user\" \n" + 
+//					"group by email LIMIT "+low+", "+top+"");
+//			ResultSet dbResultSet = pstmt.executeQuery();
+//			while (dbResultSet.next()) {
+//				
+//				String email = dbResultSet.getString("email");
+//				String telefoon = dbResultSet.getString("telefoon");
+//				String adres = dbResultSet.getString("adres");
+//				String naam = dbResultSet.getString("naam");
+//				bed
+//				bedrijven.add(bedrijf);
+//			}
+//		} catch (SQLException e) {
+//			System.out.println(e);
+//			return null;
+//		}
+//		
+//		return bedrijven;
+//	}
 	
-	public ArrayList<Bedrijf> getBedrijven(int page){
-		ArrayList<Bedrijf> bedrijven = new ArrayList<Bedrijf>();
-		int top = page * 10;
-		int low = top - 10;
-		try (Connection con = super.getConnection()) {
-			PreparedStatement pstmt = con.prepareStatement(
-					"SELECT email, telefoon, adres, naam \n" + 
-					"FROM bedrijf \n" + 
-					"WHERE role = \"user\" \n" + 
-					"group by email LIMIT "+low+", "+top+"");
-			ResultSet dbResultSet = pstmt.executeQuery();
-			while (dbResultSet.next()) {
-				
-				String email = dbResultSet.getString("email");
-				String telefoon = dbResultSet.getString("telefoon");
-				String adres = dbResultSet.getString("adres");
-				String naam = dbResultSet.getString("naam");
-
-				Bedrijf bedrijf = new Bedrijf(null, naam, email, telefoon, adres, null);
-				bedrijven.add(bedrijf);
-			}
-		} catch (SQLException e) {
-			System.out.println(e);
-			return null;
-		}
-		
-		return bedrijven;
-	}
-	
-	//wordt gebruikt bij: getWerkdagen
-	public ArrayList<Dag> getWeekRooster(Bedrijf bedrijf){
-		ArrayList<Dag> dagen = new ArrayList<Dag>();
-		try (Connection con = super.getConnection()) {
-			PreparedStatement pstmt = con.prepareStatement(
-					"SELECT dag, openingstijd, sluitingstijd"
-				 + " FROM dag "
-				 + "WHERE BedrijfBedrijfsnaam ='"+bedrijf.getBedrijfsNaam()+"' "
-				 + "ORDER BY dag");
-			ResultSet dbResultSet = pstmt.executeQuery();
-			while (dbResultSet.next()) {
-				String openingsTijd = dbResultSet.getString("openingstijd");
-				String sluitingsTijd = dbResultSet.getString("sluitingstijd");
-				int dagNummer = dbResultSet.getInt("dag");
-				
-				//format de tijden
-				Date openingsTijdDate = ServiceFilter.StringToDateFormatter(openingsTijd, "HH:mm");
-				Date sluitingsTijdDate = ServiceFilter.StringToDateFormatter(sluitingsTijd, "HH:mm");
-				
-				Dag  dag = new Dag(dagNummer, openingsTijdDate, sluitingsTijdDate);
-				
-				dagen.add(dag);
-			}
-		} catch (SQLException e) {
-			System.out.println(e);
-			return null;
-		}
-		
-		return dagen;
-	}
+//	//wordt gebruikt bij: getWerkdagen
+//	public ArrayList<Dag> getWeekRooster(Bedrijf bedrijf){
+//		ArrayList<Dag> dagen = new ArrayList<Dag>();
+//		try (Connection con = super.getConnection()) {
+//			PreparedStatement pstmt = con.prepareStatement(
+//					"SELECT dag, openingstijd, sluitingstijd"
+//				 + " FROM dag "
+//				 + "WHERE BedrijfBedrijfsnaam ='"+bedrijf.getBedrijfsNaam()+"' "
+//				 + "ORDER BY dag");
+//			ResultSet dbResultSet = pstmt.executeQuery();
+//			while (dbResultSet.next()) {
+//				String openingsTijd = dbResultSet.getString("openingstijd");
+//				String sluitingsTijd = dbResultSet.getString("sluitingstijd");
+//				int dagNummer = dbResultSet.getInt("dag");
+//				
+//				//format de tijden
+//				Date openingsTijdDate = ServiceFilter.StringToDateFormatter(openingsTijd, "HH:mm");
+//				Date sluitingsTijdDate = ServiceFilter.StringToDateFormatter(sluitingsTijd, "HH:mm");
+//				
+//				Dag  dag = new Dag(dagNummer, openingsTijdDate, sluitingsTijdDate);
+//				
+//				dagen.add(dag);
+//			}
+//		} catch (SQLException e) {
+//			System.out.println(e);
+//			return null;
+//		}
+//		
+//		return dagen;
+//	}
 	
 	// wordt gebruikt bij
 		//getProductenByPage();

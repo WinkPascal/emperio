@@ -12,8 +12,27 @@ public class BehandelingBuilder {
 	private Date lengte;
 	private String geslacht;
 
+	private int afspraken;
+	private Double inkomsten;
+	private int count;
+
 	public BehandelingBuilder() {
 
+	}
+
+	public BehandelingBuilder setAfspraken(int afspraken) {
+		this.afspraken = afspraken;
+		return this;
+	}
+
+	public BehandelingBuilder setInkomsten(Double inkomsten) {
+		this.inkomsten = inkomsten;
+		return this;
+	}
+
+	public BehandelingBuilder setCount(int count) {
+		this.count = count;
+		return this;
 	}
 
 	public BehandelingBuilder setBedrijf(Bedrijf bedrijf) {
@@ -52,7 +71,8 @@ public class BehandelingBuilder {
 	}
 
 	public Behandeling make() {
-		Behandeling behandeling = new Behandeling(bedrijf, id, naam, prijs, beschrijving, lengte, geslacht);
+		Behandeling behandeling = new Behandeling(bedrijf, id, naam, prijs, beschrijving, lengte,
+				geslacht, afspraken, inkomsten, count);
 		return behandeling;
 	}
 }

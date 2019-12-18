@@ -3,11 +3,12 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Klanten</title>
-	<link rel="stylesheet" type="text/css" href="css/home.css">
+	<title>Marketing</title>
+	<link rel="stylesheet" media="screen and (max-width: 480px)" href="css/smartphone/marketing.css">
+	<link rel="stylesheet" media="screen and (min-width: 480px) and (max-width: 1024px)" href="css/tablet/marketing.css">
+	<link rel="stylesheet" media="screen and (min-width: 1024px)" href="css/desktop/marketing.css">
 
 	<link rel="stylesheet" type="text/css" href="css/global.css">
-	<link rel="stylesheet" type="text/css" href="css/marketing.css">
 </head>
 
 <body onload="onload()">
@@ -17,31 +18,38 @@
 		<a>Marketing</a>
 		<input type="button" value="Uitloggen" class="defaultButton" id="logoutButton">
 	</span>
-	<div class="verzonden">
-		Verzonden
-		<div>
-			<span>Onderwero</span>
-			<span>2019-04-12</span>
-			<p>Dear pascal,
-				You're receiving this email because someone (presumably you) attempts to activate Visual Paradigm with your email address.
-				To activate Visual Paradigm, copy the following verification code and paste to Visual Paradigm.
-			</p>
-		</div>
+
+	<div class="emailOverzicht">
+		<h2>Verzonden</h2>
+		<div class="verzonden" id="verzonden"></div>
+		<input type="button" value="Laad oudere emails" id="loadEmails"> 
 	</div>
-	<div class="email">
-		<span>
-	 		<input type="button" id="versturen" class="defaultButton" value="Versturen"><br>
-			<input type="button" id="klantenKiezen" class="defaultButton" value="kies klanten">
-			<span>klanten</span>			
-		</span>
-		<br>
-		<span>
-			Onderwerp
-			<input type="text" id="onderwerp">
-		</span>
-		<br>
-		<textarea ></textarea>
+
+	<div class="content">
+		<form class="versturen" id="emailVersturen">
+			<div class="topInfo">
+				<span id="verstuurdOp"></span>
+				<input type="button" id="versturen" class="createButton" value="Versturen">
+				<input type="button" id="verwijderen" class="cancelButton" value="Verwijderen"><br>
+			</div>
+			
+			<div class="klantenKiezen">
+				<input type="button" id="klantenKiezen" class="defaultButton" value="kies klanten">
+				<input type="button" id="klantenOphalen" class="defaultButton" style="display: none;" value="Klanten">
+				<span id="klantenLijst">s</span>
+			</div>
+			<div class="onderwerpDiv">
+				<span id="onderwerpVanMail" class="onderwerp" style="display: none;"></span>
+				<input name="onderwerp" type="text" class="onderwerp" id="onderwerp" placeholder="Onderwerp">
+			</div>
+			
+			<div id="inhoudVanMail" class="inhoud" style="display: none;"></div>
+			<textarea id="inhoud" class="inhoud" name="inhoud"></textarea>
+		</form>
 	</div>
+
+
+
 	<div id="klantenModal" class="modal">
 		<div class="klantenModalContent">
 			<table id="klantenLijst">
@@ -53,7 +61,7 @@
 			</div>
 		</div>
 	</div>
+
  	 <script src="javascript/global.js"></script>
  	 <script src="javascript/marketing.js"></script>
-
 </html>

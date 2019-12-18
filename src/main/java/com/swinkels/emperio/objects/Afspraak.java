@@ -14,49 +14,28 @@ public class Afspraak {
 	private int id;
 	private Date timestamp;
 	private Double prijs;
-	
-	public ArrayList<String> validate(){
-		ArrayList<String> errors = new ArrayList<String>();
-		if(timestamp.before(new Date())) {
-			errors.add("Een afspraak kan niet in het verleden worden gepland.");
-		}
-		return errors;
-	}
-	
-	public Afspraak() {
 
-	}
-	//
-	//builder
-	//
-	public Afspraak(Bedrijf bedrijf, Klant klant, ArrayList<Behandeling> behandelingen, int id, Date timestamp,
+	public Afspraak(Klant klant, Bedrijf bedrijf, ArrayList<Behandeling> behandelingen, int id, Date timestamp,
 			Double prijs) {
-		this.bedrijf = bedrijf;
 		this.klant = klant;
+		this.bedrijf = bedrijf;
 		this.behandelingen = behandelingen;
 		this.id = id;
 		this.timestamp = timestamp;
 		this.prijs = prijs;
 	}
 
-	public Afspraak(int id, Date timestamp, Klant klant) {
-		this.id = id;
-		this.timestamp = timestamp;
-		this.klant = klant;
+	public ArrayList<String> validate() {
+		ArrayList<String> errors = new ArrayList<String>();
+		if (timestamp.before(new Date())) {
+			errors.add("Een afspraak kan niet in het verleden worden gepland.");
+		}
+		return errors;
 	}
+
 	public void save() {
 		AfspraakDao afspraakDao = new AfspraakDaoImpl();
 		afspraakDao.setAfspraak(this);
-	}
-
-	public Afspraak(Date afspraakTimestamp, Bedrijf bedrijf, Klant klant) {
-		this.timestamp = afspraakTimestamp;
-		this.bedrijf = bedrijf;
-		this.klant = klant;
-	}
-
-	public Afspraak(Date timestamp) {
-		this.timestamp = timestamp;
 	}
 
 	public int getId() {
@@ -75,7 +54,6 @@ public class Afspraak {
 		this.behandelingen = behandelingen;
 	}
 
-	
 	public void setPrijs(double prijs) {
 		this.prijs = prijs;
 	}
@@ -111,11 +89,12 @@ public class Afspraak {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
-	
+
 	public void retrieveBehandelingen() {
 		AfspraakDao afspraakDao = new AfspraakDaoImpl();
 		behandelingen = afspraakDao.getBehandelingen(this);
 	}
+
 	public void retrieveKlant() {
 		AfspraakDao afspraakDao = new AfspraakDaoImpl();
 		klant = afspraakDao.getKlant(this);
@@ -123,7 +102,7 @@ public class Afspraak {
 
 	public boolean delete() {
 		AfspraakDao afspraakDao = new AfspraakDaoImpl();
-		if(afspraakDao.deleteAfspraak(this)) {
+		if (afspraakDao.deleteAfspraak(this)) {
 			return true;
 		} else {
 			return false;
@@ -134,6 +113,5 @@ public class Afspraak {
 		AfspraakDao afspraakDao = new AfspraakDaoImpl();
 		afspraakDao.getAfspraakId(this);
 	}
-	
 
 }

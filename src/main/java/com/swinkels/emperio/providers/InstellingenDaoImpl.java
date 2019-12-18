@@ -1,16 +1,10 @@
 package com.swinkels.emperio.providers;
 
-import java.sql.Connection;
+import java.sql.Connection; 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-
-import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Instellingen;
-import com.swinkels.emperio.objects.Klant;
-import com.swinkels.emperio.service.ServiceFilter;
-import com.swinkels.emperio.support.Validator;
 
 public class InstellingenDaoImpl extends MariadbBaseDao implements InstellingenDao{
 

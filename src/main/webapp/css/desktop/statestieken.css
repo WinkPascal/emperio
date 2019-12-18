@@ -1,0 +1,75 @@
+body {
+	overflow: hidden;
+}
+
+.timeSelect {
+	height: 100%;
+	width: 250px;
+	position: fixed;
+	left: 0;
+	background-color: #111;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 60px;
+}
+
+.timeSelect .defaultButton {
+	margin-left: 50px;
+	margin-bottom: 15px;
+}
+
+.links {
+	left: 300px;
+	height: 100%;
+	width: 800px;
+	position: absolute;
+}
+
+.links .getallenDiv {
+	font-family: 'Lora', serif;
+	height: 120px;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 300;
+	text-transform: uppercase;
+}
+
+.links .infoBlok {
+	margin-top: 50px;
+	width: 100%;
+	font-size: 23px;
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+.links .pieCharts {
+	width: 100%;
+	left: -100px;
+	z-index: -1; position : absolute;
+	height: calc(100% - 500px);
+	position: absolute;
+}
+
+.links .pieCharts .chart {
+	float: left;
+	z-index: -3;
+	width: 400px;
+}
+
+.grafieken {
+	left: 1100px;
+	width: calc(100% - 1100px);
+	height: 600px;
+	position: relative;
+}
+
+.grafieken .inkomstenGrafiek {
+	position: relative;
+	width: 100%;
+	height: 85%;
+}
+
+.grafieken .afsprakenGrafiek {
+	width: 100%;
+	height: 85%;
+	margin-top: -60px;
+	position: relative;
+}

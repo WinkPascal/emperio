@@ -1,0 +1,9 @@
+.timeSelect {
+	height: 80px;
+	text-align: center;
+	width: 100%;
+	position: relative;
+	background-color: #111;
+	overflow-x: hidden;
+	transition: 0.5s;
+}

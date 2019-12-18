@@ -11,52 +11,84 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-
 import com.swinkels.emperio.objects.Bedrijf;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+
 import com.swinkels.emperio.objects.Email;
 import com.swinkels.emperio.objects.Klant;
+import com.swinkels.emperio.objects.KlantBuilder;
+import com.swinkels.emperio.support.JavascriptDateAdapter;
 
+@Path("/marketing")
 public class MarketingProvider {
+	
+	@POST
+	@RolesAllowed("user")
+	@Path("/email")
+	@Produces("application/json")
+	public Response setEmail(@Context SecurityContext sc,
+			@FormParam("inhoud") String inhoud,
+			@FormParam("onderwerp") String inhoudonderwerp,
+			@FormParam("klanten") String klanten) {
+		ArrayList<Klant> klantenList = new ArrayList<Klant>();
+		System.out.println("emailPost");
+		for(String klant : klanten.split(",")) {
+			Klant k = new KlantBuilder()
+					.setId(Integer.parseInt(klant))
+					.make();
+			klantenList.add(k);
+		}
+		Email email = new Email(inhoudonderwerp, inhoud, klantenList);
+		email.setBedrijf(new Bedrijf(sc.getUserPrincipal().getName()));
+		email.send();
+		return Response.ok().build();		
+	}
+	
 	@GET
-	@Path("/email/{request}")
+	@Path("/email/{id}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getEmails(@Context SecurityContext sc, @PathParam("request") String request) {
+	public String getEmails(@Context SecurityContext sc, 
+			@PathParam("id") int id) {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		int page = 1;
-		bedrijf.getEmailsByRequest(request, page);
 		
+		Email email = new Email(bedrijf);
+		email.setId(id);
+		email.getEmail();
+		
+		JsonObjectBuilder job = Json.createObjectBuilder();
+		job.add("id", email.getId());
+		job.add("verzendtijd", JavascriptDateAdapter.DateToString(email.getVerzendtijd(), "yyyy-MM-dd HH:mm"));
+		job.add("aantalKlanten", email.getAantalKlanten());
+		job.add("onderwerp", email.getOnderwerp());
+		job.add("inhoud", email.getInhoud());
+		
+		return job.build().toString();
+	}
+	
+	@GET
+	@Path("/emails/{hoeveelheid}")
+	@RolesAllowed("user")
+	@Produces("application/json")
+	public String getKlanten(@Context SecurityContext sc, 
+			@PathParam("hoeveelheid") int hoeveelheid) {
+		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-		for (Email email : bedrijf.getEmails()) {
+		for (Email email : bedrijf.getEmailsByRequest(hoeveelheid)) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
 			job.add("id", email.getId());
-			job.add("aantalKlanten", email.getTel());
-			job.add("onderwerp", email.getNaam());
-			job.add("tekst", email.getAdres());
+			job.add("verzendtijd", JavascriptDateAdapter.DateToString(email.getVerzendtijd(), "yyyy-MM-dd HH:mm"));
+			job.add("aantalKlanten", email.getAantalKlanten());
+			job.add("onderwerp", email.getOnderwerp());
+			job.add("inhoud", email.getInhoud());
 			jab.add(job);
 		}
 		return jab.build().toString();
 	}
-	@GET
-	@Path("/alleKlanten/{pageNummer}")
-	@RolesAllowed("user")
-	@Produces("application/json")
-	public String getKlanten(@Context SecurityContext sc, @PathParam("pageNummer") int pageNummer) {
-		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		ArrayList<Klant> klanten = bedrijf.getKlantenWithByPage(pageNummer);
-		
-		JsonArrayBuilder jab = Json.createArrayBuilder();
-		for (Klant klant : klanten) {
-			JsonObjectBuilder job = Json.createObjectBuilder();
-			job.add("id", klant.getId());
-			job.add("naam", klant.getNaam());
-			job.add("adres", klant.getAdres());
-			job.add("email", klant.getEmail());
-			job.add("telefoon", klant.getTel());
-			job.add("geslacht", klant.getGeslacht());
-			jab.add(job);
-		}
-		return jab.build().toString();
-	}
+	
+
 }

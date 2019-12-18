@@ -1,6 +1,11 @@
 package com.swinkels.emperio.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class KlantBuilder {
+	private List<Afspraak> afspraken = new ArrayList<Afspraak>();
+
 	private int id;
 
 	private String naam;
@@ -10,8 +15,31 @@ public class KlantBuilder {
 	private String adres;
 	private Bedrijf bedrijf;
 
+	private int hoeveeleheidAfspraken;
+	private double hoeveelheidInkomsten;
+
 	public KlantBuilder() {
 
+	}
+
+	public KlantBuilder setAfspraken(List<Afspraak> afspraken) {
+		this.afspraken = afspraken;
+		return this;
+	}
+
+	public KlantBuilder setBedrijf(Bedrijf bedrijf) {
+		this.bedrijf = bedrijf;
+		return this;
+	}
+
+	public KlantBuilder setHoeveeleheidAfspraken(int hoeveeleheidAfspraken) {
+		this.hoeveeleheidAfspraken = hoeveeleheidAfspraken;
+		return this;
+	}
+
+	public KlantBuilder setHoeveelheidInkomsten(double hoeveelheidInkomsten) {
+		this.hoeveelheidInkomsten = hoeveelheidInkomsten;
+		return this;
 	}
 
 	public KlantBuilder setId(int id) {
@@ -45,7 +73,9 @@ public class KlantBuilder {
 	}
 
 	public Klant make() {
-		Klant klant = new Klant(id, naam, email, tel, geslacht, adres, bedrijf);
+		Klant klant =new Klant(afspraken, id, naam,
+				 email, tel, geslacht,  adres,  bedrijf,  hoeveeleheidAfspraken,
+				 hoeveelheidInkomsten);
 		return klant;
 	}
 }

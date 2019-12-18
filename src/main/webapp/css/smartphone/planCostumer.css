@@ -49,7 +49,34 @@
 	display: none;
 }
 
+.wizard {
+	position: relative; width : 100%;
+	height: 120px;
+	left: 0px;
+	border: 1px solid black;
+	width: 100%;
+}
+
+.wizard .progressbar {
+	width: 130%;
+	left: -130px;
+}
+
+.wizard #terugInplannen {
+	bottom: 0px;
+	left: 10px;
+	float: left;
+	margin-top: 80px;
+}
+
+.wizard #volgendeInplannen {
+	bottom: 0px;
+	margin-top: 5px;
+	float: right;
+}
+
 .inplannenRechts {
+	height: 100%;
 	display: none;
 }
 
@@ -132,7 +159,6 @@
 /*================================================================*/
 /*================================================================*/
 /*================================================================*/
-
 #inplannenDatum .navigatieTijdslotKiezenKiezen {
 	width: 100%;
 }
@@ -201,6 +227,7 @@
 /*================================================================*/
 /*================================================================*/
 
+
 #inplannenTijd .nivagatieTijden {
 	width: 100%;
 }
@@ -217,25 +244,22 @@
 	width: 100%;
 }
 
-#inplannenTijd #tijdAfbeelding{
+#inplannenTijd #tijdAfbeelding {
 	display: none;
 	border: 1px solid black;
 }
 
-
-#inplannenTijd #tijdInstellen{
+#inplannenTijd #tijdInstellen {
 	margin-top: 5px;
 	margin: auto;
 	height: 60px;
 }
-
 
 #inplannenTijd #agendaInplannen {
 	width: 100%;
 	float: right;
 	height: 100%;
 	overflow: scroll;
-	position: absolute;
 }
 
 #inplannenTijd #agendaInplannen ul {
@@ -292,7 +316,8 @@
 	width: 100%;
 }
 
-#inplannenTijd #agendaInplannen .roosterInplanAgenda .nietBeschikbaarAfspraak {
+#inplannenTijd #agendaInplannen .roosterInplanAgenda .nietBeschikbaarAfspraak
+	{
 	background-color: #34D77B;
 	z-index: 1;
 	width: 320px;
@@ -307,10 +332,10 @@
 /*================================================================*/
 /*================================================================*/
 /*================================================================*/
-
-.inplannenForm .behandelingenOverzicht{
+.inplannenForm .behandelingenOverzicht {
 	width: 100%;
 }
+
 .inplannenForm .inplannenBehandelingOverzicht {
 	display: inline-block;
 	border-bottom: 1px solid gray;
@@ -318,6 +343,7 @@
 	height: 50px;
 	width: 90%;
 }
+
 .inplannenForm .blokkenOverzicht {
 	width: 100%;
 	height: 50px;
@@ -338,10 +364,4 @@
 	height: 50px;
 	border: 2px solid gray;
 	text-align: center;
-
 }
-
-
-
-
-

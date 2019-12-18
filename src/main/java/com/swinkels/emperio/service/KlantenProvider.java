@@ -1,6 +1,6 @@
 package com.swinkels.emperio.service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.annotation.security.RolesAllowed;
 import javax.json.Json;
@@ -17,28 +17,24 @@ import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Klant;
 import com.swinkels.emperio.objects.KlantBuilder;
-import com.swinkels.emperio.providers.AfspraakBehandelingDao;
-import com.swinkels.emperio.providers.AfspraakBehandelingDaoImpl;
-import com.swinkels.emperio.providers.AfspraakDao;
-import com.swinkels.emperio.providers.AfspraakDaoImpl;
-import com.swinkels.emperio.providers.BehandelingDao;
-import com.swinkels.emperio.providers.BehandelingDaoImpl;
-import com.swinkels.emperio.providers.KlantDao;
-import com.swinkels.emperio.providers.KlantDaoImpl;
-import com.swinkels.emperio.support.Adapter;
+import com.swinkels.emperio.support.JavascriptDateAdapter;
 
 @Path("/klanten")
 public class KlantenProvider {
 	@GET
-	@Path("/alleKlanten/{pageNummer}")
+	@Path("/klanten/{data}")
 	@RolesAllowed("user")
 	@Produces("application/json")
-	public String getKlanten(@Context SecurityContext sc, @PathParam("pageNummer") int pageNummer) {
+	public String getKlanten(@Context SecurityContext sc, @PathParam("data") String data) {
+		HashMap<String, String> dataMap = getData(data);
+		int page = Integer.parseInt(dataMap.get("page"));
+		String sort = dataMap.get("sort");
+		String search = dataMap.get("search");
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		ArrayList<Klant> klanten = bedrijf.getKlantenWithByPage(pageNummer);
+		bedrijf.getKlantenByRequest(page, sort, search);
 		
 		JsonArrayBuilder jab = Json.createArrayBuilder();
-		for (Klant klant : klanten) {
+		for (Klant klant : bedrijf.getKlanten()) {
 			JsonObjectBuilder job = Json.createObjectBuilder();
 			job.add("id", klant.getId());
 			job.add("naam", klant.getNaam());
@@ -46,33 +42,32 @@ public class KlantenProvider {
 			job.add("email", klant.getEmail());
 			job.add("telefoon", klant.getTel());
 			job.add("geslacht", klant.getGeslacht());
+			job.add("afspraken", klant.getHoeveeleheidAfspraken());
+			job.add("inkomsten", klant.getHoeveelheidInkomsten());
 			jab.add(job);
 		}
 		return jab.build().toString();
 	}
 
-	// wordt gebruikt bij
-	// klanten pagina zoeken klant
-	@GET
-	@Path("/klantenZoekReq/{request}")
-	@RolesAllowed("user")
-	@Produces("application/json")
-	public String getKlantenZoekRequest(@Context SecurityContext sc, @PathParam("request") String request) {
-		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		bedrijf.zoekKlant(request);
-		
-		JsonArrayBuilder jab = Json.createArrayBuilder();
-		for (Klant klant : bedrijf.getKlanten()) {
-			System.out.println(klant.getId());
-			JsonObjectBuilder job = Json.createObjectBuilder();
-			job.add("id", klant.getId());
-			job.add("naam", klant.getNaam());
-			job.add("email", klant.getEmail());
-			job.add("telefoon", klant.getTel());
-			job.add("geslacht", klant.getGeslacht());
-			jab.add(job);
+	private HashMap<String, String> getData(String data) {
+		HashMap<String, String> dataMap = new HashMap<String, String>();
+		for (String dataPunt : data.split("&")) {
+			String[] dataPuntDetail = dataPunt.split("=");
+			if (dataPuntDetail[0].equals("page")) {
+				dataMap.put("page", dataPuntDetail[1]);
+			}
+			if (dataPuntDetail[0].equals("sort")) {
+				dataMap.put("sort", dataPuntDetail[1]);
+			}
+			if (dataPuntDetail[0].equals("search")) {
+				if(dataPuntDetail[1].equals("-")) {
+					dataMap.put("search", "");
+				} else {
+					dataMap.put("search", dataPuntDetail[1].substring(1));
+				}
+			}
 		}
-		return jab.build().toString();
+		return dataMap;
 	}
 
 	@GET
@@ -87,16 +82,17 @@ public class KlantenProvider {
 		JsonObjectBuilder job = Json.createObjectBuilder();
 		job.add("naam", klant.getNaam());
 		job.add("geslacht", klant.getGeslacht());
-		job.add("email", klant.getEmail());		
+		job.add("email", klant.getEmail());
+		job.add("adres", klant.getAdres());
 		job.add("telefoon", klant.getTel());
-		job.add("afspraken", klant.getAantalAfspraken());
+		job.add("aantalAfspraken", klant.getAantalAfspraken());
 		job.add("inkomsten", klant.getHoeveelheidInkomsten());
 
 		JsonArrayBuilder jab1 = Json.createArrayBuilder();
 		for (Afspraak afspraak : klant.getAfspraken()) {
 			JsonObjectBuilder job1 = Json.createObjectBuilder();
 			job1.add("prijs", afspraak.getPrijs());
-			String timestampString = Adapter.DateToString(afspraak.getTimeStamp(), "YYYY-MM-dd HH:mm");
+			String timestampString = JavascriptDateAdapter.DateToString(afspraak.getTimeStamp(), "YYYY-MM-dd HH:mm");
 			job1.add("datum", timestampString.substring(0, 10));
 			job1.add("tijd", timestampString.substring(11));
 			jab1.add(job1);

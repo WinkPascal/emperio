@@ -22,7 +22,6 @@ function login() {
 				// de JWTKey wordt in de sessionStorage gezet en de actor wordt
 				// doorverbonden naar de afspraken.html pagina
 				window.sessionStorage.setItem("sessionToken", myJson.JWT);
-				alert(myJson.JWT);
 				var jwtData = sessionStorage.getItem("sessionToken").split('.')[1]
 				var decodedJwtJsonData = window.atob(jwtData)
 				// rol een warde geven
@@ -55,7 +54,7 @@ document.getElementById("loginNav").addEventListener("click", function () {
 	login();
 })
 
-document.getElementById("anulleer").addEventListener("click", function () {
+document.getElementById("annuleerLogin").addEventListener("click", function () {
 	document.getElementById("loginModal").style.display = "none";
 })
 
@@ -64,8 +63,18 @@ document.getElementById("registreerNav").addEventListener("click", function () {
 })
 
 document.getElementById("contactNav").addEventListener("click", function () {
-	alert("moet nog gemaakt worden G");
+	document.getElementById("contactForm").style.display="block";
 })
+
+document.getElementById("verstuurContact").addEventListener("click", function () {
+	succesMessage("Dankuwel voor uw vraag! \n" +
+			"Wij doen ons best om zo snel mogelijk een antwoord te geven.");
+})
+
+document.getElementById("closeContact").addEventListener("click", function () {
+	document.getElementById("contactForm").style.display="none";
+})
+
 
 document.getElementById("verkoopPuntBeschikbaar").addEventListener("click",
 	function () {

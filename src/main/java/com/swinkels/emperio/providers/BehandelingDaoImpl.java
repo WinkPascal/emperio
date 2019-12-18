@@ -10,7 +10,6 @@ import java.util.Date;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.BehandelingBuilder;
-import com.swinkels.emperio.support.Adapter;
 import com.swinkels.emperio.support.DatabaseDateAdapter;
 
 public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao {
@@ -34,7 +33,15 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 				Date lengte = DatabaseDateAdapter.StringToDate(lengteString, "HH:mm");
 				String geslacht = dbResultSet.getString("geslacht");
 
-				Behandeling behandeling = new Behandeling(id, naam, beschrijving, lengte, prijs, geslacht);
+				Behandeling behandeling = new BehandelingBuilder()
+						.setId(id)
+						.setNaam(naam)
+						.setBeschrijving(beschrijving)
+						.setLengte(lengte)
+						.setPrijs(prijs)
+						.setGeslacht(geslacht)
+						.make();
+				
 				behandelingen.add(behandeling);
 			}
 		} catch (SQLException e) {
@@ -59,7 +66,15 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 				Date lengte = DatabaseDateAdapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm");
 				double prijs = dbResultSet.getDouble("prijs");
 
-				Behandeling behandeling = new Behandeling(id, behandelingsNaam, beschrijving, lengte, prijs, geslacht);
+				Behandeling behandeling = new BehandelingBuilder()
+						.setId(id)
+						.setNaam(behandelingsNaam)
+						.setBeschrijving(beschrijving)
+						.setLengte(lengte)
+						.setPrijs(prijs)
+						.setGeslacht(geslacht)
+						.make();
+				
 				behandelingen.add(behandeling);
 			}
 		} catch (SQLException e) {
@@ -85,7 +100,11 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 				int count = dbResultSet.getInt("hoeveelheid");
 				String behandelingsNaam = dbResultSet.getString("naam");
 
-				Behandeling behandeling = new Behandeling(id, behandelingsNaam, count);
+				Behandeling behandeling = new BehandelingBuilder()
+						.setId(id)
+						.setNaam(behandelingsNaam)
+						.setCount(count)
+						.make();
 				behandelingen.add(behandeling);
 			}
 		} catch (SQLException e) {

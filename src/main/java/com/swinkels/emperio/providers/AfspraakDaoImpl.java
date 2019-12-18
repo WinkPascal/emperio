@@ -1,18 +1,23 @@
 package com.swinkels.emperio.providers;
 
-import java.sql.Connection; 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import com.swinkels.emperio.objects.Afspraak;
+import com.swinkels.emperio.objects.AfspraakBuilder;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
+import com.swinkels.emperio.objects.BehandelingBuilder;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Klant;
+import com.swinkels.emperio.objects.KlantBuilder;
+import com.swinkels.emperio.objects.Statestieken;
 import com.swinkels.emperio.support.Adapter;
 import com.swinkels.emperio.support.DatabaseDateAdapter;
 
@@ -40,7 +45,11 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 				Date lengte = DatabaseDateAdapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm");
 				double prijs = dbResultSet.getDouble("prijs");
 				
-				Behandeling behandeling = new Behandeling(behandelingnaam, lengte, prijs);
+				Behandeling behandeling = new BehandelingBuilder()
+						.setNaam(behandelingnaam)
+						.setLengte(lengte)
+						.setPrijs(prijs)
+						.make();
 
 				//Afspraak
 				int id = dbResultSet.getInt("id");
@@ -50,11 +59,16 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					timestampString = timestampString.substring(0, timestampString.length()-5);
 					Date timestampDate =  DatabaseDateAdapter.StringToDate(timestampString, "yyyy-MM-dd HH:mm");
 					
-					//klant
-					String klantNaam = dbResultSet.getString("klantNaam");
-					Klant klant = new Klant(klantNaam);
+					Klant klant = new KlantBuilder()
+							.setNaam(dbResultSet.getString("klantNaam"))
+							.make();					
 					
-					Afspraak newAfspraak = new Afspraak(id, timestampDate, klant);
+					Afspraak newAfspraak = new AfspraakBuilder()
+							.setId(id)
+							.setTimestamp(timestampDate)
+							.setKlant(klant)
+							.make();
+							
 					newAfspraak.addBehandeling(behandeling);
 
 					afsprakenVandaag.add(newAfspraak);
@@ -74,11 +88,17 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 						Date timestamp = DatabaseDateAdapter.StringToDate(timestampString,"yyyy-MM-dd HH:mm");
 						//klant
 						String klantNaam = dbResultSet.getString("klantNaam");
-						Klant klant = new Klant(klantNaam);
+						Klant klant = new KlantBuilder()
+								.setNaam(klantNaam)
+								.make();
 					
-						Afspraak newAfspraak = new Afspraak(id, timestamp, klant);
+						Afspraak newAfspraak = new AfspraakBuilder()
+								.setId(id)
+								.setTimestamp(timestamp)
+								.setKlant(klant)
+								.make();	
+						
 						newAfspraak.addBehandeling(behandeling);
-
 						afsprakenVandaag.add(newAfspraak);
 					}
 				}
@@ -146,7 +166,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 
 	public Afspraak getAfspraak(Bedrijf bedrijf, int afspraakId) {
 		try (Connection con = super.getConnection()) {
-			Afspraak afspraak = new Afspraak();
+			Afspraak afspraak = new AfspraakBuilder().make();;
 
 			PreparedStatement pstmt = con.prepareStatement( 
 					"select a.id, a.timestamp, k.naam as klantnaam, \n" + 
@@ -163,10 +183,14 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			while (dbResultSet.next()) {
 				//Behandeling
 				String behandelingnaam = dbResultSet.getString("behandelingnaam");
-				Date lengte = ServiceFilter.StringToDateFormatter(dbResultSet.getString("lengte"), "HH:mm");
+				Date lengte = DatabaseDateAdapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm");
 				double prijs = dbResultSet.getDouble("prijs");
 				
-				Behandeling behandeling = new Behandeling(behandelingnaam, lengte, prijs);
+				Behandeling behandeling = new BehandelingBuilder()
+						.setNaam(behandelingnaam)
+						.setLengte(lengte)
+						.setPrijs(prijs)
+						.make();
 
 				//Afspraak
 				int id = dbResultSet.getInt("id");
@@ -175,7 +199,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					// de klant en afspraak met de eerste behandeling wordt aangemaakt
 					String timestampString = dbResultSet.getString("timestamp");
 					timestampString = timestampString.substring(0, timestampString.length()-5);
-					Date timestamp = ServiceFilter.StringToDateFormatter(timestampString,"yyyy-MM-dd HH:mm");
+					Date timestamp = DatabaseDateAdapter.StringToDate(timestampString,"yyyy-MM-dd HH:mm");
 					//klant
 					String klantNaam = dbResultSet.getString("klantNaam");
 					String klantEmail = dbResultSet.getString("email");
@@ -188,9 +212,18 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					}
 					String klantGeslacht = dbResultSet.getString("geslacht");
 					
-					Klant klant = new Klant(klantNaam, klantEmail, klantTelefoon, klantGeslacht);
-				
-					afspraak = new Afspraak(id, timestamp, klant);
+					Klant klant = new KlantBuilder()
+							.setId(id)
+							.setNaam(klantNaam)
+							.setEmail(klantEmail)
+							.setTel(klantTelefoon)
+							.setGeslacht(klantGeslacht)
+							.make();
+					afspraak = new AfspraakBuilder()
+							.setId(id)
+							.setTimestamp(timestamp)
+							.setKlant(klant)
+							.make();
 					afspraak.addBehandeling(behandeling);
 					i++;
 				} else {
@@ -204,7 +237,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		return null;
 	}
 	
-	public void getInkomsten(Bedrijf bedrijf, Date date){
+	public void getInkomsten(Statestieken bedrijf, Date date){
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					"select count(a.id) as afspraken, sum(b.prijs) as inkomsten \n" + 
@@ -216,6 +249,8 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
+				System.out.println(dbResultSet.getInt("afspraken"));
+				System.out.println(dbResultSet.getDouble("inkomsten"));
 				bedrijf.setHoeveelheidAfspraken(dbResultSet.getInt("afspraken"));
 				bedrijf.setHoeveelheidInkomsten(dbResultSet.getDouble("inkomsten"));
 			} 
@@ -282,7 +317,10 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				String timestamp = dbResultSet.getString("timestamp");
-				Afspraak afspraak = new Afspraak(DatabaseDateAdapter.StringToDate(timestamp, "YYYY-MM-dd HH:mm"));
+				Afspraak afspraak = new AfspraakBuilder()
+						.setTimestamp(DatabaseDateAdapter.StringToDate(timestamp, "YYYY-MM-dd HH:mm"))
+						.make();
+						
 				afspraak.setPrijs(dbResultSet.getDouble("prijs"));
 				klant.addAfspraak(afspraak);
 			} 
@@ -347,7 +385,14 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					klantAdres = "-";
 				} 
 				
-				Klant klant = new Klant(id, klantNaam, klantEmail, klantTelefoon, klantGeslacht, klantAdres);
+				Klant klant = new KlantBuilder()
+						.setId(id)
+						.setNaam(klantNaam)
+						.setEmail(klantEmail)
+						.setTel(klantTelefoon)
+						.setGeslacht(klantGeslacht)
+						.setAdres(klantAdres)
+						.make();
 				return klant;
 			}
 		} catch (SQLException e) {	
@@ -374,9 +419,14 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 				double prijs = dbResultSet.getDouble("prijs");
 				
 				String lengteString = dbResultSet.getString("lengte");
-				Date lengte = ServiceFilter.StringToDateFormatter(lengteString, "HH:mm");
+				Date lengte = DatabaseDateAdapter.StringToDate(lengteString, "HH:mm");
 
-				Behandeling behandeling = new Behandeling(id, naam, null, lengte, prijs, null);
+				Behandeling behandeling = new BehandelingBuilder()
+						.setId(id)
+						.setNaam(naam)
+						.setLengte(lengte)
+						.setPrijs(prijs)
+						.make();
 				behandelingen.add(behandeling);
 			}
 		} catch (SQLException e) {	
@@ -406,4 +456,100 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		return false;
 	}
 
+	
+	public HashMap<String, String> getGeslachtenVanAfspraken(Statestieken bedrijf,Date date) {
+		HashMap<String, String> geslachten = new HashMap<String, String>();
+		
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					  "select count(a.id) as afspraken, b.geslacht as geslacht \n" + 
+					  "from afspraak a join afspraakBehandeling n on a.id = n.afspraakId\n" + 
+					  "join behandeling b on n.Behandelingid = b.id\n" + 
+					  "WHERE b.BedrijfBedrijfsnaam = '"+ bedrijf.getBedrijfsNaam() +"' \n" + 
+					  "AND timestamp < SYSDATE() \n" + 
+					  "AND timestamp > "+DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd")+" \n"+
+					  "group by b.geslacht \n");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				String afspraken = dbResultSet.getString("afspraken");
+				String geslacht = dbResultSet.getString("geslacht");
+				
+				geslachten.put(geslacht, afspraken);
+			}
+		} catch (SQLException e) {	
+			e.printStackTrace();
+		}
+		return geslachten;
+	}
+	
+	public List<Double> getPrijzenVanAfspraak(Statestieken statestieken, Date date){
+		List<Double> afspraken = new ArrayList<Double>();
+		try (Connection con = super.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(
+					  "SELECT sum(b.prijs) as prijs \n" + 
+					  "from behandeling b join afspraakBehandeling n on b.id = n.Behandelingid \n" + 
+					  "join afspraak a on n.afspraakId = a.id \n" + 
+					  "WHERE b.BedrijfBedrijfsnaam = '"+ statestieken.getBedrijfsNaam() +"' \n" + 
+					  "AND timestamp < SYSDATE() \n" + 
+					  "AND timestamp > "+DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd")+" \n"+
+					  "group by a.id ");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				afspraken.add(dbResultSet.getDouble("prijs"));
+			}
+		} catch (SQLException e) {	
+			e.printStackTrace();
+		}
+		return afspraken;
+	}
+	public List<Date> getLengtesVanAfspraak(Statestieken statestieken, Date date){
+		List<Date> lengtes = new ArrayList<Date>();
+		try (Connection con = super.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(
+					  "select b.lengte \n" + 
+					  "from behandeling b join afspraakBehandeling n on b.id = n.Behandelingid \n" + 
+					  "join afspraak a on a.id = n.Behandelingid \n" + 
+					  "WHERE b.BedrijfBedrijfsnaam = '"+ statestieken.getBedrijfsNaam() +"' \n" + 
+					  "AND timestamp < SYSDATE() \n" + 
+					  "AND timestamp > "+DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd")+" \n"+
+					  "group by a.id ");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				lengtes.add(DatabaseDateAdapter.StringToDate(dbResultSet.getString("lengte"), "HH:mm"));
+			}
+		} catch (SQLException e) {	
+			e.printStackTrace();
+		}
+		return lengtes;
+	}
+	
+	public HashMap<Date, Double> getInkomstenForStatistics(Statestieken statestieken, Date date){
+		HashMap<Date, Double> data = new HashMap<Date, Double>();
+		try (Connection con = super.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(
+					  "select a.timestamp datum, count(b.prijs) as prijs \n" + 
+					  "from behandeling b join afspraakBehandeling n on b.id = n.Behandelingid \n" + 
+					  "join afspraak a on a.id = n.Behandelingid \n" +
+					  "WHERE b.BedrijfBedrijfsnaam = '"+ statestieken.getBedrijfsNaam() +"' \n" + 
+					  "AND timestamp < SYSDATE() \n" + 
+					  "AND timestamp > "+DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd")+" \n"+
+					  "group by a.timestamp ");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				Date datum = DatabaseDateAdapter.StringToDate(dbResultSet.getString("datum"), "HH:mm");
+				double prijs = dbResultSet.getDouble("prijs");
+				data.put(datum, prijs);
+			}
+		} catch (SQLException e) {	
+			e.printStackTrace();
+		}
+		return data;
+	}
 }

@@ -15,13 +15,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import com.swinkels.emperio.objects.Afspraak;
+import com.swinkels.emperio.objects.AfspraakBuilder;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Instellingen;
 import com.swinkels.emperio.objects.Klant;
+import com.swinkels.emperio.objects.KlantBuilder;
 import com.swinkels.emperio.support.Adapter;
 import com.swinkels.emperio.support.JavascriptDateAdapter;
+import com.swinkels.emperio.support.Validator;
 
 @Path("/klantenPlanProvider")
 public class klantenPlanProvider {
@@ -82,14 +85,14 @@ public class klantenPlanProvider {
 		bedrijf.retrieveDagen();
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		for (Dag dag : bedrijf.getDagen()) {
-			JsonObjectBuilder job = Json.createObjectBuilder();
-			job.add("dagNummmer", JavascriptDateAdapter.dagNummer(dag.getDag()));
-			System.out.println(dag.getDag());
-			System.out.println(JavascriptDateAdapter.dagNummer(dag.getDag()));
-			
-			job.add("sluitingstijd", JavascriptDateAdapter.DateToString(dag.getSluitingsTijd(), "HH:mm"));
-			job.add("opeingstijd", JavascriptDateAdapter.DateToString(dag.getOpeningsTijd(), "HH:mm"));
-			jab.add(job);
+			Date openingsTijd = dag.getOpeningsTijd();
+			if(openingsTijd != null) {
+				JsonObjectBuilder job = Json.createObjectBuilder();
+				job.add("dagNummmer", JavascriptDateAdapter.dagNummer(dag.getDag()));
+				job.add("sluitingstijd", JavascriptDateAdapter.DateToString(dag.getSluitingsTijd(), "HH:mm"));
+				job.add("opeingstijd",  JavascriptDateAdapter.DateToString(openingsTijd, "HH:mm"));
+				jab.add(job);
+			} 
 		}
 		return jab.build().toString();
 	}
@@ -100,9 +103,7 @@ public class klantenPlanProvider {
 	public String tijdslotenOphalen(@PathParam("data") String data) {
 		Bedrijf bedrijf = getBedrijf(data);
 		Date vandaag = getDatum(data);
-		System.out.println(vandaag);
 		bedrijf.getOpeningsTijden(vandaag);
-		System.out.println();
 		Dag dag = bedrijf.getDagen().get(0);
 
 		JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -154,13 +155,25 @@ public class klantenPlanProvider {
 		Bedrijf bedrijf = getBedrijf(data);
 		String afspraakKlantNaam = klantVoornaam + " " + klantAchternaam;
 		String klantPlek = klantWoonplaats + " " + klantPostcode + "" + klantAdres;
-
-		Klant klant = new Klant(afspraakKlantNaam, afspraakKlantEmail, afspraakKlantTel, getGeslacht(data), klantPlek, bedrijf);
+		Klant klant = new KlantBuilder()
+				.setNaam(afspraakKlantNaam)
+				.setEmail(afspraakKlantEmail)
+				.setTel(afspraakKlantTel)
+				.setGeslacht(getGeslacht(data))
+				.setAdres(klantPlek)
+				.setBedrijf(bedrijf)
+				.make();
+				
 		klant.saveOrFindAndGetId();
 
 		Date timestamp = getTimestamp(data, afspraakTijd);
 		System.out.println(timestamp);
-		Afspraak afspraak = new Afspraak(timestamp, bedrijf, klant);
+		Afspraak afspraak = new AfspraakBuilder()
+				.setTimestamp(timestamp)
+				.setBedrijf(bedrijf)
+				.setKlant(klant)
+				.make();
+		
 		afspraak.save();
 		afspraak.retrieveId();
 

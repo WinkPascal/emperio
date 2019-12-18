@@ -1,6 +1,6 @@
 package com.swinkels.emperio.service;
-
-import java.util.Date;
+ 
+import java.util.Date; 
 import java.util.HashMap;
 
 import javax.annotation.security.RolesAllowed;
@@ -23,10 +23,6 @@ import org.json.JSONArray;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.BehandelingBuilder;
-import com.swinkels.emperio.providers.BehandelingDao;
-import com.swinkels.emperio.providers.BehandelingDaoImpl;
-import com.swinkels.emperio.support.Adapter;
-import com.swinkels.emperio.support.DatabaseDateAdapter;
 import com.swinkels.emperio.support.JavascriptDateAdapter;
 
 @Path("/behandelingProvider")
@@ -43,8 +39,15 @@ public class BehandelingProvider {
 		Date lengte = JavascriptDateAdapter.StringToDate(uur + ":" + minuten, "HH:mm");
 		JSONArray jsonArray = new JSONArray(geslachten);
 		for (int i = 0; i < jsonArray.length(); i++) {
-			Behandeling behandeling = new Behandeling(bedrijf, naam, beschrijving, prijs, lengte,
-					jsonArray.get(i).toString());
+			Behandeling behandeling = new BehandelingBuilder()
+					.setBedrijf(bedrijf)
+					.setNaam(naam)
+					.setBeschrijving(beschrijving)
+					.setPrijs(prijs)
+					.setLengte(lengte)
+					.setGeslacht(jsonArray.get(i).toString())
+					.make();
+					
 			behandeling.save();
 		}
 		return Response.ok().build();
@@ -151,5 +154,4 @@ public class BehandelingProvider {
 		hmap.put("sort", sort);
 		return hmap;
 	}
-
 }

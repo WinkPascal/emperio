@@ -54,77 +54,79 @@ function getBehandelingen(functie, geslacht) {
 		}
 	}
 	fetch("restservices/behandelingProvider/alleBehandelingen/" + data, fetchoptions)
-		.then(response => response.json())
-		.then(function (behandelingen) {
-			if (behandelingen.length == 0) {
-				errorMessage("er zijn geen behandelingen gevonden");
-				return;
-			}
-			succesMessage("behandelingen zijn opgehaald");
+	.then(response => response.json())
+	.then(function (behandelingen) {
+		if (behandelingen.length == 0) {
+			errorMessage("er zijn geen behandelingen gevonden");
+			return;
+		}
+		succesMessage("behandelingen zijn opgehaald");
 
-			var topRow = document.createElement('tr');
-
-			var behandelingNaam = document.createElement('th');
-			behandelingNaam.innerHTML = "Naam";
-			topRow.appendChild(behandelingNaam);
-
-			var behandelingPrijs = document.createElement('th');
-			behandelingPrijs.innerHTML = "prijs";
-			topRow.appendChild(behandelingPrijs);
-
-			var behandelingLengte = document.createElement('th');
-			behandelingLengte.innerHTML = "lengte";
-			topRow.appendChild(behandelingLengte);
-
-			var behandelingGeslacht = document.createElement('th');
-			behandelingGeslacht.innerHTML = "Geslacht";
-			topRow.appendChild(behandelingGeslacht);
-
-			var behandelingInkomsten = document.createElement('th');
-			behandelingInkomsten.innerHTML = "inkomsten";
-			topRow.appendChild(behandelingInkomsten);
-
-			var behandelingAfspraken = document.createElement('th');
-			behandelingAfspraken.innerHTML = "afspraken";
-			topRow.appendChild(behandelingAfspraken);
-
-			behandelingenLijst.appendChild(topRow);
-
-			for (let behandeling of behandelingen) {
-				var row = document.createElement('tr');
-				row.id = behandeling.id;
-
-				var behandelingNaam = document.createElement('td');
-				behandelingNaam.innerHTML = behandeling.naam;
-				row.appendChild(behandelingNaam);
-
-				var behandelingPrijs = document.createElement('td');
-				behandelingPrijs.innerHTML = behandeling.prijs;
-				row.appendChild(behandelingPrijs);
-
-				var behandelingLengte = document.createElement('td');
-				behandelingLengte.innerHTML = behandeling.lengte;
-				row.appendChild(behandelingLengte);
-
-				var behandelingGeslacht = document.createElement('td');
-				behandelingGeslacht.innerHTML = behandeling.geslacht;
-				row.appendChild(behandelingGeslacht);
-
-				var behandelingInkomsten = document.createElement('td');
-				behandelingInkomsten.innerHTML = behandeling.inkomsten;
-				row.appendChild(behandelingInkomsten);
-
-				var behandelingAfspraken = document.createElement('td');
-				behandelingAfspraken.innerHTML = behandeling.afspraken;
-				row.appendChild(behandelingAfspraken);
-
-				behandelingenLijst.appendChild(row);
-				getBehandeling(behandeling.id, behandeling.prijs, behandeling.lengte, behandeling.afspraken, behandeling.inkomsten);
-			}
-		})
+		behandelingenLijst.appendChild(createTopRow());
+		for (let behandeling of behandelingen) {
+			behandelingenLijst.appendChild(createBehandelingRow(behandeling));
+			getBehandeling(behandeling.id, behandeling.prijs, behandeling.lengte, behandeling.afspraken, behandeling.inkomsten);
+		}
+	})
 }
+function createTopRow(){
+	var topRow = document.createElement('tr');
 
-function getBehandeling(id, naam, prijs, lengte, afspraken, inkomsten) {
+	var behandelingNaam = document.createElement('th');
+	behandelingNaam.innerHTML = "Naam";
+	topRow.appendChild(behandelingNaam);
+
+	var behandelingPrijs = document.createElement('th');
+	behandelingPrijs.innerHTML = "prijs";
+	topRow.appendChild(behandelingPrijs);
+
+	var behandelingLengte = document.createElement('th');
+	behandelingLengte.innerHTML = "lengte";
+	topRow.appendChild(behandelingLengte);
+
+	var behandelingGeslacht = document.createElement('th');
+	behandelingGeslacht.innerHTML = "Geslacht";
+	topRow.appendChild(behandelingGeslacht);
+
+	var behandelingInkomsten = document.createElement('th');
+	behandelingInkomsten.innerHTML = "inkomsten";
+	topRow.appendChild(behandelingInkomsten);
+
+	var behandelingAfspraken = document.createElement('th');
+	behandelingAfspraken.innerHTML = "afspraken";
+	topRow.appendChild(behandelingAfspraken);
+	return topRow;
+}
+function createBehandelingRow(behandeling){
+	var row = document.createElement('tr');
+	row.id = behandeling.id;
+
+	var behandelingNaam = document.createElement('td');
+	behandelingNaam.innerHTML = behandeling.naam;
+	row.appendChild(behandelingNaam);
+
+	var behandelingPrijs = document.createElement('td');
+	behandelingPrijs.innerHTML = behandeling.prijs;
+	row.appendChild(behandelingPrijs);
+
+	var behandelingLengte = document.createElement('td');
+	behandelingLengte.innerHTML = behandeling.lengte;
+	row.appendChild(behandelingLengte);
+
+	var behandelingGeslacht = document.createElement('td');
+	behandelingGeslacht.innerHTML = behandeling.geslacht;
+	row.appendChild(behandelingGeslacht);
+
+	var behandelingInkomsten = document.createElement('td');
+	behandelingInkomsten.innerHTML = behandeling.inkomsten;
+	row.appendChild(behandelingInkomsten);
+
+	var behandelingAfspraken = document.createElement('td');
+	behandelingAfspraken.innerHTML = behandeling.afspraken;
+	row.appendChild(behandelingAfspraken);
+	return row;
+}
+function getBehandeling(id, naam, prijs, lengte, afspraken, inkomsten) {  
 	document.getElementById(id).addEventListener("click", function () {
 		document.getElementById("naam").setAttribute("data-id", id);
 		var fetchoptions = {
@@ -144,9 +146,9 @@ function getBehandeling(id, naam, prijs, lengte, afspraken, inkomsten) {
 			})
 	})
 }
+
 document.getElementById("Annuleren").addEventListener("click", function () {
 	document.getElementById("BehandelingModal").style.display = "none";
-
 })
 
 function wijzigBehandeling() {
@@ -195,8 +197,6 @@ function verwijderBehandeling() {
 			})
 	})
 }
-
-
 
 document.getElementById("aanmaken").addEventListener("click", function () {
 	document.getElementById("BehandelingToevoegenModal").style.display = "block";
@@ -262,6 +262,7 @@ document.getElementById("annuleerBehandelingAnnuleren").addEventListener("click"
 document.getElementById("inplannenBehandelingToevoegen").addEventListener("click", function () {
 	behandelingToevoegen();
 })
+
 function behandelingToevoegen() {
 	var formData = new FormData(document.querySelector("#BehandelingToevoegenForm"));
 	formData.append("geslachten", JSON.stringify(geslachten));

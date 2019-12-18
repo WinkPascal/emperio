@@ -10,6 +10,10 @@ document.getElementById("volgendeKlantenPagina").addEventListener("click", funct
 	bladzijdeManager("volgende");
 })
 
+document.getElementById("zoekKlant").addEventListener("click", function(){
+	bladzijdeManager("load");
+})
+
 function bladzijdeManager(functie){
 	if(functie == "load"){
 		blz=1;
@@ -23,33 +27,16 @@ function bladzijdeManager(functie){
 			return;
 		}
 	}
+	if(blz==1){
+		document.getElementById("vorigeKlantenPagina").style.display = "none";
+	} else{
+		document.getElementById("vorigeKlantenPagina").style.display = "block";
+	}
 	document.getElementById("paginaNummer").innerHTML = blz;
-	getKlanten(blz);
+	zoekKlanten(blz);
 }
-
-function getKlanten(blz){ 
-	var klantenLijst = document.getElementById("klantenLijst");
-	klantenLijst.innerHTML="";
-	var fetchoptions = {
-			headers: {
-				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
-			}
-		}
-	fetch("restservices/klanten/alleKlanten/"+blz, fetchoptions)
-	.then(response => response.json())
-	.then(function(klanten){
-		if(klanten.length == 0){
-			errorMessage("er zijn geen klanten gevonden");
-			return;			
-		} else{
-			klantenLijst.appendChild(createTopRow());
-			for(let klant of klanten){
-                createKlantRow(klant);
-			}
-		}
-	})
-}
-function createKlantRow(klant){
+ 
+function createKlantRow(klant){  
 	var row = document.createElement('tr');
 	row.id = klant.id;
 	
@@ -80,12 +67,12 @@ function createKlantRow(klant){
 
 	var klantAfspraken = document.createElement('td');
 	klantAfspraken.className="telefoon";
-	klantAfspraken.innerHTML = "11";
+	klantAfspraken.innerHTML =klant.afspraken;
 	row.appendChild(klantAfspraken);
 
 	var klantInkomsten = document.createElement('td');
 	klantInkomsten.className="telefoon";
-	klantInkomsten.innerHTML = "$12.22";
+	klantInkomsten.innerHTML = klant.inkomsten;
 	row.appendChild(klantInkomsten);
 	
 	document.getElementById("klantenLijst").appendChild(row);
@@ -93,8 +80,8 @@ function createKlantRow(klant){
 		getKlant(klant.id);
 	})
 }
-
-function createTopRow(){
+ 
+function createTopRow(){  
 	var topRow = document.createElement('tr');
 	topRow.className = "topRow";
 
@@ -136,7 +123,7 @@ function createTopRow(){
 	return topRow;
 }
 
-function getKlant(id){
+function getKlant(id){ 
 	document.getElementById("klantModal").style.display = "block";
 	document.getElementById("sluitKlantInfo").addEventListener("click", function(){
 		document.getElementById("naamInfo").innerHTML = "";
@@ -170,10 +157,15 @@ function getKlant(id){
 		} else{
 			document.getElementById("telefoonInfo").innerHTML = data.telefoon;
 		}
+		if(data.adres == undefined){
+			document.getElementById("adresInfo").innerHTML = "-";		
+		} else{
+			document.getElementById("adresInfo").innerHTML = data.adres;
+		}
 		document.getElementById("emailKlant").addEventListener("click", function(){
 			alert("email optie van "+id);
 		})
-		document.getElementById("aantalAfsprakenInfo").innerHTML = data.afspraken;
+		document.getElementById("aantalAfsprakenInfo").innerHTML = data.aantalAfspraken;
 		document.getElementById("hoeveelheidInkomstenInfo").innerHTML = data.inkomsten;
 		var afspraakListHeader = document.createElement('h2');
 		afspraakListHeader.innerHTML = "laatste 5 afspraken";
@@ -202,13 +194,7 @@ function getKlant(id){
 	})
 }
 
-document.getElementById("zoekKlant").addEventListener("click", function(){
-	zoekKlanten();
-})
-
-//Zoek klanten door de zoekbalk
-function zoekKlanten(){
-	var requestKlant = document.getElementById("zoekKlantInput").value;
+function zoekKlanten(blz){
 	var fetchoptions = {
 			headers: {
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
@@ -216,48 +202,18 @@ function zoekKlanten(){
 		}
 	var klantenLijst = document.getElementById("klantenLijst");
 	klantenLijst.innerHTML = "";
-	fetch("restservices/klanten/klantenZoekReq/"+requestKlant, fetchoptions)
+	
+	var sort = document.getElementById("selectList").value;
+	var search = document.getElementById("zoekInput").value;
+
+	var data = "page="+blz+"&sort="+sort+"&search=-"+search;
+	fetch("restservices/klanten/klanten/"+data, fetchoptions)
 	.then(response => response.json())
 	.then(function(klanten){
-		var topRow = document.createElement('tr');
-
-		var klantNaam = document.createElement('th');
-		klantNaam.innerHTML= "Naam";
-		topRow.appendChild(klantNaam);
-
-		var klantGeslacht = document.createElement('th');
-		klantGeslacht.innerHTML= "Geslacht";
-		topRow.appendChild(klantGeslacht);
-		
-		var klantEmail = document.createElement('th');
-		klantEmail.innerHTML= "Email";
-		topRow.appendChild(klantEmail);
-		
-		var klantTelefoon = document.createElement('th');
-		klantTelefoon.innerHTML= "Telefoon nummer";
-		topRow.appendChild(klantTelefoon);
-		
-		klantenLijst.appendChild(topRow);
+		klantenLijst.appendChild(createTopRow());
 		for(let klant of klanten){
-			var row = document.createElement('tr');
-			
-			var klantNaam = document.createElement('td');
-			klantNaam.innerHTML = klant.naam;
-			row.appendChild(klantNaam);
-
-			var klantGeslacht = document.createElement('td');
-			klantGeslacht.innerHTML = klant.geslacht;
-			row.appendChild(klantGeslacht);
-
-			var klantEmail = document.createElement('td');
-			klantEmail.innerHTML = klant.email;
-			row.appendChild(klantEmail);
-
-			var klantTelefoon = document.createElement('td');
-			klantTelefoon.innerHTML = klant.telefoon;
-			row.appendChild(klantTelefoon);
-			
-			klantenLijst.appendChild(row);
+			console.log(klant.id);
+			createKlantRow(klant);
 		}
 	})
 }

@@ -1,3 +1,21 @@
+
+.geslachtenDiv{
+	background-color: #4169E1;
+}
+.addBehandelingButton{
+	background-color: #4CDA64;
+	font-size: 50px;
+	color: white;
+	border: 0px;
+	border-radius: 50%;
+	width: 45px;
+	height: 45px;
+	padding: -10px;
+	top: 10px;
+	position: absolute;
+	right: 20px; 
+}
+
 .BehandelingToevoegenForm {
 	width: 600px;
 	margin: auto;

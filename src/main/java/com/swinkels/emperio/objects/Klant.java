@@ -9,6 +9,9 @@ import com.swinkels.emperio.providers.KlantDao;
 import com.swinkels.emperio.providers.KlantDaoImpl;
 
 public class Klant {
+	KlantDao klantDao = new KlantDaoImpl();
+	AfspraakDao afspraakDao = new AfspraakDaoImpl();
+
 	private List<Afspraak> afspraken = new ArrayList<Afspraak>();
 
 	private int id;
@@ -23,7 +26,12 @@ public class Klant {
 	private int hoeveeleheidAfspraken;
 	private double hoeveelheidInkomsten;
 
-	public Klant(int id, String naam, String email, String tel, String geslacht, String adres, Bedrijf bedrijf) {
+
+
+	public Klant(List<Afspraak> afspraken, int id, String naam,
+			String email, String tel, String geslacht, String adres, Bedrijf bedrijf, int hoeveeleheidAfspraken,
+			double hoeveelheidInkomsten) {
+		this.afspraken = afspraken;
 		this.id = id;
 		this.naam = naam;
 		this.email = email;
@@ -31,44 +39,16 @@ public class Klant {
 		this.geslacht = geslacht;
 		this.adres = adres;
 		this.bedrijf = bedrijf;
-	}
-
-	public Klant(int id, String naam, String email, String tel, String geslacht, String klantAdres) {
-		this.id = id;
-		this.naam = naam;
-		this.email = email;
-		this.tel = tel;
-		this.geslacht = geslacht;
-		this.adres = klantAdres;
-	}
-
-	public Klant(String naam, String email, String tel, String geslacht, String klantAdres, Bedrijf bedrijf) {
-		this.naam = naam;
-		this.email = email;
-		this.tel = tel;
-		this.geslacht = geslacht;
-		this.adres = klantAdres;
-		this.bedrijf = bedrijf;
-	}
-
-	public Klant(String naam, String email, String tel, String geslacht, Bedrijf bedrijf) {
-		this.naam = naam;
-		this.email = email;
-		this.tel = tel;
-		this.geslacht = geslacht;
-		this.bedrijf = bedrijf;
+		this.hoeveeleheidAfspraken = hoeveeleheidAfspraken;
+		this.hoeveelheidInkomsten = hoeveelheidInkomsten;
 	}
 
 	public void getInfo() {
-		KlantDao klantDao = new KlantDaoImpl();
 		klantDao.getKlant(bedrijf, this);
-		AfspraakDao afspraakDao = new AfspraakDaoImpl();
-		afspraakDao.getAantalAfsprakenEnInkomstenByklant(bedrijf, this);
 		afspraakDao.getLaatste3Afspraken(bedrijf, this);
 	}
 
 	public void saveOrFindAndGetId() {
-		KlantDao klantDao = new KlantDaoImpl();
 		if (!klantDao.getKlantIdByEmail(this)) {
 			if (!klantDao.getKlantIdByPhone(this)) {
 				klantDao.setKlant(this);
@@ -77,11 +57,6 @@ public class Klant {
 		}
 	}
 
-	public Klant(String klantNaam) {
-		this.naam = klantNaam;
-	}
-
-	// getters and setters
 
 	public int getId() {
 		return id;
