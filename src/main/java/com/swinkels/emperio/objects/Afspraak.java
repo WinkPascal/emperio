@@ -3,10 +3,15 @@ package com.swinkels.emperio.objects;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.swinkels.emperio.providers.AfspraakBehandelingDao;
+import com.swinkels.emperio.providers.AfspraakBehandelingDaoImpl;
 import com.swinkels.emperio.providers.AfspraakDao;
 import com.swinkels.emperio.providers.AfspraakDaoImpl;
 
 public class Afspraak {
+	AfspraakDao afspraakDao = new AfspraakDaoImpl();
+	AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
+
 	private Klant klant;
 	private Bedrijf bedrijf;
 	private ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
@@ -34,10 +39,34 @@ public class Afspraak {
 	}
 
 	public void save() {
-		AfspraakDao afspraakDao = new AfspraakDaoImpl();
 		afspraakDao.setAfspraak(this);
+		afspraakDao.getAfspraakId(this);
+		for (Behandeling behandeling : behandelingen) {
+			behandeling.setBedrijf(bedrijf);
+			behandeling.getInfo();
+			afspraakBehandelingDao.saveAfspraakBehandeling(behandeling, this);
+		}
 	}
 
+	public void retrieveBehandelingen() {
+		AfspraakDao afspraakDao = new AfspraakDaoImpl();
+		behandelingen = afspraakDao.getBehandelingen(this);
+	}
+
+	public void retrieveKlant() {
+		AfspraakDao afspraakDao = new AfspraakDaoImpl();
+		klant = afspraakDao.getKlant(this);
+	}
+
+	public boolean delete() {
+		AfspraakDao afspraakDao = new AfspraakDaoImpl();
+		if (afspraakDao.deleteAfspraak(this)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -90,28 +119,5 @@ public class Afspraak {
 		this.timestamp = timestamp;
 	}
 
-	public void retrieveBehandelingen() {
-		AfspraakDao afspraakDao = new AfspraakDaoImpl();
-		behandelingen = afspraakDao.getBehandelingen(this);
-	}
-
-	public void retrieveKlant() {
-		AfspraakDao afspraakDao = new AfspraakDaoImpl();
-		klant = afspraakDao.getKlant(this);
-	}
-
-	public boolean delete() {
-		AfspraakDao afspraakDao = new AfspraakDaoImpl();
-		if (afspraakDao.deleteAfspraak(this)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public void retrieveId() {
-		AfspraakDao afspraakDao = new AfspraakDaoImpl();
-		afspraakDao.getAfspraakId(this);
-	}
 
 }

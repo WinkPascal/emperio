@@ -101,7 +101,10 @@ function onload() {
 
 		});
 }
-
+document.getElementById("logoutButton").addEventListener("click", function() {
+	window.sessionStorage.setItem("sessionToken", "");
+	location.href = 'index.html';
+})
 //onclick listener voor aanklikken card
 document.getElementById("inventarisCard").addEventListener("click", function () {
 	location.href = 'inventaris.html';

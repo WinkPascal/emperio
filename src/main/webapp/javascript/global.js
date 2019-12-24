@@ -23,15 +23,9 @@ function succesMessage(message) {
 	}, 1000);
 }
 
-document.getElementById("logoutButton").addEventListener("click", function() {
-	window.sessionStorage.setItem("sessionToken", "");
-	location.href = 'index.html';
-})
-
-
-document.getElementById("homeButton").addEventListener("click", function () {
-	location.href = 'home.html';
-})
+//document.getElementById("homeButton").addEventListener("click", function () {
+//	location.href = 'home.html';
+//})
 
 function formatDate(date){
 	var date = new Date(date);

@@ -10,18 +10,24 @@ function onload() {
 		.then(response => response.json())
 		.then(function (data) {
 			document.getElementById("bedrijfsnaam").innerHTML = data.bedrijfsNaam;
-
-			document.getElementById("emailBedrijf").innerHTML = data.bedrijfEmail;
-			document.getElementById("telefoonBedrijf").innerHTML = data.bedrijfsTelefoon;
-			document.getElementById("adresBedrijf").innerHTML = data.bedrijfsAdres;
+			
+			var email =data.bedrijfEmail;
+			var telefoon = data.bedrijfsTelefoon;
+			var adres = data.bedrijfsAdres;
+			
+			document.getElementById("emailBedrijf").innerHTML = email;
+			document.getElementById("telefoonBedrijf").innerHTML = telefoon;
+			document.getElementById("adresBedrijf").innerHTML = adres;
 
 			document.getElementById("klantEmail").hidden = !data.invoerveldEmail;
 			document.getElementById("klantTelefoon").hidden = !data.invoerveldTelefoon;
 			document.getElementById("klantAdres").hidden = !data.invoerveldAdres;
 
-			removeLoadingScreen();
 		})
+		
+	removeLoadingScreen();
 	inplannenGeslachtKiezen();
+	
 }
 
 function openNav() {

@@ -5,15 +5,27 @@
 	<title>setup</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
 
-	<link rel="stylesheet" href="css/setup.css">
+	<link rel="stylesheet" type="text/css" href="css/wizard.css">
+
+ 	<link rel="stylesheet" media="screen and (max-width: 480px)" href="css/smartphone/setup.css">
+	<link rel="stylesheet" media="screen and (min-width: 480px) and (max-width: 1024px)" href="css/tablet/setup.css">
+	<link rel="stylesheet" media="screen and (min-width: 1024px)" href="css/desktop/setup.css">
+	
+	<link rel="stylesheet" type="text/css" href="css/desktop/instellingen.css">
 	<link rel="stylesheet" href="css/global.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>    
 </head>
 
 <body onload="onload()">
-	<div class="setupDiv">
-		<div class="wizard">
+	<div class="welkomDiv" id="welkomDiv">
+		<h2>Welkom Naam</h2>
+		<a>Voordat je aan de slag kun moet u nog een laatste paar stappen doen!</a>
+		<br><br>
+		<a>Klik op het scherm op te beginnen!</a>
+	</div>
+	<div class="setupDiv" id="setupDiv">
+		<div class="wizard" id="wizard">
 			<input type="button" class="defaultButton" value="Cancel" id="vorigeStap"> 
 			<ul class="progressbar">
          		<li id="behandelingenWizard" class="active">Behandelingen</li>
@@ -22,7 +34,7 @@
 			</ul>
 			<input type="button" class="defaultButton" value="Verder" id="volgendeStap">
 		</div>
-
+	
 
 		<div id="behandelingen" class="wizardstep"> 
 			<div class="behandelingenLijstDiv"> 
@@ -85,128 +97,6 @@
 		</div>
 
 		<div id="afspraakSettingsDiv" class="wizardstep"> 
-			<div  class="afspraakKleurInstelling">
-				<h2>Afspraak bekijken</h2>
-				<p class="infoText">Geef aan welke kleur de afspraak in uw calender moet zijn volgens een uw prijs klasse</p>
-				<div class="afspraakColor"> 
-					<div class="price-picker">
-						<a>Prijsklasse 1 </a><br>
-						<span>
-							van €
-							<span>0.00</span>
-						</span> <br>
-						<span>
-							Tot € 
-							<input class="inputPrijsToevoegen" id="maxPrijs1" type="number" name="maxPrijs1">
-						</span>	
-					</div>
-					
-					<div class="color-picker"> 
-						<label class="container">
-						  <input type="radio" value="#444c5c" name="kleurKlasse1">
-						  <span class="checkmark" style="background-color: #444c5c;"></span>
-						</label>
-						<label class="container">
-						  <input type="radio" value="#d63838" name="kleurKlasse1">
-						  <span class="checkmark" style="background-color: #d63838;"></span>
-						</label>
-						<label class="container">
-						  <input type="radio" value="#78a5a3" name="kleurKlasse1">
-						  <span class="checkmark" style="background-color: #78a5a3;"></span>
-						</label>						
-						<label class="container">
-						  <input type="radio" value="#c78d1e" name="kleurKlasse1">
-						  <span class="checkmark" style="background-color: #c78d1e;"></span>
-						</label>						
-						<label class="container">
-						  <input type="radio" value="#52b852" name="kleurKlasse1">
-						  <span class="checkmark" style="background-color: #52b852;"></span>
-						</label>						
-						<label class="container">
-						  <input type="radio" value="#ffcc5c" name="kleurKlasse1">
-						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
-						</label>						
-					</div>
-				</div>
-				<br>
-				<div class="afspraakColor">
-					<div class="price-picker">
-						<a>Prijsklasse 2 </a><br>
-						<span>
-							van €
-							<span>0.00</span>
-						</span> <br>
-						<span>
-							Tot € 
-							<input class="inputPrijsToevoegen" id="maxPrijs2" type="number" name="maxPrijs2">,
-						</span>	
-					</div>
-					
-					<div class="color-picker">
-						<label class="container">
-						  <input type="radio" value="#444c5c" name="kleurKlasse2">
-						  <span class="checkmark" style="background-color: #444c5c;"></span>
-						</label>
-						<label class="container">
-						  <input type="radio" value="#d63838" name="kleurKlasse2">
-						  <span class="checkmark" style="background-color: #d63838;"></span>
-						</label>
-						<label class="container">
-						  <input type="radio" value="#78a5a3" name="kleurKlasse2">
-						  <span class="checkmark" style="background-color: #78a5a3;"></span>
-						</label>						
-						<label class="container">
-						  <input type="radio" value="#c78d1e" name="kleurKlasse2">
-						  <span class="checkmark" style="background-color: #c78d1e;"></span>
-						</label>						
-						<label class="container">
-						  <input type="radio" value="#52b852" name="kleurKlasse2">
-						  <span class="checkmark" style="background-color: #52b852;"></span>
-						</label>						
-						<label class="container">
-						  <input type="radio" value="#ffcc5c" name="kleurKlasse2">
-						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
-						</label>	
-					</div>
-				</div>
-				<br>
-				<div class="afspraakColor">
-					<div class="price-picker">
-						<a>Prijsklasse 3 </a><br>
-						<span>
-							van €
-							<span>0.00</span>
-						</span> <br>
-					</div>
-					
-					<div class="color-picker">
-						<label class="container">
-						  <input type="radio" value="#444c5c" name="kleurKlasse3">
-						  <span class="checkmark" style="background-color: #444c5c;"></span>
-						</label>
-						<label class="container">
-						  <input type="radio" value="#d63838" name="kleurKlasse3">
-						  <span class="checkmark" style="background-color: #d63838;"></span>
-						</label>
-						<label class="container">
-						  <input type="radio" value="#78a5a3" name="kleurKlasse3">
-						  <span class="checkmark" style="background-color: #78a5a3;"></span>
-						</label>						
-						<label class="container">
-						  <input type="radio" value="#c78d1e" name="kleurKlasse3">
-						  <span class="checkmark" style="background-color: #c78d1e;"></span>
-						</label>						
-						<label class="container">
-						  <input type="radio" value="#52b852" name="kleurKlasse3">
-						  <span class="checkmark" style="background-color: #52b852;"></span>
-						</label>						
-						<label class="container">
-						  <input type="radio" value="#ffcc5c" name="kleurKlasse3">
-						  <span class="checkmark" style="background-color: #ffcc5c;"></span>
-						</label>	
-					</div>
-				</div>
-			</div>
 			<div class="invoervelden">
 				<h2>Afspraak inplannen</h2>
 				<p class="infoText">Welke informatie moet de klant invullen voor het maken van een afspraak?</p>
@@ -222,28 +112,20 @@
 				  	<input type="checkbox" name="invoerveld" id="adresInvoerVeld">
 				 	<span class="checkmark"></span>
 				</label>
-
+			</div>
+			<div class="contactGegevens"> 
 				<h2>Uw informatie</h2>
-				<p class="infoText">Welke informatie wilt u aan uw klanten laten zien?</p>
+				<a>Welke contact gegevens wilt u aanbieden aan uw klanten?</a>
 				<span class="bedrijfInfoInput">
-					<label class="container"> Email adres:
-						<input type="checkbox" name="bedrijfsinformatie" id="bedrijfsEmail">
-						<span class="checkmark"></span>
-					</label>
+					<a>Email adres</a>
 					<input type="email" id="emailBedrijfInput" value="pawiwink@gmail.com">
 				</span>
 				<span class="bedrijfInfoInput">
-					<label class="container"> Telefoon nummer: 
-					  	<input type="checkbox" name="bedrijfsinformatie" id="bedrijfsTelefoon">
-					 	<span class="checkmark"></span>
-					</label>
+					<a>Telefoon nummer</a>
 					<input type="text" id="telefoonBedrijfInput" value="0615574742">
 				</span>
 				<span class="bedrijfInfoInput">
-					<label class="container">Adres:  
-					  	<input type="checkbox" name="bedrijfsinformatie" id="bedrijfsAdres">
-					 	<span class="checkmark"></span>
-					</label>
+					<a>Adres</a>
 					<input type="text" id="adresBedrijfInput" value="adresTest">
 				</span>
 			</div>
@@ -251,7 +133,7 @@
 
 		<div id="dagenDiv" class="wizardstep">
 			<form id="dagenForm">
-				<div class="dagInputArea">
+				<div class="dagInputArea" id="infoBox">
 					<h2>Rooster</h2>
 					<a class="infoText">
 						Voer hier uw openingetijden in. <br>
@@ -452,6 +334,7 @@
 		</div>
 	</div>
  	 <script src="javascript/setup.js"></script>	
+ 	 <script src="javascript/instellingen.js"></script>	
  	 <script src="javascript/global.js"></script>	
 </body>
 </html>

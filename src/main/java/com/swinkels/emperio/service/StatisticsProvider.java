@@ -3,6 +3,7 @@ package com.swinkels.emperio.service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.json.Json;
@@ -16,10 +17,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
+import com.swinkels.emperio.objects.Afspraak;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Behandeling;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Statestieken;
+import com.swinkels.emperio.support.Adapter;
 
 @Path("/statistics")
 public class StatisticsProvider {
@@ -46,11 +49,72 @@ public class StatisticsProvider {
 		Statestieken.getAantalAfsprakenPerDag(date);
 		job.add("afsprakenPerDag", getAfsprakenVanDagen(Statestieken));
 		
-		HashMap<String, String> inkosmeten = Statestieken.getInkomsten(date);
+		//HashMap<String, String> inkosmeten = Statestieken.getInkomsten(date, lengte);
 
 		return job.build().toString();
 	}
+	
+	private JsonObjectBuilder getWeekInkomsten(List<Afspraak> afspraken) {
+		Double week1 = 0.0;
+		Double week2 = 0.0;
+		Double week3 = 0.0;
+		Double week4 = 0.0;
+		Double week5 = 0.0;
+		for(Afspraak afspraak : afspraken) {
+			int dagnummer = Adapter.getDagNummerFromDate(afspraak.getTimeStamp());
+			switch(dagnummer) {
+			
+			}
+		}
 
+		
+	}
+
+	
+	private JsonObjectBuilder getWeekInkomsten(List<Afspraak> afspraken) {
+		Double dag1 = 0.0;
+		Double dag2 = 0.0;
+		Double dag3 = 0.0;
+		Double dag4 = 0.0;
+		Double dag5 = 0.0;
+		Double dag6 = 0.0;
+		Double dag7 = 0.0;
+		for(Afspraak afspraak : afspraken) {
+			int dagnummer = Adapter.getDagNummerFromDate(afspraak.getTimeStamp());
+			switch(dagnummer) {
+			case 1:
+				dag1 = dag1 + afspraak.getPrijs();
+				break;
+			case 2:
+				dag2 = dag2 + afspraak.getPrijs();
+				break;
+			case 3:
+				dag3 = dag3 + afspraak.getPrijs();
+				break;
+			case 4:
+				dag4 = dag4 + afspraak.getPrijs();
+				break;
+			case 5:
+				dag5 = dag5 + afspraak.getPrijs();
+				break;
+			case 6:
+				dag6 = dag6 + afspraak.getPrijs();
+				break;
+			case 7:
+				dag7 = dag7 + afspraak.getPrijs();
+				break;
+			}
+		}
+		JsonObjectBuilder job = Json.createObjectBuilder();
+		job.add("dag1", dag1);
+		job.add("dag2", dag2);
+		job.add("dag3", dag3);
+		job.add("dag4", dag4);
+		job.add("dag5", dag5);
+		job.add("dag6", dag6);
+		job.add("dag7", dag7);
+		return job;
+	}
 
 	private JsonObjectBuilder getLengteAfspraken(HashMap<String, String> lengtesAfspraken) {
 		JsonObjectBuilder job = Json.createObjectBuilder();

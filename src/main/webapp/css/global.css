@@ -9,7 +9,6 @@ body {
 	margin: 0px;
 }
 
-/* Animaties */
 @ keyframes zoom {
 	from {
 		transform: scale(0)
@@ -178,11 +177,10 @@ input[type=text] {
 }
 
 #laadscherm .contentDiv {
-	position: absolute;
+	position: relative;
 	width: 200px;
 	height: 100px;
-	border: 1px solid blue;
-	left: 40%;
+	margin: auto;
 	top: 40%;
 }
 

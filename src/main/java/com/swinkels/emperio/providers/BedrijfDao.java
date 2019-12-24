@@ -7,11 +7,7 @@ import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Product;
 
-public interface BedrijfDao {	
-	public ArrayList<Product> getProductenByPage(Bedrijf bedrijf, int page);
-
-	public boolean setProduct(Product product);
-	
+public interface BedrijfDao {		
 	public boolean save(Bedrijf bedrijf);
 
 	public boolean setInvoerKlant(Bedrijf bedrijf, String contact, boolean telefoon, boolean email, boolean adres);

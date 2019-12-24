@@ -9,6 +9,10 @@ import com.swinkels.emperio.providers.BehandelingDao;
 import com.swinkels.emperio.providers.BehandelingDaoImpl;
 
 public class Behandeling {
+	BehandelingDao behandelingDao = new BehandelingDaoImpl();
+	AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
+
+	
 	private Bedrijf bedrijf;
 
 	private int id;
@@ -126,7 +130,6 @@ public class Behandeling {
 	}
 
 	public boolean save() {
-		BehandelingDao behandelingDao = new BehandelingDaoImpl();
 		if (behandelingDao.save(this)) {
 			return true;
 		} else {
@@ -135,18 +138,23 @@ public class Behandeling {
 	}
 
 	public void getInfo() {
-		BehandelingDao behandelingDao = new BehandelingDaoImpl();
 		behandelingDao.getBehandeling(this);
 	}
 
 	public void saveAfspraakBehandeling(Afspraak afspraak) {
-		AfspraakBehandelingDao afspraakBehandelingDao = new AfspraakBehandelingDaoImpl();
 		afspraakBehandelingDao.saveAfspraakBehandeling(this, afspraak);
 	}
 
 	public boolean delete() {
-		BehandelingDao behandelingDao = new BehandelingDaoImpl();
 		if (behandelingDao.delete(this)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean update() {
+		if (behandelingDao.update(this)) {
 			return true;
 		} else {
 			return false;

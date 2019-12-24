@@ -28,12 +28,14 @@ import com.swinkels.emperio.support.Validator;
 
 @Path("/klantenPlanProvider")
 public class klantenPlanProvider {
+	
 	@GET
 	@Path("/getBedrijfDataStart/{data}")
 	@Produces("application/json")
 	public String getBedrijfDataStart(@PathParam("data") String data) {
+		System.out.println("=============");
 		Bedrijf bedrijf = getBedrijf(data);
-		Instellingen instellingen = new Instellingen(bedrijf);
+		Instellingen instellingen = new Instellingen(bedrijf.getBedrijfsNaam());
 		bedrijf.setInstellingen(instellingen);
 		bedrijf.getKlantPaginaSettings();
 		
@@ -43,16 +45,11 @@ public class klantenPlanProvider {
 		job.add("invoerveldTelefoon", instellingen.isTelefoonKlantInvoer());
 		job.add("invoerveldAdres", instellingen.isAdresKlantInvoer());
 
-		if (instellingen.isBedrijfsEmail()) {
-			job.add("bedrijfEmail", bedrijf.getEmail());
-		}
-		if (instellingen.isBedrijfsTelefoon()) {
-			job.add("bedrijfsTelefoon", bedrijf.getTelefoon());
-		}
-		if (instellingen.isBedrijfsAdres()) {
-			String adres = bedrijf.getWoonplaats() + " " + bedrijf.getPostcode() + " " + bedrijf.getAdres();
-			job.add("bedrijfsAdres", adres);
-		}
+		job.add("bedrijfEmail", bedrijf.getEmail());
+		job.add("bedrijfsTelefoon", bedrijf.getTelefoon());
+		String adres = bedrijf.getWoonplaats() + " " + bedrijf.getPostcode() + " " + bedrijf.getAdres();
+		job.add("bedrijfsAdres", adres);
+		
 
 		return job.build().toString();
 	}
@@ -165,24 +162,16 @@ public class klantenPlanProvider {
 				.make();
 				
 		klant.saveOrFindAndGetId();
-
 		Date timestamp = getTimestamp(data, afspraakTijd);
-		System.out.println(timestamp);
+
 		Afspraak afspraak = new AfspraakBuilder()
 				.setTimestamp(timestamp)
 				.setBedrijf(bedrijf)
 				.setKlant(klant)
 				.make();
 		
+		afspraak.setBehandelingen(getBehandelingen(data));
 		afspraak.save();
-		afspraak.retrieveId();
-
-		ArrayList<Behandeling> behandelingen = getBehandelingen(data);
-		
-		afspraak.setBehandelingen(behandelingen);
-		for (Behandeling behandeling : behandelingen) {
-			behandeling.saveAfspraakBehandeling(afspraak);
-		}
 		return Response.ok().build();
 	}
 	private Bedrijf getBedrijf(String data) {

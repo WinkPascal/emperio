@@ -1,13 +1,60 @@
-.setupDiv {
+.welkomDiv {
+	height: 300px;
 	margin: auto;
-	width: 1100px;
-	height: 600px;
+	text-align: center;
+	position: relative;
+	font-family: 'Raleway', sans-serif;
+	color: white;
 }
 
+.welkomDiv h2 {
+	font-size: 80px;
+}
+
+.welkomDiv a {
+	font-size: 30px;
+}
+
+body::before {
+	content: "";
+	position: fixed;
+	z-index: -100;
+	width: 100%;
+	top: 0px;
+	position: absolute;
+	height: 100%;
+	background-color: #14C2CC;
+	background-image: radial-gradient(circle farthest-side at top right, transparent, #0D64FF),
+		radial-gradient(ellipse farthest-corner at 0% 100%, transparent, #FF00A0
+		);
+	animation: bg-change 10s infinite;
+}
+
+@
+keyframes bg-change { 0%, 100% {
+	filter: hue-rotate(0deg);
+}
+
+50%{
+filter
+:hue-rotate(-45deg)
+;
+}
+}
+
+.setupDiv {
+	margin: auto;
+	display: none; 
+	width: 1100px;
+	height: 100%;
+	background-color: white;
+	border-radius: 20px;
+	margin-top: 100px; 
+}
 
 /* behandleingen */
-
 .wizard {
+	display: none; 	
 	position: relative;
 	width: 100%;
 }
@@ -18,72 +65,6 @@
 	width: 80%;
 	position: relative;
 	left: 10%;
-}
-
-.wizard .progressbar li {
-	list-style-type: none;
-	width: 25%;
-	float: left;
-	font-size: 12px;
-	position: relative;
-	text-align: center;
-	text-transform: uppercase;
-	color: #7d7d7d;
-}
-
-.wizard .progressbar li:before {
-	width: 30px;
-	height: 30px;
-	content: counter(step);
-	counter-increment: step;
-	line-height: 30px;
-	border: 2px solid #7d7d7d;
-	display: block;
-	text-align: center;
-	margin: 0 auto 10px auto;
-	border-radius: 50%;
-	background-color: white;
-}
-
-.wizard .progressbar li:after {
-	width: 100%;
-	height: 2px;
-	content: '';
-	position: absolute;
-	background-color: #7d7d7d;
-	top: 15px;
-	left: -50%;
-	z-index: -1;
-}
-
-.wizard .progressbar li:first-child:after {
-	content: none;
-}
-
-.wizard .progressbar li.active {
-	color: green;
-}
-
-.wizard .progressbar li.active:before {
-	border-color: #7d7d7d;
-}
-
-.wizard .progressbar li.active+li:after {
-	background-color: #55b776;
-}
-
-.wizard .progressbar li.done {
-	color: green;
-
-}
-
-.wizard .progressbar li.done:before {
-	border-color: #55b776;
-	background-color: green;
-}
-
-.wizard .progressbar li.done+li:after {
-	background-color: #55b776;
 }
 
 #vorigeStap {
@@ -98,15 +79,12 @@
 	width: 160px;
 }
 
-
-
-
-
 .wizardstep {
 	width: 1100px;
 	height: 600px;
 	border: 1px solid black;
 	display: none;
+	bacckground-color: white;
 }
 
 .behandelingenLijstDiv {
@@ -168,8 +146,6 @@
 	position: absolute;
 	right: 0px;
 }
-
-
 
 .BehandelingToevoegenForm {
 	float: right;
@@ -244,152 +220,73 @@
 	background-color: #3D5FC4;
 }
 
-
 /* afspraak settings */
-.afspraakKleurInstelling {
-	width: 50%;
-	float: left;
-	border-right: 1px solid gray;
-	height: 100%;
-}
-
-.afspraakKleurInstelling .afspraakColor{
-	border-top: 1px solid gray;
-	position: relative;
-	height: 100px;
-} 
-
-.afspraakColor .color-picker{
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	width: 240px;
-	height: 80px;
-	border: 1px solid black;
-	border-radius: 5px;
-	background-color:#424242;
-}
-
-.afspraakColor .color-picker .container {
-  display: block;
-  width: 30px;
-  position: relative;
-  padding-left: 35px;
-  float: left;
-  margin-bottom: 35px;
-  margin-left: 5px;
-  margin-right: 0px;
-  cursor: pointer;
-  font-size: 22px;
-}
-
-.afspraakColor .color-picker .container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.afspraakColor .color-picker .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 27px;
-  width: 27px;
-  background-color: #2196F3;
-  border-radius: 50%;
-}
-
-.afspraakColor .color-picker .checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-.afspraakColor .color-picker .container input:checked ~ .checkmark:after {
-  display: block;
-}
-
-.afspraakColor .color-picker .container .checkmark:after {
- 	top: 9px;
-	left: 9px;
-	width: 8px;
-	height: 8px;
-	border-radius: 50%;
-	background: white;
-}
-
-
-.invoervelden {
-	width: 49%;
-	height: 100%;
-	float: right;
-}
 
 /* The container */
 .invoervelden .container {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 22px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+	display: block;
+	position: relative;
+	padding-left: 35px;
+	margin-bottom: 12px;
+	cursor: pointer;
+	font-size: 22px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 /* Hide the browser's default checkbox */
 .invoervelden .container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
 }
 
 /* Create a custom checkbox */
 .invoervelden .checkmark {
-  position: absolute;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-  border: 2px solid #2196F3;
+	position: absolute;
+	height: 25px;
+	width: 25px;
+	background-color: #eee;
+	border: 2px solid #2196F3;
 }
 
 /* On mouse-over, add a grey background color */
 .invoervelden .container:hover input ~ .checkmark {
-  background-color: #ccc;
+	background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background */
 .invoervelden .container input:checked ~ .checkmark {
-  background-color: #2196F3;
+	background-color: #2196F3;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .invoervelden .checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
+	content: "";
+	position: absolute;
+	display: none;
 }
 
 /* Show the checkmark when checked */
 .invoervelden .container input:checked ~ .checkmark:after {
-  display: block;
+	display: block;
 }
 
 /* Style the checkmark/indicator */
 .invoervelden .container .checkmark:after {
-  left: 9px;
-  top: 5px;
-  width: 5px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
+	left: 9px;
+	top: 5px;
+	width: 5px;
+	height: 10px;
+	border: solid white;
+	border-width: 0 3px 3px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
 }
 
 .invoervelden .bedrijfInfoInput {
@@ -401,32 +298,33 @@
 }
 
 /* dagen */
-
 #dagenForm {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 1fr, 1fr, 1fr, 1fr;
 	width: 100%;
 	height: 100%;
+	position: relative;
 }
 
 .dagInputArea {
-	border: 1px solid black;
 	text-align: center;
+	height: 25%;
+	width: calc(50% - 1px);
+	float: left;
 }
 
 .dagInputArea a {
 	font-size: 20px;
 }
-.dagInputArea .dagenInput{
+
+.dagInputArea .dagenInput {
 	display: inline-block;
 	width: 200px;
 	height: 25px;
-	border: 1px solid black;
 }
-.dagInputArea .dagTijden{
+
+.dagInputArea .dagTijden {
 	display: none;
 }
+
 .switch {
 	position: relative;
 	display: inline-block;
@@ -487,31 +385,25 @@ input:checked+.slider:before {
 	border-radius: 50%;
 }
 
-
-
-
-
-
-
-
-.tijdKiezen{
+.tijdKiezen {
 	width: 800px;
 	border: 1px solid black;
 	height: 500px;
-	top:100px;
+	top: 100px;
 	margin: auto;
 	position: relative;
 	background-color: white;
 }
-.tijdKiezen .openingsTijdKiezen{
-	float: left;            
+
+.tijdKiezen .openingsTijdKiezen {
+	float: left;
 }
 
-.tijdKiezen .sluitingsTijdKiezen{
+.tijdKiezen .sluitingsTijdKiezen {
 	float: right;
 }
 
-.tijdKiezen .timepicker-dial{
+.tijdKiezen .timepicker-dial {
 	width: 250px;
 	height: 250px;
 	border: 1px solid black;
@@ -519,52 +411,58 @@ input:checked+.slider:before {
 	position: relative;
 	display: none;
 }
-.tijdKiezen .timepicker-dial .selectedTime{
+
+.tijdKiezen .timepicker-dial .selectedTime {
 	left: 25px;
 	width: 35px;
 	height: 35px;
 	border-radius: 50%;
-	background-color:#408F90;
+	background-color: #408F90;
 }
 
-.tijdKiezen .timepicker-uur-openingstijd:hover{
-	background-color:aquamarine;
+.tijdKiezen .timepicker-uur-openingstijd:hover {
+	background-color: aquamarine;
 	width: 35px;
 	height: 35px;
 	border-radius: 50%;
 }
-.tijdKiezen .timepicker-uur-sluitingsTijd:hover{
-	background-color:aquamarine;
+
+.tijdKiezen .timepicker-uur-sluitingsTijd:hover {
+	background-color: aquamarine;
 	width: 35px;
 	height: 35px;
 	border-radius: 50%;
 }
-.tijdKiezen .timepicker-minuut-openingstijd:hover{
-	background-color:aquamarine;
-	width: 35px;
-	height: 35px;
-	border-radius: 50%;
-}        
-.tijdKiezen .timepicker-minuut-sluitingsTijd:hover{
-	background-color:aquamarine;
+
+.tijdKiezen .timepicker-minuut-openingstijd:hover {
+	background-color: aquamarine;
 	width: 35px;
 	height: 35px;
 	border-radius: 50%;
 }
-.tijdKiezen #openingsTijd{
-	width: 300px;
-	display: inline-block;
-	height: 30px;
-	border: 1px solid black;
+
+.tijdKiezen .timepicker-minuut-sluitingsTijd:hover {
+	background-color: aquamarine;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
 }
-.tijdKiezen #sluitingsTijd{
+
+.tijdKiezen #openingsTijd {
 	width: 300px;
 	display: inline-block;
 	height: 30px;
 	border: 1px solid black;
 }
 
-.tijdKiezen #okButton{
+.tijdKiezen #sluitingsTijd {
+	width: 300px;
+	display: inline-block;
+	height: 30px;
+	border: 1px solid black;
+}
+
+.tijdKiezen #okButton {
 	position: absolute;
 	bottom: 5px;
 }

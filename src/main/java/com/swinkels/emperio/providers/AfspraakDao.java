@@ -46,5 +46,6 @@ public interface AfspraakDao {
 
 	public List<Date> getLengtesVanAfspraak(Statestieken statestieken, Date date);
 
-	public HashMap<Date, Double> getInkomstenForStatistics(Statestieken statestieken, Date date);
-	}
+	public List<Afspraak> getInkomstenForStatistics(Statestieken statestieken, Date date);
+	
+}

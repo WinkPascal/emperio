@@ -8,4 +8,8 @@ public interface InstellingenDao {
 	public void getInstellingen(Instellingen instellingen);
 
 	public boolean update(Instellingen instellingen);
+
+	public boolean updateInplanSettings(Instellingen instellingen);
+
+	public void getInplanSettings(Instellingen instellingen);
 }

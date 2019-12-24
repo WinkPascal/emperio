@@ -249,8 +249,6 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				System.out.println(dbResultSet.getInt("afspraken"));
-				System.out.println(dbResultSet.getDouble("inkomsten"));
 				bedrijf.setHoeveelheidAfspraken(dbResultSet.getInt("afspraken"));
 				bedrijf.setHoeveelheidInkomsten(dbResultSet.getDouble("inkomsten"));
 			} 
@@ -266,11 +264,12 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 					"select a.dagnummer, count(a.id) as aantalAfspraken \n" + 
 					"FROM afspraak a join afspraakBehandeling h on a.id = h.afspraakId \n" + 
 					"				join behandeling b on b.id = h.behandelingId \n" + 
-					"WHERE b.BedrijfBedrijfsnaam = '"+ bedrijf.getBedrijfsNaam() +"' \n" + 
-					"AND timestamp < SYSDATE() \n" + 
-					"AND timestamp > "+DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd")+" "+ 
+					"where b.BedrijfBedrijfsnaam = '"+ bedrijf.getBedrijfsNaam() + "' \n" +
+					"and a.timestamp < SYSDATE() \n" +
+					"and a.timestamp > '"+ DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd") + "'\n"+ 
 					"group by a.dagnummer \n" + 
 					"ORDER BY a.dagnummer"); 
+			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int dag_nr = dbResultSet.getInt("dagnummer");
@@ -407,7 +406,7 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
 					  "select b.id, b.naam, b.lengte, b.prijs \n" + 
-					  "from behandeling b join afspraakbehandeling n on b.id = n.behandeling				      \n" + 
+					  "from behandeling b join afspraakbehandeling n on b.id = n.behandeling \n" + 
 					  "where n.afspraak = "+afspraak.getId());
 
 			System.out.println(pstmt);
@@ -528,8 +527,8 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 		return lengtes;
 	}
 	
-	public HashMap<Date, Double> getInkomstenForStatistics(Statestieken statestieken, Date date){
-		HashMap<Date, Double> data = new HashMap<Date, Double>();
+	public List<Afspraak> getInkomstenForStatistics(Statestieken statestieken, Date date){
+		List<Afspraak> afspraken = new ArrayList<Afspraak>();
 		try (Connection con = super.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(
@@ -543,13 +542,14 @@ public class AfspraakDaoImpl extends MariadbBaseDao implements AfspraakDao {
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
-				Date datum = DatabaseDateAdapter.StringToDate(dbResultSet.getString("datum"), "HH:mm");
-				double prijs = dbResultSet.getDouble("prijs");
-				data.put(datum, prijs);
+				AfspraakBuilder builder = new AfspraakBuilder();
+				builder.setTimestamp(DatabaseDateAdapter.StringToDate(dbResultSet.getString("datum"), "yyyy-MM-dd HH:mm"));
+				builder.setPrijs(dbResultSet.getDouble("prijs"));
+				afspraken.add(builder.make());
 			}
 		} catch (SQLException e) {	
 			e.printStackTrace();
 		}
-		return data;
+		return afspraken;
 	}
 }

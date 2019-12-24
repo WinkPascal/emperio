@@ -3,75 +3,122 @@ package com.swinkels.emperio.objects;
 import com.swinkels.emperio.providers.InstellingenDao;
 import com.swinkels.emperio.providers.InstellingenDaoImpl;
 
-public class Instellingen extends Bedrijf{
-	Bedrijf bedrijf;
-	
+public class Instellingen extends Bedrijf {
+	InstellingenDao instellingenDao = new InstellingenDaoImpl();
+
 	private String kleurKlasse1;
 	private double maximumPrijsVanKlasse1;
 	private String kleurKlasse2;
 	private double maximumPrijsVanKlasse2;
 	private String kleurKlasse3;
-	
+
+	private String bedrijfsEmailString;
+	private String bedrijfsTelefoonString;
+	private String bedrijfsAdresString;
+
 	private boolean emailKlantInvoer;
 	private boolean telefoonKlantInvoer;
 	private boolean adresKlantInvoer;
+
+	public Instellingen(String bedrijf) {
+		super(bedrijf);
+	}
 	
-	private boolean bedrijfsEmail;
-	private boolean bedrijfsTelefoon;
-	private boolean bedrijfsAdres;
-	
-	public Instellingen(Bedrijf bedrijf,boolean emailKlantInvoer, boolean telefoonKlantInvoer, boolean adresKlantInvoer, 
-			String kleurKlasse1, double maximumPrijsVanKlasse1, 
-			String kleurKlasse2, double maximumPrijsVanKlasse2, 
-			String kleurKlasse3, boolean bedrijfsEmail, boolean bedrijfsTelefoon, boolean bedrijfsAdres) {
-		this.bedrijf = bedrijf;
+	public Instellingen(String bedrijf, boolean emailKlantInvoer, boolean telefoonKlantInvoer,
+			boolean adresKlantInvoer, String kleurKlasse1, double maximumPrijsVanKlasse1, String kleurKlasse2,
+			double maximumPrijsVanKlasse2, String kleurKlasse3, String bedrijfsEmail, String bedrijfsTelefoon,
+			String bedrijfsAdres) {
+		super(bedrijf);
+
 		this.emailKlantInvoer = emailKlantInvoer;
 		this.telefoonKlantInvoer = telefoonKlantInvoer;
 		this.adresKlantInvoer = adresKlantInvoer;
+
 		this.kleurKlasse1 = kleurKlasse1;
 		this.maximumPrijsVanKlasse1 = maximumPrijsVanKlasse1;
 		this.kleurKlasse2 = kleurKlasse2;
 		this.maximumPrijsVanKlasse2 = maximumPrijsVanKlasse2;
 		this.kleurKlasse3 = kleurKlasse3;
-		this.bedrijfsEmail = bedrijfsEmail;
-		this.bedrijfsTelefoon = bedrijfsTelefoon;
-		this.bedrijfsAdres = bedrijfsAdres;
+
+		this.bedrijfsEmailString = bedrijfsEmail;
+		this.bedrijfsTelefoonString = bedrijfsTelefoon;
+		this.bedrijfsAdresString = bedrijfsAdres;
 	}
 
-
-	public boolean isBedrijfsEmail() {
-		return bedrijfsEmail;
+	public Instellingen(String bedrijf, String kleurKlasse1, double maximumPrijsVanKlasse1, String kleurKlasse2,
+			double maximumPrijsVanKlasse2, String kleurKlasse3) {
+		super(bedrijf);
+		this.kleurKlasse1 = kleurKlasse1;
+		this.maximumPrijsVanKlasse1 = maximumPrijsVanKlasse1;
+		this.kleurKlasse2 = kleurKlasse2;
+		this.maximumPrijsVanKlasse2 = maximumPrijsVanKlasse2;
+		this.kleurKlasse3 = kleurKlasse3;
 	}
 
+	public Instellingen(String bedrijf2, boolean telefoonKlantInvoer, boolean emailKlantInvoer, boolean adresKlantInvoer,
+			String bedrijfsEmail2, String bedrijfsTelefoon2, String bedrijfsAdres2) {
+		super(bedrijf2);
+		this.telefoonKlantInvoer = telefoonKlantInvoer;
+		this.emailKlantInvoer = emailKlantInvoer;
+		this.adresKlantInvoer = adresKlantInvoer;
 
-	public void setBedrijfsEmail(boolean bedrijfsEmail) {
-		this.bedrijfsEmail = bedrijfsEmail;
+		this.bedrijfsEmailString = bedrijfsEmail2;
+		this.bedrijfsTelefoonString = bedrijfsTelefoon2;
+		this.bedrijfsAdresString = bedrijfsAdres2;
 	}
 
-
-	public boolean isBedrijfsTelefoon() {
-		return bedrijfsTelefoon;
+	public boolean save() {
+		if (instellingenDao.save(this)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-
-	public void setBedrijfsTelefoon(boolean bedrijfsTelefoon) {
-		this.bedrijfsTelefoon = bedrijfsTelefoon;
+	public void getInplanSettings() {
+		instellingenDao.getInplanSettings(this);
+	}
+	
+	public void updateInplanSettings() {
+		instellingenDao.updateInplanSettings(this);
 	}
 
-
-	public boolean isBedrijfsAdres() {
-		return bedrijfsAdres;
+	public void updateColors() {
+		instellingenDao.update(this);
 	}
 
-
-	public void setBedrijfsAdres(boolean bedrijfsAdres) {
-		this.bedrijfsAdres = bedrijfsAdres;
+	public void retrieveInstellingen() {
+		instellingenDao.getInstellingen(this);
 	}
 
-
-	public Instellingen(Bedrijf bedrijf) {
-		this.bedrijf = bedrijf;
+	public double getMaximumPrijsVanKlasse1() {
+		return maximumPrijsVanKlasse1;
 	}
+
+	public String getBedrijfsEmailString() {
+		return bedrijfsEmailString;
+	}
+
+	public void setBedrijfsEmailString(String bedrijfsEmailString) {
+		this.bedrijfsEmailString = bedrijfsEmailString;
+	}
+
+	public String getBedrijfsTelefoonString() {
+		return bedrijfsTelefoonString;
+	}
+
+	public void setBedrijfsTelefoonString(String bedrijfsTelefoonString) {
+		this.bedrijfsTelefoonString = bedrijfsTelefoonString;
+	}
+
+	public String getBedrijfsAdresString() {
+		return bedrijfsAdresString;
+	}
+
+	public void setBedrijfsAdresString(String bedrijfsAdresString) {
+		this.bedrijfsAdresString = bedrijfsAdresString;
+	}
+
 
 
 	public boolean isEmailKlantInvoer() {
@@ -106,10 +153,6 @@ public class Instellingen extends Bedrijf{
 		this.kleurKlasse1 = kleurKlasse1;
 	}
 
-	public double getMaximumPrijsVanKlasse1() {
-		return maximumPrijsVanKlasse1;
-	}
-
 	public void setMaximumPrijsVanKlasse1(double maximumPrijsVanKlasse1) {
 		this.maximumPrijsVanKlasse1 = maximumPrijsVanKlasse1;
 	}
@@ -137,29 +180,7 @@ public class Instellingen extends Bedrijf{
 	public void setKleurKlasse3(String kleurKlasse3) {
 		this.kleurKlasse3 = kleurKlasse3;
 	}
-	public void setBedrijf(Bedrijf bedrijf) {
-		this.bedrijf = bedrijf;
-	}
-	public Bedrijf getBedrijf() {
-		return this.bedrijf;
-	}
 
-	public boolean save() {
-		InstellingenDao instellingen = new InstellingenDaoImpl();
-		if(instellingen.save(this)) {
-			return true;
-		} else {
-			return false;	
-		}
-	}
 
-	public void update() {
-		InstellingenDao instellingen = new InstellingenDaoImpl();
-		instellingen.update(this);
-	}
-	
-	public void retrieveInstellingen() {
-		InstellingenDao instellingenDao = new InstellingenDaoImpl();
-		instellingenDao.getInstellingen(this);
-	}
+
 }

@@ -21,7 +21,6 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 					"SELECT * " + 
 					"FROM behandeling " + 
 					"WHERE BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam() + "';");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
@@ -57,7 +56,6 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 					"select * from behandeling "
 					+ "where geslacht = '" + geslacht + "' "
 					+ "and BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam() + "'");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				int id = dbResultSet.getInt("id");
@@ -88,11 +86,13 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement("SELECT count(b.id) as hoeveelheid, b.id, b.naam \n"
 					+ "from behandeling b join afspraakBehandeling ab on b.id = ab.behandelingId \n"
-					+ "				   join afspraak a on a.id = ab.afspraakId\n" + "where b.BedrijfBedrijfsnaam = '"
-					+ bedrijf.getBedrijfsNaam() + "' \n" + "      and a.timestamp < SYSDATE()\n" + "      and a.timestamp > '"
-					+ DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd") + "'\n" + "GROUP by b.id\n"
-					+ "ORDER by COUNT(b.id) desc\n" + "LIMIT 5;");
-			System.out.println(pstmt);
+					+ "	join afspraak a on a.id = ab.afspraakId\n" 
+					+ "where b.BedrijfBedrijfsnaam = '"+ bedrijf.getBedrijfsNaam() + "' \n"
+					+ "and a.timestamp < SYSDATE() \n"
+					+ "and a.timestamp > '"	+ DatabaseDateAdapter.DateToString(date, "YYYY-MM-dd") + "'\n" 
+					+ "GROUP by b.id\n"
+					+ "ORDER by COUNT(b.id) desc \n" 
+					+ "LIMIT 5;");
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 
@@ -113,17 +113,21 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 		bedrijf.setBehandelingen(behandelingen);
 	}
 
-	public ArrayList<Behandeling> getBehandelingen(Bedrijf bedrijf, int pageNummer, String geslacht, String sort) {
+	public ArrayList<Behandeling> getBehandelingen(Bedrijf bedrijf, int pageNummer, String geslacht, String sort, String zoek) {
 		ArrayList<Behandeling> behandelingen = new ArrayList<Behandeling>();
 		int top = pageNummer * 20;
 		int low = top - 20;
-
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(
-					"select b.id, b.naam, b.beschrijving, b.geslacht, b.prijs, b.lengte, count(a.id) as afspraken, sum(b.prijs) as inkomsten \n"
+					"select b.id, b.naam, b.beschrijving, b.geslacht, b.prijs, b.lengte, count(a.id) as afspraken, sum(a.prijs) as inkomsten \n"
 							+ "from behandeling b left join afspraakBehandeling a on b.id = a.behandelingId \n"
-							+ "where b.BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam() + "'\n" + "AND b.geslacht " + geslacht + " \n"
-							+ "group by b.id \n" + "order by " + sort + "\n LIMIT " + low + ", " + top + ";");
+							+ "where b.BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam() + "' \n" 
+							+ "AND b.status = 'actief' "
+							+ "AND b.naam  LIKE '%" + zoek + "%' \n"
+							+ "AND (b.geslacht " + geslacht + ") \n"
+							+ "group by b.id \n" 
+							+ "order by " + sort + "\n "
+							+ "LIMIT "+low+", "+top);
 			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
@@ -153,14 +157,14 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 			PreparedStatement pstmt;
 			// heeft een email en telefoon
 			pstmt = con.prepareStatement(
-					"insert into behandeling (BedrijfBedrijfsnaam, lengte, geslacht, naam, prijs, beschrijving) "
+					"insert into behandeling (BedrijfBedrijfsnaam, lengte, geslacht, naam, prijs, beschrijving, status) "
 					+ "values('" + behandeling.getBedrijf().getBedrijfsNaam() + "', '"
 					+ DatabaseDateAdapter.DateToString(behandeling.getLengte(), "HH:mm") + "', '"
 					+ behandeling.getGeslacht() + "', '"
 					+ behandeling.getNaam() + "', " + ""
 					+ behandeling.getPrijs() + ", '" 
-					+ behandeling.getBeschrijving() + "')");
-			System.out.println(pstmt);
+					+ behandeling.getBeschrijving() + "', "
+					+ "'actief')");
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -177,7 +181,6 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 					"SET status = 'verwijdert' \n" + 
 					"WHERE id = "+behandeling.getId()+
 					" AND BedrijfBedrijfsnaam='"+behandeling.getBedrijf().getBedrijfsNaam()+"'");
-			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -209,5 +212,26 @@ public class BehandelingDaoImpl extends MariadbBaseDao implements BehandelingDao
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean update(Behandeling behandeling) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt;
+			pstmt = con.prepareStatement(
+					"UPDATE behandeling \n" + 
+					"SET lengte = '"+DatabaseDateAdapter.DateToString(behandeling.getLengte(), "HH:mm")+"', \n"
+					+ "naam = '"+behandeling.getNaam()+"', \n"
+					+ "prijs = "+behandeling.getPrijs()+", \n"
+					+ "beschrijving = '"+behandeling.getBeschrijving()+"'\n"
+					+ "WHERE id = "+behandeling.getId()+
+					" AND BedrijfBedrijfsnaam='"+behandeling.getBedrijf().getBedrijfsNaam()+"'");
+			System.out.println(pstmt);
+			pstmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

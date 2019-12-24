@@ -136,18 +136,14 @@ public class Bedrijf {
 		klantDao.zoekKlant(this, request);
 	}
 
-	public void zoekBehandelingen(int pageNumber, String geslacht, String sort) {
-		behandelingDao.getBehandelingen(this, pageNumber, geslacht, sort);
+	public void zoekBehandelingen(int pageNumber, String geslacht, String sort, String zoek) {
+		behandelingDao.getBehandelingen(this, pageNumber, geslacht, sort, zoek);
 	}
 	
 	public ArrayList<Klant> getKlantenWithByPage(int pageNumber) {
 		int top = pageNumber * 20;
 		int low = top - 20;
 		return klantDao.getKlantenWithLimit(this, low, top);
-	}
-
-	public void retrieveBehandelingen() {
-		this.behandelingen =  behandelingDao.getAllBehandelingen(this);
 	}
 
 	public void saveDagen() {

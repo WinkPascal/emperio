@@ -131,83 +131,55 @@ public class SetupProvider {
 		return job.build().toString();
 	}
 
+//	
+//	@POST
+//	@RolesAllowed("setup")
+//	@Path("/afspraakSettings")
+//	@Produces("application/json")
+//	public Response afspraakSettings(@Context SecurityContext sc, 
+//			@FormParam("kleurKlasse1") String kleurKlasse1,
+//			@FormParam("tot1") double maximumPrijsVanKlasse1,
+//			@FormParam("kleurKlasse2") String kleurKlasse2,
+//			@FormParam("tot2") double maximumPrijsVanKlasse2, 
+//			@FormParam("kleurKlasse3") String kleurKlasse3,
+//			
+//			@FormParam("telefoonKlant") boolean telefoonKlant,
+//			@FormParam("emailKlant") boolean emailKlant,
+//			@FormParam("adresKlant") boolean adresKlant,
+//			
+//			@FormParam("bedrijfsEmail") boolean bedrijfsEmail,
+//			@FormParam("bedrijfsTelefoon") boolean bedrijfsTelefoon,
+//			@FormParam("bedrijfsAdres") boolean bedrijfsAdres) {
+//		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+//		
+//		Instellingen bedrijfInstellingen = new Instellingen(bedrijf,emailKlant,telefoonKlant, adresKlant, kleurKlasse1, maximumPrijsVanKlasse1, kleurKlasse2, maximumPrijsVanKlasse2, kleurKlasse3, bedrijfsEmail, bedrijfsTelefoon, bedrijfsAdres);
+//		bedrijfInstellingen.update();
+//		
+//		return Response.ok().build();
+//	}
+//	
 	
-	@POST
-	@RolesAllowed("setup")
-	@Path("/afspraakSettings")
-	@Produces("application/json")
-	public Response afspraakSettings(@Context SecurityContext sc, 
-			@FormParam("kleurKlasse1") String kleurKlasse1,
-			@FormParam("tot1") double maximumPrijsVanKlasse1,
-			@FormParam("kleurKlasse2") String kleurKlasse2,
-			@FormParam("tot2") double maximumPrijsVanKlasse2, 
-			@FormParam("kleurKlasse3") String kleurKlasse3,
-			
-			@FormParam("telefoonKlant") boolean telefoonKlant,
-			@FormParam("emailKlant") boolean emailKlant,
-			@FormParam("adresKlant") boolean adresKlant,
-			
-			@FormParam("bedrijfsEmail") boolean bedrijfsEmail,
-			@FormParam("bedrijfsTelefoon") boolean bedrijfsTelefoon,
-			@FormParam("bedrijfsAdres") boolean bedrijfsAdres) {
-		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		
-		Instellingen bedrijfInstellingen = new Instellingen(bedrijf,emailKlant,telefoonKlant, adresKlant, kleurKlasse1, maximumPrijsVanKlasse1, kleurKlasse2, maximumPrijsVanKlasse2, kleurKlasse3, bedrijfsEmail, bedrijfsTelefoon, bedrijfsAdres);
-		bedrijfInstellingen.update();
-		
-		return Response.ok().build();
-	}
+//	
+//	
+//	@POST
+//	@RolesAllowed("user")
+//	@Path("/saveAfspraakInfo")
+//	@Produces("application/json")
+//	public Response saveAfspraakInfo(@Context SecurityContext sc, 
+//			@FormParam("telefoonKlant") boolean telefoonKlant, @FormParam("emailKlant") boolean emailKlant,
+//			@FormParam("adresKlant") boolean adresKlant,
+//	
+//			@FormParam("bedrijfsEmail") String bedrijfsEmail, @FormParam("bedrijfsTelefoon") String bedrijfsTelefoon,
+//			@FormParam("bedrijfsAdres") String bedrijfsAdres) {
+//		Instellingen bedrijfInstellingen = new Instellingen(sc.getUserPrincipal().getName(), 
+//				bedrijfsEmail, bedrijfsTelefoon, bedrijfsAdres);
+//		
+//		bedrijfInstellingen.updateInplanSettings();
+//		
+//		return Response.ok().build();
+//	}
 	
 	
-	@POST
-	@RolesAllowed("setup")
-	@Path("/dagen")
-	@Produces("application/json")
-	public Response dagen(@Context SecurityContext sc, 
-			@FormParam("openingsTijdMaandag") String openingsTijdMaandag,
-			@FormParam("sluitingsTijdMaandag") String sluitingsTijdMaandag,
-			
-			@FormParam("openingsTijdDinsdag") String openingsTijdDinsdag,
-			@FormParam("sluitingsTijdDinsdag") String sluitingsTijdDinsdag,
-			
-			@FormParam("openingsTijdWoensdag") String openingsTijdWoensdag,
-			@FormParam("sluitingsTijdWoensdag") String sluitingsTijdWoensdag,
-			
-			@FormParam("openingsTijdDonderdag") String openingsTijdDonderdag,
-			@FormParam("sluitingsTijdDonderdag") String sluitingsTijdDonderdag,
-			
-			@FormParam("openingsTijdVrijdag") String openingsTijdVrijdag,
-			@FormParam("sluitingsTijdVrijdag") String sluitingsTijdVrijdag,
-			
-			@FormParam("openingsTijdZaterdag") String openingsTijdZaterdag,
-			@FormParam("sluitingsTijdZaterdag") String sluitingsTijdZaterdag,
-			
-			@FormParam("openingsTijdZondag") String openingsTijdZondag,
-			@FormParam("sluitingsTijdZondag") String sluitingsTijdZondag) {	
-		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		ArrayList<Dag> dagen = new ArrayList<Dag>();
-		Dag zondag = new Dag(bedrijf, 1, openingsTijdZondag, sluitingsTijdZondag);
-		Dag maandag = new Dag(bedrijf, 2, openingsTijdMaandag, sluitingsTijdMaandag);
-		Dag dinsdag = new Dag(bedrijf, 3, openingsTijdDinsdag, sluitingsTijdDinsdag);
-		Dag woensdag = new Dag(bedrijf, 4, openingsTijdWoensdag, sluitingsTijdWoensdag);
-		Dag donderdag = new Dag(bedrijf, 5, openingsTijdDonderdag, sluitingsTijdDonderdag);
-		Dag vrijdag = new Dag(bedrijf, 6, openingsTijdVrijdag, sluitingsTijdVrijdag);
-		Dag zaterdag = new Dag(bedrijf, 7, openingsTijdZaterdag, sluitingsTijdZaterdag);
-		dagen.add(maandag);
-		dagen.add(dinsdag);
-		dagen.add(woensdag);
-		dagen.add(donderdag);
-		dagen.add(vrijdag);
-		dagen.add(zaterdag);
-		dagen.add(zondag);
-		for(Dag dag : dagen) {
-			if(dag.validateTijden()) {
-				return Response.status(409).build();
-			}
-		}
-		bedrijf.setDagen(dagen);
-		bedrijf.saveDagen();
-		
-		return Response.ok().build();
-	}	
+	
+
 }

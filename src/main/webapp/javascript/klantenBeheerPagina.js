@@ -1,4 +1,6 @@
 function onloadKlantenBeheer(){
+	showLoadingScreen();
+	
 	document.getElementById("klantenPaginaBeheerModal").style.display = "block";
 	
 	var fetchoptions = {
