@@ -1,6 +1,19 @@
 //eerste wat er gedaan wordt bij het laden van de pagina
 //hier worden de afspraken van de eerste dag geladen
-function onload() {
+function onloadHome() {
+	loadSettings();
+	function checkboxChecker(textId, checkId) {
+	 	var checkBox = document.getElementById(checkId);
+		checkBox.addEventListener("click", function () {
+			var text = document.getElementById(textId);
+			if (checkBox.checked == true){
+				text.style.display = "block";
+			} else {
+				text.style.display = "none";
+			}
+		})
+	}
+	
 	var date = new Date();
 	var dagDate = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
 	//ophalen van afspraken vandaag
@@ -149,21 +162,15 @@ document.getElementById("klantenPaginaBeheer").addEventListener("click", functio
 
 // settings card
 document.getElementById("instellingenButton").addEventListener("click", function () {
-	settingsButton();
+	settings();
 })
 
 //starten instellingen proces
-function settingsButton() {
-	var settings = document.getElementById("settings");
-	var btn = document.getElementById("myBtn");
-	var span = document.getElementsByClassName("close")[0];
-
-	settings.style.display = "block";
+function showAndHideSettings() {
 
 	//de opties openen en sluiten
 	var coll = document.getElementsByClassName("collapsible");
 	var i;
-
 	for (i = 0; i < coll.length; i++) {
 		coll[i].addEventListener("click", function () {
 			this.classList.toggle("active");
@@ -175,15 +182,29 @@ function settingsButton() {
 			}
 		});
 	}
-
-	// de sluitknop
-	span.onclick = function () {
-		settings.style.display = "none";
-	}
-	toevoegingen = 0;
-
-	voegBehandelingItemToe();
 }
+
+function settings(){
+	showAndHideSettings();
+	//bovenste deel van de onloadHome() is ook van de settings
+	document.getElementById("settings").style.display = "block";
+
+	document.getElementById("openDagenSettings").addEventListener("click", function () {
+		console.log("dagen");
+		getDagenSettings();
+	})
+	document.getElementById("klantenPaginaSettings").addEventListener("click", function () {
+		getPlanInfo();		
+	})
+	document.getElementById("afspraakKleurenSettings").addEventListener("click", function () {
+		
+	})
+}
+
+document.getElementById("saveDagen").addEventListener("click", function () {
+	saveDagen();
+})
+
 
 
 

@@ -19,10 +19,7 @@ function begin(){
 	loadBehandelingen();
 	behandelingToevoegenForm();
 
-	aanpassenTijdenHandlers();
-
-	determineOpeningsTijd();
-	determineSluitingsTijd()
+	loadSettings();
 	
 	var pagina = "behandelingen";
 	var volgendeButton = document.getElementById("volgendeStap");
@@ -50,9 +47,6 @@ function begin(){
 				volgendeButton.style.backgroundColor = "green";
 				volgendeButton.value = "Start!"
 
-				createTimePicker("openingsTijdMaandag");
-
-
 				pagina = "dagenDiv";
 			} else{
 				errorMessage("niet alles ingevuld");
@@ -60,12 +54,8 @@ function begin(){
 		} else if (pagina == "dagenDiv") {
 			saveDagen();
 		}
-		var checkBoxes = ["geslotenMaandag", "geslotenDinsdag", "geslotenWoensdag","geslotenDonderdag","geslotenVrijdag","geslotenZaterdag", "geslotenZondag"]
-		var tijdenAreas = ["tijdenMaandag", "tijdenDinsdag", "tijdenWoensdag","tijdenDonderdag","tijdenVrijdag","tijdenZaterdag", "tijdenZondag"]
-		for (i = 0; i < checkBoxes.length; i++) {
-			checkboxChecker(tijdenAreas[i], checkBoxes[i]);
-		}
 	})
+	
 	document.getElementById("vorigeStap").addEventListener("click", function () {
 		if (pagina == "afspraakSettingsDiv") {
 			stap1.className = "active";
@@ -201,23 +191,4 @@ function behandelingManager(geslacht, geslachten) {
 	}
 	return geslachten;
 }
-	
-function checkboxChecker(textId, checkId) {
- 	var checkBox = document.getElementById(checkId);
-	checkBox.addEventListener("click", function () {
-		var text = document.getElementById(textId);
-		if (checkBox.checked == true){
-			text.style.display = "block";
-		} else {
-			text.style.display = "none";
-		}
-	})
-}
-
-
-
-
-
-
-
 

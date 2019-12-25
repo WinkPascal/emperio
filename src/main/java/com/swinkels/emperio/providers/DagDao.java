@@ -9,8 +9,9 @@ import com.swinkels.emperio.objects.Dag;
 public interface DagDao {
 	public boolean saveDag(Dag dag);
 	
+	public boolean updateDag(Dag dag);
+
 	public void getWeekRooster(Bedrijf bedrijf);
 
 	public void getOpeningsTijden(Bedrijf bedrijf, Date vandaag);
-
 }

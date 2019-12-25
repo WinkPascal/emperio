@@ -56,8 +56,6 @@ public class Klant {
 			}
 		}
 	}
-
-
 	public int getId() {
 		return id;
 	}
@@ -144,5 +142,7 @@ public class Klant {
 	public double getHoeveelheidInkomsten() {
 		return hoeveelheidInkomsten;
 	}
+
+
 
 }

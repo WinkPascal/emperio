@@ -358,7 +358,7 @@ body {
 .inplannenRechts #agendaInplannen {
 	width: 60%;
 	float: right;
-	height: 100%;
+	height: 800px;
 	overflow: scroll;
 	position: relative;
 }

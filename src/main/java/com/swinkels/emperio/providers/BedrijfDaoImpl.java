@@ -119,6 +119,26 @@ public class BedrijfDaoImpl extends MariadbBaseDao implements BedrijfDao{
 		return false;
 	}	
 	
+	public void getInfo(Bedrijf bedrijf) {
+		try (Connection con = super.getConnection()) {
+			PreparedStatement pstmt = con.prepareStatement(
+					"SELECT email, telefoon, adres, woonplaats, postcode \n "
+				  + "from bedrijf \n"
+				  + "WHERE Bedrijfsnaam = '"+bedrijf.getBedrijfsNaam()+"';");
+			System.out.println(pstmt);
+			ResultSet dbResultSet = pstmt.executeQuery();
+			while (dbResultSet.next()) {
+				bedrijf.setTelefoon(dbResultSet.getString("telefoon"));
+				bedrijf.setEmail(dbResultSet.getString("email"));
+				bedrijf.setAdres(dbResultSet.getString("adres"));
+				bedrijf.setWoonplaats(dbResultSet.getString("woonplaats"));
+				bedrijf.setPostcode(dbResultSet.getString("postcode"));
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}		
+	}
+	
 	public void getKlantPaginaSettings(Bedrijf bedrijf) {
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(

@@ -55,6 +55,9 @@ public class Bedrijf {
 	public void setEmails(ArrayList<Email> emails) {
 		this.emails = emails;
 	}
+	public void getInfo() {
+		bedrijfDao.getInfo(this);
+	}
 
 	public ArrayList<String> validate(){
 		ArrayList<String> errors = new ArrayList<String>();
@@ -147,9 +150,20 @@ public class Bedrijf {
 	}
 
 	public void saveDagen() {
-		for (Dag dag : dagen) {
-			dagDao.saveDag(dag);
+		if(bedrijfDao.needsSetup(bedrijfsNaam)) {
+			for (Dag dag : dagen) {
+				dagDao.saveDag(dag);
+			}
+		} else {
+			for (Dag dag : dagen) {
+				dagDao.updateDag(dag);
+			}
 		}
+	}
+	
+
+	public void updateDagen() {
+
 	}
 	
 	public void retrieveDagen() {
@@ -280,4 +294,5 @@ public class Bedrijf {
 	public String getEmail() {
 		return email;
 	}
+
 }

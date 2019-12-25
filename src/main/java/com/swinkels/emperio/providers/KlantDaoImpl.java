@@ -22,7 +22,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 					+ "from klant "
 					+ "where naam LIKE '%" + klantRequest + "%' "
 					+ "and BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam() + "'");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				
@@ -89,7 +88,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 					+ "where BedrijfBedrijfsnaam = '" + bedrijf.getBedrijfsNaam()+"' " 
 					+ "ORDER BY naam "
 					+ "LIMIT "+low+", "+top);
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 
@@ -123,7 +121,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 					 "'" + klant.getGeslacht() + "', " + 
 					 "'" + klant.getTel() + 
 					 "', '"+klant.getAdres()+"')");
-			System.out.println(pstmt);
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -177,7 +174,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 				+ "			join behandeling b on b.id = l.behandelingId \n"
 				+ "where k.BedrijfBedrijfsnaam = '"+bedrijf.getBedrijfsNaam()+"' "
 				+ "and k.id = "+klant.getId());
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				klant.setNaam(dbResultSet.getString("naam"));
@@ -219,7 +215,6 @@ public class KlantDaoImpl extends MariadbBaseDao implements KlantDao {
 				    "BedrijfBedrijfsnaam = '"+ klant.getBedrijf().getBedrijfsNaam() + "' " + 
 				    "AND naam = '" + klant.getNaam() + "' " +
 				    "AND telefoonnummer = '"+klant.getTel()+"';");
-			System.out.println(pstmt);
 			ResultSet dbResultSet = pstmt.executeQuery();
 			while (dbResultSet.next()) {
 				klant.setId(dbResultSet.getInt("id"));

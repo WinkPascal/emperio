@@ -1,9 +1,11 @@
 package com.swinkels.emperio.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.annotation.security.RolesAllowed;
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -17,6 +19,9 @@ import javax.ws.rs.core.SecurityContext;
 import com.swinkels.emperio.objects.Bedrijf;
 import com.swinkels.emperio.objects.Dag;
 import com.swinkels.emperio.objects.Instellingen;
+import com.swinkels.emperio.providers.BedrijfDao;
+import com.swinkels.emperio.providers.BedrijfDaoImpl;
+import com.swinkels.emperio.support.JavascriptDateAdapter;
 
 @Path("/instellingen")
 public class InstellingenProvider {	
@@ -70,7 +75,6 @@ public class InstellingenProvider {
 			@FormParam("bedrijfsEmail") String bedrijfsEmail, 
 			@FormParam("bedrijfsTelefoon") String bedrijfsTelefoon,
 			@FormParam("bedrijfsAdres") String bedrijfsAdres) {
-		System.out.println("====");
 		Instellingen bedrijfInstellingen = new Instellingen(sc.getUserPrincipal().getName(), 
 				telefoonKlant, emailKlant, adresKlant,
 				bedrijfsEmail, bedrijfsTelefoon, bedrijfsAdres);
@@ -80,6 +84,29 @@ public class InstellingenProvider {
 		return Response.ok().build();
 	}
 
+	@GET
+	@RolesAllowed({"user", "setup"})
+	@Path("/getDagen")
+	@Produces("application/json")
+	public String getDagen(@Context SecurityContext sc) {
+		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+
+		bedrijf.retrieveDagen();
+		JsonArrayBuilder jab = Json.createArrayBuilder();
+		for (Dag dag : bedrijf.getDagen()) {
+			JsonObjectBuilder job = Json.createObjectBuilder();
+			job.add("dagNummmer", JavascriptDateAdapter.dagNummer(dag.getDag()));
+			Date openingsTijd = dag.getOpeningsTijd();
+			if(openingsTijd != null) {
+				job.add("sluitingstijd", JavascriptDateAdapter.DateToString(dag.getSluitingsTijd(), "HH:mm"));
+				job.add("opeingstijd",  JavascriptDateAdapter.DateToString(dag.getOpeningsTijd(), "HH:mm"));
+			}
+			System.out.println(dag.getDag());
+			jab.add(job);
+		}
+		return jab.build().toString();
+	}
+	
 	@POST
 	@RolesAllowed({"user", "setup"})
 	@Path("/dagen")
@@ -121,14 +148,16 @@ public class InstellingenProvider {
 		dagen.add(vrijdag);
 		dagen.add(zaterdag);
 		dagen.add(zondag);
+		
 		for(Dag dag : dagen) {
 			if(dag.validateTijden()) {
 				return Response.status(409).build();
 			}
 		}
+		
 		bedrijf.setDagen(dagen);
 		bedrijf.saveDagen();
-		
+
 		return Response.ok().build();
 	}	
 

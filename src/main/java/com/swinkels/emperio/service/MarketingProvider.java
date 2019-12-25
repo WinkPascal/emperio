@@ -34,12 +34,15 @@ public class MarketingProvider {
 			@FormParam("onderwerp") String inhoudonderwerp,
 			@FormParam("klanten") String klanten) {
 		ArrayList<Klant> klantenList = new ArrayList<Klant>();
-		System.out.println("emailPost");
-		for(String klant : klanten.split(",")) {
-			Klant k = new KlantBuilder()
-					.setId(Integer.parseInt(klant))
-					.make();
-			klantenList.add(k);
+		System.out.println("=================================================");
+		System.out.println(klanten);
+		if(klanten.length() > 0) {
+			for(String klant : klanten.split(",")) {
+				Klant k = new KlantBuilder()
+						.setId(Integer.parseInt(klant))
+						.make();
+				klantenList.add(k);
+			}
 		}
 		Email email = new Email(inhoudonderwerp, inhoud, klantenList);
 		email.setBedrijf(new Bedrijf(sc.getUserPrincipal().getName()));

@@ -51,74 +51,72 @@
 	  	</div>
 	 </div> 
 
-
-
-	 	 <div id="BehandelingModal" class="modal">
-			<form id="BehandelingForm" class="BehandelingToevoegenForm">
-				<h2 class="header">Behandeling</h2>
-				<div class="inputDiv">
-					<div class="inputField">
-						<a class="inputNaam">Naam</a>
-						<input class="inputBehandelingToevoegen" type="text" name="naam" id="naam"><br>
-					</div>
-					<div class="inputField beschrijvingClass">
-						<a class="inputNaam">Beschrijving</a>
-						<textarea class="inputBehandelingToevoegen beschrijvingToevoegen" name="beschrijving" id="beschrijving"></textarea>				
-					</div>
-
-					<div class="inputField prijs">
-						<a class="inputNaam">Prijs</a>
-						<span class="inputBehandelingToevoegen">
-							<input class="inputPrijsToevoegen" id="prijsBehandeling" type="number" name="prijsBehandeling" min="0" value="0" step="any">
-						</span>		
-					</div>
-					<div class="inputField">
-						<a class="inputNaam">Lengte</a>
-						<span class="inputBehandelingToevoegen">
-							<select name="uur" id="uur">
-								<option value="0">0</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-							</select>
-							:
-							<select name="minuten" id="minuten">
-								<option value="5">5</option>
-								<option value="10">10</option>
-								<option value="15">15</option>
-								<option value="20">20</option>
-								<option value="25">25</option>
-								<option value="30">30</option>
-								<option value="35">35</option>
-								<option value="40">40</option>
-								<option value="45">45</option>
-								<option value="50">50</option>
-								<option value="55">55</option>
-							</select>
-						</span>
-					</div>
-					<div class="inputField">
-						<a id="geslachtBehandeling" class="inputNaam">Doelgroep</a>
-						<span id="doelgroepId" class="behandelingValue"></span>
-					</div>
-					<div class="inputField">
-						<a id="afprakenBehandeling" class="inputNaam">Afspraken</a>
-						<span id="afsprakenId" class="behandelingValue"></span>
-						
-					</div>
-					<div class="inputField">
-						<a id="inkomstenBehandeling" class="inputNaam">Inkomsten</a>
-						<span id="inkomstenId" class="behandelingValue"></span>
-					</div>
-
+ 	 <div id="BehandelingModal" class="modal">
+		<form id="BehandelingForm" class="BehandelingToevoegenForm">
+			<h2 class="header">Behandeling</h2>
+			<div class="inputDiv">
+				<div class="inputField">
+					<a class="inputNaam">Naam</a>
+					<input class="inputBehandelingToevoegen" type="text" name="naam" id="naam"><br>
 				</div>
-				<div class="submitController">
-					<input type="button" value="Annuleren" id="Annuleren" class="defaultButton">	
-					<input type="button" value="Wijzigen" id="Wijzigen" class="defaultButton">	
-					<input type="button" value="Verwijderen" id="Verwijderen" class="defaultButton">
+				<div class="inputField beschrijvingClass">
+					<a class="inputNaam">Beschrijving</a>
+					<textarea class="inputBehandelingToevoegen beschrijvingToevoegen" name="beschrijving" id="beschrijving"></textarea>				
 				</div>
-			</form>
-		</div>
+
+				<div class="inputField prijs">
+					<a class="inputNaam">Prijs</a>
+					<span class="inputBehandelingToevoegen">
+						<input class="inputPrijsToevoegen" id="prijsBehandeling" type="number" name="prijsBehandeling" min="0" value="0" step="any">
+					</span>		
+				</div>
+				<div class="inputField">
+					<a class="inputNaam">Lengte</a>
+					<span class="inputBehandelingToevoegen">
+						<select name="uur" id="uur">
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
+						:
+						<select name="minuten" id="minuten">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="20">20</option>
+							<option value="25">25</option>
+							<option value="30">30</option>
+							<option value="35">35</option>
+							<option value="40">40</option>
+							<option value="45">45</option>
+							<option value="50">50</option>
+							<option value="55">55</option>
+						</select>
+					</span>
+				</div>
+				<div class="inputField">
+					<a id="geslachtBehandeling" class="inputNaam">Doelgroep</a>
+					<span id="doelgroepId" class="behandelingValue"></span>
+				</div>
+				<div class="inputField">
+					<a id="afprakenBehandeling" class="inputNaam">Afspraken</a>
+					<span id="afsprakenId" class="behandelingValue"></span>
+					
+				</div>
+				<div class="inputField">
+					<a id="inkomstenBehandeling" class="inputNaam">Inkomsten</a>
+					<span id="inkomstenId" class="behandelingValue"></span>
+				</div>
+
+			</div>
+			<div class="submitController">
+				<input type="button" value="Annuleren" id="Annuleren" class="defaultButton">	
+				<input type="button" value="Wijzigen" id="Wijzigen" class="defaultButton">	
+				<input type="button" value="Verwijderen" id="Verwijderen" class="defaultButton">
+			</div>
+		</form>
+	</div>
 
 	 <div id="BehandelingToevoegenModal" class="modal">
 		<form id="BehandelingToevoegenForm" class="BehandelingToevoegenForm">

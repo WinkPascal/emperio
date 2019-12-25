@@ -12,7 +12,7 @@
 	
 	<link rel="stylesheet" type="text/css" href="css/desktop/instellingen.css">
 </head>
-<body onload="onload()">
+<body onload="onloadHome()">
 	<!-- rooster vandaag -->
 	<div class="dagRooster">
 		<h2>Afspraken vandaag</h2>
@@ -56,84 +56,53 @@
 			<a>Dashboard</a>
 		</span>
 		
-		<div class="card" id="klantenCard">
-			<img class="cardImg"
-				src="https://www.workana.com/i/wp-content/uploads/2019/02/buyer-personas.jpg">
-			<div class="container">
-				<h4>
-					<b>Klanten</b>
-				</h4>
-			</div>
+		<div class="card" id="klantenCard" style="background-color:  #2ecc71;">
+			<h4>
+				<b>Klanten</b>
+			</h4>
 		</div>
 
-		<div class="card" id="inventarisCard">
-			<img class="cardImg"
-				src="https://www.ginesys.in/sites/default/files/blogs/image/inventory%20mgt%20sw.png">
-			<div class="container">
-				<h4>
-					<b>Inventaris</b>
-				</h4>
-			</div>
+		<div class="card" id="inventarisCard" style="background-color:   #f39c12 ;">
+			<h4>
+				<b>Inventaris</b>
+			</h4>
 		</div>
 
-		<div class="card" id="afsprakenCard">
-			<img class="cardImg"
-				src="https://www.marketmotive.com/market_motive/content-calendar-cover-image.jpg">
-			<div class="container">
-				<h4>
-					<b>Afspraken</b>
-				</h4>
-			</div>
+		<div class="card" id="afsprakenCard" style="background-color: #34495e;">
+			<h4>
+				<b>Afspraken</b>
+			</h4>
 		</div>
 
-		<div class="card" id="behandelingenCard">
-			<img class="cardImg"
-				src="https://www.mvbcn.org/wp-content/uploads/crisis-plan.jpg">
-			<div class="container">
-				<h4>
-					<b>Behandelingen</b>
-				</h4>
-			</div>
+		<div class="card" id="behandelingenCard" style="background-color:  #ec7063 ;">
+			<h4>
+				<b>Behandelingen</b>
+			</h4>
 		</div>
 		
-		<div class="card" id="marketingCard">
-			<img class="cardImg"
-				src="https://c1.sfdcstatic.com/content/dam/blogs/ca/Blog%20Posts/aquire-new-customers-open-graph.png">
-			<div class="container">
+		<div class="card" id="marketingCard" style="background-color:  #3498db ;">
+
 				<h4>
 					<b>Marketing</b>
 				</h4>
-			</div>
 		</div>
 		
-		<div class="card" id="inkomstenCard">
-			<img class="cardImg" width="130%"
-				src="http://code-idwebdesign.nl/images/1696198979_1-4-terahash-s-to-bitcoin.png">
-			<div class="container">
+		<div class="card" id="inkomstenCard" style="background-color:  #8e44ad ;">
 				<h4>
 					<b>Statestieken</b>
 				</h4>
-			</div>
 		</div>
 		
-		<div class="card" id="klantPagina">
-			<img class="cardImg"
-				src="https://www.workana.com/i/wp-content/uploads/2019/02/buyer-personas.jpg">
-			<div class="container">
-				<h4>
-					<b>klantPagina</b>
-				</h4>
-			</div>
+		<div class="card" id="klantPagina" style="background-color:  #138d75 ;">
+			<h4>
+				<b>klantPagina</b>
+			</h4>
 		</div>
 		
-		<div class="card" id="klantenPaginaBeheer">
-			<img class="cardImg"
-				src="https://www.workana.com/i/wp-content/uploads/2019/02/buyer-personas.jpg">
-			<div class="container">
-				<h4>
-					<b>klantenPaginaBeheer</b>
-				</h4>
-			</div>
+		<div class="card" id="klantenPaginaBeheer" style="background-color:  #7f8c8d ;">
+			<h4>
+				<b>Instellingen</b>
+			</h4>
 		</div>
 	</div>
 		
@@ -141,7 +110,7 @@
 	<div id="settings" class="modal">
 		<div class="setting-content">
 			<h3 class="header">Instellingen</h3>
-			<span class="collapsible">Afspraak kleuren</span>
+			<span class="collapsible" id="afspraakKleurenSettings">Afspraak kleuren</span>
 			<div  class="afspraakKleurInstelling content">
 				<h2>Afspraak bekijken   <input class="createButton" type="button" id="savePrijsKlasse" value="Opslaan"></h2>
 				<p class="infoText">Geef aan welke kleur de afspraak in uw calender moet zijn volgens een uw prijs klasse</p>
@@ -265,11 +234,11 @@
 				</div>
 			</div>
 			
-			<span class="collapsible">Open dagen</span>
+			<span class="collapsible" id="openDagenSettings">Open dagen</span>
 			<div class="content">
 				<form id="dagenForm">
 					<div class="dagInputArea">
-						<h2>Rooster</h2>
+						<h2>Rooster <input class="createButton" type="button" id="saveDagen" value="Opslaan"></h2>
 						<a class="infoText">
 							Voer hier uw openingetijden in. <br>
 							Met de slider kunt u aangeven of u gesloten bent deze dag.
@@ -468,7 +437,7 @@
 				</div>
 			</div>
 			
-			<span class="collapsible">Klanten pagina</span>
+			<span class="collapsible" id="klantenPaginaSettings">Klanten pagina</span>
 			<div class="content">
 				<h2 class="header">klantenPaginaBeheer</h2>
 				<div class="backgroundKlantPagina">
@@ -541,11 +510,9 @@
 		</div>
 	</div>
 	
-	<!-- Scripts -->
-	<script src="javascript/klantenBeheerPagina.js"></script>
 	<script src="javascript/home.js"></script>
+	<script src="javascript/instellingen.js"></script>
 	<script src="javascript/setup.js"></script>
 	<script src="javascript/global.js"></script>
-	<!-- Voor de drag and drop -->
 </body>
 </html>

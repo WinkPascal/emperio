@@ -109,6 +109,7 @@
 	height: 500px;
 	width: 800px;
 	top: 80px;
+	animation: windowAnimatie 0.6s;
 	background-color: aqua;
 }
 

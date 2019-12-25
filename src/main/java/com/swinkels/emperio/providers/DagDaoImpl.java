@@ -37,6 +37,33 @@ public class DagDaoImpl extends MariadbBaseDao implements DagDao {
 		return false;
 	}
 	
+	public boolean updateDag(Dag dag) {
+		try (Connection con = super.getConnection()) {
+			String openingsTijd;
+			String sluitingsTijd;
+			if(dag.getOpeningsTijd() == null) {
+				openingsTijd = "null";
+				sluitingsTijd = "null";
+			} else {
+				openingsTijd = "'"+dag.getOpeningsTijd().getHours()+":"+dag.getOpeningsTijd().getMinutes()+"'";
+				sluitingsTijd = "'"+dag.getSluitingsTijd().getHours()+":"+dag.getSluitingsTijd().getMinutes()+"'";				
+			}
+
+			PreparedStatement pstmt = con.prepareStatement(
+					"UPDATE dag \n" + 
+					"SET openingstijd = "+openingsTijd+", \n"
+					+ "sluitingstijd = "+sluitingsTijd+" \n"  
+					+ "WHERE BedrijfBedrijfsnaam = '"+dag.getBedrijf().getBedrijfsNaam()+"' \n "
+					+ "AND dagnummer = "+dag.getDag());
+					
+			System.out.println(pstmt);
+			pstmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return false;
+	}
 	
 	//wordt gebruikt bij: getWerkdagen
 	public void getWeekRooster(Bedrijf bedrijf){

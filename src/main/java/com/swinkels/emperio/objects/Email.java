@@ -2,6 +2,17 @@ package com.swinkels.emperio.objects;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.SendFailedException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,18 +26,21 @@ import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.resource.Emailv31;
 import com.swinkels.emperio.providers.EmailDao;
 import com.swinkels.emperio.providers.EmailDaoImpl;
+import com.swinkels.emperio.providers.KlantDao;
+import com.swinkels.emperio.providers.KlantDaoImpl;
 import com.swinkels.emperio.providers.KlantEmailDao;
 import com.swinkels.emperio.providers.KlantEmailDaoImpl;
 
 public class Email {
 	EmailDao emailDao = new EmailDaoImpl();
 	KlantEmailDao klantEmailDao = new KlantEmailDaoImpl();
+	KlantDao klantDao = new KlantDaoImpl();
 
+	private Bedrijf bedrijf;
 	private ArrayList<Klant> klanten = new ArrayList<Klant>();
 
 	private int id;
 	private int pageNumber;
-	private Bedrijf bedrijf;
 	private String onderwerp;
 	private String inhoud;
 	private int aantalKlanten;
@@ -43,7 +57,6 @@ public class Email {
 		this.inhoud = inhoud;
 		this.aantalKlanten = aantalKlanten;
 	}
-	
 
 	public Date getVerzendtijd() {
 		return verzendtijd;
@@ -70,16 +83,60 @@ public class Email {
 	}
 
 	public void send() {
-		emailDao.save(this);
-		for (Klant klant : klanten) {
-			klantEmailDao.save(this, klant);
+		bedrijf.getInfo();
+		String verstuurder = bedrijf.getEmail();
+		System.out.println("vbesda  "+ verstuurder);
+		Session session = getSession();
+		
+		emailDao.save(this);		
+		emailDao.getEmail(this);
+		try {
+			MimeMessage message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(verstuurder));
+			
+			message.setSubject(onderwerp);
+			message.setText(inhoud);
+			
+			for(Klant klant : klanten) {
+				klantDao.getKlant(bedrijf, klant);
+				String to = klant.getEmail();
+				if(to != null) {
+					message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+					Transport.send(message);
+					System.out.println("message sent successfully");
+				} else {
+					System.out.println("heeft geen email");
+				}
+				klantEmailDao.save(this, klant);
+			}
+		} catch (AddressException e) {
+			System.out.println(e.getMessage());
+		} catch (SendFailedException e) {
+			System.out.println("Send failed.<br>" + e.getMessage());
+		} catch (MessagingException e) {
+			System.out.println("Unexpected error.<br>" + e.getMessage());
 		}
+	}
+	
+	private Session getSession() {
+		// Get the session object
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp-relay.sendinblue.com"); // SMTP Host
+		props.put("mail.smtp.port", "587"); // TLS Port
+		props.put("mail.smtp.auth", "true"); // enable authentication
+		props.put("mail.smtp.starttls.enable", "true"); // enable STARTTLS
+
+		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication("winkpascal@gmail.com", "AJD1RqnaTOGzb06B");
+			}
+		});
+		return session;
 	}
 
 	public void getEmail() {
 		emailDao.getEmail(this);
 	}
-
 
 	public void setEmailDao(EmailDao emailDao) {
 		this.emailDao = emailDao;

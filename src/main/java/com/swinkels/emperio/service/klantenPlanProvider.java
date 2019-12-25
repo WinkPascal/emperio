@@ -33,7 +33,6 @@ public class klantenPlanProvider {
 	@Path("/getBedrijfDataStart/{data}")
 	@Produces("application/json")
 	public String getBedrijfDataStart(@PathParam("data") String data) {
-		System.out.println("=============");
 		Bedrijf bedrijf = getBedrijf(data);
 		Instellingen instellingen = new Instellingen(bedrijf.getBedrijfsNaam());
 		bedrijf.setInstellingen(instellingen);
@@ -149,14 +148,18 @@ public class klantenPlanProvider {
 			@FormParam("klantPostcode") String klantPostcode, @FormParam("klantAdres") String klantAdres,
 			@FormParam("afspraakTijd") String afspraakTijd, @FormParam("klantEmail") String afspraakKlantEmail,
 			@FormParam("klantTelefoon") String afspraakKlantTel) {
+		System.out.println(data);
 		Bedrijf bedrijf = getBedrijf(data);
+		System.out.println("==========================================================");
 		String afspraakKlantNaam = klantVoornaam + " " + klantAchternaam;
 		String klantPlek = klantWoonplaats + " " + klantPostcode + "" + klantAdres;
+		String geslacht = getGeslacht(data);
+		System.out.println(geslacht);
 		Klant klant = new KlantBuilder()
 				.setNaam(afspraakKlantNaam)
 				.setEmail(afspraakKlantEmail)
 				.setTel(afspraakKlantTel)
-				.setGeslacht(getGeslacht(data))
+				.setGeslacht(geslacht)
 				.setAdres(klantPlek)
 				.setBedrijf(bedrijf)
 				.make();

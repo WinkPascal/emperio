@@ -107,32 +107,34 @@ function inplannenGeslachtKiezen() {
 		geslachtKnopKleurManager("meisje");
 	})
 }
-function geslachtKnopKleurManager(geslacht) {
+function geslachtKnopKleurManager(geslachtObject) {
+	geslacht = geslachtObject;
 	document.getElementById("geslachtMeisje").style.background = "white"
 	document.getElementById("geslachtVrouw").style.background = "white";
 	document.getElementById("geslachtJongen").style.background = "white";
 	document.getElementById("geslachtMan").style.background = "white";
 	if (geslacht == "man") {
-		behandelingenOphalen("man");
 		document.getElementById("geslachtMan").style.background = "blue";
 	} else if (geslacht == "vrouw") {
-		behandelingenOphalen("vrouw");
 		document.getElementById("geslachtVrouw").style.background = "blue";
 	} else if (geslacht == "jongen") {
-		behandelingenOphalen("jongen");
 		document.getElementById("geslachtJongen").style.background = "blue";
 	} else if (geslacht == "meisje") {
 		document.getElementById("geslachtMeisje").style.background = "blue"
-		behandelingenOphalen("meisje");
 	}
+	tijd = "0:00";
+	prijs = 0;
+	document.getElementById("lengteAfspraakForm").innerHTML = tijd;
+	document.getElementById("prijsAfspraakForm").innerHTML = prijs;
+	
 	document.getElementById("inplanBehandelingenForm").innerHTML = "";
-	document.getElementById("lengteAfspraakForm").innerHTML = "0:00";
-	document.getElementById("prijsAfspraakForm").innerHTML = "0.00";
 	document.getElementById("behandelingenKeuzeLijst").innerHTML = "";
+	
+	behandelingenOphalen();
 }
 
 //de behandelingen voor het gekozen geslacht worden opgehaalt
-function behandelingenOphalen(geslacht) {
+function behandelingenOphalen() {
 	var url = window.location.href.split("?")[1];;
 	url = url + "&geslacht=" + geslacht;
 	fetch("restservices/klantenPlanProvider/getBehandelingenByGeslacht/" + url)
@@ -210,6 +212,9 @@ function pasTijdAan(tijd, lengte, functie){
 	}
 	if(uren.toString().length == 1){
 		uren = "0"+uren
+	}
+	if(minuten.toString().length == 1){
+		minuten = "0"+minuten;
 	}
 	return uren + ":"+minuten;
 }
@@ -318,6 +323,7 @@ function getMaandag(d) {
 	d.setDate(diff);
 	return d;
 }
+
 function formatDate(date) {
 	var date = new Date(date);
 	var monthNames = [

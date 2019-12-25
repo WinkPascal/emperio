@@ -8,6 +8,11 @@
 	<link rel="stylesheet" media="screen and (min-width: 480px) and (max-width: 1024px)" href="css/tablet/marketing.css">
 	<link rel="stylesheet" media="screen and (min-width: 1024px)" href="css/desktop/marketing.css">
 
+	<link rel="stylesheet" media="screen and (max-width: 500px)" href="css/smartphone/table.css">
+	<link rel="stylesheet" media="screen and (max-width: 700px)" href="css/tablet/table.css">
+	<link rel="stylesheet" href="css/desktop/table.css">
+
+
 	<link rel="stylesheet" type="text/css" href="css/global.css">
 </head>
 
@@ -30,13 +35,13 @@
 			<div class="topInfo">
 				<span id="verstuurdOp"></span>
 				<input type="button" id="versturen" class="createButton" value="Versturen">
-				<input type="button" id="verwijderen" class="cancelButton" value="Verwijderen"><br>
+				<input type="button" id="verwijderen" class="cancelButton" value="Verwijderen">
+				<input type="button" id="klantenKiezen" class="defaultButton" value="kies klanten">
+				<input type="button" id="klantenOphalen" class="defaultButton" style="display: none;" value="Klanten">
 			</div>
 			
 			<div class="klantenKiezen">
-				<input type="button" id="klantenKiezen" class="defaultButton" value="kies klanten">
-				<input type="button" id="klantenOphalen" class="defaultButton" style="display: none;" value="Klanten">
-				<span id="klantenLijst">s</span>
+				<span id="aantalOntvangers">Ontvangers: <a id="hoeveelheidOntavngers">0</a></span>
 			</div>
 			<div class="onderwerpDiv">
 				<span id="onderwerpVanMail" class="onderwerp" style="display: none;"></span>
@@ -44,24 +49,39 @@
 			</div>
 			
 			<div id="inhoudVanMail" class="inhoud" style="display: none;"></div>
-			<textarea id="inhoud" class="inhoud" name="inhoud"></textarea>
+			<div contenteditable="true" style="overflow-x: scroll; outline:0px;" id="inhoud" class="inhoud"></div>
 		</form>
 	</div>
 
-
-
 	<div id="klantenModal" class="modal">
 		<div class="klantenModalContent">
-			<table id="klantenLijst">
-			</table>
-			<div>
-				<input type="button" value="Terug" class="defaultButton" id="vorigeKlantenPagina">
-				<span id="paginaNummer"></span>	  	
-				<input type="button" value="Volgende" class="defaultButton" id="volgendeKlantenPagina">
-			</div>
+			<span id="aantalOntvangers">Ontvangers: <a id="hoeveelheidOntavngers">0</a></span>
+			<input type="button" class="cancelButton" value="Sluit" id="sluitKlantenSelectModal">
+			<div class="table">
+				<div class="controleDiv">
+					<input type="text" id="zoekInput"/>
+					<select id="selectList">
+			  			<option value="count(a.id) desc">Meeste afspraken</option>
+						<option value="sum(b.prijs) desc">Meeste inkomsten</option>
+						<option value="count(a.id) asc">Minste afspraken</option>
+						<option value="sum(b.prijs) asc">Minste inkomsten</option>
+					</select>
+					<input type="button" class="defaultButton" value="Zoek" id="zoekKlant">
+				</div>
+				<div class="tableContentHolder">
+					<table id="klantenLijst" class="tableContent">
+					</table>
+				</div>
+			  	<div>
+		  		  	<input type="button" value="Terug" class="defaultButton terugButton" id="vorigeKlantenPagina">
+		  		  	<span id="paginaNummer"></span>	  	
+				  	<input type="button" value="Volgende" class="defaultButton volgendeButton" id="volgendeKlantenPagina">
+			  	</div>
+			 </div> 
 		</div>
 	</div>
 
  	 <script src="javascript/global.js"></script>
+ 	 <script src="javascript/klanten.js"></script>
  	 <script src="javascript/marketing.js"></script>
 </html>

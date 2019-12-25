@@ -56,6 +56,9 @@
 	background-color: #4CAF50;
 	color: white;
 }
+.table .tableContent .selected{
+	background-color: #4CAF50;
+}
 
 .table .volgendeButton {
 	float: right;

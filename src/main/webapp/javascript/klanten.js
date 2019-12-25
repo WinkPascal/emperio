@@ -38,7 +38,7 @@ function bladzijdeManager(functie){
  
 function createKlantRow(klant){  
 	var row = document.createElement('tr');
-	row.id = klant.id;
+	row.id = "klantenRij"+klant.id;
 	
 	var klantNaam = document.createElement('td');
 	klantNaam.innerHTML = klant.naam;
@@ -74,11 +74,41 @@ function createKlantRow(klant){
 	klantInkomsten.className="telefoon";
 	klantInkomsten.innerHTML = klant.inkomsten;
 	row.appendChild(klantInkomsten);
-	
+
 	document.getElementById("klantenLijst").appendChild(row);
-	document.getElementById(klant.id).addEventListener("click", function(){
-		getKlant(klant.id);
+	var rowId = document.getElementById("klantenRij"+klant.id);
+	console.log(rowId);
+	
+	
+	if(window.location.href === "http://localhost:8080/emperio/marketing.html"){
+		if(!selectSelectedKlanten(klant.id)){				
+			rowId.className = "selected";
+		} else{
+			rowId.classList.remove("selected");
+		}
+	}
+	
+	rowId.addEventListener("click", function(){
+		if(window.location.href === "http://localhost:8080/emperio/marketing.html"){
+			if(selecteerKlant(klant.id)){
+				rowId.className = "selected";
+			} else{
+				rowId.classList.remove("selected");
+			}
+		} else{
+			getKlant(klant.id);
+		}
 	})
+}
+
+function selectSelectedKlanten(klantId){
+	for (i = 0; i < geslecteerdeKlanten.length; i++) { 
+		if(geslecteerdeKlanten[i] == klantId){
+			return false;
+		}
+	}
+	console.log(geslecteerdeKlanten);
+	return true;
 }
  
 function createTopRow(){  
@@ -205,14 +235,13 @@ function zoekKlanten(blz){
 	
 	var sort = document.getElementById("selectList").value;
 	var search = document.getElementById("zoekInput").value;
-
 	var data = "page="+blz+"&sort="+sort+"&search=-"+search;
+	
 	fetch("restservices/klanten/klanten/"+data, fetchoptions)
 	.then(response => response.json())
 	.then(function(klanten){
 		klantenLijst.appendChild(createTopRow());
 		for(let klant of klanten){
-			console.log(klant.id);
 			createKlantRow(klant);
 		}
 	})

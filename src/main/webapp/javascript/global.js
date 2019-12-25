@@ -7,7 +7,7 @@ function errorMessage(message) {
 
 	setTimeout(function () {
 		messageDiv.remove();
-	}, 1000);
+	}, 4000);
 }
 
 function succesMessage(message) {
@@ -20,7 +20,7 @@ function succesMessage(message) {
 
 	setTimeout(function () {
 		messageDiv.remove();
-	}, 1000);
+	}, 3000);
 }
 
 //document.getElementById("homeButton").addEventListener("click", function () {

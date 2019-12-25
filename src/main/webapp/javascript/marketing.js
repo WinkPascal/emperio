@@ -5,9 +5,7 @@ function onload(){
 		hoeveelheid = hoeveelheid + 10;
 		getEmail(hoeveelheid);
 	})
-	document.getElementById("klantenKiezen").addEventListener("click", function(){
-		document.getElementById("klantenModal").style.display = "block";
-	})
+
 	document.getElementById("versturen").addEventListener("click", function(){
 		sendEmail();
 	})
@@ -66,9 +64,14 @@ function getFullEmail(email){
 }
 
 function sendEmail(){
-	var formData = new FormData(document.getElementById("emailVersturen"));
-	formData.append("klanten", 1);
+	var formData = new FormData();
+	formData.append("klanten", geslecteerdeKlanten);
+	formData.append("onderwerp", document.getElementById("onderwerp").value);
+	formData.append("inhoud", document.getElementById("inhoud").innerHTML);
+	
 	var encData = new URLSearchParams(formData.entries());
+	alert(encData);
+
 	var fetchoptions = {
 		method: 'POST',
 		body: encData,
@@ -117,6 +120,31 @@ function createEmail(email){
 	verstuurdeMail.appendChild(inhoud);
 
 	return verstuurdeMail;
+}
+
+
+document.getElementById("klantenKiezen").addEventListener("click", function(){
+	document.getElementById("klantenModal").style.display = "block";
+	bladzijdeManager("load");
+})
+
+document.getElementById("sluitKlantenSelectModal").addEventListener("click", function(){
+	document.getElementById("klantenModal").style.display = "none";
+})
+
+let geslecteerdeKlanten = [];
+function selecteerKlant(klantId){
+	console.log(klantId);
+	for (i = 0; i < geslecteerdeKlanten.length; i++) { 
+		if(geslecteerdeKlanten[i] == klantId){
+			geslecteerdeKlanten.splice(i, 1);
+			document.getElementById("hoeveelheidOntavngers").innerHTML = geslecteerdeKlanten.length;
+			return false;
+		}
+	}
+	geslecteerdeKlanten.push(klantId);
+	document.getElementById("hoeveelheidOntavngers").innerHTML = geslecteerdeKlanten.length;
+	return true;
 }
 
 

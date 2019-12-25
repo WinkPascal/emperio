@@ -1,3 +1,19 @@
+function loadSettings(){
+	aanpassenTijdenHandlers();
+	determineOpeningsTijd();
+	determineSluitingsTijd()
+	createTimePicker("openingsTijdMaandag");
+	
+	checkBoxes = ["geslotenMaandag", "geslotenDinsdag", "geslotenWoensdag","geslotenDonderdag","geslotenVrijdag","geslotenZaterdag", "geslotenZondag"]
+	tijdenAreas = ["tijdenMaandag", "tijdenDinsdag", "tijdenWoensdag","tijdenDonderdag","tijdenVrijdag","tijdenZaterdag", "tijdenZondag"]
+	openingsTijdSpans = ["openingsTijdMaandag","openingsTijdDinsdag","openingsTijdWoensdag","openingsTijdDonderdag","openingsTijdVrijdag","openingsTijdZaterdag","openingsTijdZondag"];
+	sluitingsTijdSpans = ["sluitingsTijdMaandag", "sluitingsTijdDinsdag", "sluitingsTijdWoensdag", "sluitingsTijdDonderdag", "sluitingsTijdVrijdag", "sluitingsTijdZaterdag", "sluitingsTijdZondag"];
+	for (i = 0; i < checkBoxes.length; i++) {
+		checkboxChecker(tijdenAreas[i], checkBoxes[i]);
+	}
+}
+
+
 function getPlanInfo(){
 		var fetchoptions = {
 		headers: {
@@ -358,3 +374,41 @@ function determineSluitingsTijd(){
 		})
 	}
 }
+
+function getDagenSettings(){
+	var fetchoptions = {
+			headers: {
+				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
+			}
+		}
+		fetch("restservices/instellingen/getDagen", fetchoptions)
+		.then(response => response.json())
+		.then(function (dagen) {
+			for(var dag of dagen){
+				console.log(dag.dagNummmer);
+				if(dag.sluitingstijd != null){
+					var dagnummer = dag.dagNummmer;
+					console.log("========================");
+					document.getElementById(openingsTijdSpans[dagnummer]).innerHTML= dag.opeingstijd;
+					document.getElementById(sluitingsTijdSpans[dagnummer]).innerHTML = dag.sluitingstijd;
+					document.getElementById(checkBoxes[dagnummer]).checked = true;
+					document.getElementById(tijdenAreas[dagnummer]).style.display = "block"
+				}
+				console.log(dag)
+			}
+		})
+}
+
+function checkboxChecker(textId, checkId) {
+ 	var checkBox = document.getElementById(checkId);
+	checkBox.addEventListener("click", function () {
+		var text = document.getElementById(textId);
+		if (checkBox.checked == true){
+			text.style.display = "block";
+		} else {
+			text.style.display = "none";
+		}
+	})
+}
+
+

@@ -1,29 +1,38 @@
 package com.swinkels.emperio.support;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.swinkels.emperio.objects.Bedrijf;
-import com.swinkels.emperio.security.Hashing;
+import com.swinkels.emperio.objects.Email;
+import com.swinkels.emperio.objects.Klant;
+import com.swinkels.emperio.objects.KlantBuilder;
 
 public class Service {
-	public static void main(String [] args)
-	{
-		Hashing.createHash();
-//		Bedrijf bedrijf = new Bedrijf();
-//		bedrijf.setEmail("pawiwink@s.com");
-//		bedrijf.setTelefoon("0615574740");
-//		bedrijf.setPostcode("1211BH");
-//		bedrijf.setWachtwoord("PascalWink1!");
-//		
-//		
-//		ArrayList<String> errors = bedrijf.validate();
-//		if(errors.size() != 0) {
-//			for(String error : errors) {
-//				System.out.println(error);
-//			}
-//		} else {
-//			System.out.println("geen errors");
-//		}
 
+	public static void main(String[] args) {
+		KlantBuilder builder = new KlantBuilder();
+
+		ArrayList<Klant> klanten = new ArrayList<Klant>();
+		Klant klant1 = builder.make();
+		klant1.setId(1);
+		klanten.add(klant1);
+
+		Klant klant2 = builder.make();
+		klant2.setId(2);
+		klanten.add(klant2);
+
+		Klant klant3 = builder.make();
+		klant3.setId(3);
+		klanten.add(klant3);
+
+		Bedrijf bedrijf = new Bedrijf();
+		bedrijf.setBedrijfsNaam("asd");
+		bedrijf.setEmail("pascal.wink@gmail.com");
+		Email email = new Email(bedrijf);
+		email.setKlanten(klanten);
+		email.setOnderwerp("Test");
+		email.setInhoud("nog een test");
+		email.send();
 	}
 }
