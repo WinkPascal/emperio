@@ -15,8 +15,9 @@ public class Dag {
 	private int id;
 	private Date openingsTijd;
 	private Date sluitingsTijd;
-	private int aantalAfspraken;
 	private int dag;
+	
+	private int aantalAfspraken;
 	private Date datum;
 	
 	

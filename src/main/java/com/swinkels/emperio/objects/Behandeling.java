@@ -16,6 +16,8 @@ public class Behandeling {
 	private Bedrijf bedrijf;
 
 	private int id;
+	private String status;
+	
 	private String naam;
 	private double prijs;
 	private String beschrijving;

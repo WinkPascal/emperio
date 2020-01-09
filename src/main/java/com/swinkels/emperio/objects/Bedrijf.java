@@ -36,13 +36,16 @@ public class Bedrijf {
 	
 	private String bedrijfsNaam;
 	private Date inschrijfdatum;
+	private String wachtwoord;
+
+	
+	//>?>??? waarom heb ik deze attributen?
 	private String email;
 	private String telefoon;
 	private String woonplaats;
 	private String postcode;
 	private String adres;
-	private String wachtwoord;
-
+	
 	public ArrayList<Email> getEmails() {
 		return emails;
 	}
