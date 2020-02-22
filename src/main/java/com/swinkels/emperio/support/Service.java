@@ -3,10 +3,10 @@ package com.swinkels.emperio.support;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.swinkels.emperio.objects.Bedrijf;
-import com.swinkels.emperio.objects.Email;
-import com.swinkels.emperio.objects.Klant;
-import com.swinkels.emperio.objects.KlantBuilder;
+import com.swinkels.emperio.objects.email.Email;
+import com.swinkels.emperio.objects.klant.Klant;
+import com.swinkels.emperio.objects.klant.KlantBuilder;
+import com.swinkels.emperio.objects.security.Bedrijf;
 
 public class Service {
 

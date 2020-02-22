@@ -21,9 +21,9 @@ import javax.ws.rs.core.SecurityContext;
 
 import org.json.JSONArray;
 
-import com.swinkels.emperio.objects.Bedrijf;
-import com.swinkels.emperio.objects.Behandeling;
-import com.swinkels.emperio.objects.BehandelingBuilder;
+import com.swinkels.emperio.objects.behandeling.Behandeling;
+import com.swinkels.emperio.objects.behandeling.BehandelingBuilder;
+import com.swinkels.emperio.objects.security.Bedrijf;
 import com.swinkels.emperio.support.JavascriptDateAdapter;
 
 @Path("/behandelingProvider")

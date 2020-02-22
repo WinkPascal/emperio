@@ -6,10 +6,10 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.swinkels.emperio.objects.Afspraak;
-import com.swinkels.emperio.objects.Behandeling;
-import com.swinkels.emperio.providers.AfspraakDao;
-import com.swinkels.emperio.providers.AfspraakDaoImpl;
+import com.swinkels.emperio.objects.behandeling.Behandeling;
+import com.swinkels.emperio.objects.rooster.Afspraak;
+import com.swinkels.emperio.providers.Afspraak.AfspraakDao;
+import com.swinkels.emperio.providers.Afspraak.AfspraakDaoImpl;
 
 public class Validator {
 

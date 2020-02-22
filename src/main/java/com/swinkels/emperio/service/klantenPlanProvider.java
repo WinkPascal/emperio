@@ -2,6 +2,7 @@ package com.swinkels.emperio.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -14,17 +15,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import com.swinkels.emperio.objects.Afspraak;
-import com.swinkels.emperio.objects.AfspraakBuilder;
-import com.swinkels.emperio.objects.Bedrijf;
-import com.swinkels.emperio.objects.Behandeling;
-import com.swinkels.emperio.objects.Dag;
-import com.swinkels.emperio.objects.Instellingen;
-import com.swinkels.emperio.objects.Klant;
-import com.swinkels.emperio.objects.KlantBuilder;
+import com.swinkels.emperio.objects.behandeling.Behandeling;
+import com.swinkels.emperio.objects.instellingen.InstellingenFacade;
+import com.swinkels.emperio.objects.instellingen.InstellingenFacadeInterface;
+import com.swinkels.emperio.objects.klant.Klant;
+import com.swinkels.emperio.objects.klant.KlantBuilder;
+import com.swinkels.emperio.objects.rooster.Afspraak;
+import com.swinkels.emperio.objects.rooster.Dag;
+import com.swinkels.emperio.objects.security.Bedrijf;
+import com.swinkels.emperio.objects.security.Security;
 import com.swinkels.emperio.support.Adapter;
 import com.swinkels.emperio.support.JavascriptDateAdapter;
-import com.swinkels.emperio.support.Validator;
 
 @Path("/klantenPlanProvider")
 public class klantenPlanProvider {
@@ -34,21 +35,20 @@ public class klantenPlanProvider {
 	@Produces("application/json")
 	public String getBedrijfDataStart(@PathParam("data") String data) {
 		Bedrijf bedrijf = getBedrijf(data);
-		Instellingen instellingen = new Instellingen(bedrijf.getBedrijfsNaam());
-		bedrijf.setInstellingen(instellingen);
-		bedrijf.getKlantPaginaSettings();
-		
+		Security.setKey(bedrijf.getBedrijfsNaam());
+		InstellingenFacadeInterface instelingen = new InstellingenFacade();
+		HashMap<String, String> instellingenDto = instelingen.getInplanSettingsDTO();
+
 		JsonObjectBuilder job = Json.createObjectBuilder();
 		job.add("bedrijfsNaam", bedrijf.getBedrijfsNaam());
-		job.add("invoerveldEmail", instellingen.isEmailKlantInvoer());
-		job.add("invoerveldTelefoon", instellingen.isTelefoonKlantInvoer());
-		job.add("invoerveldAdres", instellingen.isAdresKlantInvoer());
+		job.add("invoerveldEmail", instellingenDto.get("emailKlantInvoer"));
+		job.add("invoerveldTelefoon", instellingenDto.get("telefoonKlantInvoer"));
+		job.add("invoerveldAdres", instellingenDto.get("adresKlantInvoer"));
 
-		job.add("bedrijfEmail", bedrijf.getEmail());
-		job.add("bedrijfsTelefoon", bedrijf.getTelefoon());
-		String adres = bedrijf.getWoonplaats() + " " + bedrijf.getPostcode() + " " + bedrijf.getAdres();
-		job.add("bedrijfsAdres", adres);
-		
+
+		job.add("bedrijfEmail", instellingenDto.get("bedrijfsEmail"));
+		job.add("bedrijfsTelefoon", instellingenDto.get("bedrijfsTelefoon"));
+		job.add("bedrijfsAdres", instellingenDto.get("bedrijfsAdres"));
 
 		return job.build().toString();
 	}
@@ -128,7 +128,8 @@ public class klantenPlanProvider {
 				}
 			}
 			// begin tijd bekerekenen
-			String timestampString = JavascriptDateAdapter.DateToString(afspraak.getTimeStamp(), "yyyy-MM-dd HH:mm");
+			HashMap<String, String> afspraakDto = afspraak.toDTO();
+			String timestampString = afspraakDto.get("timestamp");;
 			String beginTijd = Integer.parseInt(timestampString.substring(11, 13)) + ":"
 					+ Integer.parseInt(timestampString.substring(14, 16));
 
@@ -148,32 +149,22 @@ public class klantenPlanProvider {
 			@FormParam("klantPostcode") String klantPostcode, @FormParam("klantAdres") String klantAdres,
 			@FormParam("afspraakTijd") String afspraakTijd, @FormParam("klantEmail") String afspraakKlantEmail,
 			@FormParam("klantTelefoon") String afspraakKlantTel) {
-		System.out.println(data);
 		Bedrijf bedrijf = getBedrijf(data);
-		System.out.println("==========================================================");
-		String afspraakKlantNaam = klantVoornaam + " " + klantAchternaam;
-		String klantPlek = klantWoonplaats + " " + klantPostcode + "" + klantAdres;
-		String geslacht = getGeslacht(data);
-		System.out.println(geslacht);
-		Klant klant = new KlantBuilder()
-				.setNaam(afspraakKlantNaam)
+
+				
+
+		Afspraak afspraak = new Afspraak(0, getTimestamp(data, afspraakTijd), 0.0);
+		afspraak.setKlant(
+				new KlantBuilder()
+				.setNaam(klantVoornaam + " " + klantAchternaam)
 				.setEmail(afspraakKlantEmail)
 				.setTel(afspraakKlantTel)
-				.setGeslacht(geslacht)
-				.setAdres(klantPlek)
-				.setBedrijf(bedrijf)
-				.make();
-				
-		klant.saveOrFindAndGetId();
-		Date timestamp = getTimestamp(data, afspraakTijd);
-
-		Afspraak afspraak = new AfspraakBuilder()
-				.setTimestamp(timestamp)
-				.setBedrijf(bedrijf)
-				.setKlant(klant)
-				.make();
-		
+				.setGeslacht(getGeslacht(data))
+				.setAdres(klantWoonplaats + " " + klantPostcode + "" + klantAdres)
+				.build()
+		);
 		afspraak.setBehandelingen(getBehandelingen(data));
+
 		afspraak.save();
 		return Response.ok().build();
 	}

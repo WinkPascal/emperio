@@ -17,11 +17,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
-import com.swinkels.emperio.objects.Afspraak;
-import com.swinkels.emperio.objects.Bedrijf;
-import com.swinkels.emperio.objects.Behandeling;
-import com.swinkels.emperio.objects.Dag;
-import com.swinkels.emperio.objects.Statestieken;
+import com.swinkels.emperio.objects.behandeling.Behandeling;
+import com.swinkels.emperio.objects.rooster.Afspraak;
+import com.swinkels.emperio.objects.rooster.Dag;
+import com.swinkels.emperio.objects.security.Bedrijf;
+import com.swinkels.emperio.objects.statestieken.Statestieken;
 import com.swinkels.emperio.support.Adapter;
 
 @Path("/statistics")

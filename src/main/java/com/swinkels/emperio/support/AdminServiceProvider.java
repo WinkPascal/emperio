@@ -16,9 +16,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
-import com.swinkels.emperio.objects.Bedrijf;
-import com.swinkels.emperio.providers.BedrijfDao;
-import com.swinkels.emperio.providers.BedrijfDaoImpl;
+import com.swinkels.emperio.objects.security.Bedrijf;
+import com.swinkels.emperio.providers.Bedrijf.BedrijfDao;
+import com.swinkels.emperio.providers.Bedrijf.BedrijfDaoImpl;
 
 @Path("/adminService")
 @RolesAllowed("admin")

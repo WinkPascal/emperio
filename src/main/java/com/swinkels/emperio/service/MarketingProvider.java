@@ -13,13 +13,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import com.swinkels.emperio.objects.Bedrijf;
+
+import com.swinkels.emperio.objects.email.Email;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 
-import com.swinkels.emperio.objects.Email;
-import com.swinkels.emperio.objects.Klant;
-import com.swinkels.emperio.objects.KlantBuilder;
+import com.swinkels.emperio.objects.klant.Klant;
+import com.swinkels.emperio.objects.klant.KlantBuilder;
+import com.swinkels.emperio.objects.security.Bedrijf;
+import com.swinkels.emperio.objects.security.Security;
 import com.swinkels.emperio.support.JavascriptDateAdapter;
 
 @Path("/marketing")
@@ -33,14 +36,14 @@ public class MarketingProvider {
 			@FormParam("inhoud") String inhoud,
 			@FormParam("onderwerp") String inhoudonderwerp,
 			@FormParam("klanten") String klanten) {
+		Security.setKey(sc.getUserPrincipal().getName());
+
 		ArrayList<Klant> klantenList = new ArrayList<Klant>();
-		System.out.println("=================================================");
-		System.out.println(klanten);
 		if(klanten.length() > 0) {
 			for(String klant : klanten.split(",")) {
 				Klant k = new KlantBuilder()
 						.setId(Integer.parseInt(klant))
-						.make();
+						.build();
 				klantenList.add(k);
 			}
 		}
@@ -56,9 +59,9 @@ public class MarketingProvider {
 	@Produces("application/json")
 	public String getEmails(@Context SecurityContext sc, 
 			@PathParam("id") int id) {
-		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
+		Security.setKey(sc.getUserPrincipal().getName());
 		
-		Email email = new Email(bedrijf);
+		Email email = new Email();
 		email.setId(id);
 		email.getEmail();
 		

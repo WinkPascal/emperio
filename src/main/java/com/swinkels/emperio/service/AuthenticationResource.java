@@ -13,8 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.swinkels.emperio.providers.BedrijfDao;
-import com.swinkels.emperio.providers.BedrijfDaoImpl;
+import com.swinkels.emperio.providers.Bedrijf.BedrijfDao;
+import com.swinkels.emperio.providers.Bedrijf.BedrijfDaoImpl;
 import com.swinkels.emperio.security.UserDao;
 import com.swinkels.emperio.security.UserMariadbDaoImpl;
 

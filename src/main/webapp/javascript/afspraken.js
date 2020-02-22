@@ -1,8 +1,7 @@
 function onload() {
 	datum = new Date();
-	console.log("onload "+datum)
 
-	getRooster();
+	getRooster(datum, true);
 }
 
 function createAfspraakRooster(beginTijd, lengte, klant, prijs) {
@@ -68,107 +67,138 @@ function createAfspraakRooster(beginTijd, lengte, klant, prijs) {
 	return event;
 }
 
-function getRooster() {
-	afsprakenLijst = [];
+function createTimeline(dag){
+	// timeline wordt eerst aangemaakt
+	beginTijd = dag.vroegsteOpeningsTijd.split(":");
+	beginUur = parseInt(beginTijd[0]);
+	beginUurRooster = beginUur;
+	beginMinuut = parseInt(beginTijd[1]);
+	beginMinuutRooster = beginMinuut;
+
+	var eindTijd = dag.laatsteSluitingsTijd.split(":");
+	eindUur = parseInt(eindTijd[0]);
+	eindUurRooster = eindUur;
+	eindMinuut = parseInt(eindTijd[1]);
+	eindMinuutRooster = eindMinuut;
+
+	//wordt gebruikt bij het maken van de afspraken 
+	sessionStorage.setItem('beginMinuutRooster', beginMinuutRooster);
+	sessionStorage.setItem('beginUurRooster', beginUurRooster);
+
+	var ul = document.createElement('ul');
+	while (true) {
+		var timeLi = document.createElement('li');
+		var timeSpan = document.createElement('span');
+
+		timeSpan.innerHTML = beginUur + ":" + beginMinuut;
+
+		timeLi.appendChild(timeSpan);
+		ul.appendChild(timeLi);
+
+		beginMinuut = beginMinuut + 30;
+		if (beginMinuut > 59) {
+			beginUur = beginUur + 1;
+			beginMinuut = beginMinuut - 60;
+		}
+
+		if (beginUur >= eindUur && beginMinuut >= eindMinuut) {
+			break;
+		}
+
+	}
+	document.getElementById("timeline").appendChild(ul);
+	return beginTijd;
+}
+function createToInfo(weekNummer){
+	var weekdagen = new Array(7);
+	weekdagen[0] = "Maandag";
+	weekdagen[1] = "Dinsdag";
+	weekdagen[2] = "Woensdag";
+	weekdagen[3] = "Donderdag";
+	weekdagen[4] = "Vrijdag";
+	weekdagen[5] = "Zaterdag";
+	weekdagen[6] = "Zondag";
+	
+	var topinfo = document.createElement('div');
+	topinfo.setAttribute('class', 'top-info');
+
+	var weekNaam = document.createElement('a');
+	weekNaam.innerHTML = weekdagen[weekNummer] + "<br>";
+
+	// datums onder de dag zetten
+	// get Date maandag van de week
+	var maandag = new Date(datum);
+	var day = maandag.getDay(),
+		diff = maandag.getDate() - day + (day == 0 ? -6 : 1);
+	maandag.setDate(diff);
+	maandag.setDate(maandag.getDate() + weekNummer);
+	maandag.getDay(), diff = maandag.getDate() - day + (day == 0 ? -6 : 1);
+
+	var dagDate = formatDate(maandag);
+
+	var weekDate = document.createElement('a');
+	weekDate.setAttribute('id', "dagDate" + weekNummer);
+	weekDate.innerHTML = dagDate;
+	topinfo.appendChild(weekNaam);
+	topinfo.appendChild(weekDate);
+	return topinfo;
+}
+
+function verwijderenVorigRooster(maandag){
+	var day = maandag.getDay(), diff = maandag.getDate() - day + (day == 0 ? -6 : 1);
+	maandag.setDate(diff);
+	var date = maandag.getFullYear() + '-' + maandag.getMonth() + '-' + maandag.getDate();
+	var  i = 0;
+	if (!onload) {
+		// datums onder de dag zetten
+		// get Date maandag van de week
+		while (i < 7) {
+			var dagDate = formatDate(maandag);
+			document.getElementById("dagDate" + i).innerHTML = dagDate;
+			maandag.setDate(maandag.getDate() + 1);
+			i++;
+		}
+		for (let afspraak of afsprakenLijst) {
+			afspraak.remove();
+		}
+		afsprakenLijst = [];
+	} else{
+		afsprakenLijst = [];
+	}
 	dagenLijst = [];
+}
+
+function getRooster(datum, onload) {
+	// als het niet voor de eerste keer geladen wordt
+	var maandag = new Date(datum);
+	verwijderenVorigRooster(maandag);
+	
 	var fetchoptions = {
 		headers: {
 			'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 		}
 	}
-	fetch("restservices/afspraak/getWeekRooster", fetchoptions)
+	var date = maandag.getFullYear() + '-' + maandag.getMonth() + '-' + maandag.getDate();
+	fetch("restservices/afspraak/getWeekRooster/"+date, fetchoptions)
 		.then(response => response.json())
-		.then(function (dagen) {
+		.then(function (rooster) {
 			var i = 1;
-			var weekdagen = new Array(7);
-			weekdagen[0] = "Maandag";
-			weekdagen[1] = "Dinsdag";
-			weekdagen[2] = "Woensdag";
-			weekdagen[3] = "Donderdag";
-			weekdagen[4] = "Vrijdag";
-			weekdagen[5] = "Zaterdag";
-			weekdagen[6] = "Zondag";
-			this.aantalDagen = 0;
 
 			var eindUurRooster = 0;
 			var eindMinuutRooster = 0;
-
-			for (let dag of dagen) {
-				if (i == 1) {
-					// timeline wordt eerst aangemaakt
-					var beginTijd = dag.vroegsteOpeningsTijd.split(":");
-					beginUur = parseInt(beginTijd[0]);
-					beginUurRooster = beginUur;
-					beginMinuut = parseInt(beginTijd[1]);
-					beginMinuutRooster = beginMinuut;
-
-					var eindTijd = dag.laatsteSluitingsTijd.split(":");
-					eindUur = parseInt(eindTijd[0]);
-					eindUurRooster = eindUur;
-					eindMinuut = parseInt(eindTijd[1]);
-					eindMinuutRooster = eindMinuut;
-
-					//wordt gebruikt bij het maken van de afspraken 
-					sessionStorage.setItem('beginMinuutRooster', beginMinuutRooster);
-					sessionStorage.setItem('beginUurRooster', beginUurRooster);
-
-					var ul = document.createElement('ul');
-					while (true) {
-						var timeLi = document.createElement('li');
-						var timeSpan = document.createElement('span');
-
-						timeSpan.innerHTML = beginUur + ":" + beginMinuut;
-
-						timeLi.appendChild(timeSpan);
-						ul.appendChild(timeLi);
-
-						beginMinuut = beginMinuut + 30;
-						if (beginMinuut > 59) {
-							beginUur = beginUur + 1;
-							beginMinuut = beginMinuut - 60;
-						}
-
-						if (beginUur >= eindUur && beginMinuut >= eindMinuut) {
-							break;
-						}
-					}
-					document.getElementById("timeline").appendChild(ul);
-					i++;
-				} else {
-					aantalDagen++;
-					// er wordt een dag aangemaakt
+			
+			var beginTijd = createTimeline(rooster.uitersteTijden);
+			let dagTijden = rooster.dagTijden;
+			alert(dagTijden.length);
+			for(let dag of dagTijden){	
+			// er wordt een dag aangemaakt
 					var dagVanRooster = document.createElement('li');
 					dagVanRooster.setAttribute('class', 'dag');
-
-					var topinfo = document.createElement('div');
-					topinfo.setAttribute('class', 'top-info');
-
-					var weekNaam = document.createElement('a');
-					weekNaam.innerHTML = weekdagen[dag.weekNummer] + "<br>";
-
-					// datums onder de dag zetten
-					// get Date maandag van de week
-					var maandag = new Date(datum);
-					var day = maandag.getDay(),
-						diff = maandag.getDate() - day + (day == 0 ? -6 : 1);
-					maandag.setDate(diff);
-					maandag.setDate(maandag.getDate() + dag.weekNummer);
-					maandag.getDay(), diff = maandag.getDate() - day + (day == 0 ? -6 : 1);
-
-					var dagDate = formatDate(maandag);
-
-					var weekDate = document.createElement('a');
-					weekDate.setAttribute('id', "dagDate" + dag.weekNummer);
-					weekDate.innerHTML = dagDate;
-					topinfo.appendChild(weekNaam);
-					topinfo.appendChild(weekDate);
-
-					dagVanRooster.appendChild(topinfo);
+					dagVanRooster.appendChild(createToInfo(dag.weekNummer));
 					// events van de dag
 					var events = document.createElement('ul');
 					events.setAttribute('class', 'eventsDag');
 					events.setAttribute('id', 'dag' + dag.weekNummer);
-
 					// ochtend gesloten wordt aangemaakt
 					var beginTijd = dag.openingsTijd;
 					if(beginTijd != "gesloten"){
@@ -223,26 +253,24 @@ function getRooster() {
 
 					dagVanRooster.appendChild(events);
 					document.getElementById("rooster").appendChild(dagVanRooster);
-				}
-			}
+				
+		}
 
 			// maken breedte css
 			var dagen = document.getElementsByClassName('dag');
-			var breedte = 100 / aantalDagen;
+			var breedte = 100 / 7;
 			for (m = 0; m < dagen.length; m++) {
 				dagen[m].style.width = breedte + "%";
 			}
 			document.getElementById("weekTerug").addEventListener("click", function () {
 				datum.setDate(datum.getDate() - 7);
-				getAfspraken(datum, false);
+				getRooster(datum, false);
 			});
 
 			document.getElementById("weekVerder").addEventListener("click", function () {
 				datum.setDate(datum.getDate() + 7);
-				getAfspraken(datum, false);
+				getRooster(datum, false);
 			});
-			// afspraken van huidige week ophalen
-			getAfspraken(datum, true);
 		})
 }
 
@@ -256,14 +284,10 @@ function getAfspraken(datum, onload) {
 	var i = 0;
 
 	// als het niet voor de eerste keer geladen wordt
-	console.log("onload "+datum)
 	var maandag = new Date(datum);
-	console.log("afspraken1 "+datum)
 	var day = maandag.getDay(), diff = maandag.getDate() - day + (day == 0 ? -6 : 1);
 	maandag.setDate(diff);
 	var date = maandag.getFullYear() + '-' + maandag.getMonth() + '-' + maandag.getDate();
-	console.log("afspraken2 "+datum)
-	console.log("foramatted "+date)
 
 	if (!onload) {
 		// datums onder de dag zetten

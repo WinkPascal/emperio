@@ -30,13 +30,19 @@ function onload(){
 }
 
 function getAlleProducten(paginaNummer){
+	var search = document.getElementById("zoekProductenInput").value;
+	if(search == ""){
+		search = "-";
+	}
+	var data = "page="+paginaNummer+"&search="+search;
+	alert(data);
 	document.getElementById("inventarisItems").innerHTML = "";
 	var fetchoptions = {
 			headers: {
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken")
 			}
 		}
-	fetch("restservices/product/producten/" + paginaNummer, fetchoptions)
+	fetch("restservices/product/producten/" + data, fetchoptions)
 	.then(response => response.json())
 	.then(function(producten){
 		var i = 0;

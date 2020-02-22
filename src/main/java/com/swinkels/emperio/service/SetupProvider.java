@@ -18,12 +18,12 @@ import javax.ws.rs.core.SecurityContext;
 
 import org.json.JSONArray;
 
-import com.swinkels.emperio.objects.Bedrijf;
-import com.swinkels.emperio.objects.Behandeling;
-import com.swinkels.emperio.objects.BehandelingBuilder;
-import com.swinkels.emperio.objects.ContactPersoon;
-import com.swinkels.emperio.objects.Dag;
-import com.swinkels.emperio.objects.Instellingen;
+import com.swinkels.emperio.objects.behandeling.Behandeling;
+import com.swinkels.emperio.objects.behandeling.BehandelingBuilder;
+import com.swinkels.emperio.objects.instellingen.InstellingenFacade;
+import com.swinkels.emperio.objects.rooster.Dag;
+import com.swinkels.emperio.objects.security.Bedrijf;
+import com.swinkels.emperio.objects.security.ContactPersoon;
 import com.swinkels.emperio.support.JavascriptDateAdapter;
 
 @Path("/setup")
@@ -48,7 +48,7 @@ public class SetupProvider {
 			@FormParam("Adres") String Adres) {		
 		Bedrijf bedrijf = new Bedrijf(Bedrijfsnaam, Wachtwoord, BedrijfsEmail, BedrijfsTelefoon, Adres, Woonplaats, Postcode);
 		bedrijf.save();
-		Instellingen instellingen = new Instellingen(bedrijf, true, true, true, "#52b852", 20.00, "#c78d1e", 30.00, "#d63838", true, true, true);
+		InstellingenFacade instellingen = new InstellingenFacade(bedrijf, true, true, true, "#52b852", 20.00, "#c78d1e", 30.00, "#d63838", true, true, true);
 		instellingen.save();
 		ContactPersoon contactPersoon = new ContactPersoon(bedrijf, Voornaam, Achternaam, Rekeningnummer, PersoonlijkTelefoon, PersoonlijkEmail);
 		contactPersoon.save();
@@ -111,7 +111,7 @@ public class SetupProvider {
 	@Produces("application/json")
 	public String getInstellingen(@Context SecurityContext sc) {
 		Bedrijf bedrijf = new Bedrijf(sc.getUserPrincipal().getName());
-		Instellingen instellingen = new Instellingen(bedrijf);
+		InstellingenFacade instellingen = new InstellingenFacade(bedrijf);
 		instellingen.retrieveInstellingen();
 		
 		JsonObjectBuilder job = Json.createObjectBuilder();
